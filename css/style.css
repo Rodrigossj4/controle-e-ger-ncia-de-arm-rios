@@ -1,0 +1,95 @@
+.fundo_Header {
+    background-repeat: no-repeat;
+    height: 120px;
+}
+
+.divisao {
+    border-right: 1px solid;
+}
+
+.divisao_bottom {
+    border-bottom: 1px solid;
+    padding-bottom: 30px;
+
+}
+
+ul {
+    list-style: none;
+}
+
+.linha {
+    padding: 0;
+}
+
+.colunaSemPadding {
+    padding: 0 0 5 5;
+}
+
+.NomeSecaoProduto {
+    font-weight: bold;
+    font-style: normal;
+    font-size: 15px;
+}
+
+.linha:hover {
+    background-color: #e4e8ec;
+}
+
+.linhaBotao {
+    margin-right: 0px;
+}
+
+span.alert_sucess {
+    color: rgb(2, 145, 2);
+}
+
+span.alert_danger {
+    color: rgb(230, 4, 4);
+}
+
+.opcoesConfirmacao {
+    margin-top: 10px;
+    display: none;
+}
+
+.dados {
+    display: none;
+}
+
+.Armarios {
+    border: 0px solid;
+}
+
+.container_item {
+    border-bottom: 1px solid;
+    margin: 0 0 10px 0;
+    padding: 0 0 10px 0;
+}
+
+.Descricao_Armario {
+    border: 0px solid;
+    width: 48%;
+    display: inline-block;
+}
+
+.acoes-armarios {
+    border: 0px solid;
+    width: 48%;
+    display: inline-block;
+}
+
+.acoes-armarios form {
+    display: inline-block;
+}
+
+.form-control-padronizado {
+    max-width: 20em;
+}
+
+footer {
+    background-image: url("https://bucket.safea.grupoa.education/institution/pucrio/1669930020617_logo02.png");
+    background-repeat: no-repeat;
+    background-position: right;
+    background-color: rgba(0, 0, 0, .87);
+    height: 110px;
+}

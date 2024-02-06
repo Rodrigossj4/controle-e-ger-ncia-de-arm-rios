@@ -1,0 +1,9 @@
+<?php
+
+namespace Marinha\Mvc\Infra\Repository;
+
+interface IArmarioRepository
+{
+    public function listaArmarios(): array;
+    
+}
