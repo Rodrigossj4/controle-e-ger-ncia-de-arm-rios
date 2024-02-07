@@ -4,6 +4,7 @@
 namespace Marinha\Mvc\Controllers;
 
 use Exception;
+use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\DocumentoServices;
 
 class DocumentoController
@@ -16,7 +17,10 @@ class DocumentoController
     public function index()
     {
         $service = new DocumentoServices();
-        $DocumentosList = $service->listaDocumentos();  
+        $armariosService =  new ArmarioServices();
+
+        $DocumentosList = $service->listaDocumentos(); 
+        $ArmariosList = $armariosService->listaArmarios();
         require __DIR__ . '../../Views/documento/index.php';
     }
 

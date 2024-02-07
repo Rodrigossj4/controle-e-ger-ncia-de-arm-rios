@@ -40,6 +40,15 @@ class TipoDocumentoController
         $service = new TipoDocumentoService();
         echo json_encode($service->listaTipoDocumento()); 
      }
+
+     public function listarTipoDocumentoArmarios()
+     {
+        $idArmario = filter_input(INPUT_GET, 'id');
+        header('Content-Type: application/json; charset=utf-8');     
+        $service = new TipoDocumentoService();
+        echo json_encode($service->listaTipoDocumentoArmario($idArmario)); 
+     }
+
     public function alterar():bool
      {  
         $tipoDocList = array();
@@ -54,9 +63,9 @@ class TipoDocumentoController
      }
 
     public function excluir():bool
-     {
+     {      
         $service = new TipoDocumentoService();
-        $service->excluirTipoDocumento(filter_input(INPUT_POST, 'idTipoDoc'));
+        $service->excluirTipoDocumento(filter_input(INPUT_POST, 'id'));
         return true;
      }
 }

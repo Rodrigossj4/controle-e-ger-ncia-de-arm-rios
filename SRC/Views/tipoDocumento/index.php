@@ -46,7 +46,7 @@
     <div class="container">
         <div class="bg-body-tertiary rounded-3 row">
             <div class="col divisao_bottom form-control-padronizado" id="modCadTipoDocumento">
-                <h3>Cadastro de Armários</h3>
+                <h3>Cadastro de Tipos de documento</h3>
                 <form method="post" id="formCadTipoDocumento" action="/cadastrarTipoDocumento">
                     <div class="form-group">
                         <label class="col-form-label" for="desctipo">Descrição do tipo de documento: </label>
@@ -77,9 +77,9 @@
                             </div>
                             <div class="acoes-armarios">
                                 <button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="<?= $tipoDoc['id']; ?>" data-desc="<?= $tipoDoc['desctipo']; ?>">Editar</button>
-                                <form method="post" id="excluir<?= $tipoDoc['id']; ?>" action="/excluirTipoDocumento">
+                                <form method="post" id="excluir<?= $tipoDoc['id']; ?>" action="">
                                     <input type="hidden" id="idTipoDoc" name="idTipoDoc" value="<?= $tipoDoc['id']; ?>" >
-                                    <button class="btn btn-danger excluir" data-id="<?= $tipoDoc['id']; ?>" type="button">Excluir</button>
+                                    <button class="btn btn-danger excluirTipoDoc" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" data-id="<?= $tipoDoc['id']; ?>" type="button">Excluir</button>
                                 </form>
                             </div>
                         </div>                 
@@ -107,25 +107,52 @@
                         <br>
                         <div class="form-group row">
                             <div class="col-sm-3">
-                                <input type="button" class="btn btn-primary" id="btnConfirmaAlteracaoTipoDoc"
+                                <input type="button" class="btn btn-primary" id="exibConfirmaAlteracaoDocumento"
                                     value="Alterar">
                             </div>
                         </div>
-                        <!--<div class="form-group row opcoesConfirmacao">
+                        <div class="form-group row opcoesConfirmacao">
                             <span>Deseja realmente alterar essas informações?</span>
                             <div class="col-sm-3">
-                                <input type="button" id="btnConfirmaAlteracaoProduto" value="Sim"
+                                <input type="button" id="btnConfirmaAlteracaoTipoDocumento" value="Sim"
                                     class="btn btn-success">
                             </div>
                             <div class="col-sm-3">
-                                <input type="button" id="btnNaoConfirmaAlteracaoProduto" value="Não"
+                                <input type="button" id="btnNaoConfirmaAlteracaoTipoDocumento" value="Não"
                                     class="btn btn-danger">
                             </div>
-                        </div>-->
+                        </div>
                     </form>
                     <span class="alerta"></span>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modexcluirTipoDoc" tabindex="-1" aria-labelledby="modexcluirTipoDoc" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <span>Deseja realmente excluir esse tipo de documento?</span>
+                        <div class="col-sm-3">
+                            <form id="formExcluirTipoDoc">
+                                <input type="hidden" name="id" id="id">
+                            </form>
+                            <input type="button" id="btnConfirmaExcluirTipoDoc" data-id="" value="Sim"
+                                class="btn btn-success btnConfirmaExcluirTipoDoc">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="button" id="btnNaoConfirmaExcluirTipoDoc" data-id="" value="Não"
+                                class="btn btn-danger btnNaoConfirmaExcluirTipoDoc">
+                        </div>
+                    </div>
+                    <span class="alerta"></span>
+                </div>
             </div>
         </div>
     </div>

@@ -1,6 +1,8 @@
 <?php
 
 /** @var Marinha\Mvc\Models\Documentos[] $DocumentosList */
+/** @var Marinha\Mvc\Models\Armarios[] $ArmariosList  */
+
 
 ?>
 <!DOCTYPE html>
@@ -49,16 +51,21 @@
                 <h3>Gerênciar Documentos</h3>
                 <form method="post" id="formCadDocumento" action="/cadastrarDocumento">
                     <div class="form-group">
-                        <label class="col-form-label" for="Armario">Armario: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="Armario"
-                            id="Armario">
+                        <label class="col-form-label" for="Armario">Armario: </label><br>
+                        <select id="ListArmarioDocumento" class="col-form-label">
+                            <?php foreach ($ArmariosList  as $armarios): ?>  
+                                <option value="<?= $armarios['id']; ?>"><?= $armarios['nomeexterno']; ?></option>
+                            <?php endforeach; ?> 
+                        </select>    
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="TipoDoc">Tipo de documento: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="TipoDoc"
-                            id="TipoDoc">
+                    </br>
+                        <select id="SelectTipoDoc" class="col-form-label">
+                            <option value="0"></option>
+                        </select>                        
                     </div>
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="col-form-label" for="DocId">DocId: </label>
                         <input class="form-control form-control-sm form-control-padronizado" type="text" name="DocId"
                             id="DocId">
@@ -67,26 +74,32 @@
                         <label class="col-form-label" for="FolderId">Folder ID: </label>
                         <input class="form-control form-control-sm form-control-padronizado" type="text" name="FolderId"
                             id="FolderId">
+                    </div>-->
+                    <div class="form-group">
+                        <label class="col-form-label" for="semestre">Semestre: </label>
+                        <select id="semestre">
+                            <option value="1">1</option>
+                            <option value="2">2</option>                            
+                        </select>                     
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="ano">Ano: </label>
                         <input class="form-control form-control-sm form-control-padronizado" type="number" name="ano"
                             id="ano">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="semestre">Semestre: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="number" min="1" max="2" name="semestre"
-                            id="semestre">
-                    </div>
+                    </div>                    
                     <div class="form-group">
                         <label class="col-form-label" for="Nip">NIP: </label>
                         <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip"
                             id="Nip">
                     </div>
+                    <input type="file" id="documentoPrimarios">
                     <br>
                     <div class="form-group row">
+                    <div class="col-sm-3">
+                            <input type="button" id="btnBuscarDocumento" value="Buscar documentos" class="btn btn-primary">
+                        </div>
                         <div class="col-sm-3">
-                            <input type="submit" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
+                            <input type="button" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
                         </div>
                     </div>
                 </form>

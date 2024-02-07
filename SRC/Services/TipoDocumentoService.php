@@ -36,7 +36,19 @@ class TipoDocumentoService
             return [];
         }  
     }
+    public function listaTipoDocumentoArmario(int $idArmario): array
+    {
+        try{
+            $pdo = Conexao::createConnection();        
+            $repository = new TipoDocumentoRepository($pdo);       
+            return $repository->listaTipoDocumentoArmarios($idArmario);
 
+        }catch(Exception $e){
+            echo $e;
+            return [];
+        }  
+    }
+    
     public function alterarTipoDoc(array $tipoDoc): bool
     {       
         try{

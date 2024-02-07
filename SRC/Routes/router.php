@@ -40,7 +40,8 @@ Class Router
                 '/listarTipodocumento' => fn () => self::load('TipoDocumentoController','listar'),
                 '/gerenciar-tipo-documentos' => fn () => self::load('TipoDocumentoController','index'),
                 '/gerenciar-documentos' => fn () => self::load('DocumentoController','index'),
-                '/listarPaginas' => fn () => self::load('DocumentoController','listarPaginas')
+                '/listarPaginas' => fn () => self::load('DocumentoController','listarPaginas'),
+                '/listarTipoDocumentosArmario' => fn () => self::load('TipoDocumentoController','listarTipoDocumentoArmarios')
             ],
             'POST'=> [
                 '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),

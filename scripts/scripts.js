@@ -141,7 +141,7 @@ function carregarTipoDocumento() {
             var sel = $("#gradeListaDocumentos");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item"><div class="Descricao_Armario">' + e.nomeexterno + '</div><div class="acoes-armarios"><button class="btn btn-primary">Listar Documentos</button><button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="' + e.id + '" data-ni="' + e.nomeinterno + '" data-ne="' + e.nomeexterno + '" data-cd="' + e.codigo + '">Editar</button><form method="post" id="excluir' + e.id + '" action="/excluirArmario"><input type="hidden" id="idArmario" name="idArmario" value="' + e.id + '"><button class="btn btn-danger excluir" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button></form></div></div>');
+                sel.append('<div class="container_item"><div class="Descricao_Armario">' + e.desctipo + '</div><div class="acoes-armarios"><button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="' + e.id + '" data-desc="' + e.desctipo + '">Editar</button><form method="post" id="excluir' + e.id + '"><input type="hidden" id="idTipoDoc" name="idTipoDoc" value="' + e.id + '"><button class="btn btn-danger excluirTipoDoc" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" type="button">Excluir</button></form></div></div>');
 
             });
         },
@@ -171,14 +171,96 @@ $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
     });
 });
 
+$(document).on('click', '.excluirTipoDoc', function (e) {
+    $('#formExcluirTipoDoc #id').val($(this).data("id"));
+});
+
+$(document).on('click', '.btnConfirmaExcluirTipoDoc', function (e) {
+    var formdata = new FormData($("form[id='formExcluirTipoDoc']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/excluirTipoDocumento",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarTipoDocumento();
+            $(this).data("id", "");
+            alertas('Tipo documento excluído com sucesso', '#modexcluirTipoDoc', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modxcluirTipoDoc', 'alert_danger');
+        }
+    }
+    );
+});
+
+$(document).on('click', '#btnNaoConfirmaExcluirTipoDoc', function (e) {
+    FecharModal('#modexcluirTipoDoc');
+});
+
+
 $(document).on('click', '.btnAlterarTipoDoc', function (e) {
     $('#formAltTipoDoc #id').val($(this).data("id"));
     $('#formAltTipoDoc #descTipoDoc').val($(this).data("desc"));
+    $('.opcoesConfirmacao').css('display', 'none');
 });
 
-$(document).on('click', '#btnConfirmaAlteracaoTipoDoc', function (e) {
-    $('#formAltTipoDoc').submit();
+
+$(document).on('click', '#exibConfirmaAlteracaoDocumento', function (e) {
+    $('.opcoesConfirmacao').css('display', 'flex');
 });
+
+$(document).on('click', '#btnConfirmaAlteracaoTipoDocumento', function (e) {
+    var formdata = new FormData($("form[id='formAltTipoDoc']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/alterarTipoDoc",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarTipoDocumento();
+            $(this).data("id", "");
+            alertas('Tipo documento atualizado com sucesso', '#AlteraTipoDoc', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#AlteraTipoDoc', 'alert_danger');
+        }
+    }
+    );
+});
+
+$(document).on('change', '#ListArmarioDocumento', function (e) {
+    idArmario = $(this).val();
+
+    $.ajax({
+        type: 'GET',
+        url: "/listarTipoDocumentosArmario?id=" + idArmario,
+        data: "",
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            var sel = $("#SelectTipoDoc");
+            sel.empty();
+            d.forEach(e => {
+                sel.append('<option value="' + e.id + '">' + e.desctipo + '</option>');
+            });
+        },
+        error: function (d) {
+
+        }
+    }
+    );
+});
+
+$(document).on('click', '#btnNaoConfirmaAlteracaoTipoDocumento', function (e) {
+    FecharModal('#AlteraTipoDoc');
+});
+
+
 
 $(document).on('click', '.btnAlterarDocumento', function (e) {
     $('#formAltDocumento #docId').val($(this).data("docid"));
@@ -190,12 +272,6 @@ $(document).on('click', '.btnAlterarDocumento', function (e) {
     $('#formAltDocumento #folderid').val($(this).data("fi"));
     $('#formAltDocumento #armario').val($(this).data("ar"));
 });
-
-$(document).on('click', '#btnConfirmaAlteracaoDocumento', function (e) {
-    $('#formAltDocumento').submit();
-});
-
-
 
 
 

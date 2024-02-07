@@ -62,6 +62,30 @@ class TipoDocumentoRepository{
         }   
     }
 
+    public function listaTipoDocumentoArmarios(int $idArmario): array
+    {       
+        try{
+            $sqlQuery = 'SELECT * FROM  tipodocumento WHERE armario = ?;';
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idArmario);
+            $stmt->execute();  
+       
+            $tipodocumentoDataList = $stmt->fetchAll();
+            $tipodocumentoList = array();
+            foreach ($tipodocumentoDataList as $tipodocumentoData) {                   
+                array_push($tipodocumentoList, array(
+                    'id' => $tipodocumentoData['id'],
+                    'desctipo' => $tipodocumentoData['desctipo']
+                ));
+            };
+           
+            return $tipodocumentoList;
+        }catch (Exception $e){
+                echo $e;
+                return [];
+        }   
+    }
+    
     public function alterarTipoDoc(array $tipoDoc): bool
     {       
         try{
