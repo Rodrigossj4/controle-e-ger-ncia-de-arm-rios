@@ -5,6 +5,7 @@ namespace Marinha\Mvc\Controllers;
 
 use Exception;
 use Marinha\Mvc\Models\TipoDocumento;
+use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\TipoDocumentoService;
 
 class TipoDocumentoController 
@@ -18,20 +19,24 @@ class TipoDocumentoController
     public function index()
     {
         $service = new TipoDocumentoService();
-        $TipoDocumentoList = $service->listaTipoDocumento();  
+        $armariosService =  new ArmarioServices();
+        $TipoDocumentoList = $service->listaTipoDocumento(); 
+        $ArmariosList = $armariosService->listaArmarios(); 
         require __DIR__ . '../../Views/tipoDocumento/index.php';
     }
 
-    public function cadastrarTipodocumento():bool
+    public function cadastrarTipodocumento()
     {
+      
        $tipoDocList = array();
        array_push($tipoDocList, array(
-           'desctipo' => filter_input(INPUT_POST, 'desctipo')
+           'desctipo' => filter_input(INPUT_POST, 'desctipo'),
+           'armario' => filter_input(INPUT_POST, 'selectArmario'),
        ));
 
-       $service = new TipoDocumentoService();
-       
-       return $service->cadastrarTipoDocumento($tipoDocList);      
+         $service = new TipoDocumentoService();
+    
+         return $service->cadastrarTipoDocumento($tipoDocList);      
     }
 
     public function listar()
@@ -54,7 +59,8 @@ class TipoDocumentoController
         $tipoDocList = array();
         array_push($tipoDocList, array(
             'id' => filter_input(INPUT_POST, 'id'),
-            'desctipo' => filter_input(INPUT_POST, 'descTipoDoc')
+            'desctipo' => filter_input(INPUT_POST, 'descTipoDoc'),
+            'armario' => filter_input(INPUT_POST, 'armario')
         ));
        
         $service = new TipoDocumentoService();

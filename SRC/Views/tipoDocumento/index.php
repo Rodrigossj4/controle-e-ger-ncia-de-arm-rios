@@ -1,6 +1,7 @@
 <?php
 
 /** @var Marinha\Mvc\Models\TipoDocumento[] $TipoDocumentoList */
+/** @var Marinha\Mvc\Models\Armarios[] $ArmariosList  */
 
 ?>
 <!DOCTYPE html>
@@ -53,7 +54,14 @@
                         <input class="form-control form-control-sm form-control-padronizado" type="text" name="desctipo"
                             id="desctipo">
                     </div>
-                    <br>
+                    <div class="form-group">
+                        <label class="col-form-label" for="selectArmario">Armario: </label><br>
+                        <select id="selectArmario" name="selectArmario" class="col-form-label">
+                            <?php foreach ($ArmariosList  as $armarios): ?>  
+                                <option value="<?= $armarios['id']; ?>"><?= $armarios['nomeexterno']; ?></option>
+                            <?php endforeach; ?> 
+                        </select>    
+                    </div>
                     <div class="form-group row">
                         <div class="col-sm-3">
                             <input type="button" id="btnCadTipoDoc" value="Cadastrar" class="btn btn-primary">

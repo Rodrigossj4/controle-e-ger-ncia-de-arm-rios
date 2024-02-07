@@ -19,17 +19,19 @@ class TipoDocumentoRepository{
     {       
         try{
   
-            $sqlQuery = 'INSERT INTO tipodocumento(desctipo) values(?);';
+            $sqlQuery = 'INSERT INTO tipodocumento(desctipo, armario) values(? , ?);';
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach($tipoDocumento as $dc){
                 $tipoDocumentoData = new TipoDocumento(
                     null,
-                    $dc['desctipo']
+                    $dc['desctipo'],
+                    $dc['armario']
                 );
             }
                    
             $stmt->bindValue(1, $tipoDocumentoData->descTipo());
+            $stmt->bindValue(2, $tipoDocumentoData->armario());
             $stmt->execute();
        
             return true;
@@ -51,7 +53,8 @@ class TipoDocumentoRepository{
             foreach ($tipodocumentoDataList as $tipodocumentoData) {                   
                 array_push($tipodocumentoList, array(
                     'id' => $tipodocumentoData['id'],
-                    'desctipo' => $tipodocumentoData['desctipo']
+                    'desctipo' => $tipodocumentoData['desctipo'],
+                    'armario' => $tipodocumentoData['armario']
                 ));
             };
            
@@ -90,18 +93,20 @@ class TipoDocumentoRepository{
     {       
         try{
  
-            $sqlQuery = 'UPDATE tipodocumento SET desctipo = ? WHERE id = ?';
+            $sqlQuery = 'UPDATE tipodocumento SET desctipo = ?, armario = ? WHERE id = ?';
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach($tipoDoc as $td){
                 $tipoDocData = new TipoDocumento(
                     $td['id'],
-                    $td['desctipo']
+                    $td['desctipo'],
+                    $td['armario']
                 );
             }
                
-            $stmt->bindValue(1, $tipoDocData->descTipo());            
-            $stmt->bindValue(2, $tipoDocData->id());
+            $stmt->bindValue(1, $tipoDocData->descTipo());
+            $stmt->bindValue(2, $tipoDocData->armario());             
+            $stmt->bindValue(3, $tipoDocData->id());
             $stmt->execute();
        
             return true;

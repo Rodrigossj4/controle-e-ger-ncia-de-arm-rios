@@ -153,6 +153,7 @@ function carregarTipoDocumento() {
 
 $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadTipoDocumento']")[0]);
+    console.log(formdata);
     $.ajax({
         type: 'POST',
         url: "/cadastrarTipoDocumento",

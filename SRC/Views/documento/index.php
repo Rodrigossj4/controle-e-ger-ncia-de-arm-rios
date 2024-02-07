@@ -48,7 +48,7 @@
     <div class="container">
         <div class="bg-body-tertiary rounded-3 row">
             <div class="col divisao_bottom form-control-padronizado" id="modCadTipoDocumento">
-                <h3>Gerênciar Documentos</h3>
+                <h3>Gerenciar Documentos</h3>
                 <form method="post" id="formCadDocumento" action="/cadastrarDocumento">
                     <div class="form-group">
                         <label class="col-form-label" for="Armario">Armario: </label><br>
