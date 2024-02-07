@@ -52,7 +52,9 @@
                 <form method="post" id="formCadDocumento" action="/cadastrarDocumento">
                     <div class="form-group">
                         <label class="col-form-label" for="Armario">Armario: </label><br>
+                           
                         <select id="ListArmarioDocumento" class="col-form-label">
+                        <option value="0"></option>
                             <?php foreach ($ArmariosList  as $armarios): ?>  
                                 <option value="<?= $armarios['id']; ?>"><?= $armarios['nomeexterno']; ?></option>
                             <?php endforeach; ?> 
