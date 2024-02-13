@@ -4,6 +4,7 @@
 namespace Marinha\Mvc\Controllers;
 
 use Exception;
+use Zend_Pdf;
 use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\DocumentoServices;
 
@@ -40,7 +41,10 @@ class DocumentoController
             'ano' => filter_input(INPUT_POST, 'ano'),
             'nip' => filter_input(INPUT_POST, 'Nip')
         ));
-
+        $pdf = new Zend_Pdf();
+        $pdf = Zend_Pdf::load($pdfPath);
+        $pdf->properties['Title'] = 'New Title.';
+        $pdf->save($pdfPath);
         $service = new DocumentoServices();
         //var_dump($documentosList);
         if($service->cadastrarDocumentos($documentosList))
