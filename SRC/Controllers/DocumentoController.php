@@ -31,7 +31,7 @@ class DocumentoController
 
         $this->gerarPastaDoc($idPasta);
         
-        $documentosList = array();
+        $documentosList = array(); 
         array_push($documentosList, array(
             'docid' => $idPasta,
             'armario' => filter_input(INPUT_POST, 'ListArmarioDocumento'),
