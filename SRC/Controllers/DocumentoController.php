@@ -26,19 +26,27 @@ class DocumentoController
 
     public function cadastrarDocumento():bool
      {
+        $idPasta = random_int(1,999999);
+
+        $this->gerarPastaDoc($idPasta);
+        
         $documentosList = array();
         array_push($documentosList, array(
-            'docid' => filter_input(INPUT_POST, 'DocId'),
-            'armario' => filter_input(INPUT_POST, 'Armario'),
-            'tipodoc' => filter_input(INPUT_POST, 'TipoDoc'),
-            'folderid' => filter_input(INPUT_POST, 'FolderId'),
+            'docid' => $idPasta,
+            'armario' => filter_input(INPUT_POST, 'ListArmarioDocumento'),
+            'tipodoc' => filter_input(INPUT_POST, 'SelectTipoDoc'),
+            'folderid' => "1",
             'semestre' => filter_input(INPUT_POST, 'semestre'),
             'ano' => filter_input(INPUT_POST, 'ano'),
             'nip' => filter_input(INPUT_POST, 'Nip')
         ));
 
         $service = new DocumentoServices();
-        
+        //var_dump($documentosList);
+        if($service->cadastrarDocumentos($documentosList))
+        {
+            $this->cadastrarPagina($idPasta, 1, $this->gerarArquivo($idPasta));
+        }
         return $service->cadastrarDocumentos($documentosList);      
      }
 
@@ -68,18 +76,18 @@ class DocumentoController
         return true;
      }
 
-     public function cadastrarPagina():bool
+     private function cadastrarPagina(int $documentoid, int $numpagina, string $arquivo):bool
      {
         $paginasList = array();
         array_push($paginasList, array(            
-            'documentoid' => filter_input(INPUT_POST, 'documentoid'),
-            'volume' => filter_input(INPUT_POST, 'volume'),
-            'numpagina' => filter_input(INPUT_POST, 'numpagina'),
-            'codexp' => filter_input(INPUT_POST, 'codexp'),
-            'arquivo' => filter_input(INPUT_POST, 'arquivo'),
-            'filme' => filter_input(INPUT_POST, 'filme'),
-            'fotograma' => filter_input(INPUT_POST, 'fotograma'),
-            'imgencontrada' => filter_input(INPUT_POST, 'imgencontrada')
+            'documentoid' =>  $documentoid,
+            'volume' => "1",
+            'numpagina' => $numpagina,
+            'codexp' => 1,
+            'arquivo' => $arquivo,
+            'filme' => "1",
+            'fotograma' => "1",
+            'imgencontrada' => "1"
         ));
 
         $service = new DocumentoServices();
@@ -123,4 +131,31 @@ class DocumentoController
         $service->alterarPaginas($paginasList);
         return true;
      }
+
+     private function gerarArquivo(int $idPasta):string
+     {
+      //var_dump($_FILES['documento']);
+      $extensao = strtolower(substr($_FILES['documento']['name'], -4)); 
+      
+      //$novo_nome = md5(time()) . $extensao; 
+      //var_dump($novo_nome);
+      //criar pasta dentro de documentos
+      $diretorio = "documentos/"; 
+     
+      
+      mkdir("{$diretorio}/{$idPasta}", 0777, true);
+      // a pasta deve ter o nome cifrado com nip_tipodocumento
+      
+      move_uploaded_file($_FILES['documento'] ['tmp_name'],  "{$diretorio}/{$idPasta}/".$_FILES['documento']['name']); 
+      //exit();
+      return "{$diretorio}/{$idPasta}/".$_FILES['documento']['name'];
+     }
+
+     private function gerarPastaDoc(int $idPasta):string
+     {    
+         $diretorio = "documentos/"; 
+         mkdir("{$diretorio}/{$idPasta}", 0777, true);
+         return "";
+     }
+
 }

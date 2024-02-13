@@ -52,7 +52,7 @@ class DocumentoRepository
   
             $sqlQuery = 'INSERT INTO documento(docid, nip, semestre, ano, tipodocumento, folderid, armario) values(?, ?, ?, ?, ?, ?, ?);';
             $stmt = $this->pdo->prepare($sqlQuery);
-            
+            //var_dump($documento);
             foreach($documento as $dc){
                 $documentoData = new Documentos(
                     null,
@@ -209,32 +209,32 @@ class DocumentoRepository
     {       
         try{
   
-            $sqlQuery = 'INSERT INTO documentoPagina(docid, volume, numpagina, codexp, arquivo, filme, fotograma, imgencontrada) values(?, ?, ?, ?, ?, ?, ?, ?);';
+            $sqlQuery = 'INSERT INTO documentoPagina(documentoid, volume, numpagina, codexp, arquivo, filme, fotogramna, imgencontrada) values(?, ?, ?, ?, ?, ?, ?, ?);';
             $stmt = $this->pdo->prepare($sqlQuery);
             
             foreach($pagina as $pg){
                 $paginaData = new Paginas(
                     null,
-                    $pg['documentoid'],
+                    $this->retornaIdDocumentId($pg['documentoid']),
                     $pg['volume'],
-                    $pg['numpagina'],
-                    $pg['codexp'],
+                    $pg['numpagina'],                   
                     $pg['arquivo'],
+                    $pg['codexp'],
                     $pg['filme'],
                     $pg['fotograma'],
-                    $pg['imgencontrada']
-                    
+                    $pg['imgencontrada']                    
                 );
             }
            
             $stmt->bindValue(1, $paginaData->documentoid());
-            $stmt->bindValue(2, $$paginaData->volume());
+            $stmt->bindValue(2, $paginaData->volume());
             $stmt->bindValue(3, $paginaData->numpagina());
             $stmt->bindValue(4, $paginaData->codexp());
             $stmt->bindValue(5, $paginaData->arquivo());
             $stmt->bindValue(6, $paginaData->filme());
             $stmt->bindValue(7, $paginaData->fotograma());
             $stmt->bindValue(8, $paginaData->imgencontrada());
+         
             $stmt->execute();
        
             return true;
@@ -244,6 +244,24 @@ class DocumentoRepository
         }   
     }
 
+    private function retornaIdDocumentId(int $documentId):int{
+    
+        try{
+            $sqlQuery = 'SELECT id FROM documento where docid = ?;';
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $documentId);
+            $stmt->execute();
+       
+       
+            $documentosDataList = $stmt->fetchAll();
+            
+
+            return $documentosDataList[0]['id'];
+        }catch (Exception $e){
+                echo $e;
+                return [];
+        }
+    }
     public function excluirPagina(int $id): bool
     {
         try{

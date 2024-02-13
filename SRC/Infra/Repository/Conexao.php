@@ -9,7 +9,6 @@ class Conexao
     public static function createConnection(): PDO
     {
         try{
-
             $host = "localhost";
             $dbname = "sispad";
             $dbuser = "postgres";

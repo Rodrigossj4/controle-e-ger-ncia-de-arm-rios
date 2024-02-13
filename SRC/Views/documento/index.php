@@ -49,11 +49,11 @@
         <div class="bg-body-tertiary rounded-3 row">
             <div class="col divisao_bottom form-control-padronizado" id="modCadTipoDocumento">
                 <h3>Gerenciar Documentos</h3>
-                <form method="post" id="formCadDocumento" action="/cadastrarDocumento">
+                <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="col-form-label" for="Armario">Armario: </label><br>
                            
-                        <select id="ListArmarioDocumento" class="col-form-label">
+                        <select id="ListArmarioDocumento" name="ListArmarioDocumento" class="col-form-label">
                         <option value="0"></option>
                             <?php foreach ($ArmariosList  as $armarios): ?>  
                                 <option value="<?= $armarios['id']; ?>"><?= $armarios['nomeexterno']; ?></option>
@@ -63,7 +63,7 @@
                     <div class="form-group">
                         <label class="col-form-label" for="TipoDoc">Tipo de documento: </label>
                     </br>
-                        <select id="SelectTipoDoc" class="col-form-label">
+                        <select id="SelectTipoDoc" name="SelectTipoDoc" class="col-form-label">
                             <option value="0"></option>
                         </select>                        
                     </div>
@@ -79,7 +79,7 @@
                     </div>-->
                     <div class="form-group">
                         <label class="col-form-label" for="semestre">Semestre: </label>
-                        <select id="semestre">
+                        <select id="semestre" name="semestre">
                             <option value="1">1</option>
                             <option value="2">2</option>                            
                         </select>                     
@@ -94,14 +94,14 @@
                         <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip"
                             id="Nip">
                     </div>
-                    <input type="file" id="documentoPrimarios">
+                    <input type="file" id="documento" name="documento">
                     <br>
                     <div class="form-group row">
                     <div class="col-sm-3">
                             <input type="button" id="btnBuscarDocumento" value="Buscar documentos" class="btn btn-primary">
                         </div>
                         <div class="col-sm-3">
-                            <input type="button" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
+                            <input type="submit" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
                         </div>
                     </div>
                 </form>
