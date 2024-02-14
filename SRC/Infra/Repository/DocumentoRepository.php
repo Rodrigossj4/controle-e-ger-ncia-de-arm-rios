@@ -20,7 +20,15 @@ class DocumentoRepository
     public function listaDocumentos(): array
     {       
         try{
-            $sqlQuery = 'SELECT * FROM documento;';
+            $sqlQuery = 'select d.id, d.docid, d.nip, d.semestre, d.ano, d.tipodocumento, d.armario, 
+                            dp.numpagina, dp.id as idpagina, dp.arquivo, td.desctipo, arm.nomeexterno as nomeArmario
+                            from documento d
+                            inner join documentopagina dp
+                            on dp.documentoid = d.id
+                            inner join tipodocumento td
+                            on td.id = d.tipodocumento
+                            inner join armarios arm
+                            on arm.id = d.armario;';
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
        
@@ -34,8 +42,12 @@ class DocumentoRepository
                     'semestre' => $documentosData['semestre'],
                     'ano' => $documentosData['ano'],
                     'tipodocumento' => $documentosData['tipodocumento'],
-                    'folderid' => $documentosData['folderid'],
-                    'armario' => $documentosData['armario']
+                    'armario' => $documentosData['armario'],
+                    'numpagina' => $documentosData['numpagina'],
+                    'idpagina' => $documentosData['idpagina'],
+                    'arquivo' => $documentosData['arquivo'],
+                    'desctipo' => $documentosData['desctipo'],
+                    'nomeArmario' => $documentosData['nomearmario']
                 ));
             };
 

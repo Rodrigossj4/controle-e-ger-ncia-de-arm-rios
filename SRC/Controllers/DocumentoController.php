@@ -27,8 +27,9 @@ class DocumentoController
     public function cadastrarDocumento():bool
      {
         $idPasta = random_int(1,999999);
+        $service = new DocumentoServices();
 
-        $this->gerarPastaDoc($idPasta);
+        $service->gerarPastaDoc($idPasta);
         
         $documentosList = array();
         array_push($documentosList, array(
@@ -41,13 +42,14 @@ class DocumentoController
             'nip' => filter_input(INPUT_POST, 'Nip')
         ));
 
-        $service = new DocumentoServices();
+        
+        $tags = filter_input(INPUT_POST, 'Nip'). ", ".  filter_input(INPUT_POST, 'ano');
         //var_dump($documentosList);
         if($service->cadastrarDocumentos($documentosList))
         {
-            $this->cadastrarPagina($idPasta, 1, $this->gerarArquivo($idPasta));
+            $this->cadastrarPagina($idPasta, 1, $service->gerarArquivo($idPasta, $tags));
         }
-        return $service->cadastrarDocumentos($documentosList);      
+        return true;      
      }
 
      public function alterarDocumento():bool
@@ -132,30 +134,5 @@ class DocumentoController
         return true;
      }
 
-     private function gerarArquivo(int $idPasta):string
-     {
-      //var_dump($_FILES['documento']);
-      $extensao = strtolower(substr($_FILES['documento']['name'], -4)); 
-      
-      //$novo_nome = md5(time()) . $extensao; 
-      //var_dump($novo_nome);
-      //criar pasta dentro de documentos
-      $diretorio = "documentos/"; 
-     
-      
-      mkdir("{$diretorio}/{$idPasta}", 0777, true);
-      // a pasta deve ter o nome cifrado com nip_tipodocumento
-      
-      move_uploaded_file($_FILES['documento'] ['tmp_name'],  "{$diretorio}/{$idPasta}/".$_FILES['documento']['name']); 
-      //exit();
-      return "{$diretorio}/{$idPasta}/".$_FILES['documento']['name'];
-     }
-
-     private function gerarPastaDoc(int $idPasta):string
-     {    
-         $diretorio = "documentos/"; 
-         mkdir("{$diretorio}/{$idPasta}", 0777, true);
-         return "";
-     }
-
+    
 }

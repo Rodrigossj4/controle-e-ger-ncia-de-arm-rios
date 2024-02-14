@@ -72,9 +72,24 @@ span.alert_danger {
     display: inline-block;
 }
 
+.Descricao {
+    border: 0px solid;
+    width: 15%;
+    font-weight: bold;
+    font-size: 10px;
+    height: auto;
+    display: inline-block;
+}
+
 .acoes-armarios {
     border: 0px solid;
     width: 48%;
+    display: inline-block;
+}
+
+.acoes {
+    border: 0px solid;
+    width: 37.5%;
     display: inline-block;
 }
 

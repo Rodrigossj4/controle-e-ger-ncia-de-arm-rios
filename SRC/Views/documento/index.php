@@ -1,6 +1,6 @@
 <?php
 
-/** @var Marinha\Mvc\Models\Documentos[] $DocumentosList */
+/** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $DocumentosList */
 /** @var Marinha\Mvc\Models\Armarios[] $ArmariosList  */
 
 
@@ -110,43 +110,63 @@
         </div>
     </div>
 
-    <div class="Container">
+    <div class="Container" style="border:1px ">
         <div class="p-5 bg-body-tertiary rounded-3 row">
             <div class="col">
                 <h3>Gerenciamento de documentos</h3>
-                <div class="Armarios">                    
+                <div class="Armarios" id="gradeArmarios">
+                    <div class="container_item">
+                        <div class="Descricao">
+                            NIP
+                        </div>
+                        <div class="Descricao">
+                            Semestre
+                        </div>
+                        <div class="Descricao">
+                            Ano
+                        </div>
+                        <div class="Descricao">
+                            Tipo de documento
+                        </div>
+                        <div class="Descricao">
+                            Armário
+                        </div>
+                        <div class="Descricao">
+                            Arquivos
+                        </div>
+                        <!--<div class="Descricao">
+                            Ações
+                        </div>-->
+                    </div>                   
                     <?php foreach ($DocumentosList  as $documentos): ?>                    
-                        <div class="armarios_item">
-                            <div class="Id do documento">
-                                <?= $documentos['docid']; ?>
-                            </div>
-                            <div class="NIP">
+                        <div class="container_item">
+                            <div class="Descricao">
                                 <?= $documentos['nip']; ?>
                             </div>
-                            <div class="semestre">
+                            <div class="Descricao">
                                 <?= $documentos['semestre']; ?>
                             </div>
-                            <div class="ano">
+                            <div class="Descricao">
                                 <?= $documentos['ano']; ?>
                             </div>
-                            <div class="tipodocumento">
-                                <?= $documentos['tipodocumento']; ?>
+                            <div class="Descricao">
+                                <?= $documentos['desctipo']; ?>
                             </div>
-                            <div class="folderid">
-                                <?= $documentos['folderid']; ?>
+                            <div class="Descricao">
+                               <a href="<?= $documentos['arquivo']; ?>" target="_blank">Veja o documento</a>
                             </div>
-                            <div class="armario">
-                                <?= $documentos['armario']; ?>
+                            <div class="Descricao">
+                                <?= $documentos['nomeArmario']; ?>
                             </div>
-                            <div class="acoes-armarios">
+                            <!--<div class="acoes">
                             <button class="btn btn-primary btnCadPagina" data-bs-toggle="modal" data-bs-target="#CadPagina" data-id="<?= $documentos['id']; ?>">Vincular página</button>
                                 <button class="btn btn-warning btnAlterarDocumento" data-bs-toggle="modal" data-bs-target="#AlteraDocumento" data-id="<?= $documentos['id']; ?>" data-nip="<?= $documentos['nip']; ?>" data-docid="<?= $documentos['docid']; ?>"  data-sm="<?= $documentos['semestre']; ?>" data-ano="<?= $documentos['ano']; ?>" data-td="<?= $documentos['tipodocumento']; ?>" data-fi="<?= $documentos['folderid']; ?>" data-ar="<?= $documentos['armario']; ?>">Editar</button>
                                 <form method="post" id="excluir<?= $documentos['id']; ?>" action="/excluirDocumento">
                                     <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>" >
                                     <button class="btn btn-danger excluir" data-id="<?= $documentos['id']; ?>" type="button">Excluir</button>
                                 </form>
-                            </div>
-                        </div>                 
+                            </div>-->
+                        </div>             
                     <?php endforeach; ?>                    
                 </div>
             </div>
