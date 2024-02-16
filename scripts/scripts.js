@@ -261,6 +261,23 @@ $(document).on('click', '#btnNaoConfirmaAlteracaoTipoDocumento', function (e) {
     FecharModal('#AlteraTipoDoc');
 });
 
+$(document).on('click', '.abrirDocumento', function (e) {
+
+    $.ajax({
+        url: "/retornarCaminhoDocumento?id=" + $(this).data("id"),
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        cache: false,
+        success: function (data) {
+            console.log(data);
+
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+});
 
 
 $(document).on('click', '.btnAlterarDocumento', function (e) {

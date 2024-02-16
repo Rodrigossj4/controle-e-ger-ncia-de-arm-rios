@@ -153,7 +153,8 @@
                                 <?= $documentos['desctipo']; ?>
                             </div>
                             <div class="Descricao">
-                               <a href="<?= $documentos['arquivo']; ?>" target="_blank">Veja o documento</a>
+                                <form
+                               <a href="#"  class="abrirDocumento" data-id=<?= $documentos['id']; ?>>Veja o documento</a>
                             </div>
                             <div class="Descricao">
                                 <?= $documentos['nomeArmario']; ?>

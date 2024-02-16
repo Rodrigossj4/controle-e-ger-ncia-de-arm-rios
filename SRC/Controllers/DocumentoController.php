@@ -78,6 +78,13 @@ class DocumentoController
         return true;
      }
 
+    public function retornarCaminhoDocumento(int $id): array
+    { 
+        //var_dump($id);
+        $service = new DocumentoServices();
+        return $service->retornarCaminhoDocumento($id);
+    }
+
      private function cadastrarPagina(int $documentoid, int $numpagina, string $arquivo):bool
      {
         $paginasList = array();

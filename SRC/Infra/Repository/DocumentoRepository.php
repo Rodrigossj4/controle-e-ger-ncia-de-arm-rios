@@ -57,6 +57,30 @@ class DocumentoRepository
                 return [];
         }   
     }
+
+    public function retornarCaminhoDocumento(int $id): array
+    {       
+        try{
+            var_dump("$id");
+            $sqlQuery = 'select arquivo documentopagina where documentoid = ?';
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+       
+            $documentosDataList = $stmt->fetchAll();
+            $documentosList = array();
+            foreach ($documentosDataList as $documentosData) {                   
+                array_push($documentosList, array(
+                    'arquivo' => $documentosData['arquivo']
+                ));
+            };
+
+            return $documentosList;
+        }catch (Exception $e){
+                echo $e;
+                return [];
+        }   
+    }
     
     public function cadastrarDocumentos(array $documento): bool
     {       
