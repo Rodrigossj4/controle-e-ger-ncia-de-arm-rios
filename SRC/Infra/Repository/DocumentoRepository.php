@@ -58,11 +58,11 @@ class DocumentoRepository
         }   
     }
 
-    public function retornarCaminhoDocumento(int $id): array
+    public function retornarCaminhoDocumento(string $id): string
     {       
         try{
-            var_dump("$id");
-            $sqlQuery = 'select arquivo documentopagina where documentoid = ?';
+            
+            $sqlQuery = 'select arquivo from documentopagina where documentoid = ?';
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();
@@ -74,8 +74,8 @@ class DocumentoRepository
                     'arquivo' => $documentosData['arquivo']
                 ));
             };
-
-            return $documentosList;
+           
+            return $documentosData['arquivo'];
         }catch (Exception $e){
                 echo $e;
                 return [];

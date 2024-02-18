@@ -55,8 +55,7 @@ class DocumentoServices
     }
     
     public function excluirDocumentos(int $id): bool
-    {
-        var_dump($id);
+    {       
         try{
             $pdo = Conexao::createConnection();        
             $repository = new DocumentoRepository($pdo);       
@@ -68,12 +67,14 @@ class DocumentoServices
         } 
     }
 
-    public function retornarCaminhoDocumento(int $id): array
+    public function retornarCaminhoDocumento(string $id): string
     { 
         try{
             $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
-            return $repository->retornarCaminhoDocumento($id);
+            $repository = new DocumentoRepository($pdo);  
+            $returno =  $repository->retornarCaminhoDocumento($id);  
+           
+            return $returno;
 
         }catch(Exception $e){
             echo $e;
@@ -188,9 +189,18 @@ class DocumentoServices
        return $caminhoPDF;
     }
 
+    public function abrirArquivo(string $caminhoarquivo):string
+    {        
+        $encrypted_code = file_get_contents($caminhoarquivo);
+        $decrypted_code = $this->my_decrypt($encrypted_code, $this->key); 
+       
+        file_put_contents('documentos/ttt.pdf', $decrypted_code);
+       
+        return "documentos/ttt.pdf";
+    }
     public function teste(){
 
-        $code = file_get_contents('documentos/112687/653466.pdf'); 
+        $code = file_get_contents('documentos/100737/51196.pdf'); 
         $encrypted_code = $this->my_encrypt($code, $this->key); 
         file_put_contents('documentos/encrypted.pdf', $encrypted_code); 
 

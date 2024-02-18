@@ -78,11 +78,11 @@ class DocumentoController
         return true;
      }
 
-    public function retornarCaminhoDocumento(int $id): array
-    { 
-        //var_dump($id);
+    public function retornarCaminhoDocumento(int $docid):string
+    {  
         $service = new DocumentoServices();
-        return $service->retornarCaminhoDocumento($id);
+        
+        return $service->retornarCaminhoDocumento($docid);
     }
 
      private function cadastrarPagina(int $documentoid, int $numpagina, string $arquivo):bool
@@ -99,18 +99,14 @@ class DocumentoController
             'imgencontrada' => "1"
         ));
 
-        $service = new DocumentoServices();
-        
+        $service = new DocumentoServices();        
         return $service->cadastrarPaginas($paginasList);      
      }
 
     public function listarPaginas()
     {
-       
         $service = new DocumentoServices();
-       
         $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'iddocumento'));  
-        
         require __DIR__ . '../../Views/documento/index.php';
      }
 
@@ -141,5 +137,11 @@ class DocumentoController
         return true;
      }
 
-    
+    public function visualizarDocumento()
+    {
+        $caminho = $this->retornarCaminhoDocumento(filter_input(INPUT_GET, 'docid'));
+        $service = new DocumentoServices();
+        $arquivo  = $service->abrirArquivo($caminho);
+        require __DIR__ . '../../Views/documento/visualizar.php';
+    }
 }

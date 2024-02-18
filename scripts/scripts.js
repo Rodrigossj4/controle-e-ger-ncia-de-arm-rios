@@ -153,7 +153,7 @@ function carregarTipoDocumento() {
 
 $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadTipoDocumento']")[0]);
-    console.log(formdata);
+
     $.ajax({
         type: 'POST',
         url: "/cadastrarTipoDocumento",
@@ -253,8 +253,7 @@ $(document).on('change', '#ListArmarioDocumento', function (e) {
         error: function (d) {
 
         }
-    }
-    );
+    });
 });
 
 $(document).on('click', '#btnNaoConfirmaAlteracaoTipoDocumento', function (e) {
@@ -262,21 +261,9 @@ $(document).on('click', '#btnNaoConfirmaAlteracaoTipoDocumento', function (e) {
 });
 
 $(document).on('click', '.abrirDocumento', function (e) {
-
-    $.ajax({
-        url: "/retornarCaminhoDocumento?id=" + $(this).data("id"),
-        type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json',
-        cache: false,
-        success: function (data) {
-            console.log(data);
-
-        },
-        error: function (data) {
-            console.log("Ocorreu um erro: " + data);
-        }
-    });
+    var nomeForm = "docid_" + $(this).data("id");
+    var formdata = new FormData($("form[id='" + nomeForm + "']")[0]);
+    window.open("/visualizarDocumento?docid=" + $(this).data("id"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
 });
 
 
@@ -291,7 +278,22 @@ $(document).on('click', '.btnAlterarDocumento', function (e) {
     $('#formAltDocumento #armario').val($(this).data("ar"));
 });
 
-
+function abreArquivo(data) {
+    $.ajax({
+        url: "/visualizarDocumento",
+        type: 'GET',
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            console.log(d);
+            window.open(data, "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
+        },
+        error: function (d) {
+            console.log("Ocorreu um erro: " + d);
+        }
+    });
+}
 
 function FecharModal(local) {
     $(local + ' .btn-close').trigger('click');

@@ -153,8 +153,11 @@
                                 <?= $documentos['desctipo']; ?>
                             </div>
                             <div class="Descricao">
-                                <form
-                               <a href="#"  class="abrirDocumento" data-id=<?= $documentos['id']; ?>>Veja o documento</a>
+                                <form method="post" id="docid_<?= $documentos['id']; ?>" name="docid_<?= $documentos['id']; ?>">
+                                    <input type="hidden" id="docid" name="docid"  value="<?= $documentos['id']; ?>">
+                                    <a class="abrirDocumento" data-id=<?= $documentos['id']; ?>>Veja o documento</a>
+                                </form>
+                               
                             </div>
                             <div class="Descricao">
                                 <?= $documentos['nomeArmario']; ?>

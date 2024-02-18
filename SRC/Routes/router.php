@@ -41,8 +41,9 @@ Class Router
                 '/gerenciar-tipo-documentos' => fn () => self::load('TipoDocumentoController','index'),
                 '/gerenciar-documentos' => fn () => self::load('DocumentoController','index'),
                 '/listarPaginas' => fn () => self::load('DocumentoController','listarPaginas'),
-                '/listarTipoDocumentosArmario' => fn () => self::load('TipoDocumentoController','listarTipoDocumentoArmarios'),
-                '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento')
+                '/listarTipoDocumentosArmario' => fn () => self::load('TipoDocumentoController','listarTipoDocumentoArmarios') ,
+                '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento'),
+                '/visualizarDocumento' => fn () => self::load('DocumentoController','visualizarDocumento')                       
             ],
             'POST'=> [
                 '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),
@@ -56,7 +57,8 @@ Class Router
                 '/alterarDocumento' => fn () => self::load('DocumentoController', 'alterarDocumento'),
                 '/cadastrarPagina' => fn () => self::load('DocumentoController', 'cadastrarPagina'),
                 '/excluirPagina' => fn () => self::load('DocumentoController','excluirPagina'),
-                '/alterarPagina' => fn () => self::load('DocumentoController','alterarPagina')      
+                '/alterarPagina' => fn () => self::load('DocumentoController','alterarPagina')   ,
+                '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento')    
             ]
         ];
     }
