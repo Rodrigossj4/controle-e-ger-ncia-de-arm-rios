@@ -43,7 +43,8 @@ Class Router
                 '/listarPaginas' => fn () => self::load('DocumentoController','listarPaginas'),
                 '/listarTipoDocumentosArmario' => fn () => self::load('TipoDocumentoController','listarTipoDocumentoArmarios') ,
                 '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento'),
-                '/visualizarDocumento' => fn () => self::load('DocumentoController','visualizarDocumento')                       
+                '/visualizarDocumento' => fn () => self::load('DocumentoController','visualizarDocumento'),
+                '/assinarDocumento' => fn () => self::load('DocumentoController','asssinarDigital')                       
             ],
             'POST'=> [
                 '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),

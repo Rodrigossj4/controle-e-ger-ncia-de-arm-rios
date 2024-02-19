@@ -53,8 +53,8 @@
                     <div class="form-group">
                         <label class="col-form-label" for="Armario">Armario: </label><br>
                            
-                        <select id="ListArmarioDocumento" name="ListArmarioDocumento" class="col-form-label">
-                        <option value="0"></option>
+                        <select id="ListArmarioDocumento" name="ListArmarioDocumento" class="form-select">
+                        <option value="0">Selecione um armário</option>
                             <?php foreach ($ArmariosList  as $armarios): ?>  
                                 <option value="<?= $armarios['id']; ?>"><?= $armarios['nomeexterno']; ?></option>
                             <?php endforeach; ?> 
@@ -63,8 +63,8 @@
                     <div class="form-group">
                         <label class="col-form-label" for="TipoDoc">Tipo de documento: </label>
                     </br>
-                        <select id="SelectTipoDoc" name="SelectTipoDoc" class="col-form-label">
-                            <option value="0"></option>
+                        <select id="SelectTipoDoc" name="SelectTipoDoc" class="form-select">
+                            <option value="0">Selecione o tipo de documento</option>
                         </select>                        
                     </div>
                     <!--<div class="form-group">
@@ -79,14 +79,15 @@
                     </div>-->
                     <div class="form-group">
                         <label class="col-form-label" for="semestre">Semestre: </label>
-                        <select id="semestre" name="semestre">
-                            <option value="1">1</option>
-                            <option value="2">2</option>                            
+                        <br>
+                        <select id="semestre" name="semestre" class="form-select">
+                            <option value="1">Primeiro semestre</option>
+                            <option value="2">Segundo semestre</option>                            
                         </select>                     
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="ano">Ano: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="number" name="ano"
+                        <input class="form-control form-control-padronizado" type="number" name="ano"
                             id="ano">
                     </div>                    
                     <div class="form-group">
@@ -94,15 +95,15 @@
                         <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip"
                             id="Nip">
                     </div>
-                    <input type="file" id="documento" name="documento">
+                    <input type="file" id="documento" name="documento" class="form-control">
                     <br>
                     <div class="form-group row">
                     <div class="col-sm-3">
-                            <input type="button" id="btnBuscarDocumento" value="Buscar documentos" class="btn btn-primary">
-                        </div>
-                        <div class="col-sm-3">
-                            <input type="submit" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
-                        </div>
+                        <input type="button" id="btnBuscarDocumento" value="Buscar documentos" class="btn btn-primary">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="submit" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
+                    </div>
                     </div>
                 </form>
                 <span class="alerta"></span>
@@ -114,24 +115,24 @@
         <div class="p-5 bg-body-tertiary rounded-3 row">
             <div class="col">
                 <h3>Gerenciamento de documentos</h3>
-                <div class="Armarios" id="gradeArmarios">
-                    <div class="container_item">
-                        <div class="Descricao">
+                <div class="Grade_maior" id="gradeArmarios">
+                    <div class="container_item_maior">
+                        <div class="Descricao_maior">
                             NIP
                         </div>
-                        <div class="Descricao">
+                        <div class="Descricao_maior">
                             Semestre
                         </div>
-                        <div class="Descricao">
+                        <div class="Descricao_maior">
                             Ano
                         </div>
-                        <div class="Descricao">
+                        <div class="Descricao_maior">
                             Tipo de documento
                         </div>
-                        <div class="Descricao">
+                        <div class="Descricao_maior">
                             Armário
                         </div>
-                        <div class="Descricao">
+                        <div class="Descricao_maior">
                             Arquivos
                         </div>
                         <!--<div class="Descricao">
@@ -139,29 +140,30 @@
                         </div>-->
                     </div>                   
                     <?php foreach ($DocumentosList  as $documentos): ?>                    
-                        <div class="container_item">
-                            <div class="Descricao">
+                        <div class="container_item_maior">
+                            <div class="Descricao_maior">
                                 <?= $documentos['nip']; ?>
                             </div>
-                            <div class="Descricao">
+                            <div class="Descricao_maior">
                                 <?= $documentos['semestre']; ?>
                             </div>
-                            <div class="Descricao">
+                            <div class="Descricao_maior">
                                 <?= $documentos['ano']; ?>
                             </div>
-                            <div class="Descricao">
+                            <div class="Descricao_maior">
                                 <?= $documentos['desctipo']; ?>
                             </div>
-                            <div class="Descricao">
+                            <div class="Descricao_maior">
+                                <?= $documentos['nomeArmario']; ?>
+                            </div>
+                            <div class="Descricao_maior">
                                 <form method="post" id="docid_<?= $documentos['id']; ?>" name="docid_<?= $documentos['id']; ?>">
                                     <input type="hidden" id="docid" name="docid"  value="<?= $documentos['id']; ?>">
                                     <a class="abrirDocumento" data-id=<?= $documentos['id']; ?>>Veja o documento</a>
                                 </form>
                                
                             </div>
-                            <div class="Descricao">
-                                <?= $documentos['nomeArmario']; ?>
-                            </div>
+                           
                             <!--<div class="acoes">
                             <button class="btn btn-primary btnCadPagina" data-bs-toggle="modal" data-bs-target="#CadPagina" data-id="<?= $documentos['id']; ?>">Vincular página</button>
                                 <button class="btn btn-warning btnAlterarDocumento" data-bs-toggle="modal" data-bs-target="#AlteraDocumento" data-id="<?= $documentos['id']; ?>" data-nip="<?= $documentos['nip']; ?>" data-docid="<?= $documentos['docid']; ?>"  data-sm="<?= $documentos['semestre']; ?>" data-ano="<?= $documentos['ano']; ?>" data-td="<?= $documentos['tipodocumento']; ?>" data-fi="<?= $documentos['folderid']; ?>" data-ar="<?= $documentos['armario']; ?>">Editar</button>

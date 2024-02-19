@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="selectArmario">Armario: </label><br>
-                        <select id="selectArmario" name="selectArmario" class="col-form-label">
+                        <select id="selectArmario" name="selectArmario" class="form-select">
                             <?php foreach ($ArmariosList  as $armarios): ?>  
                                 <option value="<?= $armarios['id']; ?>"><?= $armarios['nomeexterno']; ?></option>
                             <?php endforeach; ?> 
@@ -77,13 +77,13 @@
         <div class="p-5 bg-body-tertiary rounded-3 row">
             <div class="col">
                 <h3>Gerenciamento de Tipo de documentos</h3>
-                <div class="Armarios" id="gradeListaDocumentos">                    
+                <div class="Grade" id="gradeListaDocumentos">                    
                     <?php foreach ($TipoDocumentoList  as $tipoDoc): ?>                    
-                        <div class="armarios_item">
-                            <div class="Descricao tipo de documento">
+                        <div class="container_item">
+                            <div class="Descricao">
                                 <?= $tipoDoc['desctipo']; ?>
                             </div>
-                            <div class="acoes-armarios">
+                            <div class="acoes">
                                 <button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="<?= $tipoDoc['id']; ?>" data-desc="<?= $tipoDoc['desctipo']; ?>">Editar</button>
                                 <form method="post" id="excluir<?= $tipoDoc['id']; ?>" action="">
                                     <input type="hidden" id="idTipoDoc" name="idTipoDoc" value="<?= $tipoDoc['id']; ?>" >

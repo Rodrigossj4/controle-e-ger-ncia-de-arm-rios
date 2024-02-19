@@ -79,22 +79,8 @@
         <div class="p-5 bg-body-tertiary rounded-3 row">
             <div class="col">
                 <h3>Gerenciamento de Armários</h3>
-                <div class="Armarios" id="gradeArmarios">                    
-                    <?php foreach ($ArmariosList  as $video): ?>                    
-                        <div class="container_item">
-                            <div class="Descricao_Armario">
-                                <?= $video['nomeexterno']; ?>
-                            </div>
-                            <div class="acoes-armarios">
-                                <button class="btn btn-primary">Listar Documentos</button>
-                                <button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="<?= $video['id']; ?>" data-ni="<?= $video['nomeinterno']; ?>" data-ne="<?= $video['nomeexterno']; ?>" data-cd="<?= $video['codigo']; ?>">Editar</button>
-                                <form method="post" id="excluir<?= $video['id']; ?>" action="">
-                                    <input type="hidden" id="idArmario" name="idArmario" value="<?= $video['id']; ?>" >
-                                    <button class="btn btn-danger excluir" data-id="<?= $video['id']; ?>" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button>
-                                </form>
-                            </div>
-                        </div>                 
-                    <?php endforeach; ?>                    
+                <div class="Grade" id="gradeArmarios">                    
+                    <?php require_once "partial_listar_armarios.php" ?>                 
                 </div>
             </div>
         </div>
