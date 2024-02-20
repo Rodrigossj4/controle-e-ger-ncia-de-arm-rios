@@ -149,15 +149,20 @@ class DocumentoServices
      $this->uploadImgPasta($idPasta, $diretorio, $caminhoArqImg);
      $retorno = $this->gerarPDF($idPasta, $tags, $diretorio, $caminhoArqImg);      
      
-     $code = file_get_contents($retorno); 
+     /*$code = file_get_contents($retorno); 
      $encrypted_code = $this->my_encrypt($code, $this->key); 
-     file_put_contents("{$retorno}", $encrypted_code); 
+     file_put_contents("{$retorno}", $encrypted_code); */
 
      unlink("{$caminhoArqImg}");
      //$this->teste();
      return $retorno;
     }
 
+    public function criptografarArquivo(string $retorno){
+        $code = file_get_contents($retorno); 
+        $encrypted_code = $this->my_encrypt($code, $this->key); 
+        file_put_contents("{$retorno}", $encrypted_code);
+    }
     public function gerarPastaDoc(int $idPasta):string
     {    
         $diretorio = "documentos/"; 

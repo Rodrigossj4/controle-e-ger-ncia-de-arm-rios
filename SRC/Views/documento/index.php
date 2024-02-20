@@ -67,16 +67,7 @@
                             <option value="0">Selecione o tipo de documento</option>
                         </select>                        
                     </div>
-                    <!--<div class="form-group">
-                        <label class="col-form-label" for="DocId">DocId: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="DocId"
-                            id="DocId">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="FolderId">Folder ID: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="FolderId"
-                            id="FolderId">
-                    </div>-->
+                  
                     <div class="form-group">
                         <label class="col-form-label" for="semestre">Semestre: </label>
                         <br>
@@ -160,10 +151,14 @@
                                 <form method="post" id="docid_<?= $documentos['id']; ?>" name="docid_<?= $documentos['id']; ?>">
                                     <input type="hidden" id="docid" name="docid"  value="<?= $documentos['id']; ?>">
                                     <a class="abrirDocumento" data-id=<?= $documentos['id']; ?>>Veja o documento</a>
-                                </form>
-                               
+                                </form>                               
                             </div>
-                           
+                            <div class="Descricao_maior">
+                                <form method="post" id="docidCript_<?= $documentos['id']; ?>" name="docidCript_<?= $documentos['id']; ?>">
+                                    <input type="hidden" id="docid" name="docid"  value="<?= $documentos['id']; ?>">
+                                    <a class="criptofrarDocumento" data-id=<?= $documentos['id']; ?>>cr</a>
+                                </form>                               
+                            </div>
                             <!--<div class="acoes">
                             <button class="btn btn-primary btnCadPagina" data-bs-toggle="modal" data-bs-target="#CadPagina" data-id="<?= $documentos['id']; ?>">Vincular página</button>
                                 <button class="btn btn-warning btnAlterarDocumento" data-bs-toggle="modal" data-bs-target="#AlteraDocumento" data-id="<?= $documentos['id']; ?>" data-nip="<?= $documentos['nip']; ?>" data-docid="<?= $documentos['docid']; ?>"  data-sm="<?= $documentos['semestre']; ?>" data-ano="<?= $documentos['ano']; ?>" data-td="<?= $documentos['tipodocumento']; ?>" data-fi="<?= $documentos['folderid']; ?>" data-ar="<?= $documentos['armario']; ?>">Editar</button>

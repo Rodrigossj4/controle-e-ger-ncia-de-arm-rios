@@ -266,6 +266,22 @@ $(document).on('click', '.abrirDocumento', function (e) {
     window.open("/visualizarDocumento?docid=" + $(this).data("id"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
 });
 
+$(document).on('click', '.criptofrarDocumento', function (e) {
+    var nomeForm = "docidCript_" + $(this).data("id");
+    var formdata = new FormData($("form[id='" + nomeForm + "']")[0]);
+    console.log(nomeForm);
+    $.ajax({
+        url: "/criptografarArquivo",
+        type: 'POST',
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) { },
+        error: function (d) {
+            console.log("Ocorreu um erro: " + d);
+        }
+    });
+});
 
 $(document).on('click', '.btnAlterarDocumento', function (e) {
     $('#formAltDocumento #docId').val($(this).data("docid"));

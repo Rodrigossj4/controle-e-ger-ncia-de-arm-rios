@@ -42,15 +42,18 @@ class DocumentoController
             'ano' => filter_input(INPUT_POST, 'ano'),
             'nip' => filter_input(INPUT_POST, 'Nip')
         ));
-
         
         $tags = filter_input(INPUT_POST, 'Nip'). ", ".  filter_input(INPUT_POST, 'ano');
-        //var_dump($documentosList);
         if($service->cadastrarDocumentos($documentosList))
         {
             $this->cadastrarPagina($idPasta, 1, $service->gerarArquivo($idPasta, $tags));
         }
         return true;      
+     }
+
+     public function criptografarArquivo(){
+        $service = new DocumentoServices();
+        $service->criptografarArquivo($this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'docid')));
      }
 
      public function alterarDocumento():bool

@@ -58,8 +58,9 @@ Class Router
                 '/alterarDocumento' => fn () => self::load('DocumentoController', 'alterarDocumento'),
                 '/cadastrarPagina' => fn () => self::load('DocumentoController', 'cadastrarPagina'),
                 '/excluirPagina' => fn () => self::load('DocumentoController','excluirPagina'),
-                '/alterarPagina' => fn () => self::load('DocumentoController','alterarPagina')   ,
-                '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento')    
+                '/alterarPagina' => fn () => self::load('DocumentoController','alterarPagina'),
+                '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento'),
+                '/criptografarArquivo' => fn () => self::load('DocumentoController','criptografarArquivo') 
             ]
         ];
     }
