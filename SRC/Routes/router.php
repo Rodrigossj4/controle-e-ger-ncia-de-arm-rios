@@ -46,7 +46,8 @@ Class Router
                 '/visualizarDocumento' => fn () => self::load('DocumentoController','visualizarDocumento'),
                 '/assinarDocumento' => fn () => self::load('DocumentoController','asssinarDigital'),
                 '/gerenciar-perfis' => fn () => self::load('PerfilAcessoController','index'),
-                '/listarPerfis' => fn () => self::load('PerfilAcessoController','listar')                       
+                '/listarPerfis' => fn () => self::load('PerfilAcessoController','listar'),
+                '/gerenciar-usuarios' => fn () => self::load('UsuariosController','index')                       
             ],
             'POST'=> [
                 '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),
@@ -65,7 +66,8 @@ Class Router
                 '/criptografarArquivo' => fn () => self::load('DocumentoController','criptografarArquivo'),
                 '/cadastrarPerfil' => fn () => self::load('PerfilAcessoController','cadastrar'),
                 '/alterarPerfil' => fn () => self::load('PerfilAcessoController', 'alterar'),
-                '/excluirPerfil' => fn () => self::load('PerfilAcessoController', 'excluir')
+                '/excluirPerfil' => fn () => self::load('PerfilAcessoController', 'excluir'),
+                '/cadastrarUsuario' => fn () => self::load('UsuariosController','cadastrar')
             ]
         ];
     }

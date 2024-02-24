@@ -402,6 +402,30 @@ $(document).on('click', '#btnNaoConfirmaExcluirPerfil', function (e) {
     FecharModal('#modexcluirPerfil');
 });
 
+$('#formCadUsuario #btnCadUsuario').on('click', function (e) {
+    var formdata = new FormData($("form[id='formCadUsuario']")[0]);
+    console.log("ae");
+    $.ajax({
+        type: 'POST',
+        url: "/cadastrarUsuario",
+        data: formdata,
+        processData: false,
+        contentType: false,
+
+        success: function (d) {
+            console.log(d);
+            carregarPerfis();
+            $('#formCadUsuario #nomeusuario').val("");
+            $('#formCadUsuario #nip').val("");
+            $('#formCadUsuario #senhausuario').val("");
+            $('#formCadUsuario #idacesso').val("");
+            alertas('Usuario cadastrado com sucesso', '#modCadUsuario', 'alert_sucess');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modCadUsuario', 'alert_danger');
+        }
+    });
+});
 function abreArquivo(data) {
     $.ajax({
         url: "/visualizarDocumento",
