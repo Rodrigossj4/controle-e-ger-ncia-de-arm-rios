@@ -44,7 +44,9 @@ Class Router
                 '/listarTipoDocumentosArmario' => fn () => self::load('TipoDocumentoController','listarTipoDocumentoArmarios') ,
                 '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento'),
                 '/visualizarDocumento' => fn () => self::load('DocumentoController','visualizarDocumento'),
-                '/assinarDocumento' => fn () => self::load('DocumentoController','asssinarDigital')                       
+                '/assinarDocumento' => fn () => self::load('DocumentoController','asssinarDigital'),
+                '/gerenciar-perfis' => fn () => self::load('PerfilAcessoController','index'),
+                '/listarPerfis' => fn () => self::load('PerfilAcessoController','listar')                       
             ],
             'POST'=> [
                 '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),
@@ -60,7 +62,10 @@ Class Router
                 '/excluirPagina' => fn () => self::load('DocumentoController','excluirPagina'),
                 '/alterarPagina' => fn () => self::load('DocumentoController','alterarPagina'),
                 '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController','retornarCaminhoDocumento'),
-                '/criptografarArquivo' => fn () => self::load('DocumentoController','criptografarArquivo') 
+                '/criptografarArquivo' => fn () => self::load('DocumentoController','criptografarArquivo'),
+                '/cadastrarPerfil' => fn () => self::load('PerfilAcessoController','cadastrar'),
+                '/alterarPerfil' => fn () => self::load('PerfilAcessoController', 'alterar'),
+                '/excluirPerfil' => fn () => self::load('PerfilAcessoController', 'excluir')
             ]
         ];
     }

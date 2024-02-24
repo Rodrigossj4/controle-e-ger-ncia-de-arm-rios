@@ -22,7 +22,7 @@ class ArmariosController
         $ArmariosList = $service->listaArmarios();  
         
         require __DIR__ . '../../Views/armarios/index.php';
-     }
+    }
 
      public function cadastrar():bool
      {       

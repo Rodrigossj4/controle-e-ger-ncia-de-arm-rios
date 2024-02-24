@@ -1,5 +1,6 @@
 var vUrlListarArmarios = "/listarArmarios";
 var vUrlListarTipoDocumento = "/listarTipodocumento";
+var vUrlListarTipoPerfis = "/listarPerfis";
 //var vUrlProdutos = "http://127.0.0.1:5000/Produtos";
 
 $(document).ready(function (e) {
@@ -292,6 +293,113 @@ $(document).on('click', '.btnAlterarDocumento', function (e) {
     $('#formAltDocumento #tipodocumento').val($(this).data("td"));
     $('#formAltDocumento #folderid').val($(this).data("fi"));
     $('#formAltDocumento #armario').val($(this).data("ar"));
+});
+
+function carregarPerfis() {
+    $.ajax({
+        url: vUrlListarTipoPerfis,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        cache: false,
+        success: function (data) {
+            //console.log(data);
+            var sel = $("#gradeListaPerfil");
+            sel.empty();
+            data.forEach(e => {
+                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeperfil + '</div><div class="acoes"><button class="btn btn-warning btnAlterarPerfil" data-bs-toggle="modal" data-bs-target="#AlteraPerfil" data-id="' + e.id + '" data-desc="' + e.nomeperfil + '">Editar</button><form method="post" id="excluir' + e.id + '"><input type="hidden" id="idPerfil" name="idPerfil" value="' + e.id + '"><button class="btn btn-danger excluirPerfil" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#modexcluirPerfil" type="button">Excluir</button></form></div></div>');
+
+            });
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+}
+
+$('#formCadPerfil #btnCadPerfil').on('click', function (e) {
+    var formdata = new FormData($("form[id='formCadPerfil']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/cadastrarPerfil",
+        data: formdata,
+        processData: false,
+        contentType: false,
+
+        success: function (d) {
+            carregarPerfis();
+            $('#formCadPerfil #nomePerfil').val("");
+            alertas('Perfil cadastrado com sucesso', '#modCadPerfil', 'alert_sucess');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modCadPerfil', 'alert_danger');
+        }
+    });
+});
+
+$(document).on('click', '.btnAlterarPerfil', function (e) {
+    $('#formAltPerfil #id').val($(this).data("id"));
+    $('#formAltPerfil #nomeperfil').val($(this).data("desc"));
+    $('.opcoesConfirmacao').css('display', 'none');
+});
+
+$(document).on('click', '#exibConfirmaAlteracaoPerfil', function (e) {
+    $('.opcoesConfirmacao').css('display', 'flex');
+});
+
+$(document).on('click', '#btnConfirmaAlteracaoPerfil', function (e) {
+    var formdata = new FormData($("form[id='formAltPerfil']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/alterarPerfil",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarPerfis();
+            $(this).data("nomeperfil", "");
+            alertas('Perfil atualizado com sucesso', '#AlteraPerfil', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#AlteraPerfil', 'alert_danger');
+        }
+    }
+    );
+});
+
+$(document).on('click', '#btnNaoConfirmaAlteracaoPerfil', function (e) {
+    FecharModal('#AlteraPerfil');
+});
+
+$(document).on('click', '.excluirPerfil', function (e) {
+    $('#formExcluirPerfil #id').val($(this).data("id"));
+});
+
+$(document).on('click', '.btnConfirmaExcluirPerfil', function (e) {
+    var formdata = new FormData($("form[id='formExcluirPerfil']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/excluirPerfil",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarPerfis();
+            $(this).data("id", "");
+            alertas('Perfil excluído com sucesso', '#modexcluirPerfil', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modexcluirPerfil', 'alert_danger');
+        }
+    }
+    );
+});
+
+$(document).on('click', '#btnNaoConfirmaExcluirPerfil', function (e) {
+    FecharModal('#modexcluirPerfil');
 });
 
 function abreArquivo(data) {
