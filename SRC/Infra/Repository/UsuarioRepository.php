@@ -74,24 +74,25 @@ class UsuarioRepository {
     {       
         try{
   
-            $sqlQuery = 'UPDATE usuarios SET nomeusuario = ?, nip = ?, senhausuario = ?, idacesso = ? WHERE codusuario = ?';
+            //$sqlQuery = 'UPDATE usuarios SET nomeusuario = ?, nip = ?, senhausuario = ?, idacesso = ? WHERE codusuario = ?';
+            $sqlQuery = 'UPDATE usuarios SET nomeusuario = ? WHERE codusuario = ?';
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach($usuario as $us){
                 $usuarioData = new Usuarios(
                     $us['codusuario'],
                     $us['nomeusuario'],
-                    $us['nip'],
-                    $us['senhausuario'],
-                    $us['idacesso ']
+                    "",
+                    "",
+                    1
                 );
             }
                    
             $stmt->bindValue(1, $usuarioData->NomeUsuario());
-            $stmt->bindValue(2, $usuarioData->Nip());
+           /* $stmt->bindValue(2, $usuarioData->Nip());
             $stmt->bindValue(3, $usuarioData->SenhaUsuario());
-            $stmt->bindValue(4, $usuarioData->idAcesso());
-            $stmt->bindValue(5, $usuarioData->codUsuario());
+            $stmt->bindValue(4, $usuarioData->idAcesso());*/
+            $stmt->bindValue(2, $usuarioData->codUsuario());
             $stmt->execute();
        
             return true;

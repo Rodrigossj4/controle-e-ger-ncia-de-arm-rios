@@ -1,6 +1,7 @@
 <?php
 
 /** @var Marinha\Mvc\Models\Usuarios[] $UsuariosList */
+/** @var Marinha\Mvc\Models\PerfilAcesso[] $PerfilAcessoList */
 
 ?>
 <!DOCTYPE html>
@@ -65,8 +66,12 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="idacesso">Perfil de acesso: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="text"
-                            name="idacesso" id="idacesso">
+                        <select name="idacesso" id="idacesso" class="form-select">
+                            <option value="0">Escolha o perfil de acesso</option>
+                        <?php foreach ($PerfilAcessoList  as $perfil): ?> 
+                            <option value="<?= $perfil['id']; ?>"><?= $perfil['nomeperfil']; ?></option>
+                        <?php endforeach; ?>  
+                        </select>
                     </div>
                     <br>
                     <div class="form-group row">
@@ -91,10 +96,10 @@
                                 <?= $usuario['nomeusuario']; ?>
                             </div>
                             <div class="acoes">
-                                <button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="<?= $usuario['id']; ?>" data-desc="<?= $usuario['desctipo']; ?>">Editar</button>
-                                <form method="post" id="excluir<?= $usuario['id']; ?>" action="">
-                                    <input type="hidden" id="idUsuario" name="idUsuario" value="<?= $usuario['id']; ?>" >
-                                    <button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="<?= $usuario['id']; ?>" type="button">Excluir</button>
+                                <button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="<?= $usuario['codusuario']; ?>" data-desc="<?= $usuario['nomeusuario']; ?>">Editar</button>
+                                <form method="post" id="excluir<?= $usuario['codusuario']; ?>" action="">
+                                    <input type="hidden" id="idUsuario" name="idUsuario" value="<?= $usuario['codusuario']; ?>" >
+                                    <button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="<?= $usuario['codusuario']; ?>" type="button">Excluir</button>
                                 </form>
                             </div>
                         </div>                 
@@ -115,19 +120,9 @@
                     <form method="post" id="formAltUsuario" action="/alterarUsuario">
                         <div class="form-group">
                             <input type="hidden" name="id" id="id">
-                            <label class="col-form-label">Código do armário: </label>
-                            <input type="text" class="form-control form-control-sm" name="codigo" id="codigo">
+                            <label class="col-form-label">Nome do usuário: </label>
+                            <input type="text" class="form-control form-control-sm" name="nomeusuario" id="nomeusuario">
                         </div>                        
-                        <div class="form-group">
-                            <label class="col-form-label">Nome Interno: </label>
-                            <input type="text" class="form-control form-control-sm" id="nomeInterno"
-                                name="nomeInterno">
-                        </div>
-                        <div class="form-group">
-                            <label class="col-form-label">Nome Externo: </label>
-                            <input type="text" class="form-control form-control-sm" id="nomeExterno"
-                                name="nomeExterno">
-                        </div>
                         <br>
                         <div class="form-group row">
                             <div class="col-sm-3">
@@ -154,7 +149,7 @@
         </div>
     </div>
         
-    <div class="modal fade" id="ExcluirUsuario" tabindex="-1" aria-labelledby="ExcluirUsuario" aria-hidden="true">
+    <div class="modal fade" id="modexcluirUsuario" tabindex="-1" aria-labelledby="modexcluirUsuario" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

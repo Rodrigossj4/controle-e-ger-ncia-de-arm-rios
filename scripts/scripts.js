@@ -1,6 +1,7 @@
 var vUrlListarArmarios = "/listarArmarios";
 var vUrlListarTipoDocumento = "/listarTipodocumento";
 var vUrlListarTipoPerfis = "/listarPerfis";
+var vUrlListarUsuarios = "/listarUsuarios";
 //var vUrlProdutos = "http://127.0.0.1:5000/Produtos";
 
 $(document).ready(function (e) {
@@ -402,6 +403,26 @@ $(document).on('click', '#btnNaoConfirmaExcluirPerfil', function (e) {
     FecharModal('#modexcluirPerfil');
 });
 
+function carregarUsuarios() {
+    $.ajax({
+        url: vUrlListarUsuarios,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        cache: false,
+        success: function (data) {
+            //console.log(data);
+            var sel = $("#gradeUsuario");
+            sel.empty();
+            data.forEach(e => {
+                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeusuario + '</div><div class="acoes"><button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="' + e.codusuario + '" data-desc="' + e.nomeusuario + '">Editar</button><form method="post" id="excluir' + e.codusuario + '"><input type="hidden" id="idUsuario" name="idUsuario" value="' + e.codusuario + '"><button class="btn btn-danger excluirUsuario" data-id="' + e.codusuario + '" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" type="button">Excluir</button></form></div></div>');
+            });
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+}
 $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadUsuario']")[0]);
     console.log("ae");
@@ -413,8 +434,7 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
-            console.log(d);
-            carregarPerfis();
+            carregarUsuarios();
             $('#formCadUsuario #nomeusuario').val("");
             $('#formCadUsuario #nip').val("");
             $('#formCadUsuario #senhausuario').val("");
@@ -426,6 +446,71 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         }
     });
 });
+
+$(document).on('click', '.btnAlterarUsuario', function (e) {
+    $('#formAltUsuario #id').val($(this).data("id"));
+    $('#formAltUsuario #nomeusuario').val($(this).data("desc"));
+    $('.opcoesConfirmacao').css('display', 'none');
+});
+
+$(document).on('click', '#exibConfirmaAlteracaoUsuario', function (e) {
+    $('.opcoesConfirmacao').css('display', 'flex');
+});
+
+$(document).on('click', '#btnConfirmaAlteracaoUsuario', function (e) {
+    var formdata = new FormData($("form[id='formAltUsuario']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/alterarUsuario",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarUsuarios();
+            $(this).data("nomeusuario", "");
+            alertas('Dados do usuario atualizados com sucesso', '#AlteraUsuario', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#AlteraUsuario', 'alert_danger');
+        }
+    }
+    );
+});
+
+$(document).on('click', '#btnNaoConfirmaAlteracaoUsuario', function (e) {
+    FecharModal('#AlteraUsuario');
+});
+
+$(document).on('click', '.excluirUsuario', function (e) {
+    $('#formExcluirUsuario #id').val($(this).data("id"));
+});
+
+$(document).on('click', '.btnConfirmaExcluirUsuario', function (e) {
+    var formdata = new FormData($("form[id='formExcluirUsuario']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/excluirUsuario",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarUsuarios();
+            $(this).data("id", "");
+            alertas('Usuario excluído com sucesso', '#modexcluirUsuario', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modexcluirUsuario', 'alert_danger');
+        }
+    }
+    );
+});
+
+$(document).on('click', '#btnNaoConfirmaExcluirUsuario', function (e) {
+    FecharModal('#modexcluirUsuario');
+});
+
 function abreArquivo(data) {
     $.ajax({
         url: "/visualizarDocumento",

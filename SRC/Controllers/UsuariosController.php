@@ -5,6 +5,7 @@ namespace Marinha\Mvc\Controllers;
 
 use Exception;
 use Marinha\Mvc\Services\UsuarioServices;
+use Marinha\Mvc\Services\PerfilAcessoServices;
 
 class UsuariosController 
 {
@@ -16,8 +17,12 @@ class UsuariosController
 
     public function index()
     {
-        $service = new UsuarioServices();
-        $UsuariosList = $service->listaUsuarios();  
+        $service = new UsuarioServices();        
+        $perfilService = new PerfilAcessoServices();
+       
+        $PerfilAcessoList = $perfilService->listaPerfis(); 
+        $UsuariosList = $service->listaUsuarios();
+
         require __DIR__ . '../../Views/usuarios/index.php';
     }
 
@@ -47,11 +52,11 @@ class UsuariosController
      {  
         $usuariosList = array();
         array_push($usuariosList, array(
-            'codusuario' => filter_input(INPUT_POST, 'codusuario'),
-            'nomeusuario' => filter_input(INPUT_POST, 'nomeusuario'),
-            'nip' => filter_input(INPUT_POST, 'nip'),
+            'codusuario' => filter_input(INPUT_POST, 'id'),
+            'nomeusuario' => filter_input(INPUT_POST, 'nomeusuario')
+            /*'nip' => filter_input(INPUT_POST, 'nip'),
             'senhausuario' => filter_input(INPUT_POST, 'senhausuario'),
-            'idacesso' => filter_input(INPUT_POST, 'idacesso')
+            'idacesso' => filter_input(INPUT_POST, 'idacesso')*/
         ));
        
         $service = new UsuarioServices();

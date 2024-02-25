@@ -47,7 +47,8 @@ Class Router
                 '/assinarDocumento' => fn () => self::load('DocumentoController','asssinarDigital'),
                 '/gerenciar-perfis' => fn () => self::load('PerfilAcessoController','index'),
                 '/listarPerfis' => fn () => self::load('PerfilAcessoController','listar'),
-                '/gerenciar-usuarios' => fn () => self::load('UsuariosController','index')                       
+                '/gerenciar-usuarios' => fn () => self::load('UsuariosController','index'),
+                '/listarUsuarios' => fn () => self::load('UsuariosController','listar')                      
             ],
             'POST'=> [
                 '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),
@@ -67,14 +68,15 @@ Class Router
                 '/cadastrarPerfil' => fn () => self::load('PerfilAcessoController','cadastrar'),
                 '/alterarPerfil' => fn () => self::load('PerfilAcessoController', 'alterar'),
                 '/excluirPerfil' => fn () => self::load('PerfilAcessoController', 'excluir'),
-                '/cadastrarUsuario' => fn () => self::load('UsuariosController','cadastrar')
+                '/cadastrarUsuario' => fn () => self::load('UsuariosController','cadastrar'),
+                '/alterarUsuario' => fn () => self::load('UsuariosController', 'alterar'),
+                '/excluirUsuario' => fn () => self::load('UsuariosController', 'excluir')
             ]
         ];
     }
 
     public static function execute()
-    {
-        
+    {        
         try{
             $routes = self::routes();
             $request = Request::get();
