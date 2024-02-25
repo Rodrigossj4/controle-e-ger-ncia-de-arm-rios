@@ -35,7 +35,8 @@ Class Router
         
         return [
             'GET'=> [
-                '/' => fn () => self::load('ArmariosController','index'),
+                '/' => fn () => self::load('LoginController','index'),
+                '/gerenciar-armarios' => fn () => self::load('ArmariosController','index'),
                 '/listarArmarios' => fn () => self::load('ArmariosController','listar'),
                 '/listarTipodocumento' => fn () => self::load('TipoDocumentoController','listar'),
                 '/gerenciar-tipo-documentos' => fn () => self::load('TipoDocumentoController','index'),
@@ -51,6 +52,7 @@ Class Router
                 '/listarUsuarios' => fn () => self::load('UsuariosController','listar')                      
             ],
             'POST'=> [
+                '/login' => fn () => self::load('LoginController','login'),
                 '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),
                 '/cadastrarArmario' => fn () => self::load('ArmariosController', 'cadastrar'),
                 '/alterarArmario' => fn () => self::load('ArmariosController', 'alterar'),

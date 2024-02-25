@@ -425,7 +425,7 @@ function carregarUsuarios() {
 }
 $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadUsuario']")[0]);
-    console.log("ae");
+
     $.ajax({
         type: 'POST',
         url: "/cadastrarUsuario",
@@ -434,6 +434,7 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
+            console.log(d);
             carregarUsuarios();
             $('#formCadUsuario #nomeusuario').val("");
             $('#formCadUsuario #nip').val("");
@@ -509,6 +510,32 @@ $(document).on('click', '.btnConfirmaExcluirUsuario', function (e) {
 
 $(document).on('click', '#btnNaoConfirmaExcluirUsuario', function (e) {
     FecharModal('#modexcluirUsuario');
+});
+
+
+$('#formLogin #btnLogin').on('click', function (e) {
+    var formdata = new FormData($("form[id='formLogin']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/login",
+        data: formdata,
+        processData: false,
+        contentType: false,
+
+        success: function (d) {
+            if (d = true) {
+                location.assign("/gerenciar-armarios");
+            } else {
+                $('#formLogin #senha').val("");
+                $('#formLogin #nip').val("");
+                alertas('Falha ao efeturar login', '#modLogin', 'alert_danger');
+            }
+
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
+        }
+    });
 });
 
 function abreArquivo(data) {

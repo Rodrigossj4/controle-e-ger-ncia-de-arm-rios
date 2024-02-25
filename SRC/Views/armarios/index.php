@@ -1,7 +1,7 @@
 <?php
 
 /** @var Marinha\Mvc\Models\Armarios[] $ArmariosList */
-
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -46,7 +46,7 @@
     <div class="container">
         <div class="bg-body-tertiary rounded-3 row">
             <div class="col divisao_bottom form-control-padronizado" id="modCadArmario">
-                <h3>Cadastro de Armários</h3>
+                <h3>Cadastro de Armários</h3> <?php var_dump($_SESSION['usuario']) ?>
                 <form method="post" id="formCadArmario" action="/cadastrarArmario">
                     <div class="form-group">
                         <label class="col-form-label" for="codigo">Código: </label>
@@ -78,7 +78,7 @@
     <div class="Container">
         <div class="p-5 bg-body-tertiary rounded-3 row">
             <div class="col">
-                <h3>Gerenciamento de Armários</h3>
+                <h3>Gerenciamento de Armários</h3>                
                 <div class="Grade" id="gradeArmarios">                    
                     <?php require_once "partial_listar_armarios.php" ?>                 
                 </div>

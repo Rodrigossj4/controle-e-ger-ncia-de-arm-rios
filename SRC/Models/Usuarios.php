@@ -35,7 +35,7 @@ class Usuarios
 
     public function SenhaUsuario(): string
     {
-        return hash('sha256', $this->Nip+$this->SenhaUsuario);
+        return hash('sha256', $this->Nip . $this->SenhaUsuario);
     }
 
     public function idAcesso(): string
