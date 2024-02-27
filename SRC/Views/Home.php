@@ -1,1 +1,2 @@
-<h3>Homes pagina</h3>
+<?php require_once __DIR__ . "/topo.php" ?>
+<h3>Bem vinda(o) <?php echo $_SESSION['usuario'][0]["nomeusuario"]?></h3>

@@ -27,11 +27,11 @@ class LogRepository {
                 );
             }
                    
-            $stmt->bindValue(1, $logData->idOperacao());
+           /* $stmt->bindValue(1, $logData-codO1());
             $stmt->bindValue(2, $logData->idUsuario());
             $stmt->bindValue(3, $logData->dh());
             $stmt->bindValue(4, $logData->idArmario());
-            $stmt->execute();
+            $stmt->execute();*/
        
             return true;
         }catch (Exception $e){

@@ -56,6 +56,10 @@ span.alert_danger {
     max-width: 20em;
 }
 
+#navbarNav li a {
+    font-size: 10px;
+}
+
 footer {
     background-image: url("https://bucket.safea.grupoa.education/institution/pucrio/1669930020617_logo02.png");
     background-repeat: no-repeat;

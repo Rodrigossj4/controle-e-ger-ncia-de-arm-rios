@@ -36,6 +36,7 @@ Class Router
         return [
             'GET'=> [
                 '/' => fn () => self::load('LoginController','index'),
+                '/home' => fn () => self::load('HomeController','index'),
                 '/gerenciar-armarios' => fn () => self::load('ArmariosController','index'),
                 '/listarArmarios' => fn () => self::load('ArmariosController','listar'),
                 '/listarTipodocumento' => fn () => self::load('TipoDocumentoController','listar'),

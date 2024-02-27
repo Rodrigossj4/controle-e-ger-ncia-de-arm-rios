@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="senhausuario">Senha do usuario: </label>
-                        <input class="form-control form-control-sm form-control-padronizado" type="text"
+                        <input class="form-control form-control-sm form-control-padronizado" type="password"
                             name="senhausuario" id="senhausuario">
                     </div>
                     <div class="form-group">

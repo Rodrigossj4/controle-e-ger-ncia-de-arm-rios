@@ -5,19 +5,19 @@ namespace Marinha\Mvc\Models;
 class LogOperacoes
 {
     private ?int $id;
-    private int $IdOperacao;
+    private string $Codoperacao;
     private int $IdUsuario; 
     private string $dh; 
-    private int $IdArmario;
+    private ?int $IdDocumento;
  
 
-    public function __construct(?int $id, int $IdOperacao, int $IdUsuario, string $dh, int $IdArmario)
+    public function __construct(?int $id, string $Codoperacao, int $IdUsuario, string $dh, ?int $IdDocumento)
     {
         $this->id = $id;
-        $this->IdOperacao = $IdOperacao;
+        $this->Codoperacao = $Codoperacao;
         $this->IdUsuario = $IdUsuario;
         $this->dh = $dh;
-        $this->IdArmario= $IdArmario;
+        $this->IdDocumento= $IdDocumento;
     }
 
     public function id(): ?int
@@ -25,9 +25,9 @@ class LogOperacoes
         return $this->id;
     }
 
-    public function idOperacao(): int
+    public function codoperacao(): string
     {
-        return $this->IdOperacao;
+        return $this->Codoperacao;
     }
     public function idUsuario(): int
     {
@@ -38,8 +38,8 @@ class LogOperacoes
         return $this->dh;
     }
 
-    public function idArmario(): int
+    public function idDocumento(): ?int
     {
-        return $this->IdArmario;
+        return $this->IdDocumento;
     }
 }

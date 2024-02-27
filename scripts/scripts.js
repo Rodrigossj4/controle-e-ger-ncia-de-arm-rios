@@ -523,8 +523,9 @@ $('#formLogin #btnLogin').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
+            //console.log(d);
             if (d = true) {
-                location.assign("/gerenciar-armarios");
+                location.assign("/home");
             } else {
                 $('#formLogin #senha').val("");
                 $('#formLogin #nip').val("");

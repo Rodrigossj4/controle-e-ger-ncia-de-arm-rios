@@ -6,6 +6,6 @@ class HomeController
     public function index(){
 
        //var_dump("Homes");
-       require __DIR__ . '../Views/Home.php';
+       require __DIR__ . '../../Views/Home.php';
     }
 }
