@@ -26,8 +26,14 @@ class LoginController
         //$dados = $service->login($login);  
         //?  header("location: /gerenciar-armarios") : require __DIR__ . '../../Views/login/index.php'
         $retorno = $service->login($login);
-       
-        var_dump($retorno);
+              
         return $retorno ;
+    }
+
+    public function logout()
+    {
+        $service = new LoginServices();
+        $retorno = $service->logout();              
+        header("location: /");
     }
 }

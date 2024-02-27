@@ -3,8 +3,14 @@
 declare(strict_types=1);
 
 namespace Marinha\Mvc\Controllers;
-
-interface Controller
+use Marinha\Mvc\Helpers\Helppers;
+class Controller
 {
-    public function processaRequisicao();
+    public function validarSessao()
+    {
+        $funcoes = new Helppers();
+        if(!$funcoes->validarSessao())
+            header("location: /");
+    }
+   
 }

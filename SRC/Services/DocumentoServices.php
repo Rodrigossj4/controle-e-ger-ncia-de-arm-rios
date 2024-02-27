@@ -2,13 +2,12 @@
 
 namespace Marinha\Mvc\Services;
 use Exception;
-use Marinha\Mvc\Infra\Repository\Conexao;
 
 use Marinha\Mvc\Infra\Repository\DocumentoRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-class DocumentoServices
+class DocumentoServices extends SistemaServices
 {
     private $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
     public function __construct()
@@ -16,9 +15,8 @@ class DocumentoServices
     }
     public function listaDocumentos(): array
     {
-        try{
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+        try{                   
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->listaDocumentos();
 
         }catch(Exception $e){
@@ -30,8 +28,7 @@ class DocumentoServices
     public function cadastrarDocumentos(array $armario): bool
     {       
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->cadastrarDocumentos($armario);
 
         }catch(Exception $e){
@@ -42,10 +39,8 @@ class DocumentoServices
 
     public function alterarDocmentos(array $documento): bool
     {       
-        try{
-            var_dump($documento);
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+        try{                 
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->alterarDocumentos($documento);
 
         }catch(Exception $e){
@@ -57,8 +52,7 @@ class DocumentoServices
     public function excluirDocumentos(int $id): bool
     {       
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->excluirDocumentos($id);
 
         }catch(Exception $e){
@@ -70,8 +64,7 @@ class DocumentoServices
     public function retornarCaminhoDocumento(string $id): string
     { 
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);  
+            $repository = new DocumentoRepository($this->Conexao());  
             $returno =  $repository->retornarCaminhoDocumento($id);  
            
             return $returno;
@@ -84,9 +77,8 @@ class DocumentoServices
 
     public function listaPaginas(int $id): array
     {
-        try{
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+        try{                  
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->listarPaginas($id);
 
         }catch(Exception $e){
@@ -98,8 +90,7 @@ class DocumentoServices
     public function cadastrarPaginas(array $pagina): bool
     {       
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->cadastrarPagina($pagina);
 
         }catch(Exception $e){
@@ -110,10 +101,8 @@ class DocumentoServices
 
     public function excluirPagina(int $id): bool
     {
-        var_dump($id);
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->excluirPagina($id);
 
         }catch(Exception $e){
@@ -124,10 +113,8 @@ class DocumentoServices
     
     public function alterarPaginas(array $pagina): bool
     {       
-        try{
-            var_dump($pagina);
-            $pdo = Conexao::createConnection();        
-            $repository = new DocumentoRepository($pdo);       
+        try{       
+            $repository = new DocumentoRepository($this->Conexao());       
             return $repository->alterarPagina($pagina);
 
         }catch(Exception $e){

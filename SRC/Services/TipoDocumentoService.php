@@ -2,10 +2,9 @@
 
 namespace Marinha\Mvc\Services;
 use Exception;
-use Marinha\Mvc\Infra\Repository\Conexao;
 use Marinha\Mvc\Infra\Repository\TipoDocumentoRepository;
 
-class TipoDocumentoService
+class TipoDocumentoService  extends SistemaServices
 {
     public function __construct()
     {
@@ -14,8 +13,7 @@ class TipoDocumentoService
     public function cadastrarTipoDocumento(array $armario): bool
     {       
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new TipoDocumentoRepository($pdo);       
+            $repository = new TipoDocumentoRepository($this->Conexao());       
             return $repository->cadastrarTipoDocumento($armario);
 
         }catch(Exception $e){
@@ -27,8 +25,7 @@ class TipoDocumentoService
     public function listaTipoDocumento(): array
     {
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new TipoDocumentoRepository($pdo);       
+            $repository = new TipoDocumentoRepository($this->Conexao());       
             return $repository->listaTipoDocumento();
 
         }catch(Exception $e){
@@ -39,8 +36,7 @@ class TipoDocumentoService
     public function listaTipoDocumentoArmario(int $idArmario): array
     {
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new TipoDocumentoRepository($pdo);       
+            $repository = new TipoDocumentoRepository($this->Conexao());       
             return $repository->listaTipoDocumentoArmarios($idArmario);
 
         }catch(Exception $e){
@@ -52,9 +48,7 @@ class TipoDocumentoService
     public function alterarTipoDoc(array $tipoDoc): bool
     {       
         try{
-           
-            $pdo = Conexao::createConnection();        
-            $repository = new TipoDocumentoRepository($pdo);       
+            $repository = new TipoDocumentoRepository($this->Conexao());       
             return $repository->alterarTipoDoc($tipoDoc);
 
         }catch(Exception $e){
@@ -64,11 +58,9 @@ class TipoDocumentoService
     }
     
     public function excluirTipoDocumento(int $id): bool
-    {
-        var_dump($id);
+    {       
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new TipoDocumentoRepository($pdo);       
+            $repository = new TipoDocumentoRepository($this->Conexao());       
             return $repository->excluirTipoDocumento($id);
 
         }catch(Exception $e){

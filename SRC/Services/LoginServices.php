@@ -2,12 +2,9 @@
 
 namespace Marinha\Mvc\Services;
 use Exception;
-use Marinha\Mvc\Infra\Repository\Conexao;
-
 use Marinha\Mvc\Infra\Repository\LoginRepository;
 
-
-class LoginServices
+class LoginServices extends SistemaServices
 {
     public function __construct()
     {
@@ -15,19 +12,32 @@ class LoginServices
 
     public function login(array $usuario): bool
     {       
-        try{
-            $pdo = Conexao::createConnection();        
-            $repository = new LoginRepository($pdo);
+        try{                 
+            $repository = new LoginRepository($this->Conexao());
             $retorno = $repository->login($usuario);  
            
             if(count($retorno) == 1){
                 session_start();
-                $_SESSION['usuario'] = $retorno;
-               
+                session_regenerate_id(true);
+                $_SESSION['usuario'] = $retorno;               
                 return true;
             }else{
                 return false;
             }           
+
+        }catch(Exception $e){
+            echo $e;
+            return false;
+        }  
+    }
+
+    public function logout(): bool
+    {       
+        try{
+            session_start();
+            $_SESSION['usuario'] = null;
+            session_destroy(); 
+            return true;         
 
         }catch(Exception $e){
             echo $e;

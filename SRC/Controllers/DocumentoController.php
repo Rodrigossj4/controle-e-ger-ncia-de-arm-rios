@@ -8,7 +8,7 @@ use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\DocumentoServices;
 use Marinha\Mvc\Models\PDF;
 
-class DocumentoController
+class DocumentoController extends Controller
 {
     public function __construct()
     {
@@ -17,6 +17,7 @@ class DocumentoController
 
     public function index()
     {
+        $this->validarSessao();
         $service = new DocumentoServices();
         $armariosService =  new ArmarioServices();
 

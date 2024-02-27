@@ -49,7 +49,8 @@ Class Router
                 '/gerenciar-perfis' => fn () => self::load('PerfilAcessoController','index'),
                 '/listarPerfis' => fn () => self::load('PerfilAcessoController','listar'),
                 '/gerenciar-usuarios' => fn () => self::load('UsuariosController','index'),
-                '/listarUsuarios' => fn () => self::load('UsuariosController','listar')                      
+                '/listarUsuarios' => fn () => self::load('UsuariosController','listar'),
+                '/logout' => fn () => self::load('LoginController','logout')
             ],
             'POST'=> [
                 '/login' => fn () => self::load('LoginController','login'),

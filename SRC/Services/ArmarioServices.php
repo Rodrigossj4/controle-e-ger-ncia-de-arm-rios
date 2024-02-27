@@ -2,21 +2,20 @@
 
 namespace Marinha\Mvc\Services;
 use Exception;
-use Marinha\Mvc\Infra\Repository\Conexao;
+
 
 use Marinha\Mvc\Infra\Repository\ArmarioRepository;
 
 
-class ArmarioServices
+class ArmarioServices extends SistemaServices
 {
     public function __construct()
     {
     }
     public function listaArmarios(): array
     {
-        try{
-            $pdo = Conexao::createConnection();        
-            $repository = new ArmarioRepository($pdo);       
+        try{                  
+            $repository = new ArmarioRepository($this->Conexao());       
             return $repository->listaArmarios();
 
         }catch(Exception $e){
@@ -27,9 +26,8 @@ class ArmarioServices
     
     public function cadastrarArmarios(array $armario): bool
     {       
-        try{
-            $pdo = Conexao::createConnection();        
-            $repository = new ArmarioRepository($pdo);       
+        try{                   
+            $repository = new ArmarioRepository($this->Conexao());       
             return $repository->cadastrarArmarios($armario);
 
         }catch(Exception $e){
@@ -40,10 +38,8 @@ class ArmarioServices
 
     public function alterarArmarios(array $armario): bool
     {       
-        try{
-            var_dump($armario);
-            $pdo = Conexao::createConnection();        
-            $repository = new ArmarioRepository($pdo);       
+        try{                   
+            $repository = new ArmarioRepository($this->Conexao());       
             return $repository->alterarArmarios($armario);
 
         }catch(Exception $e){
@@ -52,11 +48,9 @@ class ArmarioServices
         }  
     }
     public function excluirArmario(int $id): bool
-    {
-        var_dump($id);
-        try{
-            $pdo = Conexao::createConnection();        
-            $repository = new ArmarioRepository($pdo);       
+    {        
+        try{                   
+            $repository = new ArmarioRepository($this->Conexao());       
             return $repository->excluirArmario($id);
 
         }catch(Exception $e){

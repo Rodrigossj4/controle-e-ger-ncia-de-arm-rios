@@ -2,12 +2,11 @@
 
 namespace Marinha\Mvc\Services;
 use Exception;
-use Marinha\Mvc\Infra\Repository\Conexao;
 
 use Marinha\Mvc\Infra\Repository\PerfilAcessoRepository;
 
 
-class PerfilAcessoServices
+class PerfilAcessoServices extends SistemaServices
 {
     public function __construct()
     {
@@ -16,8 +15,7 @@ class PerfilAcessoServices
     public function cadastrarPerfis(array $perfil): bool
     {       
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new PerfilAcessoRepository($pdo);       
+            $repository = new PerfilAcessoRepository($this->Conexao());       
             return $repository->cadastrarPerfis($perfil);
 
         }catch(Exception $e){
@@ -29,8 +27,7 @@ class PerfilAcessoServices
     public function listaPerfis(): array
     {
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new PerfilAcessoRepository($pdo);       
+            $repository = new PerfilAcessoRepository($this->Conexao());       
             return $repository->listaPerfis();
 
         }catch(Exception $e){
@@ -41,10 +38,8 @@ class PerfilAcessoServices
     
     public function alterar(array $perfil): bool
     {       
-        var_dump($perfil);
         try{            
-            $pdo = Conexao::createConnection();        
-            $repository = new  PerfilAcessoRepository($pdo);       
+            $repository = new  PerfilAcessoRepository($this->Conexao());       
             return $repository->alterar($perfil);
 
         }catch(Exception $e){
@@ -55,8 +50,7 @@ class PerfilAcessoServices
     public function excluir(int $id): bool
     {      
         try{
-            $pdo = Conexao::createConnection();        
-            $repository = new PerfilAcessoRepository($pdo);       
+            $repository = new PerfilAcessoRepository($this->Conexao());       
             return $repository->excluir($id);
 
         }catch(Exception $e){

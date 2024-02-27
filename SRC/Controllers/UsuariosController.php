@@ -7,7 +7,7 @@ use Exception;
 use Marinha\Mvc\Services\UsuarioServices;
 use Marinha\Mvc\Services\PerfilAcessoServices;
 
-class UsuariosController 
+class UsuariosController  extends Controller
 {
     
     public function __construct()
@@ -17,6 +17,7 @@ class UsuariosController
 
     public function index()
     {
+       $this->validarSessao();
         $service = new UsuarioServices();        
         $perfilService = new PerfilAcessoServices();
        

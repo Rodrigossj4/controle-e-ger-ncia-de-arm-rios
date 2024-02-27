@@ -6,7 +6,7 @@ namespace Marinha\Mvc\Controllers;
 use Exception;
 use Marinha\Mvc\Services\PerfilAcessoServices;
 
-class PerfilAcessoController 
+class PerfilAcessoController extends Controller
 {    
     public function __construct()
     {
@@ -15,7 +15,7 @@ class PerfilAcessoController
 
     public function index()
     {
-
+        $this->validarSessao();
         $service = new PerfilAcessoServices();
        
         $PerfilAcessoList = $service->listaPerfis();  

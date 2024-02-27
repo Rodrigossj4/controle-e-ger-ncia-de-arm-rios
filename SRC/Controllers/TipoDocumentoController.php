@@ -8,7 +8,7 @@ use Marinha\Mvc\Models\TipoDocumento;
 use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\TipoDocumentoService;
 
-class TipoDocumentoController 
+class TipoDocumentoController extends Controller
 {
     
     public function __construct()
@@ -18,6 +18,7 @@ class TipoDocumentoController
 
     public function index()
     {
+        $this->validarSessao();
         $service = new TipoDocumentoService();
         $armariosService =  new ArmarioServices();
         $TipoDocumentoList = $service->listaTipoDocumento(); 
