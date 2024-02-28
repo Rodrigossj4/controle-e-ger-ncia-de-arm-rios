@@ -7,7 +7,7 @@
     if($_SESSION['usuario'][0]["idacesso"] === 6)
         $liberaAcessoAdmin = true;
 
-        //echo $_SESSION['usuario'][0]["codusuario"];
+        //echo $$liberaAcessoAdmin ;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -21,6 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
+
+
 </head>
 
 <body>
@@ -33,7 +35,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <?php if($liberaAcessoAdmin){?>
+                    <?php if(($liberaAcessoAdmin === true)){?>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="/gerenciar-armarios">Gerencia de Armarios</a>
                         </li>
@@ -42,7 +44,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
-                        </li>
+                        </li>                        
                         <li class="nav-item">
                             <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
                         </li>
@@ -54,8 +56,13 @@
                         <a class="nav-link" href="/gerenciar-documentos">Consulta de Documentos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Sair</a>
-                    </li>   
+                            <a class="nav-link" href="/Modulo_img.php" target="_blank">Tratamento de Imagens</a>
+                    </li>
+                    <?php if(($_SESSION['usuario'] !== null)){?>    
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Sair</a>
+                        </li>  
+                    <?php }?> 
                 </ul>
             </div>
         </div>
