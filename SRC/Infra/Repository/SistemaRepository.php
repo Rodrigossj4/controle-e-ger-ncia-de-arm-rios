@@ -21,7 +21,7 @@ class SistemaRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"Log\"(codoperacao, idusuario, dh, iddocumento) values(?, ?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"Log\"(\"CodOperacao\", \"idUsuario\", \"datahoraopercao\", \"idDocumento\") values(?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($log as $lg) {

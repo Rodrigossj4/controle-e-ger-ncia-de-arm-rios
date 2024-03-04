@@ -21,19 +21,17 @@ class TipoDocumentoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"TipoDocumento\"(DescTipoDoc) values(?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"TipoDocumento\"(\"DescTipoDoc\") values(?);";
             $stmt = $this->pdo->prepare($sqlQuery);
-
+            var_dump($sqlQuery);
             foreach ($tipoDocumento as $dc) {
                 $tipoDocumentoData = new TipoDocumento(
                     null,
-                    $dc['DescTipoDoc'],
-                    $dc['armario']
+                    $dc['DescTipoDoc']
                 );
             }
 
             $stmt->bindValue(1, $tipoDocumentoData->descTipo());
-            // $stmt->bindValue(2, $tipoDocumentoData->armario());
             $stmt->execute();
 
             return true;
@@ -69,16 +67,24 @@ class TipoDocumentoRepository extends LogRepository
 
     public function listaTipoDocumentoArmarios(int $idArmario): array
     {
+
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"TipoDocumento\";";
+            $sqlQuery = "select at.\"IdArmario\", at.\"IdTipoDoc\", td.\"DescTipoDoc\"
+                        FROM {$this->schema}\"ArmarioTipoDocumento\" at
+                        INNER JOIN {$this->schema}\"TipoDocumento\" td
+                        ON td.\"IdTipoDoc\" = at.\"IdTipoDoc\"
+                        WHERE \"IdArmario\" = ?;";
+
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idArmario);
             $stmt->execute();
 
             $tipodocumentoDataList = $stmt->fetchAll();
+
             $tipodocumentoList = array();
             foreach ($tipodocumentoDataList as $tipodocumentoData) {
                 array_push($tipodocumentoList, array(
+                    'idArmario' => $tipodocumentoData['IdArmario'],
                     'id' => $tipodocumentoData['IdTipoDoc'],
                     'desctipo' => $tipodocumentoData['DescTipoDoc']
                 ));
@@ -95,20 +101,18 @@ class TipoDocumentoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "UPDATE {$this->schema}\"TipoDocumento\" SET DescTipoDoc = ? WHERE IdTipoDoc = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"TipoDocumento\" SET \"DescTipoDoc\" = ? WHERE \"IdTipoDoc\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($tipoDoc as $td) {
                 $tipoDocData = new TipoDocumento(
                     $td['id'],
-                    $td['desctipo'],
-                    $td['armario']
+                    $td['desctipo']
                 );
             }
 
             $stmt->bindValue(1, $tipoDocData->descTipo());
-            $stmt->bindValue(2, $tipoDocData->armario());
-            $stmt->bindValue(3, $tipoDocData->id());
+            $stmt->bindValue(2, $tipoDocData->id());
             $stmt->execute();
 
             return true;
@@ -121,7 +125,7 @@ class TipoDocumentoRepository extends LogRepository
     public function excluirTipoDocumento(int $id): bool
     {
         try {
-            $sqlQuery = "delete FROM {$this->schema}\"TipoDocumento\" where IdTipoDoc  = ?;";
+            $sqlQuery = "delete FROM {$this->schema}\"TipoDocumento\" where \"IdTipoDoc\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();

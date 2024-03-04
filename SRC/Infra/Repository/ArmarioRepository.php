@@ -45,7 +45,7 @@ class ArmarioRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"Armarios\"(CodArmario, NomeInterno, NomeExterno) values(?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"Armarios\"(\"CodArmario\", \"NomeInterno\", \"NomeExterno\") values(?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($armario as $ar) {
@@ -69,11 +69,30 @@ class ArmarioRepository extends LogRepository
         }
     }
 
+    public function vincularDocumentos(array $armario): bool
+    {
+        try {
+
+            $sqlQuery = "INSERT INTO {$this->schema}\"ArmarioTipoDocumento\"(\"IdArmario\", \"IdTipoDoc\") values(?, ?);";
+            $stmt = $this->pdo->prepare($sqlQuery);
+
+
+            $stmt->bindValue(1, $armario[0]['id']);
+            $stmt->bindValue(2, $armario[0]['idTipoDocumento']);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
     public function alterarArmarios(array $armario): bool
     {
         try {
 
-            $sqlQuery = "UPDATE {$this->schema}\"Armarios\" SET CodArmario = ?, NomeInterno = ?, NomeExterno = ? WHERE IdArmario = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"Armarios\" SET \"CodArmario\" = ?, \"NomeInterno\" = ?, \"NomeExterno\" = ? WHERE \"IdArmario\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($armario as $ar) {
@@ -97,10 +116,11 @@ class ArmarioRepository extends LogRepository
             return false;
         }
     }
+
     public function excluirArmario(int $id): bool
     {
         try {
-            $sqlQuery = "delete FROM {$this->schema}\"Armarios\" where IdArmario  = ?;";
+            $sqlQuery = "delete FROM {$this->schema}\"Armarios\" where \"IdArmario\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();

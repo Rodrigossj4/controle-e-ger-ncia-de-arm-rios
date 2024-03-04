@@ -2,16 +2,15 @@
 
 namespace Marinha\Mvc\Models;
 
-class TipoDocumento{
+class TipoDocumento
+{
     private ?int $id;
     private string $descTipo;
-    private int $armario;
 
-    public function __construct(?int $id, string $descTipo, int $armario)
+    public function __construct(?int $id, string $descTipo)
     {
         $this->id = $id;
         $this->descTipo = $descTipo;
-        $this->armario = $armario;
     }
 
     public function id(): ?int
@@ -22,10 +21,5 @@ class TipoDocumento{
     public function descTipo(): string
     {
         return $this->descTipo;
-    }
-
-    public function armario(): ?int
-    {
-        return $this->armario;
     }
 }

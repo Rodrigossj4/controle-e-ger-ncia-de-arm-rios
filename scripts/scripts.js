@@ -22,7 +22,7 @@ function carregarArmarios() {
             var sel = $("#gradeArmarios");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeexterno + '</div><div class="acoes"><button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="' + e.id + '" data-ni="' + e.nomeinterno + '" data-ne="' + e.nomeexterno + '" data-cd="' + e.codigo + '">Editar</button><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idArmario" name="idArmario" value="' + e.id + '" ><button class="btn btn-danger excluir" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button></form></div></div>');
+                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeexterno + '</div><div class="acoes"><form id="formGerenciarArmario" name="formGerenciarArmario"><input type="hidden" name="idArmario" id="idArmario" value="' + e.id + '" /><input type="button" class="btn btn-primary btnGerenciarArmario" data-bs-toggle="modal" data-bs-target="#GerenciarArmario" data-id="' + e.id + '" value="Gerenciar"></form><button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="' + e.id + '" data-ni="' + e.nomeinterno + '" data-ne="' + e.nomeexterno + '" data-cd="' + e.codigo + '">Editar</button><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idArmario" name="idArmario" value="' + e.id + '" ><button class="btn btn-danger excluir" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button></form></div></div>');
 
             });
         },
@@ -61,6 +61,70 @@ $(document).on('click', '.btnAlterarArmario', function (e) {
     $('#formAltArmario #nomeInterno').val($(this).data("ni"));
     $('#formAltArmario #nomeExterno').val($(this).data("ne"));
     $('.opcoesConfirmacao').css('display', 'none');
+});
+
+function carregarTipoDocVincArmarios(id) {
+    console.log("aqui: " + id);
+    $.ajax({
+        url: "/listarTipoDocumentosArmario?id=" + id,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        cache: false,
+        success: function (data) {
+            var sel = $("#GradeTipoDocArmario");
+            sel.empty();
+            data.forEach(e => {
+                //sel.append('<div><div>' + e.desctipo + 'Nome</div><div><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ConfDesArmTipoDoc"" data-idArm="' + e.idArmario + '" data-idDoc="' + e.id + '" >Excluir Relação</button></div></div>')
+                sel.append('<div><div>' + e.desctipo + '</div></div>');
+            });
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+
+}
+
+$('.btnGerenciarArmario').on('click', function (e) {
+    var formdata = new FormData($("form[id='formGerenciarArmario']")[0]);
+    $('#formListaDocumentos #IdArmario').val($(this).data("id"));
+    carregarTipoDocVincArmarios($(this).data("id"));
+    $.ajax({
+        type: 'GET',
+        url: "/gerenciar-documentos-armarios",
+        data: formdata,
+        processData: false,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (d) {
+            var sel = $("#GerenciarArmario #formListaDocumentos select");
+            d.forEach(e => {
+                sel.append('<option value="' + e.id + '">' + e.desctipo + '</option>');
+            });
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
+        }
+    });
+});
+
+$('.vincArmarioTipoDoc').on('click', function (e) {
+    var formdata = new FormData($("form[id='formListaDocumentos']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/vincular-documentos-armarios",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarTipoDocVincArmarios($('#formListaDocumentos #IdArmario').val());
+            alertas('Sucesso', '#modCadArmario', 'alert_sucess');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
+        }
+    });
 });
 
 $(document).on('click', '#exibConfirmaAlteracaoArmario', function (e) {

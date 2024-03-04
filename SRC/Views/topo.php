@@ -31,27 +31,29 @@ if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6)
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <?php if (($liberaAcessoAdmin === true)) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="/gerenciar-armarios">Gerencia de Armarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerencia de Tipo de documentos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
-                        </li>
+                    <? /**php if (($liberaAcessoAdmin === true)) { **/ ?>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/gerenciar-armarios">Gerencia de Armarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerencia de Tipo de documentos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/logout">Sair</a>
-                        </li>
-                    <?php } ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Sair</a>
+                    </li>
+                    <?/*php } */ ?>
+
+
                 </ul>
             </div>
         </div>

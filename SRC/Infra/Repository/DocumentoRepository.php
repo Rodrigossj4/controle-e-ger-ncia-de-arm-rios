@@ -21,15 +21,15 @@ class DocumentoRepository extends LogRepository
     public function listaDocumentos(): array
     {
         try {
-            $sqlQuery = "select d.IdDocumento, d.DocId, d.Nip, d.Semestre, d.Ano, d.IdTipoDoc, d.IdArmario, 
-                            dp.Numpg, dp.IdDocPag as idpagina, dp.Arquivo, td.DescTipoDoc, arm.NomeExterno as nomeArmario
+            $sqlQuery = "select d.\"IdDocumento\", d.\"DocId\", d.\"Nip\", d.\"Semestre\", d.\"Ano\", d.\"IdTipoDoc\", d.\"IdArmario\", 
+            dp.\"Numpg\", dp.\"IdDocPag\" as idpagina, dp.\"Arquivo\", td.\"DescTipoDoc\", arm.\"NomeExterno\" as nomeArmario
                             from {$this->schema}\"Documentos\" d
                             inner join {$this->schema}\"DocumentoPagina\" dp
-                            on dp.DocId = d.IdDocumento
+                            on dp.\"DocId\" = d.\"IdDocumento\"
                             inner join {$this->schema}\"TipoDocumento\" td
-                            on td.IdTipoDoc = d.IdTipoDoc
+                            on td.\"IdTipoDoc\" = d.\"IdTipoDoc\"
                             inner join {$this->schema}\"Armarios\" arm
-                            on arm.IdArmario = d.IdArmario;";
+                            on arm.\"IdArmario\" = d.\"IdArmario\";";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
@@ -42,12 +42,12 @@ class DocumentoRepository extends LogRepository
                     'nip' => $documentosData['Nip'],
                     'semestre' => $documentosData['Semestre'],
                     'ano' => $documentosData['Ano'],
-                    'tipodocumento' => $documentosData['DescTipoDoc'],
-                    'armario' => $documentosData['armario'],
-                    'numpagina' => $documentosData['numpagina'],
+                    'tipodocumento' => $documentosData['IdTipoDoc'],
+                    'armario' => $documentosData['IdArmario'],
+                    'numpagina' => $documentosData['Numpg'],
                     'idpagina' => $documentosData['idpagina'],
-                    'arquivo' => $documentosData['arquivo'],
-                    'desctipo' => $documentosData['desctipo'],
+                    'arquivo' => $documentosData['Arquivo'],
+                    'desctipo' => $documentosData['DescTipoDoc'],
                     'nomeArmario' => $documentosData['nomearmario']
                 ));
             };
@@ -63,11 +63,11 @@ class DocumentoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "select arquivo from {$this->schema}\"DocumentoPagina\" where IdDocPagina = ?";
+            $sqlQuery = "select \"Arquivo\" from {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();
-
+            var_dump($sqlQuery);
             $documentosDataList = $stmt->fetchAll();
             $documentosList = array();
             foreach ($documentosDataList as $documentosData) {
@@ -76,7 +76,7 @@ class DocumentoRepository extends LogRepository
                 ));
             };
 
-            return $documentosData['arquivo'];
+            return $documentosData['Arquivo'];
         } catch (Exception $e) {
             echo $e;
             return [];
@@ -87,7 +87,7 @@ class DocumentoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"Documentos\"(DocId, Nip, Semestre, Ano, IdTipoDoc, FolderId, Armario) values(?, ?, ?, ?, ?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"Documentos\"(\"DocId\", \"Nip\", \"Semestre\", \"Ano\", \"IdTipoDoc\", \"FolderId\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
             //var_dump($documento);
             foreach ($documento as $dc) {
@@ -123,7 +123,7 @@ class DocumentoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "UPDATE {$this->schema}\"Documentos\" SET DocId= ?, Nip = ?, Semestre = ? , Ano = ? , IdTipoDoc = ?, FolderId = ?, IdArmario = ? WHERE IdDocumento = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"Documentos\" SET \"DocId\"= ?, \"Nip\" = ?, \"Semestre\" = ? , \"Ano\" = ? , \"IdTipoDoc\" = ?, \"FolderId\" = ?, \"IdArmario\" = ? WHERE \"IdDocumento\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($documento as $dc) {
@@ -160,7 +160,7 @@ class DocumentoRepository extends LogRepository
     public function excluirDocumentos(int $id): bool
     {
         try {
-            $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where IdDocumento  = ?;";
+            $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();
@@ -175,7 +175,7 @@ class DocumentoRepository extends LogRepository
     public function listarPaginas(int $id): array
     {
         try {
-            $sqlQuery = "SELECT * FROM {$this->schema}\"DocumentoPagina\" where DocId = ?;";
+            $sqlQuery = "SELECT * FROM {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();
@@ -207,7 +207,7 @@ class DocumentoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "UPDATE {$this->schema}\"DocumentoPagina\" SET DocId = ?, Volume = ?, Numpg = ? , Arquivo = ? , CodExp = ?, Filme = ?, Fotograma = ?, IMGEncontrada = ? WHERE IdDocPag = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"DocumentoPagina\" SET \"DocId\" = ?, \"Volume\" = ?, \"Numpg\" = ? , \"Arquivo\" = ? , \"CodExp\" = ?, \"Filme\" = ?, \"Fotograma\" = ?, \"IMGEncontrada\" = ? WHERE \"IdDocPag\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($pagina as $pg) {
@@ -246,7 +246,7 @@ class DocumentoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(documentoid, volume, numpagina, codexp, arquivo, filme, fotogramna, imgencontrada) values(?, ?, ?, ?, ?, ?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(\"DocId\", \"Volume\", \"Numpg\", \"CodExp\", \"Arquivo\", \"Filme\", \"Fotograma\", \"IMGEncontrada\") values(?, ?, ?, ?, ?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($pagina as $pg) {
@@ -285,7 +285,7 @@ class DocumentoRepository extends LogRepository
     {
 
         try {
-            $sqlQuery = "SELECT id FROM {$this->schema}\"Documentos\" where docid = ?;";
+            $sqlQuery = "SELECT \"IdDocumento\" FROM {$this->schema}\"Documentos\" where \"DocId\" = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $documentId);
             $stmt->execute();
@@ -294,7 +294,7 @@ class DocumentoRepository extends LogRepository
             $documentosDataList = $stmt->fetchAll();
 
 
-            return $documentosDataList[0]['id'];
+            return $documentosDataList[0]['IdDocumento'];
         } catch (Exception $e) {
             echo $e;
             return [];

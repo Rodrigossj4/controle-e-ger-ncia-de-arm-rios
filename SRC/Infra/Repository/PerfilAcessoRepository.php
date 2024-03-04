@@ -22,7 +22,7 @@ class PerfilAcessoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuario\"(DescPerfil) values(?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuario\"(\"DescPerfil\") values(?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($perfil as $pr) {
@@ -54,7 +54,7 @@ class PerfilAcessoRepository extends LogRepository
             $perfilList = array();
             foreach ($perfilDataList as $perfilData) {
                 array_push($perfilList, array(
-                    'id' => $perfilData['Id'],
+                    'id' => $perfilData['IdPerfilUsuario'],
                     'nomeperfil' => $perfilData['DescPerfil']
                 ));
             };
@@ -70,7 +70,7 @@ class PerfilAcessoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "UPDATE {$this->schema}\"PerfilUsuario\" SET DescPerfil = ? WHERE id = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"PerfilUsuario\" SET \"DescPerfil\" = ? WHERE \"IdPerfilUsuario\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($perfil as $td) {
@@ -94,7 +94,7 @@ class PerfilAcessoRepository extends LogRepository
     public function excluir(int $id): bool
     {
         try {
-            $sqlQuery = "delete FROM {$this->schema}\"PerfilUsuario\" where Id  = ?;";
+            $sqlQuery = "delete FROM {$this->schema}\"PerfilUsuario\" where \"IdPerfilUsuario\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();

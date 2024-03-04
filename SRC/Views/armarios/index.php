@@ -89,6 +89,35 @@
     </div>
 </div>
 
+<div class="modal fade" id="GerenciarArmario" tabindex="-1" aria-labelledby="GerenciarArmario" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Gerenciar Tipo de documentos do armário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formListaDocumentos" name="formListaDocumentos" class="">
+                    <input type="hidden" name="IdArmario" id="IdArmario">
+                    <select class="form-select" id="listarDocumentos" name="listarDocumentos">
+                        <option value="0">Selecione o documento</option>
+                    </select>
+                    <input type="button" name="vincArmarioTipoDoc" id="vincArmarioTipoDoc" class="vincArmarioTipoDoc btn btn-primary" value="Vincular tipo de documento">
+                </form>
+                <span>Tipos de documentos do armario:</span>
+                <div id="GradeTipoDocArmario" name="GradeTipoDocArmario">
+                    <div>
+                        <div>Nome</div>
+                        <div><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ConfDesArmTipoDoc" data-id="<?= $armario['id']; ?>">Excluir Relação</button></div>
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="ExcluirArmario" tabindex="-1" aria-labelledby="ExcluirArmario" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -103,6 +132,32 @@
                             <input type="hidden" name="id" id="id">
                         </form>
                         <input type="button" id="btnConfirmaExcluirArmario" data-id="" value="Sim" class="btn btn-success btnConfirmaExcluirArmario">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaExcluirArmario" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaExcluirArmario">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ConfDesArmTipoDoc" tabindex="-1" aria-labelledby="ConfDesArmTipoDoc" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja realmente excluir esse tipo de documento do Armario?</span>
+                    <div class="col-sm-3">
+                        <form id="formDesArmTipoDoc">
+                            <input type="hidden" name="idTipoDoc" id="idTipoDoc">
+                            <input type="hidden" name="idArmario" id="idArmario">
+                        </form>
+                        <input type="button" id="btnConfirmaDesArmTipoDoc" data-id="" value="Sim" class="btn btn-success btnConfirmaDesArmTipoDoc">
                     </div>
                     <div class="col-sm-3">
                         <input type="button" id="btnNaoConfirmaExcluirArmario" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaExcluirArmario">
