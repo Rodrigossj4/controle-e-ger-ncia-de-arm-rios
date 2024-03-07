@@ -53,7 +53,8 @@ class Router
                 '/gerenciar-usuarios' => fn () => self::load('UsuariosController', 'index'),
                 '/listarUsuarios' => fn () => self::load('UsuariosController', 'listar'),
                 '/logout' => fn () => self::load('LoginController', 'logout'),
-                '/gerenciar-documentos-armarios' => fn () => self::load('ArmariosController', 'gerenciar')
+                '/gerenciar-documentos-armarios' => fn () => self::load('ArmariosController', 'gerenciar'),
+                '/listarDocumentos' => fn () => self::load('DocumentoController', 'listarDocumentos'),
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
@@ -77,7 +78,8 @@ class Router
                 '/cadastrarUsuario' => fn () => self::load('UsuariosController', 'cadastrar'),
                 '/alterarUsuario' => fn () => self::load('UsuariosController', 'alterar'),
                 '/excluirUsuario' => fn () => self::load('UsuariosController', 'excluir'),
-                '/vincular-documentos-armarios' => fn () => self::load('ArmariosController', 'vincularDocumentos')
+                '/vincular-documentos-armarios' => fn () => self::load('ArmariosController', 'vincularDocumentos'),
+                '/tratar-documento' => fn () => self::load('DocumentoController', 'documento')
             ]
         ];
     }
@@ -91,13 +93,15 @@ class Router
 
             //var_dump(isset($routes[$request]));
             if (!isset($routes[$request])) {
-                throw new Exception('A rota não existe 1');
+                // throw new Exception('A rota não existe 1');
+                $Uri = '/';
             }
 
             //var_dump($Uri);
             //var_dump($routes[$request]);
             if (!array_key_exists($Uri, $routes[$request])) {
-                throw new Exception('A rota não existe 2');
+                //throw new Exception('A rota não existe 2');
+                $Uri = '/';
             }
 
             $router = $routes[$request][$Uri];

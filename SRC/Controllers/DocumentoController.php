@@ -12,7 +12,6 @@ class DocumentoController extends Controller
 {
     public function __construct()
     {
-
     }
 
     public function index()
@@ -21,44 +20,59 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         $armariosService =  new ArmarioServices();
 
-        $DocumentosList = $service->listaDocumentos(); 
+        $DocumentosList = $service->listaDocumentos();
         $ArmariosList = $armariosService->listaArmarios();
         require __DIR__ . '../../Views/documento/index.php';
     }
 
-    public function cadastrarDocumento():bool
-     {
-        $idPasta = random_int(1,999999);
+    public function listarDocumentos()
+    {
+        $service = new DocumentoServices();
+        echo json_encode($service->listaDocumentos());
+    }
+
+    public function cadastrarDocumento(): bool
+    {
+        $idPasta = random_int(1, 999999);
         $service = new DocumentoServices();
 
         $service->gerarPastaDoc($idPasta);
-        
+
         $documentosList = array();
         array_push($documentosList, array(
             'docid' => $idPasta,
             'armario' => filter_input(INPUT_POST, 'ListArmarioDocumento'),
             'tipodoc' => filter_input(INPUT_POST, 'SelectTipoDoc'),
-            'folderid' => "1",
+            'folderid' => $idPasta,
             'semestre' => filter_input(INPUT_POST, 'semestre'),
             'ano' => filter_input(INPUT_POST, 'ano'),
             'nip' => filter_input(INPUT_POST, 'Nip')
         ));
-        
-        $tags = filter_input(INPUT_POST, 'Nip'). ", ".  filter_input(INPUT_POST, 'ano');
-        if($service->cadastrarDocumentos($documentosList))
-        {
-            $this->cadastrarPagina($idPasta, 1, $service->gerarArquivo($idPasta, $tags));
-        }
-        return true;      
-     }
 
-     public function criptografarArquivo(){
+        $service->cadastrarDocumentos($documentosList);
+        return true;
+    }
+
+    public function documento()
+    {
+        // $this->validarSessao();
+
+        $service = new DocumentoServices();
+        $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
+
+        require __DIR__ . '../../Views/documento/documento.php';
+    }
+
+    public function criptografarArquivo()
+    {
         $service = new DocumentoServices();
         $service->criptografarArquivo($this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'docid')));
-     }
+    }
 
-     public function alterarDocumento():bool
-     {  
+    public function alterarDocumento(): bool
+    {
         $documentosList = array();
         array_push($documentosList, array(
             'id' => filter_input(INPUT_POST, 'id'),
@@ -70,60 +84,53 @@ class DocumentoController extends Controller
             'folderid' => filter_input(INPUT_POST, 'folderid'),
             'armario' => filter_input(INPUT_POST, 'armario')
         ));
-               
+
         $service = new DocumentoServices();
         $service->alterarDocmentos($documentosList);
         return true;
-     }
-        
-     public function excluir():bool
-     {        
+    }
+
+    public function excluir(): bool
+    {
         $service = new DocumentoServices();
         $service->excluirDocumentos(filter_input(INPUT_POST, 'idDocumento'));
         return true;
-     }
+    }
 
-    public function retornarCaminhoDocumento(int $docid):string
-    {  
+    public function retornarCaminhoDocumento(int $docid): string
+    {
         $service = new DocumentoServices();
-        
+
         return $service->retornarCaminhoDocumento($docid);
     }
 
-     private function cadastrarPagina(int $documentoid, int $numpagina, string $arquivo):bool
-     {
-        $paginasList = array();
-        array_push($paginasList, array(            
-            'documentoid' =>  $documentoid,
-            'volume' => "1",
-            'numpagina' => $numpagina,
-            'codexp' => 1,
-            'arquivo' => $arquivo,
-            'filme' => "1",
-            'fotograma' => "1",
-            'imgencontrada' => "1"
-        ));
+    public function cadastrarPagina(): bool
+    {
+        $service = new DocumentoServices();
+        $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
 
-        $service = new DocumentoServices();        
-        return $service->cadastrarPaginas($paginasList);      
-     }
+        $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'), $tags);
+
+        $service = new DocumentoServices();
+        return $service->cadastrarPaginas($paginasList);
+    }
 
     public function listarPaginas()
     {
         $service = new DocumentoServices();
-        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'iddocumento'));  
+        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'iddocumento'));
         require __DIR__ . '../../Views/documento/index.php';
-     }
+    }
 
-     public function excluirPagina():bool
-     {        
+    public function excluirPagina(): bool
+    {
         $service = new DocumentoServices();
         $service->excluirPagina(filter_input(INPUT_POST, 'idPagina'));
         return true;
-     }
+    }
 
-     public function alterarPagina():bool
-     {  
+    public function alterarPagina(): bool
+    {
         $paginasList = array();
         array_push($paginasList, array(
             'id' => filter_input(INPUT_POST, 'id'),
@@ -136,33 +143,34 @@ class DocumentoController extends Controller
             'fotograma' => filter_input(INPUT_POST, 'fotograma'),
             'imgencontrada' => filter_input(INPUT_POST, 'imgencontrada')
         ));
-      
+
         $service = new DocumentoServices();
         $service->alterarPaginas($paginasList);
         return true;
-     }
+    }
 
     public function visualizarDocumento()
     {
         $caminho = $this->retornarCaminhoDocumento(filter_input(INPUT_GET, 'docid'));
+        $cifrado = filter_input(INPUT_GET, 'cf');
         $service = new DocumentoServices();
-        $arquivo  = $service->abrirArquivo($caminho);
+        $arquivo  = $service->abrirArquivo($caminho, $cifrado);
         require __DIR__ . '../../Views/documento/visualizar.php';
     }
 
-    public function asssinarDigital(){
+    public function asssinarDigital()
+    {
         $diretorio = getcwd() . '/';
         $nomeCertPFX = 'Documentos/certificado_2000359152.pfx';
         $documentoParaAssinar = 'Documentos/teste.pdf';
         $nomeCertCRT = 'Documentos/tcpdf.crt';
         $password = 'RoD@2109';
 
-      
+
 
         // * Gera o .crt a partir do .pfx
-        if (!file_exists('tcpdf.crt')){
+        if (!file_exists('tcpdf.crt')) {
             shell_exec("openssl pkcs12 -in {$nomeCertPFX} -out {$nomeCertCRT} -nodes -passin pass: {$password}");
-                       
         }
 
 
@@ -179,19 +187,19 @@ class DocumentoController extends Controller
         $pkcs12 = file_get_contents($nomeCertPFX);
 
         // aqui a gente pega o certificado .crt, mas esse cara a gente tem que gerar
-        $cert = openssl_x509_read( $p );
-        $cert_parsed = openssl_x509_parse( $cert ,true);
+        $cert = openssl_x509_read($p);
+        $cert_parsed = openssl_x509_parse($cert, true);
 
         // print_r($cert_parsed);
 
-        $nome_cpf = explode(":",$cert_parsed['subject']['CN']);
+        $nome_cpf = explode(":", $cert_parsed['subject']['CN']);
 
 
 
         $res = [];
         $openSSL = openssl_pkcs12_read($pkcs12, $res, $password);
-        if(!$openSSL) {
-            throw new Exception("Error: ".openssl_error_string());
+        if (!$openSSL) {
+            throw new Exception("Error: " . openssl_error_string());
         }
 
         // // this is the CER FILE
@@ -214,13 +222,13 @@ class DocumentoController extends Controller
 
         //Informações da assinatura - Preencha com os seus dados
         $info = array(
-        'Name' => '',
-        'Location' => '',
-        'Reason' => '',
-        'ContactInfo' => '',
+            'Name' => '',
+            'Location' => '',
+            'Reason' => '',
+            'ContactInfo' => '',
         );
 
-        $pdf = new PDF($nome_cpf[0],$nome_cpf[1]);
+        $pdf = new PDF($nome_cpf[0], $nome_cpf[1]);
         //Configura a assinatura. Para saber mais sobre os parâmetros
         //consulte a documentação do TCPDF, exemplo 52.
         //Não esqueça de mudar 'senha' para a senha do seu certificado
@@ -230,19 +238,19 @@ class DocumentoController extends Controller
         // print_r($pdf->numPages());
         // print_r($numPages);
 
-        for ($i=0; $i < $numPages; $i++) { 
+        for ($i = 0; $i < $numPages; $i++) {
             # code...
-            $pdf->AddPage();    
+            $pdf->AddPage();
             // $text = "Documento assinado digitalmente por <b>$nome_cpf[0]</b>, CPF $nome_cpf[1]";
             // $pdf->writeHTML($text, true, 0, true, 0);
-            $tplId = $pdf->importPage($i+1);
+            $tplId = $pdf->importPage($i + 1);
             // $pdf->setSignature('file://'.$cert, 'file://'.realpath($cert), '','', 2, $info);
-            $pdf->setSignature($cert_info['cert'], $cert_info['pkey'], '','', 2, $info);
+            $pdf->setSignature($cert_info['cert'], $cert_info['pkey'], '', '', 2, $info);
 
 
             $pdf->useTemplate($tplId, 0, 0); //Importa nas medidas originais
             // print a line of text
-            $pdf->setSignatureAppearance(10,10,10,10,1);
+            $pdf->setSignatureAppearance(10, 10, 10, 10, 1);
         }
 
         $pdf->Output();

@@ -3,6 +3,7 @@
 /** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $DocumentosList */
 /** @var Marinha\Mvc\Models\Armarios[] $ArmariosList  */
 
+
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <li class="nav-item">
@@ -10,13 +11,9 @@
 </li>
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
-        <div class="col divisao_bottom form-control-padronizado" id="modCadDocumento">
+        <div class="col divisao_bottom form-control-padronizado" id="modCadTipoDocumento">
             <h3>Gerenciar Documentos</h3>
             <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label class="col-form-label" for="lote">LOTE: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="lote" id="lote">
-                </div>
                 <div class="form-group">
                     <label class="col-form-label" for="Armario">Armario: </label><br>
 
@@ -51,13 +48,14 @@
                     <label class="col-form-label" for="Nip">NIP: </label>
                     <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip" id="Nip">
                 </div>
+                <input type="file" id="documento" name="documento" class="form-control">
                 <br>
                 <div class="form-group row">
-                    <!-- <div class="col-sm-3">
-                        <input type="button" id="btnBuscarDocumento" value="Buscar documentos" class="btn btn-primary">
-                    </div>-->
                     <div class="col-sm-3">
-                        <input type="button" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
+                        <input type="button" id="btnBuscarDocumento" value="Buscar documentos" class="btn btn-primary">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="submit" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
                     </div>
                 </div>
             </form>
@@ -70,7 +68,7 @@
     <div class="p-5 bg-body-tertiary rounded-3 row">
         <div class="col">
             <h3>Gerenciamento de documentos</h3>
-            <div class="Grade_maior">
+            <div class="Grade_maior" id="gradeArmarios">
                 <div class="container_item_maior">
                     <div class="Descricao_maior">
                         NIP
@@ -88,38 +86,51 @@
                         Armário
                     </div>
                     <div class="Descricao_maior">
+                        Arquivos
                     </div>
                     <!--<div class="Descricao">
                             Ações
                         </div>-->
                 </div>
-                <div id="documentosLista">
-                    <?php foreach ($DocumentosList  as $documentos) : ?>
-                        <div class="container_item_maior" id="gradeDocumentos">
-                            <div class="Descricao_maior">
-                                <?= $documentos['nip']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['semestre']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['ano']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['desctipo']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['nomeArmario']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <form method="post" id="" name="" action="/tratar-documento">
-                                    <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
-                                    <input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento">
-                                </form>
-                            </div>
+                <?php foreach ($DocumentosList  as $documentos) : ?>
+                    <div class="container_item_maior">
+                        <div class="Descricao_maior">
+                            <?= $documentos['nip']; ?>
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                        <div class="Descricao_maior">
+                            <?= $documentos['semestre']; ?>
+                        </div>
+                        <div class="Descricao_maior">
+                            <?= $documentos['ano']; ?>
+                        </div>
+                        <div class="Descricao_maior">
+                            <?= $documentos['desctipo']; ?>
+                        </div>
+                        <div class="Descricao_maior">
+                            <?= $documentos['nomeArmario']; ?>
+                        </div>
+                        <div class="Descricao_maior">
+                            <form method="post" id="docid_<?= $documentos['id']; ?>" name="docid_<?= $documentos['id']; ?>">
+                                <input type="hidden" id="docid" name="docid" value="<?= $documentos['id']; ?>">
+                                <a class="abrirDocumento" data-id=<?= $documentos['id']; ?>>Veja o documento</a>
+                            </form>
+                        </div>
+                        <div class="Descricao_maior">
+                            <form method="post" id="docidCript_<?= $documentos['id']; ?>" name="docidCript_<?= $documentos['id']; ?>">
+                                <input type="hidden" id="docid" name="docid" value="<?= $documentos['id']; ?>">
+                                <a class="criptofrarDocumento" data-id=<?= $documentos['id']; ?>>cr</a>
+                            </form>
+                        </div>
+                        <!--<div class="acoes">
+                            <button class="btn btn-primary btnCadPagina" data-bs-toggle="modal" data-bs-target="#CadPagina" data-id="<?= $documentos['id']; ?>">Vincular página</button>
+                                <button class="btn btn-warning btnAlterarDocumento" data-bs-toggle="modal" data-bs-target="#AlteraDocumento" data-id="<?= $documentos['id']; ?>" data-nip="<?= $documentos['nip']; ?>" data-docid="<?= $documentos['docid']; ?>"  data-sm="<?= $documentos['semestre']; ?>" data-ano="<?= $documentos['ano']; ?>" data-td="<?= $documentos['tipodocumento']; ?>" data-fi="<?= $documentos['folderid']; ?>" data-ar="<?= $documentos['armario']; ?>">Editar</button>
+                                <form method="post" id="excluir<?= $documentos['id']; ?>" action="/excluirDocumento">
+                                    <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>" >
+                                    <button class="btn btn-danger excluir" data-id="<?= $documentos['id']; ?>" type="button">Excluir</button>
+                                </form>
+                            </div>-->
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>

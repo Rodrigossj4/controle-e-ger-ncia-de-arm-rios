@@ -194,6 +194,69 @@ $(document).on('click', '#btnNaoConfirmaExcluirArmario', function (e) {
     FecharModal('#ExcluirArmario');
 });
 
+function carregarDocumentos() {
+    $.ajax({
+        url: "/listarDocumentos",
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        cache: false,
+        success: function (data) {
+            var sel = $("#documentosLista");
+            sel.empty();
+            data.forEach(e => {
+                sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
+
+            });
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+}
+
+$('#formCadDocumento #btnCadDocumento').on('click', function (e) {
+    var formdata = new FormData($("form[id='formCadDocumento']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/cadastrarDocumento",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarDocumentos();
+            $("#formCadDocumento #ListArmarioDocumento").val("");
+            $('#formCadDocumento #SelectTipoDoc').val("");
+            $('#formCadDocumento #semestre').val("");
+            $('#formCadDocumento #ano').val("");
+            $('#formCadDocumento #Nip').val("");
+            alertas('Documento cadastrado com Sucesso', '#modCadDocumento', 'alert_sucess');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modCadTipoDocumento', 'alert_danger');
+        }
+    });
+});
+
+$('#formIncluirPagDoc #btnIncluiPag').on('click', function (e) {
+    var formdata = new FormData($("form[id='formIncluirPagDoc']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/cadastrarPagina",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            alertas('Documento cadastrado com sucesso', '#modIdxDocumento', 'alert_sucess');
+            setTimeout(function () {
+                location.reload();
+            }, 3000);
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#modCadTipoDocumento', 'alert_danger');
+        }
+    });
+});
 
 function carregarTipoDocumento() {
     $.ajax({
@@ -329,7 +392,7 @@ $(document).on('click', '#btnNaoConfirmaAlteracaoTipoDocumento', function (e) {
 $(document).on('click', '.abrirDocumento', function (e) {
     var nomeForm = "docid_" + $(this).data("id");
     var formdata = new FormData($("form[id='" + nomeForm + "']")[0]);
-    window.open("/visualizarDocumento?docid=" + $(this).data("id"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
+    window.open("/visualizarDocumento?docid=" + $(this).data("id") + "&cf=" + $(this).data("cf"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
 });
 
 $(document).on('click', '.criptofrarDocumento', function (e) {
@@ -498,7 +561,6 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
-            console.log(d);
             carregarUsuarios();
             $('#formCadUsuario #nomeusuario').val("");
             $('#formCadUsuario #nip').val("");
@@ -511,6 +573,7 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         }
     });
 });
+
 
 $(document).on('click', '.btnAlterarUsuario', function (e) {
     $('#formAltUsuario #id').val($(this).data("id"));

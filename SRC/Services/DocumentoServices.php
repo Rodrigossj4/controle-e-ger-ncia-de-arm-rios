@@ -7,10 +7,13 @@ use Exception;
 use Marinha\Mvc\Infra\Repository\DocumentoRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Sabberworm\CSS\CSSList\Document;
 
 class DocumentoServices extends SistemaServices
 {
     private $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
+    private $diretorio = "documentos/";
+
     public function __construct()
     {
     }
@@ -30,6 +33,17 @@ class DocumentoServices extends SistemaServices
         try {
             $repository = new DocumentoRepository($this->Conexao());
             return $repository->cadastrarDocumentos($armario);
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+    public function exibirDocumento(int $id): array
+    {
+        try {
+            $repository = new DocumentoRepository($this->Conexao());
+            return $repository->exibirDocumento($id);
         } catch (Exception $e) {
             echo $e;
             return false;
@@ -58,13 +72,14 @@ class DocumentoServices extends SistemaServices
         }
     }
 
+
     public function retornarCaminhoDocumento(string $id): string
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
-            $returno =  $repository->retornarCaminhoDocumento($id);
+            $retorno =  $repository->retornarCaminhoDocumento($id);
 
-            return $returno;
+            return $retorno == null ? "" : $retorno;
         } catch (Exception $e) {
             echo $e;
             return [];
@@ -115,26 +130,42 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function gerarArquivo(int $idPasta, string $tags): string
+    public function gerarArquivo(string $idPasta, string $tags): array
     {
-        //var_dump($_FILES['documento']);
-        $extensao = strtolower(substr($_FILES['documento']['name'], -4));
+        $caminhoArqImg = "{$this->diretorio}{$idPasta}/";
+        $total = count($_FILES['documento']['name']);
+        $conteudo = "";
+        for ($i = 0; $i < $total; $i++) {
+            $caminhoArqImgServ = $caminhoArqImg . $_FILES['documento']['name'][$i];
+            var_dump($caminhoArqImgServ);
+            $caminhoArqImgTemp = $this->uploadImgPasta($idPasta, $this->diretorio, $caminhoArqImgServ, $i);
+            $conteudo .= "<img src='{$caminhoArqImgServ}' /><br>";
+        }
 
-        //$novo_nome = md5(time()) . $extensao; 
+        $html = "<html><header><meta name='Keywords' content='{$tags}' /></header><body>" .
+            "{$conteudo}" .
+            "</body></html>";
 
-        $diretorio = "documentos/";
-        $caminhoArqImg = "{$diretorio}{$idPasta}/" . $_FILES['documento']['name'];
+        $retorno = $this->gerarPDF($idPasta, $this->diretorio, $html);
 
-        $this->uploadImgPasta($idPasta, $diretorio, $caminhoArqImg);
-        $retorno = $this->gerarPDF($idPasta, $tags, $diretorio, $caminhoArqImg);
+        $paginasList = [];
+        array_push($paginasList, array(
+            'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
+            'volume' => "1",
+            'numpagina' => $total,
+            'codexp' => 1,
+            'arquivo' => $retorno,
+            'filme' => "1",
+            'fotograma' => "1",
+            'imgencontrada' => "1"
+        ));
 
-        /*$code = file_get_contents($retorno); 
-     $encrypted_code = $this->my_encrypt($code, $this->key); 
-     file_put_contents("{$retorno}", $encrypted_code); */
+        for ($i = 0; $i < $total; $i++) {
+            $caminhoArqImgServ = $caminhoArqImg . $_FILES['documento']['name'][$i];
+            unlink("{$caminhoArqImgServ}");
+        }
 
-        unlink("{$caminhoArqImg}");
-        //$this->teste();
-        return $retorno;
+        return $paginasList;
     }
 
     public function criptografarArquivo(string $retorno)
@@ -150,23 +181,25 @@ class DocumentoServices extends SistemaServices
         return "";
     }
 
-    private function uploadImgPasta(int $idPasta, string $diretorio, string $caminhoArqImg): void
+    private function uploadImgPasta(int $idPasta, string $diretorio, string $caminhoArqImg, int $indice): string
     {
-        mkdir("{$diretorio}/{$idPasta}", 0777, true);
-        move_uploaded_file($_FILES['documento']['tmp_name'],  $caminhoArqImg);
+        if (!is_dir("{$diretorio}/{$idPasta}")) {
+            mkdir("{$diretorio}/{$idPasta}", 0777, true);
+        }
+        move_uploaded_file($_FILES['documento']['tmp_name'][$indice],  $caminhoArqImg);
+        return "{$diretorio}/{$idPasta}" . $_FILES['documento']['tmp_name'][$indice];
     }
 
-    private function gerarPDF(int $idPasta, string $tags, string $diretorio, string $caminhoArqImg): string
+    private function gerarPDF(int $idPasta, string $diretorio, string $html): string
     {
         $options = new Options();
         $options->setChroot($diretorio);
         $options->setIsRemoteEnabled(true);
 
         $dompdf = new Dompdf($options);
-        $dompdf->loadhtml("<meta name='Keywords' content='{$tags}' /><img src='{$caminhoArqImg}' />");
+        $dompdf->loadhtml($html);
         $dompdf->setPaper('A4');
         $dompdf->render();
-        //var_dump($dompdf);
         $pasta = random_int(1, 999999);
         $caminhoPDF = "{$diretorio}/{$idPasta}/{$pasta}.pdf";
         file_put_contents($caminhoPDF, $dompdf->output());
@@ -174,14 +207,18 @@ class DocumentoServices extends SistemaServices
         return $caminhoPDF;
     }
 
-    public function abrirArquivo(string $caminhoarquivo): string
+    public function abrirArquivo(string $caminhoarquivo, string $cifrado): string
     {
-        $encrypted_code = file_get_contents($caminhoarquivo);
-        $decrypted_code = $this->my_decrypt($encrypted_code, $this->key);
+        if ($cifrado == "true") {
+            $encrypted_code = file_get_contents($caminhoarquivo);
+            $decrypted_code = $this->my_decrypt($encrypted_code, $this->key);
 
-        file_put_contents('documentos/ttt.pdf', $decrypted_code);
-
-        return "documentos/ttt.pdf";
+            file_put_contents('documentos/ttt.pdf', $decrypted_code);
+            return "documentos/ttt.pdf";
+        } else {
+            file_put_contents('documentos/ttt.pdf', file_get_contents($caminhoarquivo));
+            return "documentos/ttt.pdf";
+        }
     }
     public function teste()
     {

@@ -22,14 +22,15 @@ class DocumentoRepository extends LogRepository
     {
         try {
             $sqlQuery = "select d.\"IdDocumento\", d.\"DocId\", d.\"Nip\", d.\"Semestre\", d.\"Ano\", d.\"IdTipoDoc\", d.\"IdArmario\", 
-            dp.\"Numpg\", dp.\"IdDocPag\" as idpagina, dp.\"Arquivo\", td.\"DescTipoDoc\", arm.\"NomeExterno\" as nomeArmario
+                         td.\"DescTipoDoc\", arm.\"NomeExterno\" as nomeArmario
                             from {$this->schema}\"Documentos\" d
-                            inner join {$this->schema}\"DocumentoPagina\" dp
-                            on dp.\"DocId\" = d.\"IdDocumento\"
                             inner join {$this->schema}\"TipoDocumento\" td
                             on td.\"IdTipoDoc\" = d.\"IdTipoDoc\"
                             inner join {$this->schema}\"Armarios\" arm
-                            on arm.\"IdArmario\" = d.\"IdArmario\";";
+                            on arm.\"IdArmario\" = d.\"IdArmario\"
+                            order by d.\"IdDocumento\" desc Limit 20  FOR UPDATE;";
+
+
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
@@ -44,9 +45,6 @@ class DocumentoRepository extends LogRepository
                     'ano' => $documentosData['Ano'],
                     'tipodocumento' => $documentosData['IdTipoDoc'],
                     'armario' => $documentosData['IdArmario'],
-                    'numpagina' => $documentosData['Numpg'],
-                    'idpagina' => $documentosData['idpagina'],
-                    'arquivo' => $documentosData['Arquivo'],
                     'desctipo' => $documentosData['DescTipoDoc'],
                     'nomeArmario' => $documentosData['nomearmario']
                 ));
@@ -59,15 +57,54 @@ class DocumentoRepository extends LogRepository
         }
     }
 
+    public function exibirDocumento(int $id): array
+    {
+        try {
+            $sqlQuery = "select d.\"IdDocumento\", d.\"DocId\", d.\"Nip\", d.\"Semestre\", d.\"Ano\", d.\"IdTipoDoc\", d.\"FolderId\", d.\"IdArmario\", 
+             td.\"DescTipoDoc\", arm.\"NomeExterno\" as nomeArmario
+                            from {$this->schema}\"Documentos\" d
+                            inner join {$this->schema}\"TipoDocumento\" td
+                            on td.\"IdTipoDoc\" = d.\"IdTipoDoc\"
+                            inner join {$this->schema}\"Armarios\" arm
+                            on arm.\"IdArmario\" = d.\"IdArmario\"
+                            where d.\"IdDocumento\" = ? Limit 1 FOR UPDATE;";
+
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+
+            $documentosDataList = $stmt->fetchAll();
+
+            $documentosList = array();
+            foreach ($documentosDataList as $documentosData) {
+                array_push($documentosList, array(
+                    'id' => $documentosData['IdDocumento'],
+                    'docid' => $documentosData['DocId'],
+                    'nip' => $documentosData['Nip'],
+                    'semestre' => $documentosData['Semestre'],
+                    'ano' => $documentosData['Ano'],
+                    'idPasta' => $documentosData['FolderId'],
+                    'tipodocumento' => $documentosData['IdTipoDoc'],
+                    'armario' => $documentosData['IdArmario'],
+                    'desctipo' => $documentosData['DescTipoDoc'],
+                    'nomeArmario' => $documentosData['nomearmario']
+                ));
+            };
+            return $documentosList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
     public function retornarCaminhoDocumento(string $id): string
     {
         try {
-
             $sqlQuery = "select \"Arquivo\" from {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();
-            var_dump($sqlQuery);
+
             $documentosDataList = $stmt->fetchAll();
             $documentosList = array();
             foreach ($documentosDataList as $documentosData) {
@@ -76,7 +113,7 @@ class DocumentoRepository extends LogRepository
                 ));
             };
 
-            return $documentosData['Arquivo'];
+            return $documentosList == null ? "" : $documentosList[0]['arquivo'];
         } catch (Exception $e) {
             echo $e;
             return [];
@@ -184,15 +221,18 @@ class DocumentoRepository extends LogRepository
             $paginasList = array();
             foreach ($paginasDataList as $paginasData) {
                 array_push($paginasList, array(
-                    'id' => $paginasData['IdDocumento'],
+                    'id' => $paginasData['IdDocPag'],
                     'documentoid' => $paginasData['DocId'],
                     'volume' => $paginasData['Volume'],
                     'numpagina' => $paginasData['Numpg'],
                     'arquivo' => $paginasData['Arquivo'],
-                    'codex' => $paginasData['CodEx'],
+                    'codex' => $paginasData['CodExp'],
                     'filme' => $paginasData['Filme'],
                     'fotograma' => $paginasData['Fotograma'],
-                    'imgencontrada' => $paginasData['IMGEncontrada']
+                    'imgencontrada' => $paginasData['IMGEncontrada'],
+                    'idarmario' => $paginasData['IdArmario'],
+                    'flgassinado' => $paginasData['FLGAssinado'],
+                    'flgcriptografado' => $paginasData['FLGCriptografado']
                 ));
             };
 
@@ -220,7 +260,10 @@ class DocumentoRepository extends LogRepository
                     $pg['filme'],
                     $pg['fotograma'],
                     $pg['imgencontrada'],
-                    $pg['id']
+                    $pg['id'],
+                    1,
+                    false,
+                    false
                 );
             }
 
@@ -250,16 +293,20 @@ class DocumentoRepository extends LogRepository
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($pagina as $pg) {
+
                 $paginaData = new Paginas(
                     null,
-                    $this->retornaIdDocumentId($pg['documentoid']),
+                    $pg['documentoid'],
                     $pg['volume'],
                     $pg['numpagina'],
                     $pg['arquivo'],
                     $pg['codexp'],
                     $pg['filme'],
                     $pg['fotograma'],
-                    $pg['imgencontrada']
+                    $pg['imgencontrada'],
+                    1,
+                    false,
+                    false
                 );
             }
 
