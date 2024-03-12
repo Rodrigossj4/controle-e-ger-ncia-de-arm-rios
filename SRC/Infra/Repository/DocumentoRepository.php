@@ -97,6 +97,91 @@ class DocumentoRepository extends LogRepository
         }
     }
 
+    public function BuscarDocumentos($documentosListParam)
+    {
+        try {
+
+            $predicado = $this->MontaPredicado($documentosListParam);
+
+            $sqlQuery = "select d.\"IdDocumento\", d.\"DocId\", d.\"Nip\", d.\"Semestre\", d.\"Ano\", d.\"IdTipoDoc\", d.\"IdArmario\", 
+                         td.\"DescTipoDoc\", arm.\"NomeExterno\" as nomeArmario
+                            from {$this->schema}\"Documentos\" d
+                            inner join {$this->schema}\"TipoDocumento\" td
+                            on td.\"IdTipoDoc\" = d.\"IdTipoDoc\"
+                            inner join {$this->schema}\"Armarios\" arm
+                            on arm.\"IdArmario\" = d.\"IdArmario\"
+                            where {$predicado}
+                            order by d.\"IdDocumento\" desc  FOR UPDATE;";
+
+
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->execute();
+
+            $documentosDataList = $stmt->fetchAll();
+            $documentosList = array();
+            foreach ($documentosDataList as $documentosData) {
+                array_push($documentosList, array(
+                    'id' => $documentosData['IdDocumento'],
+                    'docid' => $documentosData['DocId'],
+                    'nip' => $documentosData['Nip'],
+                    'semestre' => $documentosData['Semestre'],
+                    'ano' => $documentosData['Ano'],
+                    'tipodocumento' => $documentosData['IdTipoDoc'],
+                    'armario' => $documentosData['IdArmario'],
+                    'desctipo' => $documentosData['DescTipoDoc'],
+                    'nomeArmario' => $documentosData['nomearmario']
+                ));
+            };
+            //var_dump($documentosList);
+            return $documentosList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
+    public function MontaPredicado($documentosListParam): string
+    {
+        $sentenca = "";
+        $i = 0;
+        foreach ($documentosListParam as $prop => $val) {
+            $i++;
+
+            if (strlen((string)$val["armario"]) != 0) {
+                $sentenca .= "d.\"IdArmario\" = {$val["armario"]} ";
+            }
+
+            if ((strlen((string)$val["tipodoc"]) != 0) and (($val["tipodoc"]) != 0)) {
+                if (strlen($sentenca) != 0)
+                    $sentenca .= " and ";
+
+                $sentenca .= "d.\"IdTipoDoc\" = {$val["tipodoc"]} ";
+            }
+
+            if (strlen((string)$val["nip"]) != 0) {
+                if (strlen($sentenca) != 0)
+                    $sentenca .= " and ";
+
+                $sentenca .= "d.\"Nip\" = {$val["nip"]} ";
+            }
+
+            if (strlen((string)$val["semestre"]) != 0) {
+                if (strlen($sentenca) != 0)
+                    $sentenca .= " and ";
+
+                $sentenca .= "d.\"Semestre\" = {$val["semestre"]} ";
+            }
+
+            if (strlen((string)$val["ano"]) != 0) {
+                if (strlen($sentenca) != 0)
+                    $sentenca .= " and ";
+
+                $sentenca .= "d.\"Ano\" = {$val["ano"]} ";
+            }
+        }
+        //var_dump("val: " . $sentenca);
+        return $sentenca;
+    }
     public function retornarCaminhoDocumento(string $id): string
     {
         try {

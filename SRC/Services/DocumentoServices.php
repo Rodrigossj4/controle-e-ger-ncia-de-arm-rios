@@ -39,6 +39,17 @@ class DocumentoServices extends SistemaServices
         }
     }
 
+    public function BuscarDocumentos($documentosList): array
+    {
+        try {
+            $repository = new DocumentoRepository($this->Conexao());
+            return $repository->BuscarDocumentos($documentosList);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
     public function exibirDocumento(int $id): array
     {
         try {
@@ -130,19 +141,21 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function gerarArquivo(string $idPasta, string $tags): array
+    public function gerarArquivo(string $idPasta, string $tagsList): array
     {
         $caminhoArqImg = "{$this->diretorio}{$idPasta}/";
         $total = count($_FILES['documento']['name']);
+
         $conteudo = "";
+
         for ($i = 0; $i < $total; $i++) {
             $caminhoArqImgServ = $caminhoArqImg . $_FILES['documento']['name'][$i];
-            var_dump($caminhoArqImgServ);
             $caminhoArqImgTemp = $this->uploadImgPasta($idPasta, $this->diretorio, $caminhoArqImgServ, $i);
             $conteudo .= "<img src='{$caminhoArqImgServ}' /><br>";
         }
-
-        $html = "<html><header><meta name='Keywords' content='{$tags}' /></header><body>" .
+        $html = "<html><header>" .
+            "{$tagsList}" .
+            "</header><body>" .
             "{$conteudo}" .
             "</body></html>";
 

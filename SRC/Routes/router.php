@@ -79,7 +79,8 @@ class Router
                 '/alterarUsuario' => fn () => self::load('UsuariosController', 'alterar'),
                 '/excluirUsuario' => fn () => self::load('UsuariosController', 'excluir'),
                 '/vincular-documentos-armarios' => fn () => self::load('ArmariosController', 'vincularDocumentos'),
-                '/tratar-documento' => fn () => self::load('DocumentoController', 'documento')
+                '/tratar-documento' => fn () => self::load('DocumentoController', 'documento'),
+                '/BuscarDocumentos' => fn () => self::load('DocumentoController', 'BuscarDocumentos')
             ]
         ];
     }

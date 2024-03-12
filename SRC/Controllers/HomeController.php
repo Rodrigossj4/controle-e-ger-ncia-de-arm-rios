@@ -8,7 +8,6 @@ class HomeController extends Controller
     {
 
         $this->validarSessao();
-        //var_dump("Homes");
         require __DIR__ . '../../Views/Home.php';
     }
 }

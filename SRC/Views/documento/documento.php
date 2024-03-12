@@ -26,11 +26,6 @@
                     <div class="Descricao_maior">
                         Armário
                     </div>
-                    <div class="Descricao_maior">
-                    </div>
-                    <!--<div class="Descricao">
-                            Ações
-                        </div>-->
                 </div>
                 <?php foreach ($Documento  as $documentos) : ?>
                     <div class="container_item_maior">
@@ -55,16 +50,36 @@
             </div>
 
             <?php if (Count($paginasList) == 0) { ?>
-
-                <h3>Incluir páginas</h3>
+                <div>
+                    <a class="nav-link" href="/Modulo_img.php" target="_blank">Trate aqui as Imagens do documento</a>
+                </div>
+                <h3>Informe as Tags</h3>
                 <form method="post" id="formIncluirPagDoc" name="formIncluirPagDoc" action="" enctype="multipart/form-data">
                     <input type="hidden" id="IdDocumento" name="IdDocumento" value="<?= $documentos['id']; ?>">
                     <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
-                    <input type="file" id="documento[]" name="documento[]" class="form-control" multiple>
-                    <br>
-                    <input type="buttton" class="btn btn-primary" name="btnIncluiPag" id="btnIncluiPag" value="Incluir páginas">
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <label class="col-form-label" for="Assunto">Informe o assunto </label>
+                            <input type="text" id="Assunto" name="Assunto" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="col-form-label" for="Autor">Informe o Autor </label>
+                            <input type="text" id="Autor" name="Autor" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="col-form-label" for="Titulo">Titulo</label>
+                            <input type="text" id="Titulo" name="Titulo" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <h3>Incluir páginas</h3>
+                        <div class="col-md-3 mb-3">
+                            <label class="col-form-label" for="documento[]">Selecione as páginas </label>
+                            <input type="file" id="documento[]" name="documento[]" class="form-control" multiple>
+                        </div>
+                        <input type="buttton" class="btn btn-primary" name="btnIncluiPag" id="btnIncluiPag" value="Incluir páginas">
+                    </div>
                 </form>
-
             <?php } ?>
             <span class="alerta"></span>
 
@@ -73,8 +88,12 @@
                     <h3><a class="abrirDocumento" data-id=<?= $documentos['id']; ?> data-cf="false">Veja o documento</a></h3>
                 <?php } else { ?>
                     <h3><a class="abrirDocumento" data-id=<?= $documentos['id']; ?> data-cf="true">Veja o documento</a></h3>
+                <?php } ?>
+                <div class="form-row">
+                    <input type="buttton" class="btn btn-primary" value="Liberar documento Somente para assinatura digital" />
+                    <input type="buttton" class="btn btn-primary" value="Liberar documento para assinatura digital e criptografia" />
+                </div>
             <?php }
-            }
             ?>
         </div>
     </div>

@@ -5,18 +5,12 @@
 
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
-<li class="nav-item">
-    <a class="nav-link" href="/Modulo_img.php" target="_blank">Tratamento de Imagens</a>
-</li>
+
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
         <div class="col divisao_bottom form-control-padronizado" id="modCadDocumento">
             <h3>Gerenciar Documentos</h3>
             <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label class="col-form-label" for="lote">LOTE: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="lote" id="lote">
-                </div>
                 <div class="form-group">
                     <label class="col-form-label" for="Armario">Armario: </label><br>
 
@@ -26,6 +20,10 @@
                             <option value="<?= $armarios['id']; ?>"><?= $armarios['nomeexterno']; ?></option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="Nip">NIP: </label>
+                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip" id="Nip">
                 </div>
                 <div class="form-group">
                     <label class="col-form-label" for="TipoDoc">Tipo de documento: </label>
@@ -94,31 +92,7 @@
                         </div>-->
                 </div>
                 <div id="documentosLista">
-                    <?php foreach ($DocumentosList  as $documentos) : ?>
-                        <div class="container_item_maior" id="gradeDocumentos">
-                            <div class="Descricao_maior">
-                                <?= $documentos['nip']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['semestre']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['ano']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['desctipo']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <?= $documentos['nomeArmario']; ?>
-                            </div>
-                            <div class="Descricao_maior">
-                                <form method="post" id="" name="" action="/tratar-documento">
-                                    <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
-                                    <input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento">
-                                </form>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+
                 </div>
             </div>
         </div>

@@ -36,7 +36,7 @@ class DocumentoController extends Controller
         $idPasta = random_int(1, 999999);
         $service = new DocumentoServices();
 
-        $service->gerarPastaDoc($idPasta);
+        //$service->gerarPastaDoc($idPasta);
 
         $documentosList = array();
         array_push($documentosList, array(
@@ -53,6 +53,22 @@ class DocumentoController extends Controller
         return true;
     }
 
+    public function BuscarDocumentos(): array
+    {
+        $documentosList = array();
+        array_push($documentosList, array(
+            'armario' => filter_input(INPUT_POST, 'ListArmarioDocumento'),
+            'tipodoc' => filter_input(INPUT_POST, 'SelectTipoDoc'),
+            'nip' => filter_input(INPUT_POST, 'Nip'),
+            'semestre' => filter_input(INPUT_POST, 'semestre'),
+            'ano' => filter_input(INPUT_POST, 'ano')
+        ));
+
+        $service = new DocumentoServices();
+        $retorno = $service->BuscarDocumentos($documentosList);
+
+        return $retorno;
+    }
     public function documento()
     {
         // $this->validarSessao();
@@ -108,13 +124,30 @@ class DocumentoController extends Controller
     {
         $service = new DocumentoServices();
         $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
-
-        $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'), $tags);
+        $tagsList = $this->montaArryaTags();
+        var_dump($tagsList[0]);
+        $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'),  $tagsList);
 
         $service = new DocumentoServices();
         return $service->cadastrarPaginas($paginasList);
     }
 
+    public function montaArryaTags(): string
+    {
+        $assunto = filter_input(INPUT_POST, 'Assunto');
+        $autor = filter_input(INPUT_POST, 'Autor');
+        $DataDigitalizacao = filter_input(INPUT_POST, 'DataDigitalizacao');
+        $Identificador = filter_input(INPUT_POST, 'Identificador');
+        $Responsavel = filter_input(INPUT_POST, 'Responsavel');
+        $Titulo = filter_input(INPUT_POST, 'Titulo');
+        $TipoDocumento = filter_input(INPUT_POST, 'TipoDocumento');
+
+        $tagsList = "";
+        $tagsList .= "<meta name='description' content='{$assunto}'/>";
+        $tagsList .= "<meta name='Author' content='{$autor}'/>";
+        $tagsList .= "<title>{$Titulo}</title>";
+        return $tagsList;
+    }
     public function listarPaginas()
     {
         $service = new DocumentoServices();

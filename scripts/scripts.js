@@ -224,7 +224,7 @@ $('#formCadDocumento #btnCadDocumento').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
-            carregarDocumentos();
+            //carregarDocumentos();
             $("#formCadDocumento #ListArmarioDocumento").val("");
             $('#formCadDocumento #SelectTipoDoc').val("");
             $('#formCadDocumento #semestre').val("");
@@ -247,6 +247,7 @@ $('#formIncluirPagDoc #btnIncluiPag').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            // console.log(d);
             alertas('Documento cadastrado com sucesso', '#modIdxDocumento', 'alert_sucess');
             setTimeout(function () {
                 location.reload();
@@ -699,3 +700,27 @@ function alertas(msg, local, estilo, fecharAlerta) {
     }, 2500);
 
 }
+
+
+$('#formCadDocumento').on('change paste keyup', 'input, select', function () {
+
+    var formdata = new FormData($("form[id='formCadDocumento']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/BuscarDocumentos",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log("ue" + data);
+            var sel = $("#documentosLista");
+            sel.empty();
+            data.forEach(e => {
+                sel.append('<div class="container_item"><div class="Descricao">' + e.desctipo + '</div><div class="acoes"><button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="' + e.id + '" data-desc="' + e.desctipo + '">Editar</button><form method="post" id="excluir' + e.id + '"><input type="hidden" id="idTipoDoc" name="idTipoDoc" value="' + e.id + '"><button class="btn btn-danger excluirTipoDoc" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" type="button">Excluir</button></form></div></div>');
+            });
+        },
+        error: function (d) {
+
+        }
+    });
+});
