@@ -13,7 +13,7 @@
             <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-form-label" for="Armario">Armario: </label><br>
-
+                    <input type="hidden" id="flagCadastro" name="flagCadastro" />
                     <select id="ListArmarioDocumento" name="ListArmarioDocumento" class="form-select">
                         <option value="0">Selecione um armário</option>
                         <?php foreach ($ArmariosList  as $armarios) : ?>
@@ -37,6 +37,7 @@
                     <label class="col-form-label" for="semestre">Semestre: </label>
                     <br>
                     <select id="semestre" name="semestre" class="form-select">
+                        <option value="0">Selecione o semestre</option>
                         <option value="1">Primeiro semestre</option>
                         <option value="2">Segundo semestre</option>
                     </select>
@@ -44,10 +45,6 @@
                 <div class="form-group">
                     <label class="col-form-label" for="ano">Ano: </label>
                     <input class="form-control form-control-padronizado" type="number" name="ano" id="ano">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="Nip">NIP: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip" id="Nip">
                 </div>
                 <br>
                 <div class="form-group row">

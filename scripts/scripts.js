@@ -64,7 +64,7 @@ $(document).on('click', '.btnAlterarArmario', function (e) {
 });
 
 function carregarTipoDocVincArmarios(id) {
-    console.log("aqui: " + id);
+
     $.ajax({
         url: "/listarTipoDocumentosArmario?id=" + id,
         type: 'GET',
@@ -224,12 +224,13 @@ $('#formCadDocumento #btnCadDocumento').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            $("#formCadDocumento #flagCadastro").val("1").trigger('change');
             //carregarDocumentos();
-            $("#formCadDocumento #ListArmarioDocumento").val("");
-            $('#formCadDocumento #SelectTipoDoc').val("");
-            $('#formCadDocumento #semestre').val("");
-            $('#formCadDocumento #ano').val("");
-            $('#formCadDocumento #Nip').val("");
+            /* $("#formCadDocumento #ListArmarioDocumento").val("");
+             $('#formCadDocumento #SelectTipoDoc').val("");
+             $('#formCadDocumento #semestre').val("");
+             $('#formCadDocumento #ano').val("");
+             $('#formCadDocumento #Nip').val("");*/
             alertas('Documento cadastrado com Sucesso', '#modCadDocumento', 'alert_sucess');
         },
         error: function (d) {
@@ -712,11 +713,13 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log("ue" + data);
+            const arrayData = JSON.parse(data);
+            //console.log(data);
             var sel = $("#documentosLista");
             sel.empty();
-            data.forEach(e => {
-                sel.append('<div class="container_item"><div class="Descricao">' + e.desctipo + '</div><div class="acoes"><button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="' + e.id + '" data-desc="' + e.desctipo + '">Editar</button><form method="post" id="excluir' + e.id + '"><input type="hidden" id="idTipoDoc" name="idTipoDoc" value="' + e.id + '"><button class="btn btn-danger excluirTipoDoc" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" type="button">Excluir</button></form></div></div>');
+            arrayData.forEach(e => {
+                sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
+
             });
         },
         error: function (d) {

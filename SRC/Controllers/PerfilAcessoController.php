@@ -18,8 +18,7 @@ class PerfilAcessoController extends Controller
       $service = new PerfilAcessoServices();
 
       $PerfilAcessoList = $service->listaPerfis();
-
-      require __DIR__ . '../../Views/Perfis/index.php';
+      require __DIR__ . '../../Views/perfis/index.php';
    }
 
    public function cadastrar(): bool

@@ -76,3 +76,7 @@
     color: #2D68BD;
     font-weight: normal;
 }
+
+.abrirDocumento {
+    cursor: pointer;
+}

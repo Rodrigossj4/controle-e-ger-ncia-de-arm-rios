@@ -53,8 +53,9 @@ class DocumentoController extends Controller
         return true;
     }
 
-    public function BuscarDocumentos(): array
+    public function BuscarDocumentos()
     {
+
         $documentosList = array();
         array_push($documentosList, array(
             'armario' => filter_input(INPUT_POST, 'ListArmarioDocumento'),
@@ -67,7 +68,7 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         $retorno = $service->BuscarDocumentos($documentosList);
 
-        return $retorno;
+        echo json_encode($retorno);
     }
     public function documento()
     {

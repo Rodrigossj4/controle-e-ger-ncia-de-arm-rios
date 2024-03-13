@@ -54,7 +54,7 @@ class Router
                 '/listarUsuarios' => fn () => self::load('UsuariosController', 'listar'),
                 '/logout' => fn () => self::load('LoginController', 'logout'),
                 '/gerenciar-documentos-armarios' => fn () => self::load('ArmariosController', 'gerenciar'),
-                '/listarDocumentos' => fn () => self::load('DocumentoController', 'listarDocumentos'),
+                '/listarDocumentos' => fn () => self::load('DocumentoController', 'listarDocumentos')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),

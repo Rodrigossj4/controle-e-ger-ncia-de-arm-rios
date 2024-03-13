@@ -1,7 +1,6 @@
 <?php
 
 /** @var Marinha\Mvc\Models\PerfilAcesso[] $PerfilAcessoList */
-
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">

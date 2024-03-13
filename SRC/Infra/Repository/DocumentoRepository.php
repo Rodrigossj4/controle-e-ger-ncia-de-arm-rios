@@ -97,7 +97,7 @@ class DocumentoRepository extends LogRepository
         }
     }
 
-    public function BuscarDocumentos($documentosListParam)
+    public function BuscarDocumentos($documentosListParam): array
     {
         try {
 
@@ -113,7 +113,7 @@ class DocumentoRepository extends LogRepository
                             where {$predicado}
                             order by d.\"IdDocumento\" desc  FOR UPDATE;";
 
-
+            //var_dump($sqlQuery);
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
@@ -147,7 +147,7 @@ class DocumentoRepository extends LogRepository
         foreach ($documentosListParam as $prop => $val) {
             $i++;
 
-            if (strlen((string)$val["armario"]) != 0) {
+            if ((strlen((string)$val["armario"]) != 0) && ($val["armario"] != 0)) {
                 $sentenca .= "d.\"IdArmario\" = {$val["armario"]} ";
             }
 
@@ -162,10 +162,10 @@ class DocumentoRepository extends LogRepository
                 if (strlen($sentenca) != 0)
                     $sentenca .= " and ";
 
-                $sentenca .= "d.\"Nip\" = {$val["nip"]} ";
+                $sentenca .= "d.\"Nip\" = '{$val["nip"]}' ";
             }
 
-            if (strlen((string)$val["semestre"]) != 0) {
+            if ((strlen((string)$val["semestre"]) != 0) && ($val["semestre"] != 0)) {
                 if (strlen($sentenca) != 0)
                     $sentenca .= " and ";
 
