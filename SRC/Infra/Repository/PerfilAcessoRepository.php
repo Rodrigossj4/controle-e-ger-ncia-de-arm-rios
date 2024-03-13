@@ -8,7 +8,6 @@ use Exception;
 #implements IArmarioRepository
 use PDO;
 
-
 class PerfilAcessoRepository extends LogRepository
 {
     private $pdo;
