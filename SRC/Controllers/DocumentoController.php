@@ -36,7 +36,7 @@ class DocumentoController extends Controller
         $idPasta = random_int(1, 999999);
         $service = new DocumentoServices();
 
-        //$service->gerarPastaDoc($idPasta);
+        $service->gerarPastaDoc($idPasta);
 
         $documentosList = array();
         array_push($documentosList, array(
@@ -131,6 +131,25 @@ class DocumentoController extends Controller
 
         $service = new DocumentoServices();
         return $service->cadastrarPaginas($paginasList);
+    }
+
+    public function ExibirDireorio(){
+        $caminho = filter_input(INPUT_POST, 'caminhoDocumento');
+        $pasta = "{$caminho}\/";
+        $paginasList = array();
+        $types = array('pdf');        
+        if ($handle = opendir($pasta)) {
+            while ($entry = readdir($handle)) {
+                $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
+                if (in_array($ext, $types)) {
+                    array_push($paginasList, array(
+                        $entry
+                    ));                    
+                }
+            }
+            closedir($handle);
+            echo json_encode($paginasList);
+        }
     }
 
     public function montaArryaTags(): string

@@ -42,6 +42,9 @@ if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6)
                         <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/gerenciar-lotes">Gerencia de Lotes</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
                     </li>
                     <li class="nav-item">

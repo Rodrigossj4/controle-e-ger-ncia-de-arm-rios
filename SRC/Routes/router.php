@@ -54,7 +54,9 @@ class Router
                 '/listarUsuarios' => fn () => self::load('UsuariosController', 'listar'),
                 '/logout' => fn () => self::load('LoginController', 'logout'),
                 '/gerenciar-documentos-armarios' => fn () => self::load('ArmariosController', 'gerenciar'),
-                '/listarDocumentos' => fn () => self::load('DocumentoController', 'listarDocumentos')
+                '/listarDocumentos' => fn () => self::load('DocumentoController', 'listarDocumentos'),
+                '/gerenciar-lotes' => fn () => self::load('LotesController', 'index'),
+                '/listar-lotes' => fn () => self::load('LotesController', 'index')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
@@ -80,7 +82,9 @@ class Router
                 '/excluirUsuario' => fn () => self::load('UsuariosController', 'excluir'),
                 '/vincular-documentos-armarios' => fn () => self::load('ArmariosController', 'vincularDocumentos'),
                 '/tratar-documento' => fn () => self::load('DocumentoController', 'documento'),
-                '/BuscarDocumentos' => fn () => self::load('DocumentoController', 'BuscarDocumentos')
+                '/BuscarDocumentos' => fn () => self::load('DocumentoController', 'BuscarDocumentos'),
+                '/ListarDocumentos' => fn () => self::load('DocumentoController', 'ExibirDireorio'),
+                '/cadastrarLote' => fn () => self::load('LotesController', 'cadastrar')
             ]
         ];
     }

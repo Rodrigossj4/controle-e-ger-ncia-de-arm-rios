@@ -189,8 +189,8 @@ class DocumentoServices extends SistemaServices
     }
     public function gerarPastaDoc(int $idPasta): string
     {
-        $diretorio = "documentos/";
-        mkdir("{$diretorio}/{$idPasta}", 0777, true);
+        
+        mkdir("{$this->diretorio}/{$idPasta}", 0777, true);
         return "";
     }
 

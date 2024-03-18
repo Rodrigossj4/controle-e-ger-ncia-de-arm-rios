@@ -718,12 +718,95 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
             var sel = $("#documentosLista");
             sel.empty();
             arrayData.forEach(e => {
-                sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
+                sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>');
 
             });
         },
         error: function (d) {
 
+        }
+    });
+});
+
+$('#carregarDocumentos').on('click', function () {
+
+    var caminho = $('#caminhoDocumento').val();
+    var formdata = new FormData($("form[id='formIncluirPagDoc']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/ListarDocumentos",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            const arrayData = JSON.parse(data);
+            var sel = $("#listarDocumentos");
+            sel.empty();
+            arrayData.forEach(e => {
+                var url = caminho + '\/' + e;
+                sel.append(e + ' - <button class="btn btn-primary" data-arquivo="' + url + '" id="arquivos"> Visualizar documento</button> </br>');
+            })
+        },
+        error: function (d) {
+            console.log('ei erro ' + d);
+        }
+    });
+});
+
+$(document).on('click', '#arquivos', function (e) {
+    console.log($(this).data("arquivo"));
+    var caminhoarquivo = $(this).data("arquivo");
+    var sel = $("#visualizarDocumento");
+    sel.empty();
+    sel.append('<iframe src="' + caminhoarquivo + '" width="100%" height="500"></iframe>');
+
+});
+
+function carregarLotes() {
+    $.ajax({
+        url: vUrlListarArmarios,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        cache: false,
+        success: function (data) {
+            //console.log(data);
+            var sel = $("#gradeArmarios");
+            sel.empty();
+            data.forEach(e => {
+                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeexterno + '</div><div class="acoes"><form id="formGerenciarArmario" name="formGerenciarArmario"><input type="hidden" name="idArmario" id="idArmario" value="' + e.id + '" /><input type="button" class="btn btn-primary btnGerenciarArmario" data-bs-toggle="modal" data-bs-target="#GerenciarArmario" data-id="' + e.id + '" value="Gerenciar"></form><button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="' + e.id + '" data-ni="' + e.nomeinterno + '" data-ne="' + e.nomeexterno + '" data-cd="' + e.codigo + '">Editar</button><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idArmario" name="idArmario" value="' + e.id + '" ><button class="btn btn-danger excluir" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button></form></div></div>');
+
+            });
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+}
+
+$('#formCadLote #btnCadLote').on('click', function (e) {
+    var formdata = new FormData($("form[id='formCadLote']")[0]);
+    console.log("teste");
+
+    $.ajax({
+        type: 'POST',
+        url: "/cadastrarLote",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            console.log("cadastrar");
+            /*const arrayData = JSON.parse(data);
+            var sel = $("#listarDocumentos");
+            sel.empty();
+            arrayData.forEach(e => {
+                var url = caminho + '\/' + e;
+                sel.append(e + ' - <button class="btn btn-primary" data-arquivo="' + url + '" id="arquivos"> Visualizar documento</button> </br>');
+            })*/
+        },
+        error: function (d) {
+            console.log('ei erro ' + d);
         }
     });
 });
