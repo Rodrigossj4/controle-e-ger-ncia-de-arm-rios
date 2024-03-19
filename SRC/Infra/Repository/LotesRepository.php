@@ -19,21 +19,21 @@ class LotesRepository extends LogRepository
     public function listarLotes(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"lotes\";";
+            $sqlQuery = "SELECT * FROM {$this->schema}\"lotes\";";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
             $lotesDataList = $stmt->fetchAll();
             $lotesList = array();
             foreach ($lotesDataList as $lotesData) {
-                array_push($lotesData, array(
-                    'id' => $lotesData['Id'],
-                    'numeroLote' => $lotesData['NumeroLote'],
+                array_push($lotesList, array(
+                    'id' => $lotesData['id'],
+                    'numeroLote' => $lotesData['numerolote'],
                     'pasta' => $lotesData['pasta'],
                     'ativo' => $lotesData['ativo']
                 ));
             };
-
+            
             return $lotesList;
         } catch (Exception $e) {
             echo $e;

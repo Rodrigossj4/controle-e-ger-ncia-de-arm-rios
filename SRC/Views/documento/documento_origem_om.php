@@ -2,13 +2,14 @@
 
 /** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $Documento */
 /** @var  Marinha\Mvc\Models\Paginas[] $paginasList */
+/** @var  Marinha\Mvc\Models\Lotes[] $Listalotes */
 
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
         <div class="col divisao_bottom form-control-padronizado" id="modIdxDocumento">
-            <h3>Tratamento e Indexação de documento</h3>
+            <h3>Indexação de documento Origem OM</h3>
             <div class="Grade_maior">
                 <div class="container_item_maior">
                     <div class="Descricao_maior">
@@ -49,22 +50,22 @@
                 <?php endforeach; ?>
             </div>
             <?php if (Count($paginasList) == 0) { ?>
-                <div id="gradeOpcoes" name="gradeOpcoes" style="border: 1px #000 solid;">
-                    <div style="display: inline-block;">
-                        <form id="formDocOm" name="formDocOm" action="/indexar-documento-om" method="post">
-                            <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
-                            <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
-                            <input type="submit" class="btn btn-primary" name="btnDocOm" id="btnDocOm" value="Indexar documento de origem OM">                 
-                        </form>
-                    </div>
-                    <div style="display: inline-block;">
-                        <form id="formDocOl" name="formDocOl" action="/indexar-documento-ol" method="post">
-                            <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
-                            <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
-                            <input type="submit" class="btn btn-primary" name="btnDocOl" id="btnDocOm" value="Indexar documento de origem x">                 
-                        </form>
-                    </div>
-                </div>
+                <div style="
+                    border: 1px #000 solid;
+                    width: 581px;
+                    display: inline-block;
+                    position:relative;
+                ">
+                <div class="form-row">
+                <form id="SelectLote" name="SelectLote" method="POST">
+                    <select id="lote" name="lote" class="form-control">
+                        <option value="0">Selecione o lote de documentos</option>
+                        <?php foreach ($Listalotes  as $lote) : ?>
+                            <option value="<?= $lote['pasta']; ?>"><?= $lote['numeroLote']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
+            </div> 
                 <h3>Informe as Tags</h3>
                 <form method="post" id="formIncluirPagDoc" name="formIncluirPagDoc" action="" enctype="multipart/form-data">
                     <input type="hidden" id="IdDocumento" name="IdDocumento" value="<?= $documentos['id']; ?>">
@@ -83,39 +84,39 @@
                             <input type="text" id="Titulo" name="Titulo" class="form-control">
                         </div>
                     </div>
-                    <div class="form-row">
-                        <h3>Incluir páginas</h3>
-                        <div class="col-md-3 mb-3">
-                            <label class="col-form-label" for="documento[]">Selecione as páginas</label>
-                            <input type="file" id="documento[]" name="documento[]" class="form-control" multiple>
-                        </div>
-                        <input type="buttton" class="btn btn-primary" name="btnIncluiPag" id="btnIncluiPag" value="Incluir páginas">
-                    </div>
-                  
+                    <div class="form-row" style="display: none;">
+                        <input type="text" id="documento" name="documento" class="form-control">
+                   </div>                   
                 </form>
-            <?php } ?>
-            <span class="alerta"></span>
-
-            <?php if (Count($paginasList) > 0) { ?>
-                <?php if (($paginasList[0]["flgcriptografado"] == null) || (!$paginasList[0]["flgcriptografado"])) { ?>
-                    <h3><a class="abrirDocumento" data-id=<?= $documentos['id']; ?> data-cf="false">Veja o documento</a></h3>
-                <?php } else { ?>
-                    <h3><a class="abrirDocumento" data-id=<?= $documentos['id']; ?> data-cf="true">Veja o documento</a></h3>
-                <?php } ?>
-                <div class="form-row">
-                    <input type="buttton" class="btn btn-primary" value="Liberar documento Somente para assinatura digital" />
-                    <input type="buttton" class="btn btn-primary" value="Liberar documento para assinatura digital e criptografia" />
                 </div>
-            <?php }
-            ?>
+                <div style="
+                        border: 1px #000 solid;
+                        width: 501px;
+                        display: inline-block;
+                    " id="visualizarDocumento" name="visualizarDocumento">
+                    </div>
+            <?php } ?>
+               
+            
+            </div>
+            <span class="alerta"></span>          
         </div>
     </div>
 </div>
+<div class="container" style="
+                    border: 1px #000 solid;
+                    width: 581px;
+                    display: inline-block;
+                    position:relative;
+                ">
+
 <form method="Post" id="gradeDocumentos" name="gradeDocumentos" enctype="multipart/form-data">
     <div id="listarDocumentos" name="listarDocumentos">
 
     </div>
 </form>
+<input type="buttton" class="btn btn-primary" name="btnIncluiPag" id="btnIncluiPag" value="Incluir páginas">
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
 </script>

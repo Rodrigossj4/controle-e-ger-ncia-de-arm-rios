@@ -238,9 +238,21 @@ $('#formCadDocumento #btnCadDocumento').on('click', function (e) {
         }
     });
 });
+function fileListFrom(files) {
+    const b = new ClipboardEvent("").clipboardData || new DataTransfer()
+    for (const file of files) b.items.add(file)
+    return b.files
+}
 
-$('#formIncluirPagDoc #btnIncluiPag').on('click', function (e) {
+$('#btnIncluiPag').on('click', function (e) {
     var formdata = new FormData($("form[id='formIncluirPagDoc']")[0]);
+    var formdataDocumento = new FormData($("form[id='gradeDocumentos']")[0]);
+
+    var teste = $('input[name="documentoEscolhido"]:checked').toArray().map(function (check) {
+        return $(check).val();
+    });
+
+    console.log(teste);
     $.ajax({
         type: 'POST',
         url: "/cadastrarPagina",
@@ -248,11 +260,11 @@ $('#formIncluirPagDoc #btnIncluiPag').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
-            // console.log(d);
+            console.log(d);
             alertas('Documento cadastrado com sucesso', '#modIdxDocumento', 'alert_sucess');
-            setTimeout(function () {
+            /*setTimeout(function () {
                 location.reload();
-            }, 3000);
+            }, 3000);*/
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#modCadTipoDocumento', 'alert_danger');
@@ -395,6 +407,12 @@ $(document).on('click', '.abrirDocumento', function (e) {
     var nomeForm = "docid_" + $(this).data("id");
     var formdata = new FormData($("form[id='" + nomeForm + "']")[0]);
     window.open("/visualizarDocumento?docid=" + $(this).data("id") + "&cf=" + $(this).data("cf"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
+});
+
+$(document).on('click', '.abrirDocumentoLote', function (e) {
+    var nomeForm = "docid_" + $(this).data("id");
+    var formdata = new FormData($("form[id='" + nomeForm + "']")[0]);
+    window.open("/visualizarDocumentoLote?docid=" + $(this).data("id") + "&cf=" + $(this).data("cf"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
 });
 
 $(document).on('click', '.criptofrarDocumento', function (e) {
@@ -719,7 +737,6 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
             sel.empty();
             arrayData.forEach(e => {
                 sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>');
-
             });
         },
         error: function (d) {
@@ -728,10 +745,11 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
     });
 });
 
-$('#carregarDocumentos').on('click', function () {
+$('#SelectLote #lote').on('change', function () {
 
-    var caminho = $('#caminhoDocumento').val();
-    var formdata = new FormData($("form[id='formIncluirPagDoc']")[0]);
+    var formdata = new FormData($("form[id='SelectLote']")[0]);
+    var id = $(this).val();
+
     $.ajax({
         type: 'POST',
         url: "/ListarDocumentos",
@@ -743,8 +761,8 @@ $('#carregarDocumentos').on('click', function () {
             var sel = $("#listarDocumentos");
             sel.empty();
             arrayData.forEach(e => {
-                var url = caminho + '\/' + e;
-                sel.append(e + ' - <button class="btn btn-primary" data-arquivo="' + url + '" id="arquivos"> Visualizar documento</button> </br>');
+                var url = id + '\/' + e;
+                sel.append(e + ' - <input type="button" class="btn btn-primary" data-arquivo="' + url + '" id="arquivosLote"  value="Visualizar documento">  <input type="checkbox" name="documentoEscolhido" value="' + url + '"> Incluir no documento </br>');
             })
         },
         error: function (d) {
@@ -753,9 +771,11 @@ $('#carregarDocumentos').on('click', function () {
     });
 });
 
-$(document).on('click', '#arquivos', function (e) {
+$(document).on('click', '#arquivosLote', function (e) {
+    console.log($(this).data("arquivo"));
     console.log($(this).data("arquivo"));
     var caminhoarquivo = $(this).data("arquivo");
+    console.log($(this).data("arquivo"));
     var sel = $("#visualizarDocumento");
     sel.empty();
     sel.append('<iframe src="' + caminhoarquivo + '" width="100%" height="500"></iframe>');
@@ -764,14 +784,14 @@ $(document).on('click', '#arquivos', function (e) {
 
 function carregarLotes() {
     $.ajax({
-        url: vUrlListarArmarios,
+        url: "/listar-lotes",
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json',
         cache: false,
         success: function (data) {
             //console.log(data);
-            var sel = $("#gradeArmarios");
+            var sel = $("#gradeDocumentos");
             sel.empty();
             data.forEach(e => {
                 sel.append('<div class="container_item"><div class="Descricao">' + e.nomeexterno + '</div><div class="acoes"><form id="formGerenciarArmario" name="formGerenciarArmario"><input type="hidden" name="idArmario" id="idArmario" value="' + e.id + '" /><input type="button" class="btn btn-primary btnGerenciarArmario" data-bs-toggle="modal" data-bs-target="#GerenciarArmario" data-id="' + e.id + '" value="Gerenciar"></form><button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="' + e.id + '" data-ni="' + e.nomeinterno + '" data-ne="' + e.nomeexterno + '" data-cd="' + e.codigo + '">Editar</button><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idArmario" name="idArmario" value="' + e.id + '" ><button class="btn btn-danger excluir" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button></form></div></div>');
@@ -786,7 +806,6 @@ function carregarLotes() {
 
 $('#formCadLote #btnCadLote').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadLote']")[0]);
-    console.log("teste");
 
     $.ajax({
         type: 'POST',

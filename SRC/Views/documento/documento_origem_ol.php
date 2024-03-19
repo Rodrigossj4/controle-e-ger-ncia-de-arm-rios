@@ -8,7 +8,7 @@
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
         <div class="col divisao_bottom form-control-padronizado" id="modIdxDocumento">
-            <h3>Tratamento e Indexação de documento</h3>
+            <h3>Indexação de documento Origem OL</h3>
             <div class="Grade_maior">
                 <div class="container_item_maior">
                     <div class="Descricao_maior">
@@ -51,17 +51,17 @@
             <?php if (Count($paginasList) == 0) { ?>
                 <div id="gradeOpcoes" name="gradeOpcoes" style="border: 1px #000 solid;">
                     <div style="display: inline-block;">
-                        <form id="formDocOm" name="formDocOm" action="/indexar-documento-om" method="post">
-                            <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
+                        <form id="formDocOm" name="formDocOm" >
+                            <input type="hidden" id="IdDocumento" name="IdDocumento" value="<?= $documentos['id']; ?>">
                             <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
-                            <input type="submit" class="btn btn-primary" name="btnDocOm" id="btnDocOm" value="Indexar documento de origem OM">                 
+                            <input type="button" class="btn btn-primary" name="btnDocOm" id="btnDocOm" value="Indexar documento de origem OM">                 
                         </form>
                     </div>
                     <div style="display: inline-block;">
-                        <form id="formDocOl" name="formDocOl" action="/indexar-documento-ol" method="post">
-                            <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
+                        <form id="formDocOl" name="formDocOl" >
+                            <input type="hidden" id="IdDocumento" name="IdDocumento" value="<?= $documentos['id']; ?>">
                             <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
-                            <input type="submit" class="btn btn-primary" name="btnDocOl" id="btnDocOm" value="Indexar documento de origem x">                 
+                            <input type="button" class="btn btn-primary" name="btnDocOl" id="btnDocOm" value="Indexar documento de origem x">                 
                         </form>
                     </div>
                 </div>
@@ -91,7 +91,15 @@
                         </div>
                         <input type="buttton" class="btn btn-primary" name="btnIncluiPag" id="btnIncluiPag" value="Incluir páginas">
                     </div>
-                  
+                    <div class="form-row">
+                        <h3>Incluir páginas</h3>
+                        <div class="col-md-3 mb-3">
+                            <label class="col-form-label" for="caminhoDocumento">Selecione o diretório </label>
+                            <input type="text" id="caminhoDocumento" name="caminhoDocumento" class="form-control" webkitdirectory>
+                            <input type="buttton" class="btn btn-primary" name="carregarDocumentos" id="carregarDocumentos" value="Carregar Documentos">
+                        </div>
+                        <input type="buttton" class="btn btn-primary" name="btnIncluiPag" id="btnIncluiPag" value="Incluir páginas">
+                    </div>
                 </form>
             <?php } ?>
             <span class="alerta"></span>
@@ -116,7 +124,9 @@
 
     </div>
 </form>
-
+<div id="visualizarDocumento" name="visualizarDocumento">
+<iframe src="C:\Users\Rodrigo\OneDrive\Documentos\documentos novos\328.pdf" width="100%" height="500"></iframe>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
 </script>
 <script src="../../scripts/jquery.js"></script>

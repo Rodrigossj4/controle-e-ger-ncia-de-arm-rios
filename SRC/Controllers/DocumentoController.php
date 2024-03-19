@@ -6,7 +6,9 @@ namespace Marinha\Mvc\Controllers;
 use Exception;
 use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\DocumentoServices;
+use Marinha\Mvc\Services\LotesServices;
 use Marinha\Mvc\Models\PDF;
+use Marinha\Mvc\Services\LoteServices;
 
 class DocumentoController extends Controller
 {
@@ -55,7 +57,6 @@ class DocumentoController extends Controller
 
     public function BuscarDocumentos()
     {
-
         $documentosList = array();
         array_push($documentosList, array(
             'armario' => filter_input(INPUT_POST, 'ListArmarioDocumento'),
@@ -72,7 +73,7 @@ class DocumentoController extends Controller
     }
     public function documento()
     {
-        // $this->validarSessao();
+         //$this->validarSessao();
 
         $service = new DocumentoServices();
         $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
@@ -82,6 +83,29 @@ class DocumentoController extends Controller
         require __DIR__ . '../../Views/documento/documento.php';
     }
 
+    public function documentoOm()
+    {
+         //$this->validarSessao();
+        $service = new DocumentoServices();
+        $serviceLotes =  new LoteServices();
+        
+        $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
+        $Listalotes = $serviceLotes->listarLotes();
+        require __DIR__ . '../../Views/documento/documento_origem_om.php';
+    }
+
+    public function documentoOl()
+    {
+         //$this->validarSessao();
+
+        $service = new DocumentoServices();
+        $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
+        require __DIR__ . '../../Views/documento/documento_origem_ol.php';
+    }
     public function criptografarArquivo()
     {
         $service = new DocumentoServices();
@@ -123,6 +147,7 @@ class DocumentoController extends Controller
 
     public function cadastrarPagina(): bool
     {
+        var_dump(filter_input(INPUT_POST, 'Nip'));
         $service = new DocumentoServices();
         $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
         $tagsList = $this->montaArryaTags();
@@ -134,7 +159,7 @@ class DocumentoController extends Controller
     }
 
     public function ExibirDireorio(){
-        $caminho = filter_input(INPUT_POST, 'caminhoDocumento');
+        $caminho = filter_input(INPUT_POST, 'lote');
         $pasta = "{$caminho}\/";
         $paginasList = array();
         $types = array('pdf');        
@@ -210,7 +235,13 @@ class DocumentoController extends Controller
         $arquivo  = $service->abrirArquivo($caminho, $cifrado);
         require __DIR__ . '../../Views/documento/visualizar.php';
     }
-
+    public function visualizarDocumentoLote()
+    {
+        $caminho = filter_input(INPUT_GET, 'docid');
+        $service = new DocumentoServices();
+        $arquivo  = $service->abrirArquivo($caminho, "false");
+        require __DIR__ . '../../Views/documento/visualizar.php';
+    }
     public function asssinarDigital()
     {
         $diretorio = getcwd() . '/';
