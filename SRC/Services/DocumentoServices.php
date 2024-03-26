@@ -12,7 +12,7 @@ use Sabberworm\CSS\CSSList\Document;
 class DocumentoServices extends SistemaServices
 {
     private $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
-    private $diretorio = "documentos/";
+    private $diretorio = "/marinha/sisimagem/";
 
     public function __construct()
     {

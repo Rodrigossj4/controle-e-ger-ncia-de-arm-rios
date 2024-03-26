@@ -83,6 +83,18 @@ class DocumentoController extends Controller
         require __DIR__ . '../../Views/documento/documento.php';
     }
 
+    public function documentoImg()
+    {
+        //$this->validarSessao();
+        $service = new DocumentoServices();
+        $serviceLotes =  new LoteServices();
+        
+        $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
+        $Listalotes = $serviceLotes->listarLotes();
+        require __DIR__ . '../../Views/documento/index_imgPdf.php';
+    }
     public function documentoOm()
     {
          //$this->validarSessao();
@@ -177,6 +189,10 @@ class DocumentoController extends Controller
         }
     }
 
+    public function retornaCaminhoTratado(): string{
+		$caminho = filter_input(INPUT_GET, 'caminho');		
+		return __DIR__. $caminho;
+	}
     public function montaArryaTags(): string
     {
         $assunto = filter_input(INPUT_POST, 'Assunto');
@@ -243,100 +259,7 @@ class DocumentoController extends Controller
         require __DIR__ . '../../Views/documento/visualizar.php';
     }
     public function asssinarDigital()
-    {
-        $diretorio = getcwd() . '/';
-        $nomeCertPFX = 'Documentos/certificado_2000359152.pfx';
-        $documentoParaAssinar = 'Documentos/teste.pdf';
-        $nomeCertCRT = 'Documentos/tcpdf.crt';
-        $password = 'RoD@2109';
-
-
-
-        // * Gera o .crt a partir do .pfx
-        if (!file_exists('tcpdf.crt')) {
-            shell_exec("openssl pkcs12 -in {$nomeCertPFX} -out {$nomeCertCRT} -nodes -passin pass: {$password}");
-        }
-
-
-
-        $p = file_get_contents($nomeCertCRT);
-        var_dump($p);
-        //Endereço do arquivo do certificado
-        //Obs.: Tentei usar o certificado no formato PFX e não funcionou
-        //Para converter use o comando no Prompt do Windows ou Terminal do Linux:
-        //openssl pkcs12 -in certificado.pfx -out tcpdf.crt -nodes
-
-        // $cert = '/home/tuchinski/Documentos/apoema/pdf/tcpdf.crt';
-
-        $pkcs12 = file_get_contents($nomeCertPFX);
-
-        // aqui a gente pega o certificado .crt, mas esse cara a gente tem que gerar
-        $cert = openssl_x509_read($p);
-        $cert_parsed = openssl_x509_parse($cert, true);
-
-        // print_r($cert_parsed);
-
-        $nome_cpf = explode(":", $cert_parsed['subject']['CN']);
-
-
-
-        $res = [];
-        $openSSL = openssl_pkcs12_read($pkcs12, $res, $password);
-        if (!$openSSL) {
-            throw new Exception("Error: " . openssl_error_string());
-        }
-
-        // // this is the CER FILE
-        // file_put_contents('CERT.cer', $res['pkey'].$res['cert'].implode('', $res['extracerts']));
-
-        // // this is the PEM FILE
-        // $cert = $res['cert'].implode('', $res['extracerts']);
-        // file_put_contents('KEY.pem', $cert);
-
-
-
-
-        // aqui a gente pega o certificado .pfx
-        if (openssl_pkcs12_read($pkcs12, $cert_info, $password)) {
-            // echo "Certificate read\n";
-        } else {
-            echo "Error: Unable to read the cert store.\n";
-            exit;
-        }
-
-        //Informações da assinatura - Preencha com os seus dados
-        $info = array(
-            'Name' => '',
-            'Location' => '',
-            'Reason' => '',
-            'ContactInfo' => '',
-        );
-
-        $pdf = new PDF($nome_cpf[0], $nome_cpf[1]);
-        //Configura a assinatura. Para saber mais sobre os parâmetros
-        //consulte a documentação do TCPDF, exemplo 52.
-        //Não esqueça de mudar 'senha' para a senha do seu certificado
-        // var_dump($cert);
-        //Importa uma página
-        $numPages = $pdf->setSourceFile($documentoParaAssinar);
-        // print_r($pdf->numPages());
-        // print_r($numPages);
-
-        for ($i = 0; $i < $numPages; $i++) {
-            # code...
-            $pdf->AddPage();
-            // $text = "Documento assinado digitalmente por <b>$nome_cpf[0]</b>, CPF $nome_cpf[1]";
-            // $pdf->writeHTML($text, true, 0, true, 0);
-            $tplId = $pdf->importPage($i + 1);
-            // $pdf->setSignature('file://'.$cert, 'file://'.realpath($cert), '','', 2, $info);
-            $pdf->setSignature($cert_info['cert'], $cert_info['pkey'], '', '', 2, $info);
-
-
-            $pdf->useTemplate($tplId, 0, 0); //Importa nas medidas originais
-            // print a line of text
-            $pdf->setSignatureAppearance(10, 10, 10, 10, 1);
-        }
-
-        $pdf->Output();
+    {        
+        require __DIR__ . '../../Views/documento/Assinar.php';
     }
 }

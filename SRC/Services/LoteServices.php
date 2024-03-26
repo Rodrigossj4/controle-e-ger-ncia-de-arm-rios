@@ -10,7 +10,7 @@ use Marinha\Mvc\Infra\Repository\LotesRepository;
 
 class LoteServices extends SistemaServices
 {
-    private $diretorio = "lotes/";
+    private $diretorio = "/marinha/lotes/";
     public function __construct()
     {
     }

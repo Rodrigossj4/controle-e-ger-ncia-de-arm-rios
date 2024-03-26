@@ -111,7 +111,7 @@ class DocumentoRepository extends LogRepository
                             inner join {$this->schema}\"Armarios\" arm
                             on arm.\"IdArmario\" = d.\"IdArmario\"
                             where {$predicado}
-                            order by d.\"IdDocumento\" desc  FOR UPDATE;";
+                            order by d.\"IdDocumento\" desc Limit 100 FOR UPDATE;";
 
             //var_dump($sqlQuery);
             $stmt = $this->pdo->prepare($sqlQuery);

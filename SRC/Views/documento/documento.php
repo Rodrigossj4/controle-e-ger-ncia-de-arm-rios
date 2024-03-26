@@ -51,21 +51,28 @@
             <?php if (Count($paginasList) == 0) { ?>
                 <div id="gradeOpcoes" name="gradeOpcoes" style="border: 1px #000 solid;">
                     <div style="display: inline-block;">
+                        <form id="formDocImg" name="formDocImg" action="/indexar-documento-img" method="post">
+                            <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
+                            <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
+                            <input type="submit" class="btn btn-primary" name="btnDocImg" id="btnDocImg" value="Indexar Imagens em documentos pdf">                 
+                        </form>
+                    </div>
+                    <div style="display: inline-block;">
                         <form id="formDocOm" name="formDocOm" action="/indexar-documento-om" method="post">
                             <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
                             <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
-                            <input type="submit" class="btn btn-primary" name="btnDocOm" id="btnDocOm" value="Indexar documento de origem OM">                 
+                            <input type="submit" class="btn btn-primary" name="btnDocOm" id="btnDocOm" value="Indexar PDFs em documento">                 
                         </form>
                     </div>
                     <div style="display: inline-block;">
                         <form id="formDocOl" name="formDocOl" action="/indexar-documento-ol" method="post">
                             <input type="hidden" id="idDocumento" name="idDocumento" value="<?= $documentos['id']; ?>">
                             <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
-                            <input type="submit" class="btn btn-primary" name="btnDocOl" id="btnDocOm" value="Indexar documento de origem x">                 
+                            <input type="submit" class="btn btn-primary" name="btnDocOl" id="btnDocOm" value="Indexar PDF Completo">                 
                         </form>
-                    </div>
+                    </div>                    
                 </div>
-                <h3>Informe as Tags</h3>
+                <!--<h3>Informe as Tags</h3>
                 <form method="post" id="formIncluirPagDoc" name="formIncluirPagDoc" action="" enctype="multipart/form-data">
                     <input type="hidden" id="IdDocumento" name="IdDocumento" value="<?= $documentos['id']; ?>">
                     <input type="hidden" id="IdPasta" name="IdPasta" value="<?= $documentos['idPasta']; ?>">
@@ -92,7 +99,7 @@
                         <input type="buttton" class="btn btn-primary" name="btnIncluiPag" id="btnIncluiPag" value="Incluir páginas">
                     </div>
                   
-                </form>
+                </form>-->
             <?php } ?>
             <span class="alerta"></span>
 

@@ -57,7 +57,9 @@ class Router
                 '/gerenciar-documentos-armarios' => fn () => self::load('ArmariosController', 'gerenciar'),
                 '/listarDocumentos' => fn () => self::load('DocumentoController', 'listarDocumentos'),
                 '/gerenciar-lotes' => fn () => self::load('LotesController', 'index'),
-                '/listar-lotes' => fn () => self::load('LotesController', 'index')
+                '/listar-lotes' => fn () => self::load('LotesController', 'index'),
+                '/retorna-caminhoTratado' => fn () => self::load('DocumentoController', 'retornaCaminhoTratado'),
+                '/assinar' => fn () => self::load('DocumentoController', 'asssinarDigital')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
@@ -85,6 +87,7 @@ class Router
                 '/tratar-documento' => fn () => self::load('DocumentoController', 'documento'),
                 '/indexar-documento-om' => fn () => self::load('DocumentoController', 'documentoOm'),
                 '/indexar-documento-ol' => fn () => self::load('DocumentoController', 'documentoOl'),
+                '/indexar-documento-img' => fn () => self::load('DocumentoController', 'documentoImg'),
                 '/BuscarDocumentos' => fn () => self::load('DocumentoController', 'BuscarDocumentos'),
                 '/ListarDocumentos' => fn () => self::load('DocumentoController', 'ExibirDireorio'),
                 '/cadastrarLote' => fn () => self::load('LotesController', 'cadastrar')

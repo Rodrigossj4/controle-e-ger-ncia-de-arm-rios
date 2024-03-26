@@ -28,9 +28,9 @@ class LotesRepository extends LogRepository
             foreach ($lotesDataList as $lotesData) {
                 array_push($lotesList, array(
                     'id' => $lotesData['id'],
-                    'numeroLote' => $lotesData['numerolote'],
-                    'pasta' => $lotesData['pasta'],
-                    'ativo' => $lotesData['ativo']
+                    'numeroLote' => $lotesData['NumeroLote'],
+                    'pasta' => $lotesData['Pasta'],
+                    'ativo' => $lotesData['Ativo']
                 ));
             };
             
@@ -45,7 +45,7 @@ class LotesRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"lotes\"(\"numerolote\", \"pasta\", \"ativo\") values(?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"lotes\"(\"NumeroLote\", \"Pasta\", \"Ativo\") values(?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($lote as $lt) {

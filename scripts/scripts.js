@@ -260,11 +260,11 @@ $('#btnIncluiPag').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
-            console.log(d);
+            //console.log(d);
             alertas('Documento cadastrado com sucesso', '#modIdxDocumento', 'alert_sucess');
-            /*setTimeout(function () {
+            setTimeout(function () {
                 location.reload();
-            }, 3000);*/
+            }, 3000);
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#modCadTipoDocumento', 'alert_danger');
@@ -723,26 +723,28 @@ function alertas(msg, local, estilo, fecharAlerta) {
 
 $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
-    var formdata = new FormData($("form[id='formCadDocumento']")[0]);
-    $.ajax({
-        type: 'POST',
-        url: "/BuscarDocumentos",
-        data: formdata,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            const arrayData = JSON.parse(data);
-            //console.log(data);
-            var sel = $("#documentosLista");
-            sel.empty();
-            arrayData.forEach(e => {
-                sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>');
-            });
-        },
-        error: function (d) {
+    if ($('#formCadDocumento #Nip').val() != "") {
+        var formdata = new FormData($("form[id='formCadDocumento']")[0]);
+        $.ajax({
+            type: 'POST',
+            url: "/BuscarDocumentos",
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                const arrayData = JSON.parse(data);
+                //console.log(data);
+                var sel = $("#documentosLista");
+                sel.empty();
+                arrayData.forEach(e => {
+                    sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>');
+                });
+            },
+            error: function (d) {
 
-        }
-    });
+            }
+        });
+    }
 });
 
 $('#SelectLote #lote').on('change', function () {
@@ -774,13 +776,30 @@ $('#SelectLote #lote').on('change', function () {
 $(document).on('click', '#arquivosLote', function (e) {
     console.log($(this).data("arquivo"));
     console.log($(this).data("arquivo"));
-    var caminhoarquivo = $(this).data("arquivo");
+    var caminhoarquivo = retornaCaminho($(this).data("arquivo"));
     console.log($(this).data("arquivo"));
     var sel = $("#visualizarDocumento");
     sel.empty();
     sel.append('<iframe src="' + caminhoarquivo + '" width="100%" height="500"></iframe>');
 
 });
+
+function retornaCaminho(caminho) {
+    $.ajax({
+        url: "/retorna-caminhoTratado?caminho=" + caminho,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        cache: false,
+        success: function (data) {
+            console.log(data);
+            return data;
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+}
 
 function carregarLotes() {
     $.ajax({
