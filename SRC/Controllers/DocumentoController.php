@@ -259,7 +259,7 @@ class DocumentoController extends Controller
     }
 
     public function ExibirArquivosDiretorio()
-    {
+    { //teste
         $caminho = filter_input(INPUT_POST, 'Caminho');
         var_dump($caminho);
         $pasta = "{$caminho}/";
