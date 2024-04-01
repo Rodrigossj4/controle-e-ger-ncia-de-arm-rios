@@ -13,6 +13,8 @@ class DocumentoServices extends SistemaServices
 {
     private $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
     private $diretorio = "/marinha/sisimagem/";
+    private $diretorioLote = "Documentos/";
+
 
     public function __construct()
     {
@@ -32,6 +34,7 @@ class DocumentoServices extends SistemaServices
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
+            var_dump($repository);
             return $repository->cadastrarDocumentos($armario);
         } catch (Exception $e) {
             echo $e;
@@ -49,7 +52,6 @@ class DocumentoServices extends SistemaServices
             return [];
         }
     }
-
     public function exibirDocumento(int $id): array
     {
         try {
@@ -82,13 +84,11 @@ class DocumentoServices extends SistemaServices
             return false;
         }
     }
-
-
-    public function retornarCaminhoDocumento(string $id): string
+    public function retornarCaminhoDocumento(string $id, int $pagina): string
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
-            $retorno =  $repository->retornarCaminhoDocumento($id);
+            $retorno =  $repository->retornarCaminhoDocumento($id, $pagina);
 
             return $retorno == null ? "" : $retorno;
         } catch (Exception $e) {
@@ -141,11 +141,48 @@ class DocumentoServices extends SistemaServices
         }
     }
 
+    public function gerarPdfs(string $tagsList): array
+    {
+        $total = count($_POST['documentoEscolhido']);
+        $paginasList = [];
+
+        for ($i = 0; $i < $total; $i++) {
+
+            $caminhoArqImgServ = $_POST['documentoEscolhido'][$i];
+            //var_dump("caminho:" .  $caminhoArqImgServ);
+            //$caminhoArqImgTemp = $this->uploadImgPasta(filter_input(INPUT_POST, 'documentoEscolhido'), $this->diretorio, $caminhoArqImgServ, $i);
+            $conteudo = "<img src='{$caminhoArqImgServ}' /><br>";
+
+            $html = "<html><header>" .
+                "{$tagsList}" .
+                "</header><body>" .
+                "{$conteudo}" .
+                "</body></html>";
+
+            $retorno = $this->gerarPDF(filter_input(INPUT_POST, 'Caminho'), $html);
+
+            array_push($paginasList, array(
+                'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
+                'volume' => "1",
+                'numpagina' => $i,
+                'codexp' => 1,
+                'arquivo' => $retorno,
+                'filme' => "1",
+                'fotograma' => "1",
+                'imgencontrada' => "1"
+            ));
+
+
+            unlink("{$caminhoArqImgServ}");
+        }
+        return $paginasList;
+    }
+
     public function gerarArquivo(string $idPasta, string $tagsList): array
     {
         $caminhoArqImg = "{$this->diretorio}{$idPasta}/";
-        $total = count($_FILES['documento']['name']);
-
+        $total = count(filter_input(INPUT_POST, 'documentoEscolhido'));
+        var_dump($total);
         $conteudo = "";
 
         for ($i = 0; $i < $total; $i++) {
@@ -189,7 +226,6 @@ class DocumentoServices extends SistemaServices
     }
     public function gerarPastaDoc(int $idPasta): string
     {
-        
         mkdir("{$this->diretorio}/{$idPasta}", 0777, true);
         return "";
     }
@@ -203,7 +239,24 @@ class DocumentoServices extends SistemaServices
         return "{$diretorio}/{$idPasta}" . $_FILES['documento']['tmp_name'][$indice];
     }
 
-    private function gerarPDF(int $idPasta, string $diretorio, string $html): string
+    private function gerarPDF(string $diretorio, string $html): string
+    {
+        $options = new Options();
+        $options->setChroot($diretorio);
+        $options->setIsRemoteEnabled(true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadhtml($html);
+        $dompdf->setPaper('A4');
+        $dompdf->render();
+        $pasta = random_int(1, 999999);
+        $caminhoPDF = "{$diretorio}/{$pasta}.pdf";
+        file_put_contents($caminhoPDF, $dompdf->output());
+
+        return $caminhoPDF;
+    }
+
+    private function gerarPDF_old(int $idPasta, string $diretorio, string $html): string
     {
         $options = new Options();
         $options->setChroot($diretorio);
@@ -223,6 +276,7 @@ class DocumentoServices extends SistemaServices
     public function abrirArquivo(string $caminhoarquivo, string $cifrado): string
     {
         if ($cifrado == "true") {
+
             $encrypted_code = file_get_contents($caminhoarquivo);
             $decrypted_code = $this->my_decrypt($encrypted_code, $this->key);
 
@@ -258,5 +312,109 @@ class DocumentoServices extends SistemaServices
         $encryption_key = base64_decode($key);
         list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
         return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
+    }
+
+    public function carregarArquivosDiretorioTemporario(string $nip, string $tipoArquivo): string
+    {
+        $pasta = $this->gerarPastaTemporaria($nip, $tipoArquivo);
+        $this->subirArquivos($pasta);
+        //var_dump($pasta);
+        return $pasta;
+    }
+
+    private function gerarPastaTemporaria(string $nip, string $tipoArquivo): string
+    {
+        $idPasta = random_int(1, 999999);
+        $pasta = $tipoArquivo . "-" . $nip . "-" . $idPasta;
+        mkdir("{$this->diretorioLote}{$pasta}", 0777, true);
+        return "{$this->diretorioLote}{$pasta}";
+    }
+
+    private function subirArquivos(string $diretorio)
+    {
+        $total = count($_FILES['documento']['name']);
+
+        for ($i = 0; $i < $total; $i++) {
+
+            $nomeArquivo = pathinfo($_FILES['documento']['name'][$i], PATHINFO_BASENAME);
+
+            if (Strtolower(pathinfo($_FILES['documento']['name'][$i], PATHINFO_EXTENSION)) == "tif") {
+                $parts = explode('.', $nomeArquivo);
+                $nomeArquivo = $parts["0"] . ".jpg";
+            }
+
+            $caminhoArqImgServ = $diretorio . "/" . $nomeArquivo;
+            $this->uploadImgPastaLote($caminhoArqImgServ, $i);
+        }
+    }
+
+    private function TratarTifParaJpg()
+    {
+        $arquivoWebp = 'caminho/para/seu/arquivo.webp';
+        $imagemWebp = imagecreatefromwebp($arquivoWebp);
+        $arquivoJpeg = 'caminho/para/seu/arquivo_convertido.jpeg';
+        $qualidadeJpeg = 90; // Define a qualidade da imagem JPEG (0 a 100)
+
+        $resultado = imagewebp($imagemWebp, $arquivoJpeg, $qualidadeJpeg);
+    }
+    private function uploadImgPastaLote(string $caminhoArqImg, int $indice)
+    {
+        move_uploaded_file($_FILES['documento']['tmp_name'][$indice],  $caminhoArqImg);
+    }
+
+
+    public function carregarArquivoservidor(string $arquivos): string
+    {
+        $repository = new DocumentoRepository($this->Conexao());
+        $pasta = $this->gerarPasta();
+        $documentos = json_decode(file_get_contents('php://input'));
+        //var_dump("ei: ". pathinfo($documentos[0]->arquivo)['dirname']);
+
+        foreach ($documentos as $values) {
+
+            //var_dump($values);
+            $origem = $values->arquivo;
+            $caminho = $this->subirArquivoss($pasta, $origem);
+
+            $paginasList = [];
+            array_push($paginasList, array(
+                'documentoid' =>  $values->documentoid,
+                'volume' => "1",
+                'numpagina' => 1,
+                'codexp' => 1,
+                'arquivo' => $caminho,
+                'filme' => "1",
+                'fotograma' => "1",
+                'imgencontrada' => "1"
+            ));
+            $repository->cadastrarPagina($paginasList);
+        }
+
+        $caminhoRaiz = pathinfo($documentos[0]->arquivo)['dirname'];
+
+        array_map('unlink', glob("$caminhoRaiz/*.*"));
+        rmdir("{$caminhoRaiz}");
+
+        return $pasta;
+    }
+
+    private function gerarPasta(): string
+    {
+        $pasta = random_int(1, 999999);
+        mkdir("{$this->diretorio}{$pasta}", 0777, true);
+        return "{$this->diretorio}{$pasta}";
+    }
+
+    private function subirArquivoss(string $diretorio, string $caminhoOrigem): string
+    {
+        //var_dump($diretorio." - " . $caminhoOrigem);
+        return $this->uploadImgPastaLotes($diretorio, $caminhoOrigem);
+    }
+
+    private function uploadImgPastaLotes(string $caminhoArq, string $caminhoOrigem): string
+    {
+        $caminhoArq = $caminhoArq . "/" . basename($caminhoOrigem);
+        copy($caminhoOrigem, $caminhoArq);
+        return $caminhoArq;
     }
 }

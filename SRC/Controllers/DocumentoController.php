@@ -73,55 +73,20 @@ class DocumentoController extends Controller
     }
     public function documento()
     {
-         //$this->validarSessao();
+        //$this->validarSessao();
 
         $service = new DocumentoServices();
         $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
+        //$CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
         $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
 
         require __DIR__ . '../../Views/documento/documento.php';
     }
 
-    public function documentoImg()
-    {
-        //$this->validarSessao();
-        $service = new DocumentoServices();
-        $serviceLotes =  new LoteServices();
-        
-        $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
-        $Listalotes = $serviceLotes->listarLotes();
-        require __DIR__ . '../../Views/documento/index_imgPdf.php';
-    }
-    public function documentoOm()
-    {
-         //$this->validarSessao();
-        $service = new DocumentoServices();
-        $serviceLotes =  new LoteServices();
-        
-        $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
-        $Listalotes = $serviceLotes->listarLotes();
-        require __DIR__ . '../../Views/documento/documento_origem_om.php';
-    }
-
-    public function documentoOl()
-    {
-         //$this->validarSessao();
-
-        $service = new DocumentoServices();
-        $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
-        require __DIR__ . '../../Views/documento/documento_origem_ol.php';
-    }
     public function criptografarArquivo()
     {
         $service = new DocumentoServices();
-        $service->criptografarArquivo($this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'docid')));
+        $service->criptografarArquivo($_GET['caminho']);
     }
 
     public function alterarDocumento(): bool
@@ -150,38 +115,59 @@ class DocumentoController extends Controller
         return true;
     }
 
-    public function retornarCaminhoDocumento(int $docid): string
+    public function retornarCaminhoDocumento(int $docid, int $pagina): string
     {
         $service = new DocumentoServices();
+        return $service->retornarCaminhoDocumento($docid, $pagina);
+    }
 
-        return $service->retornarCaminhoDocumento($docid);
+    public function retornaPdfs()
+    {
+        $service = new DocumentoServices();
+        $tagsList = $this->montaArryaTags();
+
+        $paginasList = $service->gerarPdfs($tagsList);
+        echo json_encode($paginasList);
     }
 
     public function cadastrarPagina(): bool
     {
-        var_dump(filter_input(INPUT_POST, 'Nip'));
         $service = new DocumentoServices();
         $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
         $tagsList = $this->montaArryaTags();
-        var_dump($tagsList[0]);
+        //var_dump($tagsList[0]);
         $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'),  $tagsList);
-
-        $service = new DocumentoServices();
         return $service->cadastrarPaginas($paginasList);
     }
 
-    public function ExibirDireorio(){
+    public function carregarArquivos()
+    {
+        $service = new DocumentoServices();
+        $caminho = $service->carregarArquivosDiretorioTemporario(filter_input(INPUT_POST, 'Nip'), "ARQ");
+
+        echo $caminho;
+    }
+    public function carregarArquivosServidor()
+    {
+
+        $service = new DocumentoServices();
+        $caminho = $service->carregarArquivoservidor(file_get_contents('php://input'));
+
+        echo $caminho;
+    }
+    public function ExibirDireorio()
+    {
         $caminho = filter_input(INPUT_POST, 'lote');
         $pasta = "{$caminho}\/";
         $paginasList = array();
-        $types = array('pdf');        
+        $types = array('pdf');
         if ($handle = opendir($pasta)) {
             while ($entry = readdir($handle)) {
                 $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
                 if (in_array($ext, $types)) {
                     array_push($paginasList, array(
                         $entry
-                    ));                    
+                    ));
                 }
             }
             closedir($handle);
@@ -189,24 +175,26 @@ class DocumentoController extends Controller
         }
     }
 
-    public function retornaCaminhoTratado(): string{
-		$caminho = filter_input(INPUT_GET, 'caminho');		
-		return __DIR__. $caminho;
-	}
+    public function retornaCaminhoTratado()
+    {
+
+        $caminho = filter_input(INPUT_GET, 'caminho');
+
+        echo $caminho;
+    }
     public function montaArryaTags(): string
     {
         $assunto = filter_input(INPUT_POST, 'Assunto');
         $autor = filter_input(INPUT_POST, 'Autor');
-        $DataDigitalizacao = filter_input(INPUT_POST, 'DataDigitalizacao');
-        $Identificador = filter_input(INPUT_POST, 'Identificador');
-        $Responsavel = filter_input(INPUT_POST, 'Responsavel');
         $Titulo = filter_input(INPUT_POST, 'Titulo');
-        $TipoDocumento = filter_input(INPUT_POST, 'TipoDocumento');
+        $palavrasChave = filter_input(INPUT_POST, 'PalavrasChave');
 
         $tagsList = "";
         $tagsList .= "<meta name='description' content='{$assunto}'/>";
         $tagsList .= "<meta name='Author' content='{$autor}'/>";
         $tagsList .= "<title>{$Titulo}</title>";
+        $tagsList .= "<meta name='KeyWords' content='{$palavrasChave}'/>";
+
         return $tagsList;
     }
     public function listarPaginas()
@@ -218,8 +206,11 @@ class DocumentoController extends Controller
 
     public function excluirPagina(): bool
     {
+        $arquivo = json_decode(file_get_contents('php://input'));
+        //unlink($b64->arquivoOriginal);
+        var_dump($arquivo->idPagina);
         $service = new DocumentoServices();
-        $service->excluirPagina(filter_input(INPUT_POST, 'idPagina'));
+        $service->excluirPagina($arquivo->idPagina);
         return true;
     }
 
@@ -245,8 +236,8 @@ class DocumentoController extends Controller
 
     public function visualizarDocumento()
     {
-        $caminho = $this->retornarCaminhoDocumento(filter_input(INPUT_GET, 'docid'));
-        $cifrado = filter_input(INPUT_GET, 'cf');
+        $caminho = $this->retornarCaminhoDocumento(filter_input(INPUT_GET, 'docid'), filter_input(INPUT_GET, 'pagina'));
+        $cifrado = "true";
         $service = new DocumentoServices();
         $arquivo  = $service->abrirArquivo($caminho, $cifrado);
         require __DIR__ . '../../Views/documento/visualizar.php';
@@ -259,7 +250,59 @@ class DocumentoController extends Controller
         require __DIR__ . '../../Views/documento/visualizar.php';
     }
     public function asssinarDigital()
-    {        
+    {
+        $service = new DocumentoServices();
+        $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
+        $tagsList = $this->montaArryaTags();
+        //var_dump($tagsList[0]);
+        $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'),  $tagsList);
         require __DIR__ . '../../Views/documento/Assinar.php';
+    }
+
+    public function ExibirArquivosDiretorio()
+    {
+
+        $caminho = filter_input(INPUT_POST, 'Caminho');
+        //var_dump($caminho);
+        $pasta = "{$caminho}\/";
+        $paginasList = array();
+        $types = array('jpg', 'png', 'pdf', 'tif');
+        if ($handle = opendir($pasta)) {
+            while ($entry = readdir($handle)) {
+                $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
+                if (in_array($ext, $types)) {
+                    array_push($paginasList, array(
+                        $entry
+                    ));
+                }
+            }
+            closedir($handle);
+            // var_dump($paginasList);
+            echo json_encode($paginasList);
+        }
+    }
+
+    public function arquivoBase64()
+    {
+        //var_dump("ei: ". pathinfo($documentos[0]->arquivo)['dirname']);
+        $path = filter_input(INPUT_GET, 'caminho');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        $base64 = base64_encode($data);
+        echo json_encode($base64);
+    }
+
+    public function base64ArquivoPDF()
+    {
+        $b64 = json_decode(file_get_contents('php://input'));
+        unlink($b64->arquivoOriginal);
+        $bin = base64_decode($b64->arquivoB64, true);
+        file_put_contents($b64->arquivoOriginal, $bin);
+    }
+    public function Indexar()
+    {
+        var_dump("vamos lá");
+        //transformar imagens em pdf(incluindo as tags)
+        //assinar
     }
 }

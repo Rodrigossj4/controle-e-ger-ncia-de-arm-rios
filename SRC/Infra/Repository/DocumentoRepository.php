@@ -182,12 +182,12 @@ class DocumentoRepository extends LogRepository
         //var_dump("val: " . $sentenca);
         return $sentenca;
     }
-    public function retornarCaminhoDocumento(string $id): string
+    public function retornarCaminhoDocumento(string $id, int $pagina): string
     {
         try {
-            $sqlQuery = "select \"Arquivo\" from {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?";
+            $sqlQuery = "select \"Arquivo\" from {$this->schema}\"DocumentoPagina\" where \"IdDocPag\" = ? ";
             $stmt = $this->pdo->prepare($sqlQuery);
-            $stmt->bindValue(1, $id);
+            $stmt->bindValue(1, $pagina);
             $stmt->execute();
 
             $documentosDataList = $stmt->fetchAll();
@@ -373,8 +373,8 @@ class DocumentoRepository extends LogRepository
     public function cadastrarPagina(array $pagina): bool
     {
         try {
-
-            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(\"DocId\", \"Volume\", \"Numpg\", \"CodExp\", \"Arquivo\", \"Filme\", \"Fotograma\", \"IMGEncontrada\") values(?, ?, ?, ?, ?, ?, ?, ?);";
+            //var_dump($pagina);
+            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(\"DocId\", \"Volume\", \"Numpg\", \"CodExp\", \"Arquivo\", \"Filme\", \"Fotograma\", \"IMGEncontrada\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($pagina as $pg) {
@@ -403,7 +403,7 @@ class DocumentoRepository extends LogRepository
             $stmt->bindValue(6, $paginaData->filme());
             $stmt->bindValue(7, $paginaData->fotograma());
             $stmt->bindValue(8, $paginaData->imgencontrada());
-
+            $stmt->bindValue(9, 1);
             $stmt->execute();
 
             return true;
@@ -435,7 +435,9 @@ class DocumentoRepository extends LogRepository
     public function excluirPagina(int $id): bool
     {
         try {
-            $sqlQuery = "delete FROM {$this->schema}\"DocumentoPagina\" where id  = ?;";
+            var_dump($this->retornarCaminhoDocumento("", $id));
+            unlink($this->retornarCaminhoDocumento("", $id));
+            $sqlQuery = "delete FROM {$this->schema}\"DocumentoPagina\" where \"IdDocPag\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();

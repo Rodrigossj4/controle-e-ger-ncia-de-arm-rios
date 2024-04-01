@@ -6,11 +6,15 @@
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
  <!-- is.min.js serve para identificar se o usuário está no Windows ou Linux -->
- <script src="../../scripts/serpro/js/lib/serpro/is.min.js" type="text/javascript"></script>
+ <script src="../../../scripts/serpro/lib/serpro/is.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+    <script src="../../../scripts/jquery-3.1.1.slim.min.js"></script>
+    <script src="../../../scripts/js/bootstrap.min.js"></script>
 
 <!-- os próximos dois arquivos - em Javascript puro - são a API de comunicação com o Assinador SERPRO -->
-<script src="../../scripts/serpro/js/lib/serpro/serpro-signer-promise.js" type="text/javascript"></script>
-<script src="../../scripts/serpro/js/lib/serpro/serpro-signer-client.js" type="text/javascript"></script>
+<script src="../../../scripts/serpro/lib/serpro/serpro-signer-promise.js" type="text/javascript"></script>
+<script src="../../../scripts/serpro/lib/serpro/serpro-signer-client.js" type="text/javascript"></script>
+
 
 <!-- PDFJS, para converter bas364 em PDF -->
 <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
@@ -32,7 +36,7 @@
             <form id="assinarPdf">
               <div class="form-group">
                 <label for="file_input">Escolher Arquivo PDF</label>
-                <input id="input-file" type="file" onchange="convertToBase64();" />
+                <input id="input-file" type="file" id="arquivo" name="arquivo" value="$paginasList.firstOrDefault()" onchange="convertToBase64();" />
               </div>
               <div class="form-group">
                 <label for="content-value">Conteúdo do PDF (Base 64)</label>
@@ -40,7 +44,7 @@
               </div>
               <div class="form-group row">
                 <div class="col-sm-2">
-                  <button type="submit" class="btn btn-primary">Assinar PDF</button>
+                  <button type="submit" id="assinarPdf" name="assinarPdf" class="btn btn-primary">Assinar PDF</button>
                 </div>
               </div>
               <div class="form-group">
@@ -76,7 +80,7 @@
 
 <script src="../../scripts/jquery.js"></script>
 <script src="../../scripts/scripts.js"></script>
-<script src="../../scripts/serpro/js/app/serpro-client-connector.js" type="text/javascript"></script>
+<script src="../../scripts/serpro/app/serpro-client-connector.js" type="text/javascript"></script>
     <script>
       function prettyCommandSign() {
         $('#sign-websocket').val(JSON.stringify({

@@ -246,13 +246,13 @@ function fileListFrom(files) {
 
 $('#btnIncluiPag').on('click', function (e) {
     var formdata = new FormData($("form[id='formIncluirPagDoc']")[0]);
-    var formdataDocumento = new FormData($("form[id='gradeDocumentos']")[0]);
+    //var formdataDocumento = new FormData($("form[id='gradeDocumentos']")[0]);
 
-    var teste = $('input[name="documentoEscolhido"]:checked').toArray().map(function (check) {
+    /*var teste = $('input[name="documentoEscolhido"]:checked').toArray().map(function (check) {
         return $(check).val();
     });
+*/
 
-    console.log(teste);
     $.ajax({
         type: 'POST',
         url: "/cadastrarPagina",
@@ -260,7 +260,7 @@ $('#btnIncluiPag').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
-            //console.log(d);
+            console.log(d);
             alertas('Documento cadastrado com sucesso', '#modIdxDocumento', 'alert_sucess');
             setTimeout(function () {
                 location.reload();
@@ -404,9 +404,8 @@ $(document).on('click', '#btnNaoConfirmaAlteracaoTipoDocumento', function (e) {
 });
 
 $(document).on('click', '.abrirDocumento', function (e) {
-    var nomeForm = "docid_" + $(this).data("id");
-    var formdata = new FormData($("form[id='" + nomeForm + "']")[0]);
-    window.open("/visualizarDocumento?docid=" + $(this).data("id") + "&cf=" + $(this).data("cf"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
+
+    window.open("/visualizarDocumento?docid=" + $(this).data("id") + "&pagina=" + $(this).data("pagina"), "janela1", "width=800, height=600, directories=no, location=no, menubar=no,scrollbars=no, status=no, toolbar=no, resizable=no")
 });
 
 $(document).on('click', '.abrirDocumentoLote', function (e) {
@@ -773,33 +772,7 @@ $('#SelectLote #lote').on('change', function () {
     });
 });
 
-$(document).on('click', '#arquivosLote', function (e) {
-    console.log($(this).data("arquivo"));
-    console.log($(this).data("arquivo"));
-    var caminhoarquivo = retornaCaminho($(this).data("arquivo"));
-    console.log($(this).data("arquivo"));
-    var sel = $("#visualizarDocumento");
-    sel.empty();
-    sel.append('<iframe src="' + caminhoarquivo + '" width="100%" height="500"></iframe>');
 
-});
-
-function retornaCaminho(caminho) {
-    $.ajax({
-        url: "/retorna-caminhoTratado?caminho=" + caminho,
-        type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json',
-        cache: false,
-        success: function (data) {
-            console.log(data);
-            return data;
-        },
-        error: function (data) {
-            console.log("Ocorreu um erro: " + data);
-        }
-    });
-}
 
 function carregarLotes() {
     $.ajax({
@@ -848,3 +821,250 @@ $('#formCadLote #btnCadLote').on('click', function (e) {
         }
     });
 });
+
+$('#formAnexarPagDoc #btnCarregarArquivosImg').on('click', function (e) {
+    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/carregarArquivos",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            // console.log(data);
+            $('#formAnexarPagDoc #Caminho').val(data);
+            ListarArquivos();
+        },
+        error: function (d) {
+            console.log('erro ao carregar arquivos ' + d);
+        }
+    });
+});
+
+function ListarArquivos() {
+
+    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+    var id = $('#formAnexarPagDoc #Caminho').val();
+    $.ajax({
+        type: 'POST',
+        url: "/ListarDocumentos",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            const arrayData = JSON.parse(data);
+            var sel = $("#listarDocumentos");
+            sel.empty();
+            arrayData.forEach(e => {
+                var url = id + '\/' + e;
+                sel.append(e + ' - <input type="button" class="btn btn-primary" data-arquivo="' + url + '" id="arquivosLote"  value="Visualizar documento">  <input type="checkbox" name="documentoEscolhido[]" value="' + url + '"> Indexar </br> <hr>');
+            })
+        },
+        error: function (d) {
+            console.log('ei erro ' + d);
+        }
+    });
+}
+
+$(document).on('click', '#arquivosLote', function (e) {
+    var sel = $("#visualizarDocumento");
+    sel.empty();
+    sel.append('<img src="' + $(this).data("arquivo") + '" width="100%" height="500"></img>');
+});
+
+function retornaCaminho(caminho) {
+    $.ajax({
+        url: "/retorna-caminhoTratado?caminho=" + caminho,
+        type: 'GET',
+        data: "",
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            const arrayData = JSON.parse(data);
+            return data;
+        },
+        error: function (data) {
+            console.log("Ocorreu um erro: " + data);
+        }
+    });
+}
+
+$(document).on('click', '#btnNaoConfirmaIndexarDocumento', function (e) {
+    FecharModal('#IndexarDocumento');
+});
+
+$(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
+    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/retorna-pdfs",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            assinarDocumentos(data);
+            criptgrafarDocumento(data);
+            armazenaDocumentos(data);
+
+            alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
+            setTimeout(function () {
+                location.reload();
+            }, 3000);
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#IndexarDocumento', 'alert_danger');
+            console.log('erro ao carregar arquivos ' + d);
+        }
+    });
+});
+
+function assinarDocumentos(documentos) {
+    console.log("Rotina de assinar");
+    var ArrayDocumentos = JSON.parse(documentos);
+    ArrayDocumentos.forEach(doc => {
+        $.ajax({
+            type: 'GET',
+            url: "/converter-base64?caminho=" + doc["arquivo"],
+            data: "",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $('#assinarPdf #content-value').val(data);
+                prettyCommandSign();
+                $('#assinarPdf').on('submit');
+
+                atualizarArquivo(JSON.stringify({
+                    arquivoOriginal: doc["arquivo"],
+                    arquivoOriginalB64: data.replace(/[\\"]/g, ''),
+                    arquivoB64: $('#assinatura').val().replace(/[\\"]/g, ''),
+                }, null, 2));
+            },
+            error: function (d) {
+                retorno == "Não foi possivel converter";
+            }
+        });
+    });
+}
+function criptgrafarDocumento(documentos) {
+    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+    //console.log("Rotina de criptografar");
+    var ArrayDocumentos = JSON.parse(documentos);
+    ArrayDocumentos.forEach(doc => {
+        $('#tratandoDocumento').val(doc["arquivo"]);
+
+        $.ajax({
+            type: 'GET',
+            url: "/criptografar-pdfs?caminho=" + doc["arquivo"],
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log('Processo concluido');
+            },
+            error: function (d) {
+                console.log('erro ao carregar arquivos ' + d);
+            }
+        });
+    });
+}
+
+function armazenaDocumentos(documentos) {
+    //console.log("Rotina de armazenar");
+    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+    var ArrayDocumentos = JSON.parse(documentos);
+    // $('#tratandoDocumento').val(documentos);
+
+    $.ajax({
+        type: 'POST',
+        url: "/carregar-arquivos-servidor",
+        data: documentos,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (d) {
+            console.log('erro ao armazena Documentos ' + d);
+        }
+    });
+}
+
+function prettyCommandSign() {
+    $('#sign-websocket').val(JSON.stringify({
+        command: "sign",
+        type: "pdf",
+        inputData: $('#content-value').val()
+    }, null, 2));
+}
+
+function atualizarArquivo(documentos) {
+    $.ajax({
+        type: 'POST',
+        url: "/atualizar-arquivo-assinado",
+        data: documentos,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (d) {
+            console.log('erro ao armazena Documentos ' + d);
+        }
+    });
+}
+
+function downloadPdf() {
+    const data = $('#assinatura').val();
+    const linkSource = `data:application/pdf;base64,${data}`;
+    const downloadLink = document.createElement("a");
+    const fileName = "assinado.pdf";
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+}
+
+$('.ExcDoc').on('click', function (e) {
+    $('#formExcluirPagina #id').val($(this).data("idpagina"));
+    $('#formExcluirPagina #docid').val($(this).data("docid"));
+});
+
+$(document).on('click', '.btnConfirmaExcluirPagina', function (e) {
+
+    dados = JSON.stringify({
+        idPagina: $('#formExcluirPagina #id').val(),
+        docId: $('#formExcluirPagina #docid').val(),
+    }, null, 2)
+
+    $.ajax({
+        type: 'POST',
+        url: "/excluirPagina",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            alertas('Página Excluida com sucesso', '#ExcluirPagina', 'alert_sucess', 'true');
+            setTimeout(function () {
+                location.reload();
+            }, 3000);
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#ExcluirPagina', 'alert_danger');
+            console.log('erro ao excluir a página ' + d);
+        }
+    });
+});
+
+$(document).on('click', '#btnNaoConfirmaExcluirPagina', function (e) {
+    FecharModal('#ExcluirPagina');
+});
+
+$(document).ready(function () {
+    $("#documento").on('change', function () {
+        if ($('#documento').length > 0) {
+            $('#btnCarregarArquivosImg').attr("disabled", false);
+        }
+    })
+});
+

@@ -2,7 +2,7 @@
 
 /** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $Documento */
 /** @var  Marinha\Mvc\Models\Paginas[] $paginasList */
-
+var_dump(Count($paginasList));
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
@@ -106,6 +106,7 @@
             <?php if (Count($paginasList) > 0) { ?>
                 <?php if (($paginasList[0]["flgcriptografado"] == null) || (!$paginasList[0]["flgcriptografado"])) { ?>
                     <h3><a class="abrirDocumento" data-id=<?= $documentos['id']; ?> data-cf="false">Veja o documento</a></h3>
+					
                 <?php } else { ?>
                     <h3><a class="abrirDocumento" data-id=<?= $documentos['id']; ?> data-cf="true">Veja o documento</a></h3>
                 <?php } ?>
@@ -119,11 +120,8 @@
 </div>
 <form method="Post" id="gradeDocumentos" name="gradeDocumentos" enctype="multipart/form-data">
     <div id="listarDocumentos" name="listarDocumentos">
-
     </div>
 </form>
 
-<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous">
-</script>
 <script src="../../scripts/jquery.js"></script>
 <script src="../../scripts/scripts.js"></script>

@@ -28,7 +28,7 @@ class UsuarioRepository extends LogRepository
             $usuariosList = array();
             foreach ($usuariosDataList as $usuariosData) {
                 array_push($usuariosList, array(
-                    'codusuario' => $usuariosData['IDUsuario'],
+                    'codusuario' => $usuariosData['IdUsuario'],
                     'nomeusuario' => $usuariosData['NomeUsuario'],
                     'nip' => $usuariosData['Nip'],
                     'senhausuario' => $usuariosData['SenhaUsuario'],
@@ -79,7 +79,7 @@ class UsuarioRepository extends LogRepository
         try {
 
             //$sqlQuery = 'UPDATE usuarios SET nomeusuario = ?, nip = ?, senhausuario = ?, idacesso = ? WHERE codusuario = ?';
-            $sqlQuery = "UPDATE {$this->schema}\"Usuarios\" SET \"NomeUsuario\" = ? WHERE \"IDUsuario\" = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"Usuarios\" SET \"NomeUsuario\" = ? WHERE \"IdUsuario\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($usuario as $us) {
@@ -108,7 +108,7 @@ class UsuarioRepository extends LogRepository
     public function excluirUsuario(int $id): bool
     {
         try {
-            $sqlQuery = "delete FROM {$this->schema}\"Usuarios\" where \"IDUsuario\"  = ?;";
+            $sqlQuery = "delete FROM {$this->schema}\"Usuarios\" where \"IdUsuario\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();

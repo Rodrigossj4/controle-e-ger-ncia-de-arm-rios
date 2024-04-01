@@ -59,7 +59,9 @@ class Router
                 '/gerenciar-lotes' => fn () => self::load('LotesController', 'index'),
                 '/listar-lotes' => fn () => self::load('LotesController', 'index'),
                 '/retorna-caminhoTratado' => fn () => self::load('DocumentoController', 'retornaCaminhoTratado'),
-                '/assinar' => fn () => self::load('DocumentoController', 'asssinarDigital')
+                '/assinar' => fn () => self::load('DocumentoController', 'asssinarDigital'),
+                '/criptografar-pdfs' => fn () => self::load('DocumentoController', 'criptografarArquivo'),
+                '/converter-base64' => fn () => self::load('DocumentoController', 'arquivoBase64')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
@@ -75,8 +77,8 @@ class Router
                 '/cadastrarPagina' => fn () => self::load('DocumentoController', 'cadastrarPagina'),
                 '/excluirPagina' => fn () => self::load('DocumentoController', 'excluirPagina'),
                 '/alterarPagina' => fn () => self::load('DocumentoController', 'alterarPagina'),
-                '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController', 'retornarCaminhoDocumento'),
-                '/criptografarArquivo' => fn () => self::load('DocumentoController', 'criptografarArquivo'),
+                //'/retornarCaminhoDocumento' => fn () => self::load('DocumentoController', 'retornarCaminhoDocumento'),
+                //'/criptografarArquivo' => fn () => self::load('DocumentoController', 'criptografarArquivo'),
                 '/cadastrarPerfil' => fn () => self::load('PerfilAcessoController', 'cadastrar'),
                 '/alterarPerfil' => fn () => self::load('PerfilAcessoController', 'alterar'),
                 '/excluirPerfil' => fn () => self::load('PerfilAcessoController', 'excluir'),
@@ -89,8 +91,13 @@ class Router
                 '/indexar-documento-ol' => fn () => self::load('DocumentoController', 'documentoOl'),
                 '/indexar-documento-img' => fn () => self::load('DocumentoController', 'documentoImg'),
                 '/BuscarDocumentos' => fn () => self::load('DocumentoController', 'BuscarDocumentos'),
-                '/ListarDocumentos' => fn () => self::load('DocumentoController', 'ExibirDireorio'),
-                '/cadastrarLote' => fn () => self::load('LotesController', 'cadastrar')
+                '/ListarDocumentos' => fn () => self::load('DocumentoController', 'ExibirArquivosDiretorio'),
+                '/cadastrarLote' => fn () => self::load('LotesController', 'cadastrar'),
+                '/carregarArquivos' => fn () => self::load('DocumentoController', 'carregarArquivos'),
+                '/Indexar' => fn () => self::load('DocumentoController', 'Indexar'),
+                '/retorna-pdfs' => fn () => self::load('DocumentoController', 'retornaPdfs'),
+                '/carregar-arquivos-servidor' => fn () => self::load('DocumentoController', 'carregarArquivosServidor'),
+                '/atualizar-arquivo-assinado' => fn () => self::load('DocumentoController', 'base64ArquivoPDF')
             ]
         ];
     }
