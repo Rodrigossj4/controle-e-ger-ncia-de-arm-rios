@@ -261,7 +261,7 @@ class DocumentoController extends Controller
     public function ExibirArquivosDiretorio()
     { //teste
         $caminho = filter_input(INPUT_POST, 'Caminho');
-        var_dump($caminho);
+        // var_dump($caminho);
         $pasta = "{$caminho}/";
         $paginasList = array();
         $types = array('jpg', 'png', 'pdf');
@@ -275,7 +275,7 @@ class DocumentoController extends Controller
                 }
             }
             closedir($handle);
-            var_dump($paginasList);
+            //var_dump($paginasList);
             echo json_encode($paginasList);
         }
     }

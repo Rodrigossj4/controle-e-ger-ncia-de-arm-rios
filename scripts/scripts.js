@@ -904,7 +904,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //assinarDocumentos(data);
+            assinarDocumentos(data);
             criptgrafarDocumento(data);
             armazenaDocumentos(data);
 
