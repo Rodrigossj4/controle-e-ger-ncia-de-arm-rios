@@ -13,7 +13,7 @@ class DocumentoServices extends SistemaServices
 {
     private $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
     private $diretorio = "/marinha/sisimagem/";
-    private $diretorioLote = "Documentos/";
+    private $diretorioLote = "documentos/";
 
 
     public function __construct()
@@ -413,7 +413,7 @@ class DocumentoServices extends SistemaServices
         array_map('unlink', glob("$caminhoRaiz/*.*"));
         rmdir("{$caminhoRaiz}");
 
-      
+
         return $pasta;
     }
 
