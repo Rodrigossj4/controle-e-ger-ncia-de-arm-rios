@@ -262,7 +262,7 @@ class DocumentoController extends Controller
     {
         $caminho = filter_input(INPUT_POST, 'Caminho');
         var_dump($caminho);
-        $pasta = "{$caminho}\/";
+        $pasta = "{$caminho}/";
         $paginasList = array();
         $types = array('jpg', 'png', 'pdf');
         if ($handle = opendir($pasta)) {
