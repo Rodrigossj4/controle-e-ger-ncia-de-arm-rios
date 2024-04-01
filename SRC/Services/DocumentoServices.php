@@ -338,24 +338,42 @@ class DocumentoServices extends SistemaServices
 
             $nomeArquivo = pathinfo($_FILES['documento']['name'][$i], PATHINFO_BASENAME);
 
-            if (Strtolower(pathinfo($_FILES['documento']['name'][$i], PATHINFO_EXTENSION)) == "tif") {
-                $parts = explode('.', $nomeArquivo);
-                $nomeArquivo = $parts["0"] . ".jpg";
-            }
 
-            $caminhoArqImgServ = $diretorio . "/" . $nomeArquivo;
+            $caminhoArqImgServ = $diretorio . "/" . $_FILES['documento']['name'][$i];
             $this->uploadImgPastaLote($caminhoArqImgServ, $i);
+            // $this->TratarTifParapng($caminhoArqImgServ);
         }
     }
 
-    private function TratarTifParaJpg()
+    private function TratarTifParapng(string $caminho)
     {
-        $arquivoWebp = 'caminho/para/seu/arquivo.webp';
-        $imagemWebp = imagecreatefromwebp($arquivoWebp);
-        $arquivoJpeg = 'caminho/para/seu/arquivo_convertido.jpeg';
-        $qualidadeJpeg = 90; // Define a qualidade da imagem JPEG (0 a 100)
+        // Caminho do arquivo TIFF de entrada
+        $tiffFilePath = $caminho;
+        //var_dump($tiffFilePath);
+        // Caminho do arquivo PNG de saída
+        $pngFilePath = $this->diretorioLote;
 
-        $resultado = imagewebp($imagemWebp, $arquivoJpeg, $qualidadeJpeg);
+        // Carrega a imagem TIFF
+        $tiffImage = imagecreatefromtiff($tiffFilePath);
+
+        if ($tiffImage !== false) {
+            // Cria uma nova imagem PNG
+            $pngImage = imagecreatetruecolor(imagesx($tiffImage), imagesy($tiffImage));
+
+            // Copia a imagem TIFF para a imagem PNG
+            imagecopy($pngImage, $tiffImage, 0, 0, 0, 0, imagesx($tiffImage), imagesy($tiffImage));
+
+            // Salva a imagem PNG
+            imagepng($pngImage, $pngFilePath);
+
+            // Libera a memória
+            imagedestroy($tiffImage);
+            imagedestroy($pngImage);
+
+            echo "Arquivo TIFF convertido para PNG com sucesso!";
+        } else {
+            echo "Erro ao carregar o arquivo TIFF.";
+        }
     }
     private function uploadImgPastaLote(string $caminhoArqImg, int $indice)
     {
@@ -395,6 +413,7 @@ class DocumentoServices extends SistemaServices
         array_map('unlink', glob("$caminhoRaiz/*.*"));
         rmdir("{$caminhoRaiz}");
 
+      
         return $pasta;
     }
 

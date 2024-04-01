@@ -852,6 +852,7 @@ function ListarArquivos() {
         processData: false,
         contentType: false,
         success: function (data) {
+            console.log('retorno: ' + data);
             const arrayData = JSON.parse(data);
             var sel = $("#listarDocumentos");
             sel.empty();
@@ -903,7 +904,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            assinarDocumentos(data);
+            //assinarDocumentos(data);
             criptgrafarDocumento(data);
             armazenaDocumentos(data);
 

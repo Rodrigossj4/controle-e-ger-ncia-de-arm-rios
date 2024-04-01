@@ -152,7 +152,6 @@ class DocumentoController extends Controller
 
         $service = new DocumentoServices();
         $caminho = $service->carregarArquivoservidor(file_get_contents('php://input'));
-
         echo $caminho;
     }
     public function ExibirDireorio()
@@ -261,12 +260,11 @@ class DocumentoController extends Controller
 
     public function ExibirArquivosDiretorio()
     {
-
         $caminho = filter_input(INPUT_POST, 'Caminho');
         //var_dump($caminho);
         $pasta = "{$caminho}\/";
         $paginasList = array();
-        $types = array('jpg', 'png', 'pdf', 'tif');
+        $types = array('jpg', 'png', 'pdf');
         if ($handle = opendir($pasta)) {
             while ($entry = readdir($handle)) {
                 $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
