@@ -758,6 +758,7 @@ $('#SelectLote #lote').on('change', function () {
         processData: false,
         contentType: false,
         success: function (data) {
+            //console.log(data);
             const arrayData = JSON.parse(data);
             var sel = $("#listarDocumentos");
             sel.empty();
@@ -841,6 +842,24 @@ $('#formAnexarPagDoc #btnCarregarArquivosImg').on('click', function (e) {
     });
 });
 
+$('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
+    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/carregarArquivos",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            $('#formAnexarPagDoc #Caminho').val(data);
+            ListarArquivos();
+        },
+        error: function (d) {
+            console.log('erro ao carregar arquivos ' + d);
+        }
+    });
+});
 function ListarArquivos() {
 
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
@@ -904,8 +923,11 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            assinarDocumentos(data);
-            criptgrafarDocumento(data);
+            //console.log(data);
+            if (($("input[name='origemDoc']").val() == "imgToPdf") || ($('#AssinaDocumentos').prop('checked')))
+                //assinarDocumentos(data);
+
+                criptgrafarDocumento(data);
             armazenaDocumentos(data);
 
             alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
@@ -931,9 +953,9 @@ function assinarDocumentos(documentos) {
             processData: false,
             contentType: false,
             success: function (data) {
-                $('#assinarPdf #content-value').val(data);
+                $('#assinarPdf #content-value').val(data.replace(/[\\"]/g, ''));
                 prettyCommandSign();
-                $('#assinarPdf').on('submit');
+                $('#assinarPdf').submit();
 
                 atualizarArquivo(JSON.stringify({
                     arquivoOriginal: doc["arquivo"],
@@ -961,6 +983,7 @@ function criptgrafarDocumento(documentos) {
             processData: false,
             contentType: false,
             success: function (data) {
+                //console.log(data);
                 console.log('Processo concluido');
             },
             error: function (d) {
@@ -983,7 +1006,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log("arm: "+data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);
@@ -1063,9 +1086,36 @@ $(document).on('click', '#btnNaoConfirmaExcluirPagina', function (e) {
 
 $(document).ready(function () {
     $("#documento").on('change', function () {
-        if ($('#documento').length > 0) {
+        if (($('#documento').length > 0)) {
             $('#btnCarregarArquivosImg').attr("disabled", false);
         }
+
+        if (($('#documento').length > 0)) {
+            $('#btnCarregarArquivosPDF').attr("disabled", false);
+        }
     })
+
+    $("#documentoPDF").on('change', function () {
+        if ($('#documento').length > 0) {
+            $('#btnCarregarArquivosPDF').attr("disabled", false);
+        }
+    })
+
+    $("input[name='origemDoc']").click(function () {
+        if ($(this).prop('checked')) {
+            if ($(this).val() == "imgToPdf") {
+                $('#gerenImagem').css("display", "block");
+                $('#gerenPDF').css("display", "none");
+            }
+
+            if ($(this).val() == "pdfPronto") {
+                $('#gerenPDF').css("display", "block");
+                $('#gerenImagem').css("display", "none");
+            }
+        }
+    });
+
 });
+
+
 

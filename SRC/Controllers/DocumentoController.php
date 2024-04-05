@@ -135,7 +135,7 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
         $tagsList = $this->montaArryaTags();
-        //var_dump($tagsList[0]);
+        var_dump($tagsList[0]);
         $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'),  $tagsList);
         return $service->cadastrarPaginas($paginasList);
     }
@@ -189,10 +189,12 @@ class DocumentoController extends Controller
         $palavrasChave = filter_input(INPUT_POST, 'PalavrasChave');
 
         $tagsList = "";
+        $tagsList .= "<meta name='buy' content='valor teste'/>";
         $tagsList .= "<meta name='description' content='{$assunto}'/>";
         $tagsList .= "<meta name='Author' content='{$autor}'/>";
         $tagsList .= "<title>{$Titulo}</title>";
         $tagsList .= "<meta name='KeyWords' content='{$palavrasChave}'/>";
+
 
         return $tagsList;
     }
@@ -236,6 +238,7 @@ class DocumentoController extends Controller
     public function visualizarDocumento()
     {
         $caminho = $this->retornarCaminhoDocumento(filter_input(INPUT_GET, 'docid'), filter_input(INPUT_GET, 'pagina'));
+        //var_dump($caminho);
         $cifrado = "true";
         $service = new DocumentoServices();
         $arquivo  = $service->abrirArquivo($caminho, $cifrado);
@@ -261,12 +264,16 @@ class DocumentoController extends Controller
     public function ExibirArquivosDiretorio()
     { //teste
         $caminho = filter_input(INPUT_POST, 'Caminho');
-        // var_dump($caminho);
+        //var_dump("caminho:" . $caminho);
         $pasta = "{$caminho}/";
         $paginasList = array();
         $types = array('jpg', 'png', 'pdf');
         if ($handle = opendir($pasta)) {
             while ($entry = readdir($handle)) {
+                //var_dump($entry);
+                //$image = new Imagick($entry);
+                //$image->setImageFormat('jpeg');
+                //header('Content-Type: image/jpeg');
                 $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
                 if (in_array($ext, $types)) {
                     array_push($paginasList, array(

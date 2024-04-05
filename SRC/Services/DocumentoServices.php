@@ -153,28 +153,48 @@ class DocumentoServices extends SistemaServices
             //$caminhoArqImgTemp = $this->uploadImgPasta(filter_input(INPUT_POST, 'documentoEscolhido'), $this->diretorio, $caminhoArqImgServ, $i);
             $conteudo = "<img src='{$caminhoArqImgServ}' /><br>";
 
-            $html = "<html><header>" .
-                "{$tagsList}" .
-                "</header><body>" .
-                "{$conteudo}" .
-                "</body></html>";
+            $ext = pathinfo($caminhoArqImgServ, PATHINFO_EXTENSION);
 
-            $retorno = $this->gerarPDF(filter_input(INPUT_POST, 'Caminho'), $html);
+            if ($ext != "pdf") {
+                $html = "<html><header>" .
+                    "{$tagsList}" .
+                    "</header><body>" .
+                    "{$conteudo}" .
+                    "</body></html>";
 
-            array_push($paginasList, array(
-                'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
-                'volume' => "1",
-                'numpagina' => $i,
-                'codexp' => 1,
-                'arquivo' => $retorno,
-                'filme' => "1",
-                'fotograma' => "1",
-                'imgencontrada' => "1"
-            ));
+                $retorno = $this->gerarPDF(filter_input(INPUT_POST, 'Caminho'), $html);
 
+                array_push($paginasList, array(
+                    'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
+                    'volume' => "1",
+                    'numpagina' => $i,
+                    'codexp' => 1,
+                    'arquivo' => $retorno,
+                    'filme' => "1",
+                    'fotograma' => "1",
+                    'imgencontrada' => "1"
+                ));
+            } else {
+                $pasta = random_int(1, 999999);
+                $nomePDF = "/{$pasta}.pdf";
 
-            unlink("{$caminhoArqImgServ}");
+                $caminhoPDF = filter_input(INPUT_POST, 'Caminho') . "/" . pathinfo($caminhoArqImgServ, PATHINFO_BASENAME);
+
+                move_uploaded_file($caminhoArqImgServ, filter_input(INPUT_POST, 'Caminho') . "" . $nomePDF);
+
+                array_push($paginasList, array(
+                    'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
+                    'volume' => "1",
+                    'numpagina' => $i,
+                    'codexp' => 1,
+                    'arquivo' => $caminhoPDF,
+                    'filme' => "1",
+                    'fotograma' => "1",
+                    'imgencontrada' => "1"
+                ));
+            }
         }
+        //var_dump($paginasList);
         return $paginasList;
     }
 
@@ -182,7 +202,7 @@ class DocumentoServices extends SistemaServices
     {
         $caminhoArqImg = "{$this->diretorio}{$idPasta}/";
         $total = count(filter_input(INPUT_POST, 'documentoEscolhido'));
-        var_dump($total);
+
         $conteudo = "";
 
         for ($i = 0; $i < $total; $i++) {
@@ -190,6 +210,7 @@ class DocumentoServices extends SistemaServices
             $caminhoArqImgTemp = $this->uploadImgPasta($idPasta, $this->diretorio, $caminhoArqImgServ, $i);
             $conteudo .= "<img src='{$caminhoArqImgServ}' /><br>";
         }
+
         $html = "<html><header>" .
             "{$tagsList}" .
             "</header><body>" .
@@ -241,10 +262,11 @@ class DocumentoServices extends SistemaServices
 
     private function gerarPDF(string $diretorio, string $html): string
     {
+        //var_dump("gerar");
         $options = new Options();
         $options->setChroot($diretorio);
         $options->setIsRemoteEnabled(true);
-
+        $options->set('isHtml5ParserEnabled', true);
         $dompdf = new Dompdf($options);
         $dompdf->loadhtml($html);
         $dompdf->setPaper('A4');
@@ -317,7 +339,12 @@ class DocumentoServices extends SistemaServices
     public function carregarArquivosDiretorioTemporario(string $nip, string $tipoArquivo): string
     {
         $pasta = $this->gerarPastaTemporaria($nip, $tipoArquivo);
-        $this->subirArquivos($pasta);
+        if (count($_FILES['documento']['name']) > 0)
+            $this->subirArquivos($pasta);
+
+        if (count($_FILES['documentoPDF']['name']) > 0)
+            $this->subirArquivosPDF($pasta);
+
         //var_dump($pasta);
         return $pasta;
     }
@@ -338,13 +365,28 @@ class DocumentoServices extends SistemaServices
 
             $nomeArquivo = pathinfo($_FILES['documento']['name'][$i], PATHINFO_BASENAME);
 
-
+            //var_dump($_FILES['documento']['name'][$i]);
             $caminhoArqImgServ = $diretorio . "/" . $_FILES['documento']['name'][$i];
             $this->uploadImgPastaLote($caminhoArqImgServ, $i);
             // $this->TratarTifParapng($caminhoArqImgServ);
         }
     }
 
+    private function subirArquivosPDF(string $diretorio)
+    {
+        $total = count($_FILES['documentoPDF']['name']);
+        //var_dump("total: " . $total);
+        for ($i = 0; $i < $total; $i++) {
+
+            $nomeArquivo = pathinfo($_FILES['documentoPDF']['name'][$i], PATHINFO_BASENAME);
+
+            //var_dump($_FILES['documentoPDF']['name'][$i]);
+            $caminhoArqImgServ = $diretorio . "/" . $_FILES['documentoPDF']['name'][$i];
+            //var_dump("caminho: " . $caminhoArqImgServ);
+            $this->uploadPDFPasta($caminhoArqImgServ, $i);
+            // $this->TratarTifParapng($caminhoArqImgServ);
+        }
+    }
     private function TratarTifParapng(string $caminho)
     {
         // Caminho do arquivo TIFF de entrada
@@ -377,20 +419,26 @@ class DocumentoServices extends SistemaServices
     }
     private function uploadImgPastaLote(string $caminhoArqImg, int $indice)
     {
+        //var_dump("testeart: " . $_FILES['documento']['tmp_name'][$indice]);
         move_uploaded_file($_FILES['documento']['tmp_name'][$indice],  $caminhoArqImg);
     }
-
+    private function uploadPDFPasta(string $caminhoArqImg, int $indice)
+    {
+        //var_dump("testeart: " . $_FILES['documentoPDF']['tmp_name'][$indice]);
+        move_uploaded_file($_FILES['documentoPDF']['tmp_name'][$indice],  $caminhoArqImg);
+    }
 
     public function carregarArquivoservidor(string $arquivos): string
     {
+        //var_dump($arquivos);
         $repository = new DocumentoRepository($this->Conexao());
         $pasta = $this->gerarPasta();
         $documentos = json_decode(file_get_contents('php://input'));
-        //var_dump("ei: ". pathinfo($documentos[0]->arquivo)['dirname']);
+        //var_dump("ei: " . pathinfo($documentos[0]->arquivo)['dirname']);
 
         foreach ($documentos as $values) {
 
-            //var_dump($values);
+            var_dump($values);
             $origem = $values->arquivo;
             $caminho = $this->subirArquivoss($pasta, $origem);
 

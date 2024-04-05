@@ -126,23 +126,43 @@ $numPag = 1;
               <hr class="mb-4">
               <div class="d-block my-3">
                 <div class="custom-control custom-radio">
-                  <input id="imgToPdf" name="origemDoc" type="radio" class="form-control-input" checked required>
+                  <input id="imgToPdf" name="origemDoc" type="radio" value="imgToPdf" class="form-control-input" required>
                   <label class="form-control-label" for="imgToPdf">Tratar Imagens para Pdf e Anexar</label>
                 </div>
                 <div class="custom-control custom-radio">
-                  <input id="pdfPronto" name="origemDoc" type="radio" class="form-control-input" required>
+                  <input id="pdfPronto" name="origemDoc" type="radio" value="pdfPronto" class="form-control-input" required>
                   <label class="form-control-label" for="pdfPronto">Anexar pdf pronto</label>
                 </div>
                 <hr class="mb-4">
-                <div class="row">
-                  <div class="col-md-9 mb-3">
-                    <label class="col-form-label" for="documento[]">Selecione as imagens</label>
-                    <input type="file" id="documento" name="documento[]" class="form-control" multiple>
+                <div id="gerenImagem" name="gerenImagem" style="display: none" ;>
+                  <div class=" row">
+                    <div class="col-md-9 mb-3">
+                      <label class="col-form-label" for="documento[]">Selecione as imagens</label>
+                      <input type="file" id="documento" name="documento[]" class="form-control" multiple>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-9 mb-3">
+                      <input type="buttton" class="btn btn-primary" name="btnCarregarArquivosImg" id="btnCarregarArquivosImg" value="Carregar Imagens" disabled="true">
+                    </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-9 mb-3">
-                    <input type="buttton" class="btn btn-primary" name="btnCarregarArquivosImg" id="btnCarregarArquivosImg" value="Carregar Imagens" disabled="true">
+                <div id="gerenPDF" name="gerenPDF" style="display: none" ;>
+                  <div class=" row">
+                    <div class="col-md-9 mb-3">
+                      <label class="col-form-label" for="documentoPDF[]">Selecione os PDF</label>
+                      <input type="file" id="documentoPDF" name="documentoPDF[]" class="form-control" multiple>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-9 mb-3">
+                      <input type="buttton" class="btn btn-primary" name="btnCarregarArquivosPDF" id="btnCarregarArquivosPDF" value="Carregar PDF" disabled="true">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-9 mb-3">
+                      <input type="checkbox" name="AssinaDocumentos" value="1"> Assina documentos
+                    </div>
                   </div>
                 </div>
               </div>
@@ -154,7 +174,7 @@ $numPag = 1;
                 </div>
                 <div class="col-md-6 mb-3">
                   <div id="visualizarDocumento" name="visualizarDocumento">
-                    <!--  <iframe src="C:\Users\Rodrigo\OneDrive\Documentos\documentos novos\328.pdf" width="100%" height="500"></iframe>-->
+                    <iframe src="C:\Users\Rodrigo\OneDrive\Documentos\documentos novos\328.pdf" width="100%" height="500"></iframe>
                   </div>
                 </div>
               </div>
