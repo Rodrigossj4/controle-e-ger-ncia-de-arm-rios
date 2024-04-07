@@ -126,6 +126,7 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         $tagsList = $this->montaArryaTags();
 
+        //var_dump("eit");
         $paginasList = $service->gerarPdfs($tagsList);
         echo json_encode($paginasList);
     }
@@ -267,7 +268,7 @@ class DocumentoController extends Controller
         //var_dump("caminho:" . $caminho);
         $pasta = "{$caminho}/";
         $paginasList = array();
-        $types = array('jpg', 'png', 'pdf');
+        $types = array('jpg', 'png', 'tif', 'pdf');
         if ($handle = opendir($pasta)) {
             while ($entry = readdir($handle)) {
                 //var_dump($entry);

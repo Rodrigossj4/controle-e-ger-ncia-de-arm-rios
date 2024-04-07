@@ -923,11 +923,11 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
-            if (($("input[name='origemDoc']").val() == "imgToPdf") || ($('#AssinaDocumentos').prop('checked')))
-                //assinarDocumentos(data);
+            console.log(data);
+            //if (($("input[name='origemDoc']").val() == "imgToPdf") || ($('#AssinaDocumentos').prop('checked')))
+            //assinarDocumentos(data);
 
-                criptgrafarDocumento(data);
+            criptgrafarDocumento(data);
             armazenaDocumentos(data);
 
             alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
@@ -984,7 +984,7 @@ function criptgrafarDocumento(documentos) {
             contentType: false,
             success: function (data) {
                 //console.log(data);
-                console.log('Processo concluido');
+                //console.log('Processo concluido');
             },
             error: function (d) {
                 console.log('erro ao carregar arquivos ' + d);
@@ -994,7 +994,7 @@ function criptgrafarDocumento(documentos) {
 }
 
 function armazenaDocumentos(documentos) {
-    //console.log("Rotina de armazenar");
+    console.log("Rotina de armazenar");
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
     var ArrayDocumentos = JSON.parse(documentos);
     // $('#tratandoDocumento').val(documentos);
@@ -1006,7 +1006,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log("arm: "+data);
+            //console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);
@@ -1067,7 +1067,7 @@ $(document).on('click', '.btnConfirmaExcluirPagina', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             alertas('Página Excluida com sucesso', '#ExcluirPagina', 'alert_sucess', 'true');
             setTimeout(function () {
                 location.reload();

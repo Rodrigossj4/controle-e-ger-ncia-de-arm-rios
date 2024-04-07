@@ -9,12 +9,18 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Sabberworm\CSS\CSSList\Document;
 
+require_once 'vendor/autoload.php';
+
+use thiagoalessio\TesseractOCR\TesseractOCR;
+
+use setasign\Fpdi\Fpdi;
+use TCPDF\TCPDF;
+
 class DocumentoServices extends SistemaServices
 {
     private $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
     private $diretorio = "/marinha/sisimagem/";
     private $diretorioLote = "documentos/";
-
 
     public function __construct()
     {
@@ -146,56 +152,60 @@ class DocumentoServices extends SistemaServices
         $total = count($_POST['documentoEscolhido']);
         $paginasList = [];
 
+        // $origemOcr = $this->gerarOcrs($origem);
         for ($i = 0; $i < $total; $i++) {
 
-            $caminhoArqImgServ = $_POST['documentoEscolhido'][$i];
-            //var_dump("caminho:" .  $caminhoArqImgServ);
-            //$caminhoArqImgTemp = $this->uploadImgPasta(filter_input(INPUT_POST, 'documentoEscolhido'), $this->diretorio, $caminhoArqImgServ, $i);
-            $conteudo = "<img src='{$caminhoArqImgServ}' /><br>";
+            $ext = pathinfo($_POST['documentoEscolhido'][$i], PATHINFO_EXTENSION);
 
-            $ext = pathinfo($caminhoArqImgServ, PATHINFO_EXTENSION);
+            $caminhoArqImgServ = $ext != "pdf" ? $this->gerarOcrs($_POST['documentoEscolhido'][$i]) :
+                $_POST['documentoEscolhido'][$i];
 
-            if ($ext != "pdf") {
-                $html = "<html><header>" .
-                    "{$tagsList}" .
-                    "</header><body>" .
-                    "{$conteudo}" .
-                    "</body></html>";
+            $this->IncluirTags($caminhoArqImgServ);
 
-                $retorno = $this->gerarPDF(filter_input(INPUT_POST, 'Caminho'), $html);
+            $pasta = random_int(1, 999999);
+            $nomePDF = "/{$pasta}.pdf";
 
-                array_push($paginasList, array(
-                    'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
-                    'volume' => "1",
-                    'numpagina' => $i,
-                    'codexp' => 1,
-                    'arquivo' => $retorno,
-                    'filme' => "1",
-                    'fotograma' => "1",
-                    'imgencontrada' => "1"
-                ));
-            } else {
-                $pasta = random_int(1, 999999);
-                $nomePDF = "/{$pasta}.pdf";
+            $caminhoPDF = filter_input(INPUT_POST, 'Caminho') . "/" . pathinfo($caminhoArqImgServ, PATHINFO_BASENAME);
 
-                $caminhoPDF = filter_input(INPUT_POST, 'Caminho') . "/" . pathinfo($caminhoArqImgServ, PATHINFO_BASENAME);
+            move_uploaded_file($caminhoArqImgServ, filter_input(INPUT_POST, 'Caminho') . "" . $nomePDF);
 
-                move_uploaded_file($caminhoArqImgServ, filter_input(INPUT_POST, 'Caminho') . "" . $nomePDF);
-
-                array_push($paginasList, array(
-                    'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
-                    'volume' => "1",
-                    'numpagina' => $i,
-                    'codexp' => 1,
-                    'arquivo' => $caminhoPDF,
-                    'filme' => "1",
-                    'fotograma' => "1",
-                    'imgencontrada' => "1"
-                ));
-            }
+            array_push($paginasList, array(
+                'documentoid' =>  filter_input(INPUT_POST, 'IdDocumento'),
+                'volume' => "1",
+                'numpagina' => $i,
+                'codexp' => 1,
+                'arquivo' => $caminhoPDF,
+                'filme' => "1",
+                'fotograma' => "1",
+                'imgencontrada' => "1"
+            ));
         }
+
         //var_dump($paginasList);
         return $paginasList;
+    }
+
+    private function IncluirTags(string $arquivos)
+    {
+        $pdf = new Fpdi();
+        $pdf->AddPage();
+        $pdf->setSourceFile($arquivos);
+        $pageId = $pdf->importPage(1);
+        $pdf->useTemplate($pageId);
+
+        if (filter_input(INPUT_POST, 'Titulo') != "")
+            $pdf->SetTitle(filter_input(INPUT_POST, 'Titulo'));
+
+        if (filter_input(INPUT_POST, 'Autor'))
+            $pdf->SetAuthor(filter_input(INPUT_POST, 'Autor'));
+
+        if (filter_input(INPUT_POST, 'Assunto'))
+            $pdf->SetSubject(filter_input(INPUT_POST, 'Assunto'));
+
+        if (filter_input(INPUT_POST, 'PalavrasChave'))
+            $pdf->SetKeywords(filter_input(INPUT_POST, 'PalavrasChave'));
+
+        $pdf->Output($arquivos, 'F');
     }
 
     public function gerarArquivo(string $idPasta, string $tagsList): array
@@ -263,17 +273,17 @@ class DocumentoServices extends SistemaServices
     private function gerarPDF(string $diretorio, string $html): string
     {
         //var_dump("gerar");
-        $options = new Options();
+        /*$options = new Options();
         $options->setChroot($diretorio);
         $options->setIsRemoteEnabled(true);
         $options->set('isHtml5ParserEnabled', true);
         $dompdf = new Dompdf($options);
         $dompdf->loadhtml($html);
         $dompdf->setPaper('A4');
-        $dompdf->render();
+        $dompdf->render();*/
         $pasta = random_int(1, 999999);
         $caminhoPDF = "{$diretorio}/{$pasta}.pdf";
-        file_put_contents($caminhoPDF, $dompdf->output());
+        //file_put_contents($caminhoPDF, $dompdf->output());
 
         return $caminhoPDF;
     }
@@ -438,8 +448,9 @@ class DocumentoServices extends SistemaServices
 
         foreach ($documentos as $values) {
 
-            var_dump($values);
+            //var_dump($values);
             $origem = $values->arquivo;
+            //var_dump($origemOcr);
             $caminho = $this->subirArquivoss($pasta, $origem);
 
             $paginasList = [];
@@ -463,6 +474,22 @@ class DocumentoServices extends SistemaServices
 
 
         return $pasta;
+    }
+
+    private function gerarOcrs(string $caminhoArq): string
+    {
+        $pasta = random_int(1, 999999);
+        $nomeArquivoOcr = pathinfo($caminhoArq, PATHINFO_DIRNAME) . "/{$pasta}.pdf";
+        //var_dump($nomeArquivoOcr);
+        /*var_dump($caminhoArq);*/
+        (new TesseractOCR($caminhoArq))
+            //->userWords("{$this->diretorioLote}user-words.odt")
+            ->dpi(300)
+            ->configFile('pdf')
+            ->setOutputFile($nomeArquivoOcr)
+            ->run();
+
+        return $nomeArquivoOcr;
     }
 
     private function gerarPasta(): string
