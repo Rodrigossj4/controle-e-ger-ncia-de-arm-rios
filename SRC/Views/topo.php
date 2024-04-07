@@ -16,7 +16,7 @@ if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6)
     <meta charset="utf-8" />
     <title>SISTEMA DE DIGITALIZAÇÃO DE IMAGENS</title>
     <link rel="stylesheet" type="text/css" href="../../css/style.css" />
-    <link href="../../css/bootstrap.min.css" rel="stylesheet" >
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
     <script src="../../scripts/bootstrap.bundle.min.js"></script>
 
 
@@ -40,9 +40,6 @@ if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6)
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/gerenciar-lotes">Gerencia de Lotes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>

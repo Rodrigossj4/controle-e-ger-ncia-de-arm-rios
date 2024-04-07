@@ -28,14 +28,27 @@ class TipoDocumentoController extends Controller
    public function cadastrarTipodocumento()
    {
 
-      $tipoDocList = array();
-      array_push($tipoDocList, array(
-         'DescTipoDoc' => filter_input(INPUT_POST, 'desctipo')
-      ));
+      if (strlen(filter_input(INPUT_POST, 'desctipo')) < 1) {
+         http_response_code(500);
+         return "Todos os campos são obrigatórios";
+      }
 
-      $service = new TipoDocumentoService();
+      try {
+         $tipoDocList = array();
+         array_push($tipoDocList, array(
+            'DescTipoDoc' => filter_input(INPUT_POST, 'desctipo')
+         ));
 
-      return $service->cadastrarTipoDocumento($tipoDocList);
+         $service = new TipoDocumentoService();
+
+         if ($service->cadastrarTipoDocumento($tipoDocList)) {
+            http_response_code(200);
+            return "Tipo de documento cadastrado com sucesso.";
+         }
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para cadastrar o tipo de documento";
+      }
    }
 
    public function listar()
@@ -55,24 +68,44 @@ class TipoDocumentoController extends Controller
       echo json_encode($service->listaTipoDocumentoArmario($idArmario));
    }
 
-   public function alterar(): bool
+   public function alterar()
    {
-      $tipoDocList = array();
-      array_push($tipoDocList, array(
-         'id' => filter_input(INPUT_POST, 'id'),
-         'desctipo' => filter_input(INPUT_POST, 'descTipoDoc'),
-         'armario' => filter_input(INPUT_POST, 'armario')
-      ));
+      if (strlen(filter_input(INPUT_POST, 'descTipoDoc')) < 1) {
+         http_response_code(500);
+         return "Todos os campos são obrigatórios";
+      }
 
-      $service = new TipoDocumentoService();
-      $service->alterarTipoDoc($tipoDocList);
-      return true;
+      try {
+         $tipoDocList = array();
+         array_push($tipoDocList, array(
+            'id' => filter_input(INPUT_POST, 'id'),
+            'desctipo' => filter_input(INPUT_POST, 'descTipoDoc'),
+            'armario' => filter_input(INPUT_POST, 'armario')
+         ));
+
+         $service = new TipoDocumentoService();
+
+         if ($service->alterarTipoDoc($tipoDocList)) {
+            http_response_code(200);
+            return "Tipo de documento cadastrado com sucesso.";
+         }
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para atualizar o tipo de documento";
+      }
    }
 
-   public function excluir(): bool
+   public function excluir()
    {
-      $service = new TipoDocumentoService();
-      $service->excluirTipoDocumento(filter_input(INPUT_POST, 'id'));
-      return true;
+      try {
+         $service = new TipoDocumentoService();
+         if ($service->excluirTipoDocumento(filter_input(INPUT_POST, 'id'))) {
+            http_response_code(200);
+            return "Tipo de documento excluído com sucesso";
+         }
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para excluir o tipo de documento";
+      }
    }
 }

@@ -33,6 +33,12 @@ function carregarArmarios() {
 }
 
 $('#btnCadArmario').on('click', function (e) {
+
+    if (($('#formCadArmario #codigo').val() == "") || ($('#formCadArmario #nomeInterno').val() == "") || ($('#formCadArmario #nomeExterno').val() == "")) {
+        alertas("Todos os campos do formulário são obrigatórios", '#modCadArmario', 'alert_danger');
+        return false;
+    }
+
     var formdata = new FormData($("form[id='formCadArmario']")[0]);
     $.ajax({
         type: 'POST',
@@ -47,11 +53,12 @@ $('#btnCadArmario').on('click', function (e) {
             $('#formCadArmario #nomeInterno').val("");
             $('#formCadArmario #nomeExterno').val("");
             alertas('Armário cadastrado com sucesso', '#modCadArmario', 'alert_sucess');
+
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#modCadArmario', 'alert_danger');
+            console.log(d);
+            alertas("Houve um problema para cadastrar o armário.", '#modCadArmario', 'alert_danger');
         }
-
     });
 });
 
@@ -133,6 +140,11 @@ $(document).on('click', '#exibConfirmaAlteracaoArmario', function (e) {
 
 $(document).on('click', '#btnConfirmaAlteracaoArmario', function (e) {
 
+    if (($('#formAltArmario #codigo').val() == "") || ($('#formAltArmario #nomeInterno').val() == "") || ($('#formAltArmario #nomeExterno').val() == "")) {
+        alertas("Todos os campos do formulário são obrigatórios", '#AlteraArmario', 'alert_danger');
+        return false;
+    }
+
     var formdata = new FormData($("form[id='formAltArmario']")[0]);
     $.ajax({
         type: 'POST',
@@ -151,7 +163,7 @@ $(document).on('click', '#btnConfirmaAlteracaoArmario', function (e) {
             alertas('Armário atualizado com sucesso', '#AlteraArmario', 'alert_sucess');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#AlteraArmario', 'alert_danger');
+            alertas("Houve um problema para atualizar o armário", '#AlteraArmario', 'alert_danger');
         }
 
     });
@@ -184,7 +196,7 @@ $(document).on('click', '.btnConfirmaExcluirArmario', function (e) {
             alertas('Armario excluído com sucesso', '#ExcluirArmario', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#ExcluirArmario', 'alert_danger');
+            alertas("Houve um problema para excluir o armário", '#ExcluirArmario', 'alert_danger');
         }
     }
     );
@@ -295,6 +307,12 @@ function carregarTipoDocumento() {
 }
 
 $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
+
+    if (($('#formCadTipoDocumento #desctipo').val() == "")) {
+        alertas("Todos os campos do formulário são obrigatórios", '#modCadTipoDocumento', 'alert_danger');
+        return false;
+    }
+
     var formdata = new FormData($("form[id='formCadTipoDocumento']")[0]);
 
     $.ajax({
@@ -310,7 +328,7 @@ $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
             alertas('Tipo de documento cadastrado com sucesso', '#modCadTipoDocumento', 'alert_sucess');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#modCadTipoDocumento', 'alert_danger');
+            alertas("Houve um problema para cadastrar o Tipo de documento", '#modCadTipoDocumento', 'alert_danger');
         }
     });
 });
@@ -334,7 +352,7 @@ $(document).on('click', '.btnConfirmaExcluirTipoDoc', function (e) {
             alertas('Tipo documento excluído com sucesso', '#modexcluirTipoDoc', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#modxcluirTipoDoc', 'alert_danger');
+            alertas("Houve um problema para excluir o tipo de documento", '#modxcluirTipoDoc', 'alert_danger');
         }
     }
     );
@@ -357,6 +375,11 @@ $(document).on('click', '#exibConfirmaAlteracaoDocumento', function (e) {
 });
 
 $(document).on('click', '#btnConfirmaAlteracaoTipoDocumento', function (e) {
+
+    /*if (($('#formAltTipoDoc #desctipo').val() == "")) {
+        alertas("Todos os campos do formulário são obrigatórios", '#AlteraTipoDoc', 'alert_danger');
+        return false;
+    }*/
     var formdata = new FormData($("form[id='formAltTipoDoc']")[0]);
 
     $.ajax({
@@ -371,7 +394,7 @@ $(document).on('click', '#btnConfirmaAlteracaoTipoDocumento', function (e) {
             alertas('Tipo documento atualizado com sucesso', '#AlteraTipoDoc', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#AlteraTipoDoc', 'alert_danger');
+            alertas("Houve um problema para atualizar o tipo de documento", '#AlteraTipoDoc', 'alert_danger');
         }
     }
     );
@@ -832,7 +855,7 @@ $('#formAnexarPagDoc #btnCarregarArquivosImg').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            // console.log(data);
+            console.log(data);
             $('#formAnexarPagDoc #Caminho').val(data);
             ListarArquivos();
         },

@@ -22,18 +22,31 @@ class ArmariosController extends Controller
       require __DIR__ . '../../Views/armarios/index.php';
    }
 
-   public function cadastrar(): bool
+   public function cadastrar()
    {
-      $armariosList = array();
-      array_push($armariosList, array(
-         'codigo' => filter_input(INPUT_POST, 'codigo'),
-         'nomeinterno' => filter_input(INPUT_POST, 'nomeInterno'),
-         'nomeexterno' => filter_input(INPUT_POST, 'nomeExterno')
-      ));
+      if (strlen(filter_input(INPUT_POST, 'codigo')) < 1 || strlen(filter_input(INPUT_POST, 'nomeInterno')) < 1 || strlen(filter_input(INPUT_POST, 'nomeExterno')) < 1) {
+         http_response_code(500);
+         return "Todos os campos são obrigatórios";
+      }
 
-      $service = new ArmarioServices();
+      try {
+         $armariosList = array();
+         array_push($armariosList, array(
+            'codigo' => filter_input(INPUT_POST, 'codigo'),
+            'nomeinterno' => filter_input(INPUT_POST, 'nomeInterno'),
+            'nomeexterno' => filter_input(INPUT_POST, 'nomeExterno')
+         ));
 
-      return $service->cadastrarArmarios($armariosList);
+         $service = new ArmarioServices();
+
+         if ($service->cadastrarArmarios($armariosList)) {
+            http_response_code(200);
+            return "Armario Cadastrado";
+         }
+      } catch (Exception) {
+         http_response_code(500);
+         return "Houve um problema para cadastrar o armário";
+      }
    }
 
    public function gerenciar()
@@ -81,25 +94,45 @@ class ArmariosController extends Controller
       echo json_encode($service->listaArmarios());
    }
 
-   public function alterar(): bool
+   public function alterar()
    {
-      $armariosList = array();
-      array_push($armariosList, array(
-         'id' => filter_input(INPUT_POST, 'id'),
-         'codigo' => filter_input(INPUT_POST, 'codigo'),
-         'nomeinterno' => filter_input(INPUT_POST, 'nomeInterno'),
-         'nomeexterno' => filter_input(INPUT_POST, 'nomeExterno')
-      ));
+      if (strlen(filter_input(INPUT_POST, 'id')) < 1 || strlen(filter_input(INPUT_POST, 'codigo')) < 1 || strlen(filter_input(INPUT_POST, 'nomeInterno')) < 1 || strlen(filter_input(INPUT_POST, 'nomeExterno')) < 1) {
+         http_response_code(500);
+         return "Todos os campos são obrigatórios";
+      }
 
-      $service = new ArmarioServices();
-      $service->alterarArmarios($armariosList);
-      return true;
+      try {
+         $armariosList = array();
+         array_push($armariosList, array(
+            'id' => filter_input(INPUT_POST, 'id'),
+            'codigo' => filter_input(INPUT_POST, 'codigo'),
+            'nomeinterno' => filter_input(INPUT_POST, 'nomeInterno'),
+            'nomeexterno' => filter_input(INPUT_POST, 'nomeExterno')
+         ));
+
+         $service = new ArmarioServices();
+         if ($service->alterarArmarios($armariosList)) {
+            http_response_code(200);
+            return "Armario Atualizado";
+         }
+         //return true;
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para atualizar o armário";
+      }
    }
 
-   public function excluir(): bool
+   public function excluir()
    {
-      $service = new ArmarioServices();
-      $service->excluirArmario(filter_input(INPUT_POST, 'id'));
-      return true;
+      try {
+         $service = new ArmarioServices();
+         if ($service->excluirArmario(filter_input(INPUT_POST, 'id'))) {
+            http_response_code(200);
+            return "Armario excluído Cadastrado";
+         }
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para excluir o armário";
+      }
    }
 }

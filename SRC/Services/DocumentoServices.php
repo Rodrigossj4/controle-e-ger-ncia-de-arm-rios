@@ -7,7 +7,6 @@ use Exception;
 use Marinha\Mvc\Infra\Repository\DocumentoRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Sabberworm\CSS\CSSList\Document;
 
 require_once 'vendor/autoload.php';
 
@@ -394,39 +393,13 @@ class DocumentoServices extends SistemaServices
             $caminhoArqImgServ = $diretorio . "/" . $_FILES['documentoPDF']['name'][$i];
             //var_dump("caminho: " . $caminhoArqImgServ);
             $this->uploadPDFPasta($caminhoArqImgServ, $i);
-            // $this->TratarTifParapng($caminhoArqImgServ);
+            //$this->TratarTifParapng($caminhoArqImgServ);
         }
     }
     private function TratarTifParapng(string $caminho)
     {
-        // Caminho do arquivo TIFF de entrada
-        $tiffFilePath = $caminho;
-        //var_dump($tiffFilePath);
-        // Caminho do arquivo PNG de saída
-        $pngFilePath = $this->diretorioLote;
-
-        // Carrega a imagem TIFF
-        $tiffImage = imagecreatefromtiff($tiffFilePath);
-
-        if ($tiffImage !== false) {
-            // Cria uma nova imagem PNG
-            $pngImage = imagecreatetruecolor(imagesx($tiffImage), imagesy($tiffImage));
-
-            // Copia a imagem TIFF para a imagem PNG
-            imagecopy($pngImage, $tiffImage, 0, 0, 0, 0, imagesx($tiffImage), imagesy($tiffImage));
-
-            // Salva a imagem PNG
-            imagepng($pngImage, $pngFilePath);
-
-            // Libera a memória
-            imagedestroy($tiffImage);
-            imagedestroy($pngImage);
-
-            echo "Arquivo TIFF convertido para PNG com sucesso!";
-        } else {
-            echo "Erro ao carregar o arquivo TIFF.";
-        }
     }
+
     private function uploadImgPastaLote(string $caminhoArqImg, int $indice)
     {
         //var_dump("testeart: " . $_FILES['documento']['tmp_name'][$indice]);
