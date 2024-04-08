@@ -268,10 +268,9 @@ class DocumentoController extends Controller
         //var_dump("caminho:" . $caminho);
         $pasta = "{$caminho}/";
         $paginasList = array();
-        $types = array('jpg', 'png', 'tif', 'pdf');
+        $types = array('jpg', 'png', 'pdf');
         if ($handle = opendir($pasta)) {
             while ($entry = readdir($handle)) {
-                //var_dump($entry);
                 //$image = new Imagick($entry);
                 //$image->setImageFormat('jpeg');
                 //header('Content-Type: image/jpeg');

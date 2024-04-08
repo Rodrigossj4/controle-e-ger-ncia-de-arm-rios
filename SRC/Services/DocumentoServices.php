@@ -373,11 +373,15 @@ class DocumentoServices extends SistemaServices
         for ($i = 0; $i < $total; $i++) {
 
             $nomeArquivo = pathinfo($_FILES['documento']['name'][$i], PATHINFO_BASENAME);
+            $arquivoExtensao = pathinfo($_FILES['documento']['name'][$i], PATHINFO_EXTENSION);
 
-            //var_dump($_FILES['documento']['name'][$i]);
             $caminhoArqImgServ = $diretorio . "/" . $_FILES['documento']['name'][$i];
             $this->uploadImgPastaLote($caminhoArqImgServ, $i);
-            // $this->TratarTifParapng($caminhoArqImgServ);
+
+            if ($arquivoExtensao == "TIF") {
+                $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".jpg";
+                $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
+            }
         }
     }
 
@@ -387,29 +391,22 @@ class DocumentoServices extends SistemaServices
         //var_dump("total: " . $total);
         for ($i = 0; $i < $total; $i++) {
 
-            $nomeArquivo = pathinfo($_FILES['documentoPDF']['name'][$i], PATHINFO_BASENAME);
 
-            //var_dump($_FILES['documentoPDF']['name'][$i]);
             $caminhoArqImgServ = $diretorio . "/" . $_FILES['documentoPDF']['name'][$i];
-            //var_dump("caminho: " . $caminhoArqImgServ);
             $this->uploadPDFPasta($caminhoArqImgServ, $i);
-            $this->TratarTifParapng($caminhoArqImgServ);
         }
     }
-    private function TratarTifParapng(string $caminho)
+    private function TratarTifParaJpeg(string $caminhoTif, string $diretoriosaida): string
     {
-
-        $input_tiff = "{$this->diretorioLote}00000001.TIF";
-        $output_jpeg = "{$this->diretorioLote}novo.jpg";
+        $input_tiff = $caminhoTif;
+        $output_jpeg = $diretoriosaida;
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
-        $command = "convert $input_tiff $output_jpeg";
+        $command = "magick $input_tiff $output_jpeg";
 
-        // Executa o comando e captura a saída
-        $output = shell_exec($caminho);
+        shell_exec($command);
 
-        var_dump(__DIR__);
-        echo 'Conversão concluída!';
+        return  $output_jpeg;
     }
 
     private function uploadImgPastaLote(string $caminhoArqImg, int $indice)
