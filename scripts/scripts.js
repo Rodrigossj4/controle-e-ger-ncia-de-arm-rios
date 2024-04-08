@@ -947,8 +947,8 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         contentType: false,
         success: function (data) {
             console.log(data);
-            //if (($("input[name='origemDoc']").val() == "imgToPdf") || ($('#AssinaDocumentos').prop('checked')))
-            //assinarDocumentos(data);
+            if (($("input[name='origemDoc']").val() == "imgToPdf") || ($('#AssinaDocumentos').prop('checked')))
+                assinarDocumentos(data);
 
             criptgrafarDocumento(data);
             armazenaDocumentos(data);

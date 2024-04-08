@@ -393,11 +393,23 @@ class DocumentoServices extends SistemaServices
             $caminhoArqImgServ = $diretorio . "/" . $_FILES['documentoPDF']['name'][$i];
             //var_dump("caminho: " . $caminhoArqImgServ);
             $this->uploadPDFPasta($caminhoArqImgServ, $i);
-            //$this->TratarTifParapng($caminhoArqImgServ);
+            $this->TratarTifParapng($caminhoArqImgServ);
         }
     }
     private function TratarTifParapng(string $caminho)
     {
+
+        $input_tiff = "{$this->diretorioLote}00000001.TIF";
+        $output_jpeg = "{$this->diretorioLote}novo.jpg";
+
+        // Comando para chamar o ImageMagick para converter TIFF para JPEG
+        $command = "convert $input_tiff $output_jpeg";
+
+        // Executa o comando e captura a saída
+        $output = shell_exec($caminho);
+
+        var_dump(__DIR__);
+        echo 'Conversão concluída!';
     }
 
     private function uploadImgPastaLote(string $caminhoArqImg, int $indice)
