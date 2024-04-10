@@ -188,7 +188,7 @@ $numPag = 1;
         </div>
 
         <div class="row col-12">
-          <div class="panel panel-default" style="display: none;">
+          <div class="panel panel-default" style="display: block;">
             <div class="panel-heading">
               <h3 class="panel-title">Assinar PDF</h3>
             </div>
@@ -216,7 +216,7 @@ $numPag = 1;
           </div>
         </div>
 
-        <div class="row col-12" style="display: none;">
+        <div class="row col-12" style="display: block;">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">PDF Assinado</h3>
@@ -225,7 +225,7 @@ $numPag = 1;
               <form>
                 <div class="form-group">
                   <label for="resultado">Arquivo Assinado (PDF + Assinatura em Base 64)</label>
-                  <textarea id="assinatura" class="form-control" rows="5" disabled></textarea>
+                  <textarea id="assinatura" class="form-control" rows="5"></textarea>
                 </div>
                 <div class="form-group">
                   <button id="validarAssinaturaPdf" type="button" class="btn btn-primary">Validar Assinatura</button>

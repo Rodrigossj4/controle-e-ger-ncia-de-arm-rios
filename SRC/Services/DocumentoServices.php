@@ -176,7 +176,8 @@ class DocumentoServices extends SistemaServices
                 'arquivo' => $caminhoPDF,
                 'filme' => "1",
                 'fotograma' => "1",
-                'imgencontrada' => "1"
+                'imgencontrada' => "1",
+                'b64' => ""
             ));
         }
 
@@ -402,8 +403,8 @@ class DocumentoServices extends SistemaServices
         $output_jpeg = $diretoriosaida;
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
-        $command = "magick $input_tiff $output_jpeg";
-
+        $command = "convert $input_tiff $output_jpeg";
+        //var_dump($command);
         shell_exec($command);
 
         return  $output_jpeg;

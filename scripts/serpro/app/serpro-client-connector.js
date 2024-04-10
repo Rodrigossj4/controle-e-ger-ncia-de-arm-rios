@@ -107,19 +107,21 @@
 				} else {
 					console.debug('Sucesso:', response);
 					var resultado = $('#assinatura');
+					$('#assinatura').focus();
+					$('#validarAssinaturaPdf').focus();
 					resultado.val(response.signature);
 					//resultado.autogrow();
 
 					// Para o caso de assinatura de arquivo, exibe o hash
 					var hash = $('#file-base64');
 					//if (hash && params.type != 'pdf') {
-					  hash.val(response.original);
+					hash.val(response.original);
 					//}
 
 					// Para o caso de assinatura de arquivo, exibe o nome do arquivo
 					var fileName = $('#filename-value');
 					if (fileName) {
-					  fileName.val(response.originalFileName);
+						fileName.val(response.originalFileName);
 					}
 
 					console.log('response');
@@ -173,8 +175,8 @@
 					var dados = response.signerSignatureValidations[0];
 					console.log('DADOS', dados)
 					var cadeias = "";
-					$.each(dados.cadeiaCertificado, function(i, v) {
-					  cadeias += (v + "\n");
+					$.each(dados.cadeiaCertificado, function (i, v) {
+						cadeias += (v + "\n");
 					});
 					$('#ass_assinante').val(dados.assinante);
 					$('#ass_cadeia').val(cadeias);
@@ -191,8 +193,8 @@
 				$('#ass_cadeia').val('erro');
 				$('#ass_data').val('erro');
 				$('#ass_politica').val('erro');
-        if (error.error) {
-				  alert(error.error);
+				if (error.error) {
+					alert(error.error);
 				}
 				console.debug('Error:', error);
 				params.onError && params.onError(error);
@@ -227,19 +229,19 @@
 	}
 
 	function initApp() {
-    // hide authorization link
-    var serverAuthorizarion = $('.js-server-authorization');
-    serverAuthorizarion.hide();
+		// hide authorization link
+		var serverAuthorizarion = $('.js-server-authorization');
+		serverAuthorizarion.hide();
 		// handle forms
 		$('form#assinarHash').submit(signHash);
 		$('form#assinarTexto').submit(signText);
-    $('form#assinarArquivo').submit(signFile);
-    $('form#assinarPdf').submit(signPdf);
+		$('form#assinarArquivo').submit(signFile);
+		$('form#assinarPdf').submit(signPdf);
 
 		$('#validar-assinatura-hash').click(validateHashSign);
 		$('#validar-assinatura-texto').click(validateTextSign);
-        $('#validar-assinatura-arquivo').click(validateFileSign);
-        $('#validarAssinaturaPdf').click(validatePdfSign);
+		$('#validar-assinatura-arquivo').click(validateFileSign);
+		$('#validarAssinaturaPdf').click(validatePdfSign);
 
 		$('#extrairConteudo').click(extractContents);
 
@@ -274,8 +276,8 @@
 				type: 'text',
 				data: textData,
 				textEncoding: 'UTF-8',
-        attached: $('#incluir-coteudo').prop('checked'),
-        outputDataType: 'base64',
+				attached: $('#incluir-coteudo').prop('checked'),
+				outputDataType: 'base64',
 				onSuccess: onSuccessTextHandler,
 				onError: function (error) { console.debug('ERRO: ', error) }, // optional
 				// onCancel: onCancelHandler, // optional
@@ -308,7 +310,7 @@
 			}
 		}
 
-    // ---------- Sign PDF ----------
+		// ---------- Sign PDF ----------
 		function signPdf(event) {
 			event.preventDefault();
 
@@ -334,7 +336,7 @@
 			var hashData = $('#hash-value').val();
 			var signature = $('#assinatura').val();
 			var algorithm = $('#hash-algorithm').val();
-			algorithm = algorithm==='SHA-256' ? '2.16.840.1.101.3.4.2.1' : '2.16.840.1.101.3.4.2.3';
+			algorithm = algorithm === 'SHA-256' ? '2.16.840.1.101.3.4.2.1' : '2.16.840.1.101.3.4.2.3';
 			console.log('ALGORITHM', algorithm)
 
 			verify({

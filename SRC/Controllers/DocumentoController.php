@@ -301,7 +301,7 @@ class DocumentoController extends Controller
     {
         $b64 = json_decode(file_get_contents('php://input'));
         unlink($b64->arquivoOriginal);
-        $bin = base64_decode($b64->arquivoB64, true);
+        $bin = base64_decode($b64->arquivoB64);
         file_put_contents($b64->arquivoOriginal, $bin);
     }
     public function Indexar()
