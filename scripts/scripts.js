@@ -1000,12 +1000,12 @@ $(document).ready(function () {
         if (valorInput !== '') {
             finalizarAssinatura(function () {
                 console.log(dadosDocumento);
-                //criptgrafarDocumento(dadosDocumento);
-                //armazenaDocumentos(dadosDocumento);
+                criptgrafarDocumento(dadosDocumento);
+                armazenaDocumentos(dadosDocumento);
                 alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
-                /*setTimeout(function () {
+                setTimeout(function () {
                     location.reload();
-                }, 3000);*/
+                }, 3000);
             });
 
         }
