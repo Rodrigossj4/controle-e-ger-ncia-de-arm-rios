@@ -1007,7 +1007,6 @@ $(document).ready(function () {
                     location.reload();
                 }, 3000);
             });
-
         }
     });
 });
@@ -1041,6 +1040,7 @@ function finalizarAssinatura(callback) {
         callback();
     }, 2000);
 }
+
 function criptgrafarDocumento(documentos) {
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
     console.log("Rotina de criptografar");
