@@ -97,7 +97,6 @@
 
 		// Antes de assinar
 		params.beforeSign && params.beforeSign();
-
 		// Sign - Chama o assinador
 		window.SerproSignerClient.sign(params.type, params.data, params.textEncoding, params.outputDataType, params.attached)
 			.success(function (response) {
@@ -107,9 +106,8 @@
 				} else {
 					console.debug('Sucesso:', response);
 					var resultado = $('#assinatura');
-					$('#assinatura').focus();
-					$('#validarAssinaturaPdf').focus();
 					resultado.val(response.signature);
+					$('#assinatura').trigger('change');
 					//resultado.autogrow();
 
 					// Para o caso de assinatura de arquivo, exibe o hash
