@@ -136,4 +136,21 @@ class TipoDocumentoRepository extends LogRepository
             return false;
         }
     }
+
+    public function BuscarTipoDocumento(array $tipoDoc): int
+    {
+        $DescTipoDoc = $tipoDoc['0']["DescTipoDoc"];
+        try {
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"TipoDocumento\" WHERE LOWER(\"DescTipoDoc\") = LOWER('$DescTipoDoc');";
+            //var_dump($sqlQuery);
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->execute();
+
+            $tipodocumentoList = $stmt->fetchAll();
+            return count($tipodocumentoList);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
 }

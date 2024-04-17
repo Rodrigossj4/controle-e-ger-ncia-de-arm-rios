@@ -131,4 +131,21 @@ class ArmarioRepository extends LogRepository
             return false;
         }
     }
+
+    public function BuscarArmario(array $armario): int
+    {
+        $nomeExterno = $armario['0']["nomeexterno"];
+        try {
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" WHERE LOWER(\"NomeExterno\") = LOWER('$nomeExterno');";
+            //var_dump($sqlQuery);
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->execute();
+
+            $armariosDataList = $stmt->fetchAll();
+            return count($armariosDataList);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
 }

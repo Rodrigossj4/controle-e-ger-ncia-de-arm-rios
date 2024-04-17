@@ -35,6 +35,12 @@ class ArmarioServices extends SistemaServices
         }
     }
 
+    public function BuscarArmario(array $armario): int
+    {
+        $repository = new ArmarioRepository($this->Conexao());
+        return $repository->BuscarArmario($armario);
+    }
+    
     public function vincularDocumentos(array $vinculosList): bool
     {
         try {

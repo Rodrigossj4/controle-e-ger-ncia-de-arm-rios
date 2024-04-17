@@ -48,6 +48,7 @@ $('#btnCadArmario').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
+            //console.log(d);
             carregarArmarios();
             $('#formCadArmario #codigo').val("");
             $('#formCadArmario #nomeInterno').val("");
@@ -57,7 +58,7 @@ $('#btnCadArmario').on('click', function (e) {
         },
         error: function (d) {
             console.log(d);
-            alertas("Houve um problema para cadastrar o armário.", '#modCadArmario', 'alert_danger');
+            alertas("Houve um problema para cadastrar o armário. ", '#modCadArmario', 'alert_danger');
         }
     });
 });
@@ -160,7 +161,7 @@ $(document).on('click', '#btnConfirmaAlteracaoArmario', function (e) {
             $('#formAltArmario #nomeInterno').val("");
             $('#formAltArmario #nomeExterno').val("");
             $('.opcoesConfirmacao').css('display', 'none');
-            alertas('Armário atualizado com sucesso', '#AlteraArmario', 'alert_sucess');
+            alertas('Armário atualizado com sucesso', '#AlteraArmario', 'alert_sucess', 'true');
         },
         error: function (d) {
             alertas("Houve um problema para atualizar o armário", '#AlteraArmario', 'alert_danger');

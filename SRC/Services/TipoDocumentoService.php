@@ -22,6 +22,12 @@ class TipoDocumentoService  extends SistemaServices
         }
     }
 
+    public function BuscarTipoDocumento(array $tipoDoc): int
+    {
+        $repository = new TipoDocumentoRepository($this->Conexao());
+        return $repository->BuscarTipoDocumento($tipoDoc);
+    }
+
     public function listaTipoDocumento(): array
     {
         try {

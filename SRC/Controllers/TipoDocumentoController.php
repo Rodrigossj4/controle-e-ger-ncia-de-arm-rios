@@ -27,7 +27,6 @@ class TipoDocumentoController extends Controller
 
    public function cadastrarTipodocumento()
    {
-
       if (strlen(filter_input(INPUT_POST, 'desctipo')) < 1) {
          http_response_code(500);
          return "Todos os campos são obrigatórios";
@@ -40,6 +39,11 @@ class TipoDocumentoController extends Controller
          ));
 
          $service = new TipoDocumentoService();
+
+         if ($service->BuscarTipoDocumento($tipoDocList) > 0) {
+            http_response_code(500);
+            return "Já existe um Tipo de documento com esse nome cadastrado";
+         }
 
          if ($service->cadastrarTipoDocumento($tipoDocList)) {
             http_response_code(200);

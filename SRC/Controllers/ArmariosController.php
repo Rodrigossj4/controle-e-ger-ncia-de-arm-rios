@@ -38,6 +38,10 @@ class ArmariosController extends Controller
          ));
 
          $service = new ArmarioServices();
+         if ($service->BuscarArmario($armariosList) > 0) {
+            http_response_code(500);
+            return "Já existe um armario com esse nome cadastrado";
+         }
 
          if ($service->cadastrarArmarios($armariosList)) {
             http_response_code(200);
