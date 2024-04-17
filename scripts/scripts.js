@@ -938,6 +938,8 @@ $(document).on('click', '#btnNaoConfirmaIndexarDocumento', function (e) {
 
 var dadosDocumento = "";
 var docBase64 = "";
+var docAtual = ""
+var docBase64Atual = "";
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
 
@@ -949,13 +951,13 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         contentType: false,
         success: function (data) {
             //console.log(data);
-            dadosDocumento = data;
+            //dadosDocumento = data;
             // if (($("input[name='origemDoc']").val() == "imgToPdf") || ($('#AssinaDocumentos').prop('checked')))
-            assinarDocumentos(data);
-
-            //criptgrafarDocumento(data);
-            //armazenaDocumentos(data);
-
+            var ArrayDocumentos = JSON.parse(data);
+            ArrayDocumentos.forEach(doc => {
+                dadosDocumento = JSON.stringify(doc);
+                assinarDocumentos(dadosDocumento);
+            });
 
         },
         error: function (d) {
@@ -966,112 +968,114 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 });
 
 function assinarDocumentos(documentos) {
-    console.log("Rotina de assinar");
+    console.log("Rotina de assinar: ");
     var ArrayDocumentos = JSON.parse(documentos);
-    ArrayDocumentos.forEach(doc => {
-        $.ajax({
-            type: 'GET',
-            url: "/converter-base64?caminho=" + doc["arquivo"],
-            data: "",
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                $('#assinarPdf #content-value').val(data.replace(/[\\"]/g, ''));
-                prettyCommandSign();
-                $('#assinarPdf').submit();
-                doc["b64"] = data;
-                docBase64 = data;
-                /*atualizarArquivo(JSON.stringify({
-                    arquivoOriginal: doc["arquivo"],
-                    arquivoOriginalB64: data.replace(/[\\"]/g, ''),
-                    arquivoB64: $('#assinatura').val().replace(/[\\"]/g, ''),
-                }, null, 2));*/
-            },
-            error: function (d) {
-                retorno == "Não foi possivel converter";
-            }
-        });
+
+    $.ajax({
+        type: 'GET',
+        url: "/converter-base64?caminho=" + ArrayDocumentos["arquivo"],
+        data: "",
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            $('#assinarPdf #content-value').val(data.replace(/[\\"]/g, ''));
+            $('#assinarPdf #objetoAtual').val(documentos);
+            prettyCommandSign();
+            $('#assinarPdf').submit();
+            ArrayDocumentos["b64"] = data;
+            docBase64 = data;
+        },
+        error: function (d) {
+            retorno == "Não foi possivel converter";
+        }
     });
+
 }
 
 $(document).ready(function () {
     $('#assinatura').change(function () {
         var valorInput = $(this).val();
         if (valorInput !== '') {
+            docAtual = $('#objetoAtual').val();
+            docBase64Atual = $(this).val();
+            //console.log(dadosDocumento);
+
             finalizarAssinatura(function () {
-                console.log(dadosDocumento);
-                criptgrafarDocumento(dadosDocumento);
-                armazenaDocumentos(dadosDocumento);
-                alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
+                console.log("Terminou: " + docAtual);
                 setTimeout(function () {
                     location.reload();
                 }, 3000);
+
             });
+
+            finalizarCriptografia(function () {
+                //console.log("Terminou: " + docAtual);
+
+            });
+            alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
         }
     });
 });
-/*function finalizarAssinatura() {
-    var ArrayDocumentos = JSON.parse(dadosDocumento);
-    ArrayDocumentos.forEach(doc => {
-        atualizarArquivo(JSON.stringify({
-            arquivoOriginal: doc["arquivo"],
-            arquivoOriginalB64: docBase64.replace(/[\\"]/g, ''),
-            arquivoB64: $('#assinatura').val().replace(/[\\"]/g, ''),
-        }, null, 2));
-    });
 
-    //armazenaDocumentos(dadosDocumento);
-    /*alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
-       setTimeout(function () {
-           location.reload();
-       }, 3000);*/
-//});
-//}
 function finalizarAssinatura(callback) {
-    var ArrayDocumentos = JSON.parse(dadosDocumento);
-    ArrayDocumentos.forEach(doc => {
-        atualizarArquivo(JSON.stringify({
-            arquivoOriginal: doc["arquivo"],
-            arquivoOriginalB64: doc["b64"].replace(/[\\"]/g, ''),
-            arquivoB64: $('#assinatura').val().replace(/[\\"]/g, ''),
-        }, null, 2));
-    });
+    var ArrayDocumentos = JSON.parse(docAtual);
+    //console.log("atual: " + ArrayDocumentos["arquivo"]);
+    //console.log("atualB64: " + docBase64Atual);
+    atualizarArquivo(JSON.stringify({
+        arquivoOriginal: ArrayDocumentos["arquivo"],
+        arquivoOriginalB64: ArrayDocumentos["b64"].replace(/[\\"]/g, ''),
+        arquivoB64: docBase64Atual.replace(/[\\"]/g, ''),
+    }, null, 2));
+
     setTimeout(function () {
         callback();
     }, 2000);
+    console.log("Rotina de assinatura finalizada ");
+    //finalizarCriptografia(docAtual);
 }
+
+function finalizarCriptografia(callback) {
+    criptgrafarDocumento(docAtual);
+    setTimeout(function () {
+        callback();
+    }, 3000);
+    console.log("Rotina de criptografia finalizada ");
+    armazenaDocumentos(docAtual);
+}
+
 
 function criptgrafarDocumento(documentos) {
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
     console.log("Rotina de criptografar");
     var ArrayDocumentos = JSON.parse(documentos);
-    //console.log(ArrayDocumentos);
-    ArrayDocumentos.forEach(doc => {
-        $('#tratandoDocumento').val(doc["arquivo"]);
-        //console.log("arquivo para cifrar: ".doc);
-        $.ajax({
-            type: 'GET',
-            url: "/criptografar-pdfs?caminho=" + doc["arquivo"],
-            data: formdata,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                //console.log(data);
-                console.log('Processo concluido');
-            },
-            error: function (d) {
-                console.log('erro ao carregar arquivos ' + d);
-            }
-        });
+    //console.log(ArrayDocumentos["arquivo"]);
+
+    $('#tratandoDocumento').val(ArrayDocumentos["arquivo"]);
+    // console.log("arquivo para cifrar: " + ArrayDocumentos["arquivo"]);
+    $.ajax({
+        type: 'GET',
+        url: "/criptografar-pdfs?caminho=" + ArrayDocumentos["arquivo"],
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+            console.log('Processo  concluido');
+
+        },
+        error: function (d) {
+            console.log('erro ao carregar arquivos ' + d);
+        }
     });
+    console.log("Fim da Rotina de criptografar");
 }
 
 function armazenaDocumentos(documentos) {
-    console.log("Rotina de armazenar");
+    console.log("Rotina de armazenar ");
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
     var ArrayDocumentos = JSON.parse(documentos);
     // $('#tratandoDocumento').val(documentos);
-
+    //console.log('arma: ' + documentos);
     $.ajax({
         type: 'POST',
         url: "/carregar-arquivos-servidor",

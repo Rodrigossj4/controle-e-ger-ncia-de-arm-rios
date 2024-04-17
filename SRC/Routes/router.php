@@ -97,7 +97,8 @@ class Router
                 '/Indexar' => fn () => self::load('DocumentoController', 'Indexar'),
                 '/retorna-pdfs' => fn () => self::load('DocumentoController', 'retornaPdfs'),
                 '/carregar-arquivos-servidor' => fn () => self::load('DocumentoController', 'carregarArquivosServidor'),
-                '/atualizar-arquivo-assinado' => fn () => self::load('DocumentoController', 'base64ArquivoPDF')
+                '/atualizar-arquivo-assinado' => fn () => self::load('DocumentoController', 'base64ArquivoPDF'),
+                '/FinalizarArquivo' => fn () => self::load('DocumentoController', 'finalizarArquivo')
             ]
         ];
     }

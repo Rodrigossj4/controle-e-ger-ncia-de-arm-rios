@@ -423,34 +423,68 @@ class DocumentoServices extends SistemaServices
 
     public function carregarArquivoservidor(string $arquivos): string
     {
-        //var_dump($arquivos);
+
         $repository = new DocumentoRepository($this->Conexao());
         $pasta = $this->gerarPasta();
-        $documentos = json_decode(file_get_contents('php://input'));
+        $documentos = json_decode($arquivos);
         //var_dump("ei: " . pathinfo($documentos[0]->arquivo)['dirname']);
+        //var_dump($documentos->arquivo);
 
-        foreach ($documentos as $values) {
 
-            //var_dump($values);
-            $origem = $values->arquivo;
-            //var_dump($origemOcr);
-            $caminho = $this->subirArquivoss($pasta, $origem);
+        //var_dump($values);
+        $origem = $documentos->arquivo;
+        //var_dump($origem);
+        $caminho = $this->subirArquivoss($pasta, $origem);
 
-            $paginasList = [];
-            array_push($paginasList, array(
-                'documentoid' =>  $values->documentoid,
-                'volume' => "1",
-                'numpagina' => 1,
-                'codexp' => 1,
-                'arquivo' => $caminho,
-                'filme' => "1",
-                'fotograma' => "1",
-                'imgencontrada' => "1"
-            ));
-            $repository->cadastrarPagina($paginasList);
-        }
+        $paginasList = [];
+        array_push($paginasList, array(
+            'documentoid' =>  $documentos->documentoid,
+            'volume' => "1",
+            'numpagina' => 1,
+            'codexp' => 1,
+            'arquivo' => $caminho,
+            'filme' => "1",
+            'fotograma' => "1",
+            'imgencontrada' => "1"
+        ));
+        $repository->cadastrarPagina($paginasList);
 
-        $caminhoRaiz = pathinfo($documentos[0]->arquivo)['dirname'];
+
+        $caminhoRaiz = pathinfo($documentos->arquivo)['dirname'];
+
+        //array_map('unlink', glob("$caminhoRaiz/*.*"));
+        //rmdir("{$caminhoRaiz}");
+
+
+        return $pasta;
+    }
+
+    public function carregarArquivoservidor2(string $arquivos, string $documentoid): string
+    {
+        // var_dump($arquivos);
+        $repository = new DocumentoRepository($this->Conexao());
+        $pasta = $this->gerarPasta();
+
+        //var_dump("ei: " . pathinfo($documentos[0]->arquivo)['dirname']);
+        $origem = $arquivos;
+        //var_dump($origemOcr);
+        $caminho = $this->subirArquivoss($pasta, $origem);
+
+        $paginasList = [];
+        array_push($paginasList, array(
+            'documentoid' =>  $documentoid,
+            'volume' => "1",
+            'numpagina' => 1,
+            'codexp' => 1,
+            'arquivo' => $caminho,
+            'filme' => "1",
+            'fotograma' => "1",
+            'imgencontrada' => "1"
+        ));
+        $repository->cadastrarPagina($paginasList);
+
+
+        $caminhoRaiz = pathinfo($arquivos)['dirname'];
 
         array_map('unlink', glob("$caminhoRaiz/*.*"));
         rmdir("{$caminhoRaiz}");
@@ -458,7 +492,6 @@ class DocumentoServices extends SistemaServices
 
         return $pasta;
     }
-
     private function gerarOcrs(string $caminhoArq): string
     {
         $pasta = random_int(1, 999999);

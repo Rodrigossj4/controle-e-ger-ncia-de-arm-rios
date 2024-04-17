@@ -151,6 +151,7 @@ class DocumentoController extends Controller
     public function carregarArquivosServidor()
     {
 
+        //var_dump(file_get_contents('php://input'));
         $service = new DocumentoServices();
         $caminho = $service->carregarArquivoservidor(file_get_contents('php://input'));
         echo $caminho;
@@ -214,6 +215,20 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         $service->excluirPagina($arquivo->idPagina);
         return true;
+    }
+
+    public function finalizarArquivo()
+    {
+        //var_dump(file_get_contents('php://input'));
+        $Arquivos = json_decode(file_get_contents('php://input'));
+        $service = new DocumentoServices();
+
+        foreach ($Arquivos as $values) {
+            var_dump($values->arquivo);
+            $service->criptografarArquivo($values->arquivo);
+            $service->carregarArquivoservidor2($values->arquivo, $values->documentoid);
+        }
+        //echo $Arquivos;
     }
 
     public function alterarPagina(): bool

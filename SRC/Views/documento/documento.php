@@ -199,6 +199,7 @@ $numPag = 1;
                   <input id="input-file" type="file" id="arquivo" name="arquivo" value="$paginasList.firstOrDefault()" onchange="convertToBase64();" />
                 </div>
                 <div class="form-group">
+                  <input type="text" id="objetoAtual" name="objetoAtual" value="">
                   <label for="content-value">Conteúdo do PDF (Base 64)</label>
                   <textarea id="content-value" class="form-control" rows="5" disabled></textarea>
                 </div>
