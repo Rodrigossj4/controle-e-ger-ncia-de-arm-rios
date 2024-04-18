@@ -310,9 +310,9 @@ class DocumentoServices extends SistemaServices
         if ($cifrado == "true") {
 
             $encrypted_code = file_get_contents($caminhoarquivo);
-            $decrypted_code = $this->my_decrypt($encrypted_code, $this->key);
+            //$decrypted_code = $this->my_decrypt($encrypted_code, $this->key);
 
-            file_put_contents('documentos/ttt.pdf', $decrypted_code);
+            file_put_contents('documentos/ttt.pdf', $encrypted_code);
             return "documentos/ttt.pdf";
         } else {
             file_put_contents('documentos/ttt.pdf', file_get_contents($caminhoarquivo));

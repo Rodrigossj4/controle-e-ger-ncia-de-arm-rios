@@ -43,7 +43,7 @@ class UsuarioRepository extends LogRepository
         }
     }
 
-    public function cadastrarUsuario(array $usuario): bool
+    public function cadastrarUsuario(array $usuario)
     {
         try {
             var_dump($usuario);
@@ -117,6 +117,24 @@ class UsuarioRepository extends LogRepository
         } catch (Exception $e) {
             echo $e;
             return false;
+        }
+    }
+
+    public function totalUsuariosPerfil(int $idPerfil): int
+    {
+        try {
+            $sqlQuery = "SELECT count(\"IdUsuario\") as \"totalUsuario\" FROM  {$this->schema}\"Usuarios\" WHERE \"PerfilUsuario\" = '$idPerfil';";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->execute();
+
+            $usuariosDataList = $stmt->fetchAll();
+
+            // var_dump($usuariosDataList['0']['totalUsuario']);
+
+            return $usuariosDataList['0']['totalUsuario'];
+        } catch (Exception $e) {
+            echo $e;
+            return 1;
         }
     }
 }

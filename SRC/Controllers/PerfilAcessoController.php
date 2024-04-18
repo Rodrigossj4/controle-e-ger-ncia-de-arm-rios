@@ -5,6 +5,7 @@ namespace Marinha\Mvc\Controllers;
 
 use Exception;
 use Marinha\Mvc\Services\PerfilAcessoServices;
+use Marinha\Mvc\Services\UsuarioServices;
 
 class PerfilAcessoController extends Controller
 {
@@ -21,16 +22,34 @@ class PerfilAcessoController extends Controller
       require __DIR__ . '../../Views/perfis/index.php';
    }
 
-   public function cadastrar(): bool
+   public function cadastrar()
    {
-      $perfilList = array();
-      array_push($perfilList, array(
-         'nomeperfil' => filter_input(INPUT_POST, 'nomePerfil')
-      ));
+      if (strlen(filter_input(INPUT_POST, 'nomePerfil')) < 1) {
+         http_response_code(500);
+         return "Todos os campos são obrigatórios";
+      }
 
-      $service = new PerfilAcessoServices();
+      try {
+         $perfilList = array();
+         array_push($perfilList, array(
+            'nomeperfil' => filter_input(INPUT_POST, 'nomePerfil')
+         ));
 
-      return $service->cadastrarPerfis($perfilList);
+         $service = new PerfilAcessoServices();
+
+         if ($service->BuscarPerfil($perfilList) > 0) {
+            http_response_code(500);
+            return "Já existe um perfil com esse nome cadastrado";
+         }
+
+         if ($service->cadastrarPerfis($perfilList)) {
+            http_response_code(200);
+            return "Armario Cadastrado";
+         }
+      } catch (Exception) {
+         http_response_code(500);
+         return "Houve um problema para cadastrar o novo perfil";
+      }
    }
 
    public function listar()
@@ -54,10 +73,24 @@ class PerfilAcessoController extends Controller
       return true;
    }
 
-   public function excluir(): bool
+   public function excluir()
    {
-      $service = new PerfilAcessoServices();
-      $service->excluir(filter_input(INPUT_POST, 'id'));
-      return true;
+      try {
+         $service = new PerfilAcessoServices();
+         $Usuarioservice = new UsuarioServices();
+
+         if ($Usuarioservice->totalUsuariosPerfil(filter_input(INPUT_POST, 'id')) != 0) {
+            http_response_code(500);
+            return "Existem usuários com esse perfil. Exclua antes.";
+         }
+
+         if ($service->excluir(filter_input(INPUT_POST, 'id'))) {
+            http_response_code(200);
+            return "Perfil Cadastrado com sucesso";
+         }
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para excluir o perfil";
+      }
    }
 }

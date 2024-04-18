@@ -103,4 +103,21 @@ class PerfilAcessoRepository extends LogRepository
             return false;
         }
     }
+
+    public function BuscarPerfil(array $perfilList): int
+    {
+        $perfil = $perfilList['0']["nomeperfil"];
+        try {
+            $sqlQuery = "SELECT * FROM {$this->schema}\"PerfilUsuario\" WHERE LOWER(\"DescPerfil\") = LOWER('$perfil');";
+            //var_dump($sqlQuery);
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->execute();
+
+            $armariosDataList = $stmt->fetchAll();
+            return count($armariosDataList);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
 }

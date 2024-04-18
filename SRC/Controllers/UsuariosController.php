@@ -28,21 +28,46 @@ class UsuariosController  extends Controller
       require __DIR__ . '../../Views/usuarios/index.php';
    }
 
-   public function cadastrar(): bool
+   public function cadastrar()
    {
-      $usuariosList = array();
       $funcoes = new Helppers();
-      array_push($usuariosList, array(
-         'codusuario' => filter_input(INPUT_POST, 'codusuario'),
-         'nomeusuario' => filter_input(INPUT_POST, 'nomeusuario'),
-         'nip' => $funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')),
-         'senhausuario' => filter_input(INPUT_POST, 'senhausuario'),
-         'idacesso' => filter_input(INPUT_POST, 'idacesso')
-      ));
 
-      $service = new UsuarioServices();
+      if (strlen(filter_input(INPUT_POST, 'nomeusuario')) < 1 || strlen(filter_input(INPUT_POST, 'nip')) < 1 || strlen(filter_input(INPUT_POST, 'senhausuario')) < 1 || filter_input(INPUT_POST, 'idacesso') == 0) {
+         http_response_code(500);
+         return "Todos os campos são obrigatórios";
+      }
 
-      return $service->cadastrarUsuario($usuariosList);
+      if (!$funcoes->validarNip($funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')))) {
+         http_response_code(500);
+         return "Nip inválido";
+      }
+
+      if (!$funcoes->validarSenha(filter_input(INPUT_POST, 'senhausuario'))) {
+         http_response_code(500);
+         return "Senha inválida";
+      }      
+
+      try {
+
+         $usuariosList = array();;
+         array_push($usuariosList, array(
+            'codusuario' => filter_input(INPUT_POST, 'codusuario'),
+            'nomeusuario' => filter_input(INPUT_POST, 'nomeusuario'),
+            'nip' => $funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')),
+            'senhausuario' => filter_input(INPUT_POST, 'senhausuario'),
+            'idacesso' => filter_input(INPUT_POST, 'idacesso')
+         ));
+
+         $service = new UsuarioServices();
+
+         if ($service->cadastrarUsuario($usuariosList)) {
+            http_response_code(200);
+            return "Usuário Cadastrado";
+         }
+      } catch (Exception) {
+         http_response_code(500);
+         return "Houve um problema para cadastrar o usuário";
+      }
    }
    public function listar()
    {

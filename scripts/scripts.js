@@ -491,6 +491,11 @@ function carregarPerfis() {
 $('#formCadPerfil #btnCadPerfil').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadPerfil']")[0]);
 
+    if (($('#formCadPerfil #nomePerfil').val() == "")) {
+        alertas("Todos os campos do formulário são obrigatórios", '#modCadPerfil', 'alert_danger');
+        return false;
+    }
+
     $.ajax({
         type: 'POST',
         url: "/cadastrarPerfil",
@@ -504,7 +509,7 @@ $('#formCadPerfil #btnCadPerfil').on('click', function (e) {
             alertas('Perfil cadastrado com sucesso', '#modCadPerfil', 'alert_sucess');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#modCadPerfil', 'alert_danger');
+            alertas('Houve um problema para cadastrar esse perfil', '#modCadPerfil', 'alert_danger');
         }
     });
 });
@@ -521,6 +526,11 @@ $(document).on('click', '#exibConfirmaAlteracaoPerfil', function (e) {
 
 $(document).on('click', '#btnConfirmaAlteracaoPerfil', function (e) {
     var formdata = new FormData($("form[id='formAltPerfil']")[0]);
+
+    if (($('#formAltPerfil #nomeperfil').val() == "")) {
+        alertas("Todos os campos do formulário são obrigatórios", '#AlteraPerfil', 'alert_danger');
+        return false;
+    }
 
     $.ajax({
         type: 'POST',
@@ -558,12 +568,13 @@ $(document).on('click', '.btnConfirmaExcluirPerfil', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            //console.log(d);
             carregarPerfis();
             $(this).data("id", "");
             alertas('Perfil excluído com sucesso', '#modexcluirPerfil', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#modexcluirPerfil', 'alert_danger');
+            alertas('Não foi possível excluir o perfil. Verifique se existem usuários ativos.', '#modexcluirPerfil', 'alert_danger', 'true');
         }
     }
     );
@@ -593,8 +604,25 @@ function carregarUsuarios() {
         }
     });
 }
+
 $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadUsuario']")[0]);
+
+    if (($('#formCadUsuario #nomeusuario').val() == "") || ($('#formCadUsuario #nip').val() == "") || ($('#formCadUsuario #senhausuario').val() == "") || ($('#formCadUsuario #idacesso').val() == 0)) {
+        alertas("Todos os campos do formulário são obrigatórios", '#modCadUsuario', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadUsuario #nip').val().replace(/[^\d]+/g, '').length != 8)) {
+        alertas("Campo NIP inválido", '#modCadUsuario', 'alert_danger');
+        return false;
+    }
+
+    if (!validarSenha($('#formCadUsuario #senhausuario').val())) {
+        console.log($('#formCadUsuario #senhausuario').val());
+        alertas("A senha não atende ao requisitos mínimos", '#modCadUsuario', 'alert_danger');
+        return false;
+    }
 
     $.ajax({
         type: 'POST',
@@ -604,6 +632,7 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
+            console.log(d);
             carregarUsuarios();
             $('#formCadUsuario #nomeusuario').val("");
             $('#formCadUsuario #nip').val("");
@@ -612,7 +641,7 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
             alertas('Usuario cadastrado com sucesso', '#modCadUsuario', 'alert_sucess');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#modCadUsuario', 'alert_danger');
+            alertas(d, '#modCadUsuario', 'alert_danger');
         }
     });
 });
@@ -994,6 +1023,9 @@ function assinarDocumentos(documentos) {
 }
 
 $(document).ready(function () {
+
+    
+
     $('#assinatura').change(function () {
         var valorInput = $(this).val();
         if (valorInput !== '') {
@@ -1006,9 +1038,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     location.reload();
                 }, 3000);
-
             });
-
             finalizarCriptografia(function () {
                 //console.log("Terminou: " + docAtual);
 
@@ -1036,12 +1066,13 @@ function finalizarAssinatura(callback) {
 }
 
 function finalizarCriptografia(callback) {
-    criptgrafarDocumento(docAtual);
+    //criptgrafarDocumento(docAtual);
+    armazenaDocumentos(docAtual);
     setTimeout(function () {
         callback();
     }, 3000);
     console.log("Rotina de criptografia finalizada ");
-    armazenaDocumentos(docAtual);
+
 }
 
 
@@ -1196,5 +1227,19 @@ $(document).ready(function () {
 
 });
 
+function validarSenha(senha) {
+    // Verifica se a senha tem pelo menos 10 caracteres
+    if (senha.length < 10) {
+        return false;
+    }
+
+    // Verifica se a senha possui pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial
+    if (!/[A-Z]/.test(senha) || !/[a-z]/.test(senha) || !/[0-9]/.test(senha) || !/[^A-Za-z0-9]/.test(senha)) {
+        return false;
+    }
+
+    // Se a senha passar por todas as verificações, é considerada válida
+    return true;
+}
 
 
