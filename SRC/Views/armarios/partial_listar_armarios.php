@@ -17,5 +17,5 @@
             </form>
         </td>
     </tr>
-<?php $numPag++;
+<?php
 endforeach; ?>
