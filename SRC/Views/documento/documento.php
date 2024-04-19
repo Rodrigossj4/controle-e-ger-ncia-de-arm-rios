@@ -188,7 +188,7 @@ $numPag = 1;
         </div>
 
         <div class="row col-12">
-          <div class="panel panel-default" style="display: block;">
+          <div class="panel panel-default" style="display: none;">
             <div class="panel-heading">
               <h3 class="panel-title">Assinar PDF</h3>
             </div>

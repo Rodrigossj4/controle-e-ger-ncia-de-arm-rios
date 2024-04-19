@@ -22,8 +22,7 @@ function carregarArmarios() {
             var sel = $("#gradeArmarios");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeexterno + '</div><div class="acoes"><form id="formGerenciarArmario" name="formGerenciarArmario"><input type="hidden" name="idArmario" id="idArmario" value="' + e.id + '" /><input type="button" class="btn btn-primary btnGerenciarArmario" data-bs-toggle="modal" data-bs-target="#GerenciarArmario" data-id="' + e.id + '" value="Gerenciar"></form><button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="' + e.id + '" data-ni="' + e.nomeinterno + '" data-ne="' + e.nomeexterno + '" data-cd="' + e.codigo + '">Editar</button><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idArmario" name="idArmario" value="' + e.id + '" ><button class="btn btn-danger excluir" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button></form></div></div>');
-
+                sel.append('<tr><td>' + e.nomeexterno + '</td><td><form id="formGerenciarArmario" name="formGerenciarArmario"><input type="hidden" name="idArmario" id="idArmario" value="' + e.id + '" /><input type="button" class="btn btn-primary btnGerenciarArmario" data-bs-toggle="modal" data-bs-target="#GerenciarArmario" data-id="' + e.id + '" value="Gerenciar"></form></td><td><button class="btn btn-warning btnAlterarArmario" data-bs-toggle="modal" data-bs-target="#AlteraArmario" data-id="' + e.id + '" data-ni="' + e.nomeinterno + '" data-ne="' + e.nomeexterno + '" data-cd="' + e.codigo + '">Editar</button></td><td><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idArmario" name="idArmario" value="' + e.id + '"><button class="btn btn-danger excluir" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#ExcluirArmario" type="button">Excluir</button></form></td></tr>');
             });
         },
         error: function (data) {
@@ -80,11 +79,13 @@ function carregarTipoDocVincArmarios(id) {
         contentType: 'application/json',
         cache: false,
         success: function (data) {
+            //console.log(data);
+
             var sel = $("#GradeTipoDocArmario");
             sel.empty();
             data.forEach(e => {
                 //sel.append('<div><div>' + e.desctipo + 'Nome</div><div><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ConfDesArmTipoDoc"" data-idArm="' + e.idArmario + '" data-idDoc="' + e.id + '" >Excluir Relação</button></div></div>')
-                sel.append('<div><div>' + e.desctipo + '</div></div>');
+                sel.append('<tr><td>' + e.desctipo + '</td><td><button class="btn btn-danger desvincularTipoDocArmario" data-bs-toggle="modal" data-bs-target="#ConfDesArmTipoDoc" data-id="' + e.id + '" data-ArmarioId="' + id + '">Excluir Relação</button></td></tr>');
             });
         },
         error: function (data) {
@@ -93,26 +94,61 @@ function carregarTipoDocVincArmarios(id) {
     });
 
 }
-
-$('.btnGerenciarArmario').on('click', function (e) {
+function carregarTipoDocNaoVincArmarios(id) {
     var formdata = new FormData($("form[id='formGerenciarArmario']")[0]);
-    $('#formListaDocumentos #IdArmario').val($(this).data("id"));
-    carregarTipoDocVincArmarios($(this).data("id"));
     $.ajax({
         type: 'GET',
-        url: "/gerenciar-documentos-armarios",
+        url: "/listarTipoDocumentosNaoPertencentesArmario?id=" + id,
         data: formdata,
         processData: false,
         dataType: 'json',
         contentType: 'application/json',
         success: function (d) {
             var sel = $("#GerenciarArmario #formListaDocumentos select");
+            sel.empty();
             d.forEach(e => {
                 sel.append('<option value="' + e.id + '">' + e.desctipo + '</option>');
             });
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
+        }
+    });
+}
+
+$('.btnGerenciarArmario').on('click', function (e) {
+    carregarTipoDocNaoVincArmarios($(this).data("id"));
+    $('#formListaDocumentos #IdArmario').val($(this).data("id"));
+    carregarTipoDocVincArmarios($(this).data("id"));
+});
+
+$(document).on('click', '#GradeTipoDocArmario .desvincularTipoDocArmario', function (e) {
+    $('#formDesArmTipoDoc #idTipoDoc').val($(this).data("id"));
+    $('#formDesArmTipoDoc #idArmario').val($(this).data("armarioid"));
+});
+
+$(document).on('click', '#btnConfirmaDesArmTipoDoc', function (e) {
+    dados = JSON.stringify({
+        idArmario: $('#formDesArmTipoDoc #idArmario').val(),
+        idTipoDoc: $('#formDesArmTipoDoc #idTipoDoc').val(),
+    }, null, 2)
+
+    $.ajax({
+        type: 'POST',
+        url: "/ExcluiVinculoArmaTipoDoc",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+            carregarTipoDocNaoVincArmarios($('#formDesArmTipoDoc #idArmario').val());
+            $('#formListaDocumentos #IdArmario').val($('#formDesArmTipoDoc #idArmario').val());
+            carregarTipoDocVincArmarios($('#formDesArmTipoDoc #idArmario').val());
+            alertas('Vinculo Excluido com sucesso', '#ConfDesArmTipoDoc', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#ConfDesArmTipoDoc', 'alert_danger');
+            console.log('erro ao excluir ' + d);
         }
     });
 });
@@ -126,8 +162,10 @@ $('.vincArmarioTipoDoc').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            carregarTipoDocNaoVincArmarios($('#formListaDocumentos #IdArmario').val());
             carregarTipoDocVincArmarios($('#formListaDocumentos #IdArmario').val());
-            alertas('Sucesso', '#modCadArmario', 'alert_sucess');
+
+            alertas('Armário e documento vinculados com sucesso', '#GerenciarArmario', 'alert_sucess');
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
@@ -192,12 +230,13 @@ $(document).on('click', '.btnConfirmaExcluirArmario', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            console.log(d);
             carregarArmarios();
             $(this).data("id", "");
             alertas('Armario excluído com sucesso', '#ExcluirArmario', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas("Houve um problema para excluir o armário", '#ExcluirArmario', 'alert_danger');
+            alertas("Houve um problema para excluir o armário. Verifique se existem tipo de documentos vinculados a ele antes de excluir.", '#ExcluirArmario', 'alert_danger', 'true');
         }
     }
     );
@@ -1024,7 +1063,7 @@ function assinarDocumentos(documentos) {
 
 $(document).ready(function () {
 
-    
+
 
     $('#assinatura').change(function () {
         var valorInput = $(this).val();

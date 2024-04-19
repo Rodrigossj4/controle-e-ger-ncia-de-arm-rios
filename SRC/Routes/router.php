@@ -45,6 +45,7 @@ class Router
                 '/gerenciar-documentos' => fn () => self::load('DocumentoController', 'index'),
                 '/listarPaginas' => fn () => self::load('DocumentoController', 'listarPaginas'),
                 '/listarTipoDocumentosArmario' => fn () => self::load('TipoDocumentoController', 'listarTipoDocumentoArmarios'),
+                '/listarTipoDocumentosNaoPertencentesArmario' => fn () => self::load('TipoDocumentoController', 'listarTipoDocumentoNaoPertencentesArmarios'),
                 '/retornarCaminhoDocumento' => fn () => self::load('DocumentoController', 'retornarCaminhoDocumento'),
                 '/visualizarDocumento' => fn () => self::load('DocumentoController', 'visualizarDocumento'),
                 '/visualizarDocumentoLote' => fn () => self::load('DocumentoController', 'visualizarDocumentoLote'),
@@ -98,7 +99,8 @@ class Router
                 '/retorna-pdfs' => fn () => self::load('DocumentoController', 'retornaPdfs'),
                 '/carregar-arquivos-servidor' => fn () => self::load('DocumentoController', 'carregarArquivosServidor'),
                 '/atualizar-arquivo-assinado' => fn () => self::load('DocumentoController', 'base64ArquivoPDF'),
-                '/FinalizarArquivo' => fn () => self::load('DocumentoController', 'finalizarArquivo')
+                '/FinalizarArquivo' => fn () => self::load('DocumentoController', 'finalizarArquivo'),
+                '/ExcluiVinculoArmaTipoDoc' => fn () => self::load('ArmariosController', 'desvincularDocumentos')
             ]
         ];
     }

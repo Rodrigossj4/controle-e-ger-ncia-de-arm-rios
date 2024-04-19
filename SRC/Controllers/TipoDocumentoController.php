@@ -64,14 +64,27 @@ class TipoDocumentoController extends Controller
 
    public function listarTipoDocumentoArmarios()
    {
+      try {
+         $idArmario = filter_input(INPUT_GET, 'id');
+         header('Content-Type: application/json; charset=utf-8');
+         $service = new TipoDocumentoService();
+         //var_dump("teste");
+         echo json_encode($service->listaTipoDocumentoArmario($idArmario));
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema";
+      }
+   }
+
+   public function listarTipoDocumentoNaoPertencentesArmarios()
+   {
       $idArmario = filter_input(INPUT_GET, 'id');
+      //var_dump($idArmario);
       header('Content-Type: application/json; charset=utf-8');
       $service = new TipoDocumentoService();
 
-
-      echo json_encode($service->listaTipoDocumentoArmario($idArmario));
+      echo json_encode($service->listarTipoDocumentoNaoPertencentesArmario($idArmario));
    }
-
    public function alterar()
    {
       if (strlen(filter_input(INPUT_POST, 'descTipoDoc')) < 1) {

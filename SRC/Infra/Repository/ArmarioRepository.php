@@ -19,7 +19,7 @@ class ArmarioRepository extends LogRepository
     public function listaArmarios(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\";";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\"  order by \"NomeExterno\" asc;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
@@ -79,6 +79,24 @@ class ArmarioRepository extends LogRepository
 
             $stmt->bindValue(1, $armario[0]['id']);
             $stmt->bindValue(2, $armario[0]['idTipoDocumento']);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+    public function desvincularDocumentos(int $idDoc, int $idArmario): bool
+    {
+        try {
+
+            $sqlQuery = "Delete from {$this->schema}\"ArmarioTipoDocumento\" where \"IdArmario\" = ? and  \"IdTipoDoc\" = ? ;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+
+            $stmt->bindValue(1, $idArmario);
+            $stmt->bindValue(2, $idDoc);
             $stmt->execute();
 
             return true;

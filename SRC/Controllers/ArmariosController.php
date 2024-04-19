@@ -73,12 +73,21 @@ class ArmariosController extends Controller
          'id' => filter_input(INPUT_POST, 'IdArmario'),
          'idTipoDocumento' => filter_input(INPUT_POST, 'listarDocumentos')
       ));
-      var_dump($vinculosList);
       $service->vincularDocumentos($vinculosList);
 
       return true;
    }
 
+   public function desvincularDocumentos()
+   {
+      //$this->validarSessao();
+      $service = new ArmarioServices();
+      $vinculosList = json_decode(file_get_contents('php://input'));
+      //var_dump($vinculosList);
+      $service->desvincularDocumentos($vinculosList->idTipoDoc, $vinculosList->idArmario);
+
+      return true;
+   }
    public function TipoDocsArmarios()
    {
       $this->validarSessao();
@@ -130,6 +139,13 @@ class ArmariosController extends Controller
    {
       try {
          $service = new ArmarioServices();
+         $tipoDocumentoService = new TipoDocumentoService();
+
+         if (Count($tipoDocumentoService->listaTipoDocumentoArmario(filter_input(INPUT_POST, 'id'))) != 0) {
+            http_response_code(500);
+            return "Existem Tipos de documentos vinculados a esse armário. Exclua antes.";
+         }
+
          if ($service->excluirArmario(filter_input(INPUT_POST, 'id'))) {
             http_response_code(200);
             return "Armario excluído Cadastrado";

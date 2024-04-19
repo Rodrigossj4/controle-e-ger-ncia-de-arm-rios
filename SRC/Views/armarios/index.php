@@ -6,39 +6,54 @@
 
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
-        <div class="col divisao_bottom form-control-padronizado" id="modCadArmario">
+        <div class="col-md-8 order-md-1 form-control-padronizado" id="modCadArmario">
             <h3>Cadastro de Armários</h3>
             <form method="post" id="formCadArmario" action="/cadastrarArmario">
-                <div class="form-group">
-                    <label class="col-form-label" for="codigo">Código: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="codigo" id="codigo">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="nomeInterno">Nome Interno: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomeInterno" id="nomeInterno">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="nomeExterno">Nome Externo: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomeExterno" id="nomeExterno">
-                </div>
-                <br>
-                <div class="form-group row">
-                    <div class="col-sm-3">
-                        <input type="button" id="btnCadArmario" value="Cadastrar" class="btn btn-primary">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="codigo">Código: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="codigo" id="codigo">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="nomeInterno">Nome Interno: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomeInterno" id="nomeInterno">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="nomeExterno">Nome Externo: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomeExterno" id="nomeExterno">
+                    </div>
+                    <br>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <input type="button" id="btnCadArmario" value="Cadastrar" class="btn btn-primary">
+                        </div>
                     </div>
                 </div>
             </form>
             <span class="alerta"></span>
         </div>
     </div>
+    <hr class="mb-4">
 </div>
 
-<div class="Container">
-    <div class="p-5 bg-body-tertiary rounded-3 row">
-        <div class="col">
+<div class="container">
+    <div class="bg-body-tertiary rounded-3 row">
+        <div class="col-md-8 order-md-1 form-control-padronizado">
             <h3>Gerenciamento de Armários</h3>
-            <div class="Grade" id="gradeArmarios">
-                <?php require_once "partial_listar_armarios.php" ?>
+            <div class="container">
+                <div class="row">
+                    <table class="table table-striped" id="listPaginas">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome do Armário</th>
+                                <th scope="col" colspan="4" style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id='gradeArmarios'>
+                            <?php require_once "partial_listar_armarios.php" ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -104,11 +119,27 @@
                     </select>
                     <input type="button" name="vincArmarioTipoDoc" id="vincArmarioTipoDoc" class="vincArmarioTipoDoc btn btn-primary" value="Vincular tipo de documento">
                 </form>
-                <span>Tipos de documentos do armario:</span>
-                <div id="GradeTipoDocArmario" name="GradeTipoDocArmario">
+                <hr class="mb-4">
+                <div class="container">
                     <div>
-                        <div>Nome</div>
-                        <div><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ConfDesArmTipoDoc" data-id="<?= $armario['id']; ?>">Excluir Relação</button></div>
+                        <div class="col-md-8 order-md-1 form-control-padronizado">
+                            <h5>Tipos de documentos do armario:</h5>
+                            <div class="container">
+                                <div class="row">
+                                    <table class="table table-striped" id="listPaginas">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Nome do Armário</th>
+                                                <th scope="col" style="text-align: center;">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id='GradeTipoDocArmario'>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <span class="alerta"></span>
@@ -154,8 +185,8 @@
                     <span>Deseja realmente excluir esse tipo de documento do Armario?</span>
                     <div class="col-sm-3">
                         <form id="formDesArmTipoDoc">
-                            <input type="hidden" name="idTipoDoc" id="idTipoDoc">
-                            <input type="hidden" name="idArmario" id="idArmario">
+                            <input type="hidden" name="idTipoDoc" id="idTipoDoc" value="">
+                            <input type="hidden" name="idArmario" id="idArmario" value="">
                         </form>
                         <input type="button" id="btnConfirmaDesArmTipoDoc" data-id="" value="Sim" class="btn btn-success btnConfirmaDesArmTipoDoc">
                     </div>

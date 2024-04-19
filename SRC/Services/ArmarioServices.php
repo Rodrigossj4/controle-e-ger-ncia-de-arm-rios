@@ -40,12 +40,23 @@ class ArmarioServices extends SistemaServices
         $repository = new ArmarioRepository($this->Conexao());
         return $repository->BuscarArmario($armario);
     }
-    
+
     public function vincularDocumentos(array $vinculosList): bool
     {
         try {
             $repository = new ArmarioRepository($this->Conexao());
             return $repository->vincularDocumentos($vinculosList);
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+    public function desvincularDocumentos(int $idDoc, int $idArmario): bool
+    {
+        try {
+            $repository = new ArmarioRepository($this->Conexao());
+            return $repository->desvincularDocumentos($idDoc, $idArmario);
         } catch (Exception $e) {
             echo $e;
             return false;
