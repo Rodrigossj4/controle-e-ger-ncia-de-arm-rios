@@ -28,6 +28,7 @@ if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6)
             <span></span>
             <span></span>
         </div>
+
         <ul>
             <li class="nav-item">
                 <a class="nav-link" href="/gerenciar-armarios">Gerencia de Armarios</a>
