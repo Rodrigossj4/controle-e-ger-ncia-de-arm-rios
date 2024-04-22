@@ -57,6 +57,13 @@ class DocumentoServices extends SistemaServices
             return [];
         }
     }
+
+    public function BuscarDocumentosPorTipo(int $idTipoDocumento): array
+    {
+        $repository = new DocumentoRepository($this->Conexao());
+        return $repository->BuscarDocumentosPorTipo($idTipoDocumento);
+    }
+
     public function exibirDocumento(int $id): array
     {
         try {

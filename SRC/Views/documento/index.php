@@ -5,11 +5,9 @@
 
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
-
 <div class="container">
-    <div class="bg-body-tertiary rounded-3 row">
-        <div class="col divisao_bottom form-control-padronizado" id="modCadDocumento">
-            <h3>Gerenciar Documentos</h3>
+    <div style="border: 1px solid;" class="row" id="modCadDocumento">
+        <div class="col-md-4 order-md-1">
             <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-form-label" for="Armario">Armario: </label><br>
@@ -25,6 +23,21 @@
                     <label class="col-form-label" for="Nip">NIP: </label>
                     <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip" id="Nip">
                 </div>
+                <div class="row">
+                    <div class="col-md-7 mb-3">
+                        <label class="col-form-label" for="semestre">Semestre: </label>
+                        <br>
+                        <select id="semestre" name="semestre" class="form-select">
+                            <option value="0">Selecione o semestre</option>
+                            <option value="1">Primeiro semestre</option>
+                            <option value="2">Segundo semestre</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="ano">Ano: </label>
+                        <input class="form-control form-control-padronizado" type="number" name="ano" id="ano">
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="col-form-label" for="TipoDoc">Tipo de documento: </label>
                     </br>
@@ -32,69 +45,48 @@
                         <option value="0">Selecione o tipo de documento</option>
                     </select>
                 </div>
-
-                <div class="form-group">
-                    <label class="col-form-label" for="semestre">Semestre: </label>
-                    <br>
-                    <select id="semestre" name="semestre" class="form-select">
-                        <option value="0">Selecione o semestre</option>
-                        <option value="1">Primeiro semestre</option>
-                        <option value="2">Segundo semestre</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="ano">Ano: </label>
-                    <input class="form-control form-control-padronizado" type="number" name="ano" id="ano">
-                </div>
                 <br>
                 <div class="form-group row">
-                    <!-- <div class="col-sm-3">
-                        <input type="button" id="btnBuscarDocumento" value="Buscar documentos" class="btn btn-primary">
-                    </div>-->
                     <div class="col-sm-3">
-                        <input type="button" id="btnCadDocumento" value="Cadastrar" class="btn btn-primary">
+                        <input type="button" id="btnCadDocumento" value="Indexar" class="btn btn-primary">
                     </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnCadDocumento" value="Anexar" class="btn btn-primary">
+                    </div>
+                    <span class="alerta"></span>
                 </div>
             </form>
-            <span class="alerta"></span>
-        </div>
-    </div>
-</div>
 
-<div class="Container" style="border:1px ">
-    <div class="p-5 bg-body-tertiary rounded-3 row">
-        <div class="col">
-            <h3>Gerenciamento de documentos</h3>
-            <div class="Grade_maior">
-                <div class="container_item_maior">
-                    <div class="Descricao_maior">
-                        NIP
-                    </div>
-                    <div class="Descricao_maior">
-                        Semestre
-                    </div>
-                    <div class="Descricao_maior">
-                        Ano
-                    </div>
-                    <div class="Descricao_maior">
-                        Tipo de documento
-                    </div>
-                    <div class="Descricao_maior">
-                        Armário
-                    </div>
-                    <div class="Descricao_maior">
-                    </div>
-                    <!--<div class="Descricao">
-                            Ações
-                        </div>-->
-                </div>
-                <div id="documentosLista">
+            <hr class="mb-4">
+            <div class="bg-body-tertiary rounded-3 row">
+                <div class="col order-md-1">
+                    <div class="container">
+                        <div class="row">
+                            <table class="table table-striped" id="listPaginas">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Itens</th>
+                                        <th scope="col">NIP</th>
+                                        <th scope="col">Semestre</th>
+                                        <th scope="col">Ano</th>
+                                        <th scope="col">Tipo de documento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='documentosLista'>
 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-8 order-md-1" style="border-left: 1px solid;">
+            lado 2
+        </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="CadPagina" tabindex="-1" aria-labelledby="CadPagina" aria-hidden="true">
     <div class="modal-dialog">

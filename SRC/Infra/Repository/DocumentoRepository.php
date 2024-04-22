@@ -182,6 +182,24 @@ class DocumentoRepository extends LogRepository
         //var_dump("val: " . $sentenca);
         return $sentenca;
     }
+
+    public function BuscarDocumentosPorTipo(int $idTipoDocumento): array
+    {
+        try {
+            $sqlQuery = "SELECT \"IdDocumento\" FROM {$this->schema}\"Documentos\" where \"IdTipoDoc\" = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idTipoDocumento);
+            $stmt->execute();
+
+            $documentosDataList = $stmt->fetchAll();
+
+            return $documentosDataList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
     public function retornarCaminhoDocumento(string $id, int $pagina): string
     {
         try {

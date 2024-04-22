@@ -44,7 +44,7 @@ class PerfilAcessoRepository extends LogRepository
     public function listaPerfis(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM {$this->schema}\"PerfilUsuario\";";
+            $sqlQuery = "SELECT * FROM {$this->schema}\"PerfilUsuario\" order by \"DescPerfil\" desc;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 

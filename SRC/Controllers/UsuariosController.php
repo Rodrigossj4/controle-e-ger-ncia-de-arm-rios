@@ -45,7 +45,7 @@ class UsuariosController  extends Controller
       if (!$funcoes->validarSenha(filter_input(INPUT_POST, 'senhausuario'))) {
          http_response_code(500);
          return "Senha inválida";
-      }      
+      }
 
       try {
 
@@ -78,10 +78,13 @@ class UsuariosController  extends Controller
 
    public function alterar(): bool
    {
+      $arquivo = json_decode(file_get_contents('php://input'));
+      //unlink($b64->arquivoOriginal);
+
       $usuariosList = array();
       array_push($usuariosList, array(
-         'codusuario' => filter_input(INPUT_POST, 'id'),
-         'nomeusuario' => filter_input(INPUT_POST, 'nomeusuario')
+         'codusuario' => $arquivo->codusuario,
+         'nomeusuario' => $arquivo->nomeusuario
          /*'nip' => filter_input(INPUT_POST, 'nip'),
             'senhausuario' => filter_input(INPUT_POST, 'senhausuario'),
             'idacesso' => filter_input(INPUT_POST, 'idacesso')*/

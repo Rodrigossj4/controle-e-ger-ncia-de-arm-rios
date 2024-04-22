@@ -71,10 +71,9 @@ class DocumentoController extends Controller
 
         echo json_encode($retorno);
     }
+
     public function documento()
     {
-        //$this->validarSessao();
-
         $service = new DocumentoServices();
         $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
         //$CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
@@ -126,7 +125,6 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         $tagsList = $this->montaArryaTags();
 
-        //var_dump("eit");
         $paginasList = $service->gerarPdfs($tagsList);
         echo json_encode($paginasList);
     }
@@ -286,9 +284,6 @@ class DocumentoController extends Controller
         $types = array('jpg', 'jpeg', 'png', 'pdf');
         if ($handle = opendir($pasta)) {
             while ($entry = readdir($handle)) {
-                //$image = new Imagick($entry);
-                //$image->setImageFormat('jpeg');
-                //header('Content-Type: image/jpeg');
                 $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
                 if (in_array($ext, $types)) {
                     array_push($paginasList, array(
@@ -318,11 +313,5 @@ class DocumentoController extends Controller
         unlink($b64->arquivoOriginal);
         $bin = base64_decode($b64->arquivoB64);
         file_put_contents($b64->arquivoOriginal, $bin);
-    }
-    public function Indexar()
-    {
-        var_dump("vamos lá");
-        //transformar imagens em pdf(incluindo as tags)
-        //assinar
     }
 }

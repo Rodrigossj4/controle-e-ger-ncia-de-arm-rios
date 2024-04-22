@@ -5,44 +5,58 @@
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
-        <div class="col divisao_bottom form-control-padronizado" id="modCadPerfil">
+        <div class="col-md-8 order-md-1 form-control-padronizado" id="modCadPerfil">
             <h3>Cadastro de Perfil</h3>
             <form method="post" id="formCadPerfil" action="">
-                <div class="form-group">
-                    <label class="col-form-label" for="nomePerfil">Nome do Perfil: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomePerfil" id="nomePerfil">
-                </div>
-                <br>
-                <div class="form-group row">
-                    <div class="col-sm-3">
-                        <input type="button" id="btnCadPerfil" value="Cadastrar" class="btn btn-primary">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="col-form-label" for="nomePerfil">Nome do Perfil: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomePerfil" id="nomePerfil">
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <input type="button" id="btnCadPerfil" value="Cadastrar" class="btn btn-primary">
+                        </div>
                     </div>
                 </div>
             </form>
             <span class="alerta"></span>
         </div>
     </div>
+    <hr class="mb-4">
 </div>
 
-<div class="Container">
-    <div class="p-5 bg-body-tertiary rounded-3 row">
-        <div class="col">
+<div class="container">
+    <div class="bg-body-tertiary rounded-3 row">
+        <div class="col-md-8 order-md-1 form-control-padronizado">
             <h3>Gerenciamento de Perfil</h3>
-            <div class="Grade" id="gradeListaPerfil">
-                <?php foreach ($PerfilAcessoList  as $perfil) : ?>
-                    <div class="container_item">
-                        <div class="Descricao">
-                            <?= $perfil['nomeperfil']; ?>
-                        </div>
-                        <div class="acoes">
-                            <button class="btn btn-warning btnAlterarPerfil" data-bs-toggle="modal" data-bs-target="#AlteraPerfil" data-id="<?= $perfil['id']; ?>" data-desc="<?= $perfil['nomeperfil']; ?>">Editar</button>
-                            <form method="post" id="excluir<?= $perfil['id']; ?>" action="">
-                                <input type="hidden" id="idPerfil" name="idPerfil" value="<?= $perfil['id']; ?>">
-                                <button class="btn btn-danger excluirPerfil" data-bs-toggle="modal" data-bs-target="#modexcluirPerfil" data-id="<?= $perfil['id']; ?>" type="button">Excluir</button>
-                            </form>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+            <div class="container">
+                <div class="row">
+                    <table class="table table-striped" id="listPaginas">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome do Perfil</th>
+                                <th scope="col" colspan="2" style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id='gradeListaPerfil'>
+                            <?php foreach ($PerfilAcessoList  as $perfil) : ?>
+                                <tr>
+                                    <td><?= $perfil['nomeperfil']; ?></td>
+                                    <td>
+                                        <button class="btn btn-warning btnAlterarPerfil" data-bs-toggle="modal" data-bs-target="#AlteraPerfil" data-id="<?= $perfil['id']; ?>" data-desc="<?= $perfil['nomeperfil']; ?>">Editar</button>
+                                    </td>
+                                    <td>
+                                        <form method="post" id="excluir<?= $perfil['id']; ?>" action="">
+                                            <input type="hidden" id="idPerfil" name="idPerfil" value="<?= $perfil['id']; ?>">
+                                            <button class="btn btn-danger excluirPerfil" data-bs-toggle="modal" data-bs-target="#modexcluirPerfil" data-id="<?= $perfil['id']; ?>" type="button">Excluir</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

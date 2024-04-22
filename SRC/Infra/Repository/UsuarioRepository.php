@@ -20,7 +20,7 @@ class UsuarioRepository extends LogRepository
     public function listaUsuarios(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"Usuarios\";";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Usuarios\" order by \"NomeUsuario\" asc;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 

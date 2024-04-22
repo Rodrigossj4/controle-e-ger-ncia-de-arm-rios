@@ -17,10 +17,12 @@ $numPag = 1;
 
 <!-- PDFJS, para converter bas364 em PDF -->
 <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
-
+<div class="container">
+  novo
+</div>
 <div class="container">
   <div class="bg-body-tertiary rounded-3 row">
-    <div class="col divisao_bottom form-control-padronizado" id="modIdxDocumento">
+    <div class="col divisao_bottom" id="modIdxDocumento">
       <h3>Tratamento e Indexação de documento</h3>
       <div class="Grade_maior">
         <div class="container_item_maior">

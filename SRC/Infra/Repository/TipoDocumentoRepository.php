@@ -44,7 +44,7 @@ class TipoDocumentoRepository extends LogRepository
     public function listaTipoDocumento(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"TipoDocumento\";";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"TipoDocumento\" order by  \"DescTipoDoc\" asc ;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
@@ -97,9 +97,25 @@ class TipoDocumentoRepository extends LogRepository
         }
     }
 
+    public function listaArmariosTipoDocumento(int $idArmario): array
+    {
+        try {
+            // $sqlQuery = "select at.\"IdTipoDoc\" FROM {$this->schema}\"ArmarioTipoDocumento\" at WHERE at.\"IdTipoDoc\" = ?";
+            $sqlQuery = "SELECT \"IdArmario\" FROM {$this->schema}\"ArmarioTipoDocumento\" where \"IdTipoDoc\" = ?";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idArmario);
+            $stmt->execute();
+
+            $tipodocumentoDataList = $stmt->fetchAll();
+            return $tipodocumentoDataList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
     public function listarTipoDocumentoNaoPertencentesArmario(int $idArmario): array
     {
-
         try {
             $sqlQuery = "select \"IdTipoDoc\", \"DescTipoDoc\" FROM {$this->schema}\"TipoDocumento\" WHERE \"IdTipoDoc\" NOT IN (
                             select at.\"IdTipoDoc\"

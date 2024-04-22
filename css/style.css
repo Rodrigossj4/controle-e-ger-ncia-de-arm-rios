@@ -1,3 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: 'Open Sans Light';
+    --cor-topo-card: #114889;
+    --cor-botao-primary: #114889;
+}
+
+main {
+    position: absolute;
+    left: 0;
+    top: 5;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu .menu-faketrigger {
+    position: absolute;
+    z-index: 1000;
+    width: 35px;
+    height: 35px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.menu .menu-lines {
+    position: absolute;
+    z-index: 999;
+    width: 35px;
+    height: 35px;
+}
+
+.menu .menu-lines span {
+    display: block;
+    width: 35px;
+    height: 5px;
+    margin-bottom: 10px;
+    background-color: #114889;
+    border-radius: 3px;
+    transition: all ease .2s;
+}
+
+.menu .menu-faketrigger:checked~.menu-lines span {
+    background-color: #232323;
+}
+
+.menu .menu-faketrigger:checked~.menu-lines span:nth-child(1) {
+    transform-origin: 0% 0%;
+    transform: rotate(45deg) scaleX(1.25);
+}
+
+.menu .menu-faketrigger:checked~.menu-lines span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu .menu-faketrigger:checked~.menu-lines span:nth-child(3) {
+    transform-origin: 0% 100%;
+    transform: rotate(-45deg) scaleX(1.25);
+}
+
+.btn-primary {
+    background-color: var(--cor-botao-primary);
+    border-color: var(--cor-botao-primary);
+}
+
+.card {
+    border-top: 3px solid var(--cor-topo-card);
+}
+
+.menu {
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.menu ul {
+    position: absolute;
+    z-index: 998;
+    left: 0;
+    top: 0;
+    width: 300px;
+    height: calc(100vh - 100px);
+    padding-top: 100px;
+    background-color: #EDEDED;
+    margin-left: -300px;
+    transition: all ease 1s;
+}
+
+.menu .menu-faketrigger:checked~ul {
+    margin-left: 0;
+}
+
+.menu ul li {
+    text-decoration: none;
+    color: var(--cor-botao-primary);
+
+    cursor: pointer;
+    transition: all ease 3s;
+    border-bottom: 1px;
+}
+
+.menu ul li:hover {
+    color: #1b4e8d;
+}
+
+.menu ul .nav-item .nav-link {
+    font-size: 20px;
+    border-bottom: 1px;
+}
+
+/*
 .Grade {
     border: 0px solid;
     width: 50%;
@@ -65,6 +178,7 @@
 
 }
 
+
 #LinkInicio a {
     font-size: 20px;
     color: #2D68BD;
@@ -80,3 +194,5 @@
 .abrirDocumento {
     cursor: pointer;
 }
+
+*/

@@ -6,43 +6,58 @@
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
-        <div class="col divisao_bottom form-control-padronizado" id="modCadTipoDocumento">
+        <div class="col-md-8 order-md-1 " id="modCadTipoDocumento">
             <h3>Cadastro de Tipos de documento</h3>
             <form method="post" id="formCadTipoDocumento" action="/cadastrarTipoDocumento">
-                <div class="form-group">
-                    <label class="col-form-label" for="desctipo">Descrição do tipo de documento: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="desctipo" id="desctipo">
-                </div><br>
-                <div class="form-group row">
-                    <div class="col-sm-3">
-                        <input type="button" id="btnCadTipoDoc" value="Cadastrar" class="btn btn-primary">
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="col-form-label" for="desctipo">Descrição do tipo de documento: </label>
+                        <input class="form-control form-control-sm " type="text" name="desctipo" id="desctipo">
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <input type="button" id="btnCadTipoDoc" value="Cadastrar" class="btn btn-primary">
+                        </div>
                     </div>
                 </div>
             </form>
             <span class="alerta"></span>
         </div>
     </div>
+    <hr class="mb-4">
 </div>
 
-<div class="Container">
-    <div class="p-5 bg-body-tertiary rounded-3 row">
-        <div class="col">
+<div class="container">
+    <div class="bg-body-tertiary rounded-3 row">
+        <div class="col-md-8 order-md-1 ">
             <h3>Gerenciamento de Tipo de documentos</h3>
-            <div class="Grade" id="gradeListaDocumentos">
-                <?php foreach ($TipoDocumentoList  as $tipoDoc) : ?>
-                    <div class="container_item">
-                        <div class="Descricao">
-                            <?= $tipoDoc['desctipo']; ?>
-                        </div>
-                        <div class="acoes">
-                            <button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="<?= $tipoDoc['id']; ?>" data-desc="<?= $tipoDoc['desctipo']; ?>">Editar</button>
-                            <form method="post" id="excluir<?= $tipoDoc['id']; ?>" action="">
-                                <input type="hidden" id="idTipoDoc" name="idTipoDoc" value="<?= $tipoDoc['id']; ?>">
-                                <button class="btn btn-danger excluirTipoDoc" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" data-id="<?= $tipoDoc['id']; ?>" type="button">Excluir</button>
-                            </form>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+            <div class="container">
+                <div class="row">
+                    <table class="table table-striped" id="listPaginas">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome Tipo de documento</th>
+                                <th scope="col" colspan="2" style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id='gradeListaDocumentos'>
+                            <?php foreach ($TipoDocumentoList  as $tipoDoc) : ?>
+                                <tr>
+                                    <td><?= $tipoDoc['desctipo']; ?></td>
+                                    <td>
+                                        <button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="<?= $tipoDoc['id']; ?>" data-desc="<?= $tipoDoc['desctipo']; ?>">Editar</button>
+                                    </td>
+                                    <td>
+                                        <form method="post" id="excluir<?= $tipoDoc['id']; ?>" action="">
+                                            <input type="hidden" id="idTipoDoc" name="idTipoDoc" value="<?= $tipoDoc['id']; ?>">
+                                            <button class="btn btn-danger excluirTipoDoc" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" data-id="<?= $tipoDoc['id']; ?>" type="button">Excluir</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

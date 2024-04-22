@@ -6,32 +6,33 @@
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
-    <div class="bg-body-tertiary rounded-3 row">
-        <div class="col divisao_bottom form-control-padronizado" id="modCadUsuario">
+    <div class="bg-body-tertiary rounded-6 row">
+        <div class="col-md-8 order-md-1 form-control-padronizado" id="modCadUsuario">
             <h3>Cadastro de Usuários</h3>
             <form method="post" id="formCadUsuario" name="formCadUsuario" action="/cadastrarUsuario">
-                <div class="form-group">
-                    <label class="col-form-label" for="nomeusuario">Nome do usuário: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomeusuario" id="nomeusuario">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="nomeusuario">Nome do usuário: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomeusuario" id="nomeusuario">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="nip">NIP: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="nip" id="nip">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="senhausuario">Senha do usuario: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="password" name="senhausuario" id="senhausuario">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="idacesso">Perfil de acesso: </label>
+                        <select name="idacesso" id="idacesso" class="form-select">
+                            <option value="0">Escolha o perfil de acesso</option>
+                            <?php foreach ($PerfilAcessoList  as $perfil) : ?>
+                                <option value="<?= $perfil['id']; ?>"><?= $perfil['nomeperfil']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="nip">NIP: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="nip" id="nip">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="senhausuario">Senha do usuario: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="password" name="senhausuario" id="senhausuario">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="idacesso">Perfil de acesso: </label>
-                    <select name="idacesso" id="idacesso" class="form-select">
-                        <option value="0">Escolha o perfil de acesso</option>
-                        <?php foreach ($PerfilAcessoList  as $perfil) : ?>
-                            <option value="<?= $perfil['id']; ?>"><?= $perfil['nomeperfil']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <br>
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <input type="button" id="btnCadUsuario" value="Cadastrar" class="btn btn-primary">
@@ -41,27 +42,41 @@
             <span class="alerta"></span>
         </div>
     </div>
+    <hr class="mb-4">
 </div>
 
-<div class="Container">
-    <div class="p-5 bg-body-tertiary rounded-3 row">
-        <div class="col">
+
+<div class="container">
+    <div class="bg-body-tertiary rounded-3 row">
+        <div class="col-md-8 order-md-1 form-control-padronizado">
             <h3>Gerenciamento de Usuario</h3>
-            <div class="Grade" id="gradeUsuario">
-                <?php foreach ($UsuariosList  as $usuario) : ?>
-                    <div class="container_item">
-                        <div class="Descricao">
-                            <?= $usuario['nomeusuario']; ?>
-                        </div>
-                        <div class="acoes">
-                            <button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="<?= $usuario['codusuario']; ?>" data-desc="<?= $usuario['nomeusuario']; ?>">Editar</button>
-                            <form method="post" id="excluir<?= $usuario['codusuario']; ?>" name="formAltUsuario" id="formAltUsuario" action="">
-                                <input type="hidden" name="idUsuario" value="<?= $usuario['codusuario']; ?>">
-                                <button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="<?= $usuario['codusuario']; ?>" type="button">Excluir</button>
-                            </form>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+            <div class="container">
+                <div class="row">
+                    <table class="table table-striped" id="listPaginas">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome do Usuário</th>
+                                <th scope="col" colspan="2" style="text-align: center;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id='gradeUsuario'>
+                            <?php foreach ($UsuariosList  as $usuario) : ?>
+                                <tr>
+                                    <td><?= $usuario['nomeusuario']; ?></td>
+                                    <td>
+                                        <button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="<?= $usuario['codusuario']; ?>" data-desc="<?= $usuario['nomeusuario']; ?>">Editar</button>
+                                    </td>
+                                    <td>
+                                        <form method="post" id="excluir<?= $usuario['codusuario']; ?>" name="formAltUsuario" id="formAltUsuario" action="">
+                                            <input type="hidden" name="idUsuario" value="<?= $usuario['codusuario']; ?>">
+                                            <button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="<?= $usuario['codusuario']; ?>" type="button">Excluir</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -79,7 +94,7 @@
                     <div class="form-group">
                         <input type="hidden" name="id" id="idAlt">
                         <label class="col-form-label">Nome do usuário: </label>
-                        <input type="text" class="form-control form-control-sm" name="nomeusuario">
+                        <input type="text" class="form-control form-control-sm" id="nomeusuarioAlt" name="nomeusuario">
                     </div>
                     <br>
                     <div class="form-group row">

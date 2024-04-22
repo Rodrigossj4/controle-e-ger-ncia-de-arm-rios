@@ -50,6 +50,17 @@ class TipoDocumentoService  extends SistemaServices
         }
     }
 
+    public function listaArmarioTipoDocumento(int $idArmario): array
+    {
+        try {
+            $repository = new TipoDocumentoRepository($this->Conexao());
+            return $repository->listaArmariosTipoDocumento($idArmario);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
     public function listarTipoDocumentoNaoPertencentesArmario(int $idArmario): array
     {
 

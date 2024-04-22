@@ -258,7 +258,7 @@ function carregarDocumentos() {
             sel.empty();
             data.forEach(e => {
                 sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
-
+                //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>'
             });
         },
         error: function (data) {
@@ -336,8 +336,7 @@ function carregarTipoDocumento() {
             var sel = $("#gradeListaDocumentos");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item"><div class="Descricao">' + e.desctipo + '</div><div class="acoes"><button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="' + e.id + '" data-desc="' + e.desctipo + '">Editar</button><form method="post" id="excluir' + e.id + '"><input type="hidden" id="idTipoDoc" name="idTipoDoc" value="' + e.id + '"><button class="btn btn-danger excluirTipoDoc" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" type="button">Excluir</button></form></div></div>');
-
+                sel.append('<tr><td>' + e.desctipo + '</td><td><button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="' + e.id + '" data-desc="' + e.desctipo + '">Editar</button></td><td><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idTipoDoc" name="idTipoDoc" value="' + e.id + '"><button class="btn btn-danger excluirTipoDoc" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" data-id="' + e.id + '" type="button">Excluir</button></form></td></tr>');
             });
         },
         error: function (data) {
@@ -387,12 +386,13 @@ $(document).on('click', '.btnConfirmaExcluirTipoDoc', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            console.log(d);
             carregarTipoDocumento();
             $(this).data("id", "");
             alertas('Tipo documento excluído com sucesso', '#modexcluirTipoDoc', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas("Houve um problema para excluir o tipo de documento", '#modxcluirTipoDoc', 'alert_danger');
+            alertas("Houve um problema para excluir o tipo de documento. Verifique se há documentos cadastrados com esse tipo.", '#modexcluirTipoDoc', 'alert_danger', 'true');
         }
     }
     );
@@ -517,7 +517,7 @@ function carregarPerfis() {
             var sel = $("#gradeListaPerfil");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeperfil + '</div><div class="acoes"><button class="btn btn-warning btnAlterarPerfil" data-bs-toggle="modal" data-bs-target="#AlteraPerfil" data-id="' + e.id + '" data-desc="' + e.nomeperfil + '">Editar</button><form method="post" id="excluir' + e.id + '"><input type="hidden" id="idPerfil" name="idPerfil" value="' + e.id + '"><button class="btn btn-danger excluirPerfil" data-id="' + e.id + '" data-bs-toggle="modal" data-bs-target="#modexcluirPerfil" type="button">Excluir</button></form></div></div>');
+                sel.append('<tr><td>' + e.nomeperfil + '</td><td><button class="btn btn-warning btnAlterarPerfil" data-bs-toggle="modal" data-bs-target="#AlteraPerfil" data-id="' + e.id + '" data-desc="' + e.nomeperfil + '">Editar</button></td><td><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idPerfil" name="idPerfil" value="' + e.nomeperfil + '"><button class="btn btn-danger excluirPerfil" data-bs-toggle="modal" data-bs-target="#modexcluirPerfil" data-id="' + e.id + '" type="button">Excluir</button></form></td></tr>');
 
             });
         },
@@ -635,7 +635,7 @@ function carregarUsuarios() {
             var sel = $("#gradeUsuario");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item"><div class="Descricao">' + e.nomeusuario + '</div><div class="acoes"><button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="' + e.codusuario + '" data-desc="' + e.nomeusuario + '">Editar</button><form method="post" id="excluir' + e.codusuario + '"><input type="hidden" id="idUsuario" name="idUsuario" value="' + e.codusuario + '"><button class="btn btn-danger excluirUsuario" data-id="' + e.codusuario + '" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" type="button">Excluir</button></form></div></div>');
+                sel.append('<tr><td>' + e.nomeusuario + '</td><td><button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="' + e.codusuario + '" data-desc="' + e.nomeusuario + '">Editar</button></td><td><form method="post" id="excluir' + e.codusuario + '" name="formAltUsuario" id="formAltUsuario" action=""><input type="hidden" name="idUsuario" value="' + e.codusuario + '"><button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="' + e.codusuario + '" type="button">Excluir</button></form></td></tr>');
             });
         },
         error: function (data) {
@@ -658,7 +658,6 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
     }
 
     if (!validarSenha($('#formCadUsuario #senhausuario').val())) {
-        console.log($('#formCadUsuario #senhausuario').val());
         alertas("A senha não atende ao requisitos mínimos", '#modCadUsuario', 'alert_danger');
         return false;
     }
@@ -671,7 +670,7 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
-            console.log(d);
+            //console.log(d);
             carregarUsuarios();
             $('#formCadUsuario #nomeusuario').val("");
             $('#formCadUsuario #nip').val("");
@@ -687,8 +686,8 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
 
 
 $(document).on('click', '.btnAlterarUsuario', function (e) {
-    $('#formAltUsuario #id').val($(this).data("id"));
-    $('#formAltUsuario #nomeusuario').val($(this).data("desc"));
+    $('#formAltUsuario #idAlt').val($(this).data("id"));
+    $('#formAltUsuario #nomeusuarioAlt').val($(this).data("desc"));
     $('.opcoesConfirmacao').css('display', 'none');
 });
 
@@ -699,10 +698,20 @@ $(document).on('click', '#exibConfirmaAlteracaoUsuario', function (e) {
 $(document).on('click', '#btnConfirmaAlteracaoUsuario', function (e) {
     var formdata = new FormData($("form[id='formAltUsuario']")[0]);
 
+    if (($('#formAltUsuario #nomeusuarioAlt').val() == "")) {
+        alertas("Todos os campos do formulário são obrigatórios", '#AlteraUsuario', 'alert_danger');
+        return false;
+    }
+
+    dados = JSON.stringify({
+        codusuario: $('#formAltUsuario #idAlt').val(),
+        nomeusuario: $('#formAltUsuario #nomeusuarioAlt').val(),
+    }, null, 2)
+
     $.ajax({
         type: 'POST',
         url: "/alterarUsuario",
-        data: formdata,
+        data: dados,
         processData: false,
         contentType: false,
         success: function (d) {
@@ -828,7 +837,9 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
                 var sel = $("#documentosLista");
                 sel.empty();
                 arrayData.forEach(e => {
-                    sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>');
+                    sel.append('<tr><td>1</td><td>' + e.nip + '</td><td>' + e.semestre + '</td><td>' + e.ano + '</td><td>' + e.desctipo + '</td></tr>');
+
+                    //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>'
                 });
             },
             error: function (d) {

@@ -7,6 +7,7 @@ use Exception;
 use Marinha\Mvc\Models\TipoDocumento;
 use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\TipoDocumentoService;
+use Marinha\Mvc\Services\DocumentoServices;
 
 class TipoDocumentoController extends Controller
 {
@@ -116,6 +117,20 @@ class TipoDocumentoController extends Controller
    {
       try {
          $service = new TipoDocumentoService();
+         $serviceDocumento = new DocumentoServices();
+
+         $total = count($service->listaArmarioTipoDocumento(filter_input(INPUT_POST, 'id')));
+
+         if ($total > 0) {
+            http_response_code(500);
+            return "Existem Armários vinculados a esse tipo de documento. Exclua antes.";
+         }
+
+         if (Count($serviceDocumento->BuscarDocumentosPorTipo(filter_input(INPUT_POST, 'id'))) != 0) {
+            http_response_code(500);
+            return "Existem documentos desse tipo cadastrados. Exclua antes.";
+         }
+
          if ($service->excluirTipoDocumento(filter_input(INPUT_POST, 'id'))) {
             http_response_code(200);
             return "Tipo de documento excluído com sucesso";
