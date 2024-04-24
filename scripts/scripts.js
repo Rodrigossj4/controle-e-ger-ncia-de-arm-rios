@@ -926,8 +926,8 @@ $('#formCadLote #btnCadLote').on('click', function (e) {
     });
 });
 
-$('#formAnexarPagDoc #btnCarregarArquivosImg').on('click', function (e) {
-    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+$('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
+    var formdata = new FormData($("form[id='formCadDocumento']")[0]);
     $.ajax({
         type: 'POST',
         url: "/carregarArquivos",
@@ -936,7 +936,7 @@ $('#formAnexarPagDoc #btnCarregarArquivosImg').on('click', function (e) {
         contentType: false,
         success: function (data) {
             console.log(data);
-            $('#formAnexarPagDoc #Caminho').val(data);
+            $('#formCadDocumento #Caminho').val(data);
             ListarArquivos();
         },
         error: function (d) {
@@ -965,8 +965,9 @@ $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
 });
 function ListarArquivos() {
 
-    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
-    var id = $('#formAnexarPagDoc #Caminho').val();
+    var contador = 0;
+    var formdata = new FormData($("form[id='formCadDocumento']")[0]);
+    var id = $('#formCadDocumento #Caminho').val();
     $.ajax({
         type: 'POST',
         url: "/ListarDocumentos",
@@ -979,9 +980,13 @@ function ListarArquivos() {
             var sel = $("#listarDocumentos");
             sel.empty();
             arrayData.forEach(e => {
-                var url = id + '\/' + e;
-                sel.append(e + ' - <input type="button" class="btn btn-primary" data-arquivo="' + url + '" id="arquivosLote"  value="Visualizar documento">  <input type="checkbox" name="documentoEscolhido[]" value="' + url + '"> Indexar </br> <hr>');
-            })
+                var active = (contador == 0) ? 'active' : '';
+                sel.append('<div class="carousel-item ' + active + ' style="width: 400px; height: 100Vh;"><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+                contador++;
+            });
+
+            $("#carouselExampleControls").html();
+
         },
         error: function (d) {
             console.log('ei erro ' + d);
@@ -1245,6 +1250,11 @@ $(document).on('click', '#btnNaoConfirmaExcluirPagina', function (e) {
 });
 
 $(document).ready(function () {
+    $('.carousel').carousel({
+        pause: true,
+        interval: false
+    });
+
     $("#documento").on('change', function () {
         if (($('#documento').length > 0)) {
             $('#btnCarregarArquivosImg').attr("disabled", false);

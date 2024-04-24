@@ -2,9 +2,11 @@
 
 /** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $DocumentosList */
 /** @var Marinha\Mvc\Models\Armarios[] $ArmariosList  */
-
+//$TotalArquivos = count($listaArquivosCarregados);
+$contador = 0;
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
+
 <div class="container">
     <div style="border: 1px solid;" class="row" id="modCadDocumento">
         <div class="col-md-4 order-md-1">
@@ -47,6 +49,20 @@
                 </div>
                 <br>
                 <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label class="col-form-label" for="documento[]">Selecione as imagens</label>
+                        <input type="file" id="documento" name="documento[]" class="form-control" multiple>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group row">
+                    <div class="col-sm-9">
+                        <input type="hidden" id="Caminho" name="Caminho" value="">
+                        <input type="buttton" class="btn btn-primary" name="btnCarregarArquivosImg" id="btnCarregarArquivosImg" value="Carregar Imagens" disabled="true">
+                    </div>
+                </div>
+                <br>
+                <div class="form-group row">
                     <div class="col-sm-3">
                         <input type="button" id="btnCadDocumento" value="Indexar" class="btn btn-primary">
                     </div>
@@ -81,138 +97,63 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8 order-md-1" style="border-left: 1px solid;">
-            lado 2
+        <div class="col-md-4 order-md-1" style="border: 1px solid;">
+            <div class="container mt-4">
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div class="carousel-inner" id="listarDocumentos">
+
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Próximo</span>
+                    </a>
+                </div>
+            </div>
+            <div class="container">
+                <button name="incluir" id="incluir" class="btn btn-primary">incluir</button>
+            </div>
+        </div>
+        <div class="col-md-4 order-md-1" style="border: 1px solid;">
+            <div class="container mt-4">
+                <div class="row">
+                    <label>MetaTags</label>
+                </div>
+                <hr class="mb-4">
+                <div class="form-group">
+                    <label class="col-form-label" for="TipoDoc">Informe o assunto: </label>
+                    <input type="text" id="Assunto" name="Assunto" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="Autor">Informe o Autor </label>
+                    <input type="text" id="Autor" name="Autor" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="Titulo">Informe o Titulo</label>
+                    <input type="text" id="Titulo" name="Titulo" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="Identificador">Identificador do documento digital</label>
+                    <input id="Identificador" name="Identificador" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="Classe">Classe</label>
+                    <input id="Classe" name="Classe" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="Identificador">Observação</label>
+                    <input id="Observacao" name="Observacao" class="form-control" />
+                </div>
+                <br>
+
+            </div>
         </div>
     </div>
 </div>
 
-
-<div class="modal fade" id="CadPagina" tabindex="-1" aria-labelledby="CadPagina" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cadastra Página</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="formCadPagina" action="/cadastrarPagina">
-                    <div class="form-group">
-                        <input type="hidden" name="docid" id="docid">
-                        <label class="col-form-label">Volume: </label>
-                        <input type="text" class="form-control form-control-sm" name="volume" id="volume">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Número da página: </label>
-                        <input type="text" class="form-control form-control-sm" name="numpagina" id="numpagina">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Arquivo: </label>
-                        <input type="number" class="form-control form-control-sm" name="arquivo" id="arquivo">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">CODEXP: </label>
-                        <input type="number" class="form-control form-control-sm" name="codexp" id="codexp">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Filme: </label>
-                        <input type="number" class="form-control form-control-sm" name="filme" id="filme">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Fotograma: </label>
-                        <input type="number" class="form-control form-control-sm" name="fotograma" id="fotograma">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Imagem Encontrada: </label>
-                        <input type="number" class="form-control form-control-sm" name="imgencontrada" id="imgencontrada">
-                    </div>
-                    <br>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <input type="button" class="btn btn-primary" id="btnConfirmaCadPagina" value="Cadastrar Página">
-                        </div>
-                    </div>
-                    <!--<div class="form-group row opcoesConfirmacao">
-                            <span>Deseja realmente alterar essas informações?</span>
-                            <div class="col-sm-3">
-                                <input type="button" id="btnConfirmaAlteracaoProduto" value="Sim"
-                                    class="btn btn-success">
-                            </div>
-                            <div class="col-sm-3">
-                                <input type="button" id="btnNaoConfirmaAlteracaoProduto" value="Não"
-                                    class="btn btn-danger">
-                            </div>
-                        </div>-->
-                </form>
-                <span class="alerta"></span>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="AlteraDocumento" tabindex="-1" aria-labelledby="AlteraDocumento" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Alterar documento</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="formAltDocumento" action="/alterarDocumento">
-                    <div class="form-group">
-                        <input type="hidden" name="id" id="id">
-                        <label class="col-form-label">Id do documento: </label>
-                        <input type="text" class="form-control form-control-sm" name="docId" id="docId">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">NIP: </label>
-                        <input type="text" class="form-control form-control-sm" name="nip" id="nip">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">semestre: </label>
-                        <input type="number" class="form-control form-control-sm" name="semestre" id="semestre">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Ano: </label>
-                        <input type="number" class="form-control form-control-sm" name="ano" id="ano">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Tipo do documento: </label>
-                        <input type="number" class="form-control form-control-sm" name="tipodocumento" id="tipodocumento">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">FolderId: </label>
-                        <input type="number" class="form-control form-control-sm" name="folderid" id="folderid">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Armario: </label>
-                        <input type="number" class="form-control form-control-sm" name="armario" id="armario">
-                    </div>
-                    <br>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <input type="button" class="btn btn-primary" id="btnConfirmaAlteracaoDocumento" value="Alterar">
-                        </div>
-                    </div>
-                    <!--<div class="form-group row opcoesConfirmacao">
-                            <span>Deseja realmente alterar essas informações?</span>
-                            <div class="col-sm-3">
-                                <input type="button" id="btnConfirmaAlteracaoProduto" value="Sim"
-                                    class="btn btn-success">
-                            </div>
-                            <div class="col-sm-3">
-                                <input type="button" id="btnNaoConfirmaAlteracaoProduto" value="Não"
-                                    class="btn btn-danger">
-                            </div>
-                        </div>-->
-                </form>
-                <span class="alerta"></span>
-            </div>
-
-        </div>
-    </div>
-</div>
 </body>
 
 </html>
@@ -220,3 +161,6 @@
 
 <script src="../../scripts/jquery.js"></script>
 <script src="../../scripts/scripts.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

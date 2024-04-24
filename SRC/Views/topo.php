@@ -7,6 +7,10 @@ $liberaAcessoAdmin = false;
 if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6))
     $liberaAcessoAdmin = true;
 
+$listaArquivosCarregados = [];
+if ((isset($_SESSION['Arquivos'])))
+    $listaArquivosCarregados  = $_SESSION['Arquivos'];
+
 //echo  $liberaAcessoAdmin;
 ?>
 <!DOCTYPE html>
@@ -15,9 +19,11 @@ if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6)
 <head>
     <meta charset="utf-8" />
     <title>SISTEMA DE DIGITALIZAÇÃO DE IMAGENS</title>
+
     <link href="/../../css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <script src="../../scripts/bootstrap.bundle.min.js"></script>
     <link href="/../../css/style.css" type="text/css" rel="stylesheet" />
+
 </head>
 
 <body>

@@ -28,7 +28,9 @@ class DocumentoServices extends SistemaServices
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
-            return $repository->listaDocumentos();
+            $retorno = $repository->listaDocumentos();
+
+            return $retorno;
         } catch (Exception $e) {
             echo $e;
             return [];
@@ -359,8 +361,8 @@ class DocumentoServices extends SistemaServices
         if (count($_FILES['documento']['name']) > 0)
             $this->subirArquivos($pasta);
 
-        if (count($_FILES['documentoPDF']['name']) > 0)
-            $this->subirArquivosPDF($pasta);
+        /*if (count($_FILES['documentoPDF']['name']) > 0)
+            $this->subirArquivosPDF($pasta);*/
 
         //var_dump($pasta);
         return $pasta;
@@ -377,7 +379,7 @@ class DocumentoServices extends SistemaServices
     private function subirArquivos(string $diretorio)
     {
         $total = count($_FILES['documento']['name']);
-
+        //var_dump($total);
         for ($i = 0; $i < $total; $i++) {
 
             $nomeArquivo = pathinfo($_FILES['documento']['name'][$i], PATHINFO_BASENAME);
@@ -389,6 +391,8 @@ class DocumentoServices extends SistemaServices
             if ($arquivoExtensao == "TIF") {
                 $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".jpg";
                 $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
+                array_map('unlink', glob("$caminhoArqImgServ"));
+                //rmdir("{$caminhoArqImgServ}");
             }
         }
     }
@@ -410,6 +414,7 @@ class DocumentoServices extends SistemaServices
         $output_jpeg = $diretoriosaida;
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
+        //$command = "magick $input_tiff $output_jpeg";
         $command = "convert $input_tiff $output_jpeg";
         //var_dump($command);
         shell_exec($command);

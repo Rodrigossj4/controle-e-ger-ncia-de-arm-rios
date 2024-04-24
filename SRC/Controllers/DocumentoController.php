@@ -281,18 +281,19 @@ class DocumentoController extends Controller
         //var_dump("caminho:" . $caminho);
         $pasta = "{$caminho}/";
         $paginasList = array();
-        $types = array('jpg', 'jpeg', 'png', 'pdf');
+        $types = array('jpg', 'jpeg', 'png', 'tif', 'pdf');
         if ($handle = opendir($pasta)) {
             while ($entry = readdir($handle)) {
                 $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
                 if (in_array($ext, $types)) {
                     array_push($paginasList, array(
-                        $entry
+                        "../" . $caminho . "/" . $entry
                     ));
                 }
             }
             closedir($handle);
             //var_dump($paginasList);
+
             echo json_encode($paginasList);
         }
     }

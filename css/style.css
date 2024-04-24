@@ -110,6 +110,14 @@ main {
     border-bottom: 1px;
 }
 
+span.carousel-control-prev-icon {
+    background-image: url("../imagensSistema/arrow_back_ios_black_24dp.svg")
+}
+
+span.carousel-control-next-icon {
+    background-image: url("../imagensSistema/arrow_forward_ios_black_24dp.svg")
+}
+
 /*
 .Grade {
     border: 0px solid;
