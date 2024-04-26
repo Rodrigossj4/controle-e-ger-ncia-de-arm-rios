@@ -133,7 +133,6 @@ class TipoDocumentoRepository extends LogRepository
             $tipodocumentoList = array();
             foreach ($tipodocumentoDataList as $tipodocumentoData) {
                 array_push($tipodocumentoList, array(
-                    'idArmario' => $tipodocumentoData['IdArmario'],
                     'id' => $tipodocumentoData['IdTipoDoc'],
                     'desctipo' => $tipodocumentoData['DescTipoDoc']
                 ));
