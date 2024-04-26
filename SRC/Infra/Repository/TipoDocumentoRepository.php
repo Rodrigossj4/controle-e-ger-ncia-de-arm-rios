@@ -116,17 +116,18 @@ class TipoDocumentoRepository extends LogRepository
 
     public function listarTipoDocumentoNaoPertencentesArmario(int $idArmario): array
     {
+        //var_dump($idArmario);
         try {
             $sqlQuery = "select \"IdTipoDoc\", \"DescTipoDoc\" FROM {$this->schema}\"TipoDocumento\" WHERE \"IdTipoDoc\" NOT IN (
                             select at.\"IdTipoDoc\"
                             FROM {$this->schema}\"ArmarioTipoDocumento\" at
                             WHERE \"IdArmario\" = ?)";
 
-            var_dump($sqlQuery);
+
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idArmario);
             $stmt->execute();
-
+            //var_dump($sqlQuery);
             $tipodocumentoDataList = $stmt->fetchAll();
 
             $tipodocumentoList = array();
@@ -137,6 +138,8 @@ class TipoDocumentoRepository extends LogRepository
                     'desctipo' => $tipodocumentoData['DescTipoDoc']
                 ));
             };
+
+            //var_dump($tipodocumentoList);
 
             return $tipodocumentoList;
         } catch (Exception $e) {

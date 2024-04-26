@@ -104,7 +104,7 @@ function carregarTipoDocNaoVincArmarios(id) {
         dataType: 'json',
         contentType: 'application/json',
         success: function (d) {
-            console.log(d);
+            //console.log(d);
             var sel = $("#GerenciarArmario #formListaDocumentos select");
             sel.empty();
             d.forEach(e => {
@@ -112,8 +112,8 @@ function carregarTipoDocNaoVincArmarios(id) {
             });
         },
         error: function (d) {
-            console.log(d);
-            alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
+            //console.log(d);
+            alertas('Erro', '#modLogin', 'alert_danger');
         }
     });
 }

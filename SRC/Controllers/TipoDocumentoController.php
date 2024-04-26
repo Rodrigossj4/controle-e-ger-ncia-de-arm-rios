@@ -83,7 +83,7 @@ class TipoDocumentoController extends Controller
       //var_dump($idArmario);
       header('Content-Type: application/json; charset=utf-8');
       $service = new TipoDocumentoService();
-
+      //var_dump($service->listarTipoDocumentoNaoPertencentesArmario($idArmario));
       echo json_encode($service->listarTipoDocumentoNaoPertencentesArmario($idArmario));
    }
    public function alterar()
