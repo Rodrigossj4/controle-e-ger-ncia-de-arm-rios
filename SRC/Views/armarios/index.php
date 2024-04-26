@@ -7,7 +7,7 @@
     <div class="container">
         <div class="bg-body-tertiary rounded-3 row">
             <div class="col-md-8 order-md-1" id="modCadArmario">
-                <h3>Cadastro de Armários</h3>
+                <div class="tituloModulo">Cadastro de Armários</div>
                 <form method="post" id="formCadArmario" action="/cadastrarArmario">
                     <div class="row">
                         <div class="col-md-4 mb-3">
@@ -203,5 +203,4 @@
 
 </html>
 
-<script src="../../scripts/jquery.js"></script>
-<script src="../../scripts/scripts.js"></script>
+<?php require_once __DIR__ . "../../rodape.php" ?>

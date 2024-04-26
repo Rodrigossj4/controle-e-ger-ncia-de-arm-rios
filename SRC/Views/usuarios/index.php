@@ -8,7 +8,7 @@
 <div class="container">
     <div class="bg-body-tertiary rounded-6 row">
         <div class="col-md-8 order-md-1 form-control-padronizado" id="modCadUsuario">
-            <h3>Cadastro de Usuários</h3>
+            <div class="tituloModulo">Gerenciar usuários</div>
             <form method="post" id="formCadUsuario" name="formCadUsuario" action="/cadastrarUsuario">
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -147,10 +147,10 @@
 
 </html>
 
-<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-<script src="../../scripts/jquery.js"></script>
-<script src="../../scripts/jquery-mask.js"></script>
-<script src="../../scripts/scripts.js"></script>
+<?php require_once __DIR__ . "../../rodape.php" ?>
+
 <script>
-    $('#formCadUsuario #nip').mask('000.000-00');
+    $(document).ready(function() {
+        $('#formCadUsuario #nip').mask('000.000-00');
+    });
 </script>

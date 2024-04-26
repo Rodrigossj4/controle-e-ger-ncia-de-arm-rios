@@ -135,6 +135,22 @@ class ArmariosController extends Controller
       }
    }
 
+   public function inativar()
+   {
+      try {
+         $service = new ArmarioServices();
+         $tipoDocumentoService = new TipoDocumentoService();
+
+         if ($service->excluirArmario(filter_input(INPUT_POST, 'id'))) {
+            http_response_code(200);
+            return "Armario excluído Cadastrado";
+         }
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para excluir o armário";
+      }
+   }
+
    public function excluir()
    {
       try {

@@ -437,7 +437,7 @@ class DocumentoServices extends SistemaServices
     {
 
         $repository = new DocumentoRepository($this->Conexao());
-        $pasta = $this->gerarPasta();
+        $pasta = $this->gerarPasta("teste");
         $documentos = json_decode($arquivos);
         //var_dump("ei: " . pathinfo($documentos[0]->arquivo)['dirname']);
         //var_dump($documentos->arquivo);
@@ -471,11 +471,11 @@ class DocumentoServices extends SistemaServices
         return $pasta;
     }
 
-    public function carregarArquivoservidor2(string $arquivos, string $documentoid): string
+    public function carregarArquivoservidor2(string $arquivos, string $tipoDoc, string $documentoid): string
     {
         // var_dump($arquivos);
         $repository = new DocumentoRepository($this->Conexao());
-        $pasta = $this->gerarPasta();
+        $pasta = $this->gerarPasta($tipoDoc);
 
         //var_dump("ei: " . pathinfo($documentos[0]->arquivo)['dirname']);
         $origem = $arquivos;
@@ -520,10 +520,10 @@ class DocumentoServices extends SistemaServices
         return $nomeArquivoOcr;
     }
 
-    private function gerarPasta(): string
+    private function gerarPasta(string $tipoDoc): string
     {
         $pasta = random_int(1, 999999);
-        mkdir("{$this->diretorio}{$pasta}", 0777, true);
+        mkdir("{$this->diretorio}/{$tipoDoc}{$pasta}", 0777, true);
         return "{$this->diretorio}{$pasta}";
     }
 

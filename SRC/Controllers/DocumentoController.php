@@ -27,6 +27,16 @@ class DocumentoController extends Controller
         require __DIR__ . '../../Views/documento/index.php';
     }
 
+    public function VisualizarDocumentos()
+    {
+        $service = new DocumentoServices();
+        $armariosService =  new ArmarioServices();
+
+        $DocumentosList = $service->listaDocumentos();
+        $ArmariosList = $armariosService->listaArmarios();
+        require __DIR__ . '../../Views/documento/visualizarDocumentos.php';
+    }
+
     public function listarDocumentos()
     {
         $service = new DocumentoServices();
@@ -224,7 +234,7 @@ class DocumentoController extends Controller
         foreach ($Arquivos as $values) {
             var_dump($values->arquivo);
             $service->criptografarArquivo($values->arquivo);
-            $service->carregarArquivoservidor2($values->arquivo, $values->documentoid);
+            $service->carregarArquivoservidor2($values->arquivo, $values->tipodoc, $values->documentoid);
         }
         //echo $Arquivos;
     }

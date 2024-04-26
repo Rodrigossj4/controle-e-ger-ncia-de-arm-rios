@@ -78,7 +78,7 @@ class ArmarioServices extends SistemaServices
     {
         try {
             $repository = new ArmarioRepository($this->Conexao());
-            return $repository->excluirArmario($id);
+            return $repository->inativarArmario($id);
         } catch (Exception $e) {
             echo $e;
             return false;

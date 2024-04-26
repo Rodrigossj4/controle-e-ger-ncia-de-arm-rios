@@ -36,6 +36,14 @@ if ((isset($_SESSION['Arquivos'])))
         </div>
 
         <ul>
+            <li class="nav-item" id="menuAdmin">
+                <a class="nav-link dropdown-toggle" href="#" id="menuAdmin" role="button">
+                    Administração
+                </a>
+                <div id="submenu">
+                    <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
+                </div>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/gerenciar-armarios">Gerencia de Armarios</a>
             </li>
@@ -46,10 +54,10 @@ if ((isset($_SESSION['Arquivos'])))
                 <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
+                <a class="nav-link" href="/visualizar-documentos">Visualizar Documentos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
+                <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/Modulo_img.php" target="_blank">Tratamento de Imagens</a>

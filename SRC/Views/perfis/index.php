@@ -6,7 +6,7 @@
 <div class="container">
     <div class="bg-body-tertiary rounded-3 row">
         <div class="col-md-8 order-md-1 form-control-padronizado" id="modCadPerfil">
-            <h3>Cadastro de Perfil</h3>
+            <div class="tituloModulo">Gerenciar Perfil de usuários</div>
             <form method="post" id="formCadPerfil" action="">
                 <div class="row">
                     <div class="col-md-8 mb-3">
@@ -127,5 +127,4 @@
 
 </html>
 
-<script src="../../scripts/jquery.js"></script>
-<script src="../../scripts/scripts.js"></script>
+<?php require_once __DIR__ . "../../rodape.php" ?>

@@ -43,6 +43,7 @@ class Router
                 '/listarTipodocumento' => fn () => self::load('TipoDocumentoController', 'listar'),
                 '/gerenciar-tipo-documentos' => fn () => self::load('TipoDocumentoController', 'index'),
                 '/gerenciar-documentos' => fn () => self::load('DocumentoController', 'index'),
+                '/visualizar-documentos' => fn () => self::load('DocumentoController', 'VisualizarDocumentos'),
                 '/listarPaginas' => fn () => self::load('DocumentoController', 'listarPaginas'),
                 '/listarTipoDocumentosArmario' => fn () => self::load('TipoDocumentoController', 'listarTipoDocumentoArmarios'),
                 '/listarTipoDocumentosNaoPertencentesArmario' => fn () => self::load('TipoDocumentoController', 'listarTipoDocumentoNaoPertencentesArmarios'),
@@ -66,7 +67,7 @@ class Router
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
-                '/excluirArmario' => fn () => self::load('ArmariosController', 'excluir'),
+                '/excluirArmario' => fn () => self::load('ArmariosController', 'inativar'),
                 '/cadastrarArmario' => fn () => self::load('ArmariosController', 'cadastrar'),
                 '/alterarArmario' => fn () => self::load('ArmariosController', 'alterar'),
                 '/cadastrarTipoDocumento' => fn () => self::load('TipoDocumentoController', 'cadastrarTipoDocumento'),

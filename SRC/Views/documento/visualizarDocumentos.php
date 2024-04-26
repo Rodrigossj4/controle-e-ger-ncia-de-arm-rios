@@ -8,9 +8,9 @@ $contador = 0;
 <?php require_once __DIR__ . "../../topo.php" ?>
 
 <div class="container">
-    <div class="tituloModulo">Gerenciar Documentos</div>
+    <div class="tituloModulo">Visualizar Documentos</div>
     <div style="border: 1px solid;" class="row" id="modCadDocumento">
-        <div class="col-md-4 order-md-1">
+        <div class="col-md-6 order-md-1">
             <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-form-label" for="Armario">Armario: </label><br>
@@ -50,20 +50,6 @@ $contador = 0;
                 </div>
                 <br>
                 <div class="form-group row">
-                    <div class="col-sm-12">
-                        <label class="col-form-label" for="documento[]">Selecione as imagens</label>
-                        <input type="file" id="documento" name="documento[]" class="form-control" multiple>
-                    </div>
-                </div>
-                <br>
-                <div class="form-group row">
-                    <div class="col-sm-9">
-                        <input type="hidden" id="Caminho" name="Caminho" value="">
-                        <input type="buttton" class="btn btn-primary" name="btnCarregarArquivosImg" id="btnCarregarArquivosImg" value="Carregar Imagens" disabled="true">
-                    </div>
-                </div>
-                <br>
-                <div class="form-group row">
                     <div class="col-sm-3">
                         <input type="button" id="btnCadDocumento" value="Indexar" class="btn btn-primary">
                     </div>
@@ -89,17 +75,14 @@ $contador = 0;
                                         <th scope="col">Tipo de documento</th>
                                     </tr>
                                 </thead>
-                                <tbody id='documentosLista'>
-
-                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 order-md-1" style="border: 1px solid;">
-            <div class="container mt-4">
+        <div class="col-md-6 order-md-1" style="border: 1px solid;">
+            <div class="container mt-6">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="0">
                     <div class="carousel-inner" id="listarDocumentos">
 
@@ -118,44 +101,11 @@ $contador = 0;
                 <button name="incluir" id="incluir" class="btn btn-primary">incluir</button>
             </div>
         </div>
-        <div class="col-md-4 order-md-1" style="border: 1px solid;">
-            <div class="container mt-4">
-                <div class="row">
-                    <label>MetaTags</label>
-                </div>
-                <hr class="mb-4">
-                <div class="form-group">
-                    <label class="col-form-label" for="TipoDoc">Informe o assunto: </label>
-                    <input type="text" id="Assunto" name="Assunto" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="Autor">Informe o Autor </label>
-                    <input type="text" id="Autor" name="Autor" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="Titulo">Informe o Titulo</label>
-                    <input type="text" id="Titulo" name="Titulo" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="Identificador">Identificador do documento digital</label>
-                    <input id="Identificador" name="Identificador" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="Classe">Classe</label>
-                    <input id="Classe" name="Classe" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label class="col-form-label" for="Identificador">Observação</label>
-                    <input id="Observacao" name="Observacao" class="form-control" />
-                </div>
-                <br>
-
-            </div>
-        </div>
     </div>
 </div>
 
 </body>
 
 </html>
+
 <?php require_once __DIR__ . "../../rodape.php" ?>
