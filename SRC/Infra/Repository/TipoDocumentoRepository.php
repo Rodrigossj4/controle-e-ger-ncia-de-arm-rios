@@ -122,7 +122,7 @@ class TipoDocumentoRepository extends LogRepository
                             FROM {$this->schema}\"ArmarioTipoDocumento\" at
                             WHERE \"IdArmario\" = ?)";
 
-            // var_dump($sqlQuery);
+            var_dump($sqlQuery);
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idArmario);
             $stmt->execute();
