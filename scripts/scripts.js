@@ -104,6 +104,7 @@ function carregarTipoDocNaoVincArmarios(id) {
         dataType: 'json',
         contentType: 'application/json',
         success: function (d) {
+            console.log(d);
             var sel = $("#GerenciarArmario #formListaDocumentos select");
             sel.empty();
             d.forEach(e => {
