@@ -112,6 +112,7 @@ function carregarTipoDocNaoVincArmarios(id) {
             });
         },
         error: function (d) {
+            console.log(d);
             alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
         }
     });
