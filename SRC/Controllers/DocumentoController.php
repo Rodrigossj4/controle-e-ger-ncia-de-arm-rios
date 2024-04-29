@@ -43,26 +43,36 @@ class DocumentoController extends Controller
         echo json_encode($service->listaDocumentos());
     }
 
-    public function cadastrarDocumento(): bool
+    public function cadastrarDocumento()
     {
+        $Arquivos = json_decode(file_get_contents('php://input'), true);
+
+        if (strlen($Arquivos["nip"]) < 8 || strlen($Arquivos["ano"]) != 4 || $Arquivos["semestre"] == 0  || $Arquivos["idArmario"] == 0 || $Arquivos["tipoDoc"] == 0) {
+            http_response_code(500);
+            return "Todos os campos são obrigatórios";
+        }
+
         $idPasta = random_int(1, 999999);
         $service = new DocumentoServices();
 
-        $service->gerarPastaDoc($idPasta);
+        //$service->gerarPastaDoc($idPasta);
+        //var_dump($Arquivos["idArmario"]);
 
         $documentosList = array();
         array_push($documentosList, array(
             'docid' => $idPasta,
-            'armario' => filter_input(INPUT_POST, 'ListArmarioDocumento'),
-            'tipodoc' => filter_input(INPUT_POST, 'SelectTipoDoc'),
+            'armario' => $Arquivos["idArmario"],
+            'tipodoc' => $Arquivos["tipoDoc"],
             'folderid' => $idPasta,
-            'semestre' => filter_input(INPUT_POST, 'semestre'),
-            'ano' => filter_input(INPUT_POST, 'ano'),
-            'nip' => filter_input(INPUT_POST, 'Nip')
+            'semestre' =>  $Arquivos["semestre"],
+            'ano' => $Arquivos["ano"],
+            'nip' => $Arquivos["nip"]
         ));
 
-        $service->cadastrarDocumentos($documentosList);
-        return true;
+        //var_dump($documentosList[0]["docid"]);
+        $documentosList[0]["docid"] = $service->cadastrarDocumentos($documentosList);
+
+        echo json_encode($documentosList[0]["docid"]);
     }
 
     public function BuscarDocumentos()
@@ -92,11 +102,11 @@ class DocumentoController extends Controller
         require __DIR__ . '../../Views/documento/documento.php';
     }
 
-    public function criptografarArquivo()
+    /*public function criptografarArquivo()
     {
         $service = new DocumentoServices();
         $service->criptografarArquivo($_GET['caminho']);
-    }
+    }*/
 
     public function alterarDocumento(): bool
     {
@@ -132,14 +142,16 @@ class DocumentoController extends Controller
 
     public function retornaPdfs()
     {
+        $dadosDocumento = json_decode(file_get_contents('php://input'));
+        //var_dump($arquivo);
         $service = new DocumentoServices();
-        $tagsList = $this->montaArryaTags();
+        //$tagsList = $this->montaArryaTags(json_decode($dadosDocumento->tags));
 
-        $paginasList = $service->gerarPdfs($tagsList);
+        $paginasList = $service->gerarPdfs($dadosDocumento);
         echo json_encode($paginasList);
     }
 
-    public function cadastrarPagina(): bool
+    /* public function cadastrarPagina(): bool
     {
         $service = new DocumentoServices();
         $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
@@ -147,7 +159,7 @@ class DocumentoController extends Controller
         var_dump($tagsList[0]);
         $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'),  $tagsList);
         return $service->cadastrarPaginas($paginasList);
-    }
+    }*/
 
     public function carregarArquivos()
     {
@@ -191,12 +203,12 @@ class DocumentoController extends Controller
 
         echo $caminho;
     }
-    public function montaArryaTags(): string
+    /*public function montaArryaTags($tags): string
     {
-        $assunto = filter_input(INPUT_POST, 'Assunto');
-        $autor = filter_input(INPUT_POST, 'Autor');
-        $Titulo = filter_input(INPUT_POST, 'Titulo');
-        $palavrasChave = filter_input(INPUT_POST, 'PalavrasChave');
+        $assunto = $tags->assunto;
+        $autor = $tags->autor;
+        $Titulo = $tags->titulo;
+        $palavrasChave = "Identificador: " . $tags->identificador;
 
         $tagsList = "";
         $tagsList .= "<meta name='buy' content='valor teste'/>";
@@ -205,9 +217,9 @@ class DocumentoController extends Controller
         $tagsList .= "<title>{$Titulo}</title>";
         $tagsList .= "<meta name='KeyWords' content='{$palavrasChave}'/>";
 
-
+        //var_dump($tagsList);
         return $tagsList;
-    }
+    }*/
     public function listarPaginas()
     {
         $service = new DocumentoServices();
@@ -225,7 +237,7 @@ class DocumentoController extends Controller
         return true;
     }
 
-    public function finalizarArquivo()
+    /* public function finalizarArquivo()
     {
         //var_dump(file_get_contents('php://input'));
         $Arquivos = json_decode(file_get_contents('php://input'));
@@ -237,7 +249,7 @@ class DocumentoController extends Controller
             $service->carregarArquivoservidor2($values->arquivo, $values->tipodoc, $values->documentoid);
         }
         //echo $Arquivos;
-    }
+    }*/
 
     public function alterarPagina(): bool
     {
@@ -275,7 +287,7 @@ class DocumentoController extends Controller
         $arquivo  = $service->abrirArquivo($caminho, "false");
         require __DIR__ . '../../Views/documento/visualizar.php';
     }
-    public function asssinarDigital()
+    /*public function asssinarDigital()
     {
         $service = new DocumentoServices();
         $tags = filter_input(INPUT_POST, 'Nip') . ", " .  filter_input(INPUT_POST, 'ano');
@@ -283,7 +295,7 @@ class DocumentoController extends Controller
         //var_dump($tagsList[0]);
         $paginasList = $service->gerarArquivo(filter_input(INPUT_POST, 'IdPasta'),  $tagsList);
         require __DIR__ . '../../Views/documento/Assinar.php';
-    }
+    }*/
 
     public function ExibirArquivosDiretorio()
     { //teste

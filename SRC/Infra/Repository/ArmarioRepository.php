@@ -19,7 +19,7 @@ class ArmarioRepository extends LogRepository
     public function listaArmarios(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" where \"Ativo\" = true order by \"NomeExterno\" asc;";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" where \"ativo\" = true order by \"NomeExterno\" asc;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
@@ -179,6 +179,23 @@ class ArmarioRepository extends LogRepository
         } catch (Exception $e) {
             echo $e;
             return [];
+        }
+    }
+
+    public function BuscarArmarioId(string $id): string
+    {
+
+        try {
+            $sqlQuery = "select \"NomeExterno\" FROM {$this->schema}\"Armarios\" where \"IdArmario\"  = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+            $armario = $stmt->fetchAll();
+
+            return $armario[0]['NomeExterno'];
+        } catch (Exception $e) {
+            echo $e;
+            return "";
         }
     }
 }

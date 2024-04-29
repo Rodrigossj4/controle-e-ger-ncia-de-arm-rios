@@ -3,11 +3,14 @@ var vUrlListarTipoDocumento = "/listarTipodocumento";
 var vUrlListarTipoPerfis = "/listarPerfis";
 var vUrlListarUsuarios = "/listarUsuarios";
 //var vUrlProdutos = "http://127.0.0.1:5000/Produtos";
-
+let listDocumentos = [];
+let listDocumentosServidor = [];
+let totalDocumnetos = 0;
 $(document).ready(function (e) {
     //carregarSecoes();
     //carregarProdutos();
     //console.log("carraga");
+
 });
 
 function carregarArmarios() {
@@ -947,6 +950,11 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
     });
 });
 
+$('#incluirDocumento').on('click', function (e) {
+    listDocumentos.push($("#listarDocumentos .active img").attr("src").replace(/\.\.\//g, ""));
+    //console.log(listDocumentos);
+});
+
 $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
     $.ajax({
@@ -956,7 +964,7 @@ $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             $('#formAnexarPagDoc #Caminho').val(data);
             ListarArquivos();
         },
@@ -965,6 +973,7 @@ $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
         }
     });
 });
+
 function ListarArquivos() {
 
     var contador = 0;
@@ -977,13 +986,13 @@ function ListarArquivos() {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log('retorno: ' + data);
+            //console.log('retorno: ' + data);
             const arrayData = JSON.parse(data);
             var sel = $("#listarDocumentos");
             sel.empty();
             arrayData.forEach(e => {
                 var active = (contador == 0) ? 'active' : '';
-                sel.append('<div class="carousel-item ' + active + ' style="width: 400px; height: 100Vh;"><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+                sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;"><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
                 contador++;
             });
 
@@ -1020,38 +1029,108 @@ function retornaCaminho(caminho) {
 }
 
 $(document).on('click', '#btnNaoConfirmaIndexarDocumento', function (e) {
-    FecharModal('#IndexarDocumento');
+    FecharModal('#ModIndexarDocumento');
 });
 
 var dadosDocumento = "";
 var docBase64 = "";
 var docAtual = ""
 var docBase64Atual = "";
+let docid = 0;
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
-    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
+
+    if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
+        alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Nip').val() == "") || ($('#formCadDocumento #Nip').val().length != 8)) {
+        alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #semestre').val() == 0)) {
+        alertas("Informe o semestre", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
+        alertas("Informe um ano válido", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
+        alertas("Informe o tipo de documento", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if ((listDocumentos.length == 0)) {
+        alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formTags #Assunto').val() == "") || ($('#formTags #Autor').val() == "") || ($('#formTags #Titulo').val() == "") || ($('#formTags #Identificador').val() == "") || ($('#formTags #Classe').val() == "")) {
+        alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    tags = JSON.stringify({
+        assunto: $('#formTags #Assunto').val(),
+        autor: $('#formTags #Autor').val(),
+        titulo: $('#formTags #Titulo').val(),
+        identificador: $('#formTags #Identificador').val(),
+        classe: $('#formTags #Classe').val(),
+        observacao: $('#formTags #Observacao').val(),
+    }, null, 2);
+
+    dados = JSON.stringify({
+        idArmario: $('#formCadDocumento #ListArmarioDocumento').val(),
+        nomeArmario: "",
+        nip: $('#formCadDocumento #Nip').val(),
+        semestre: $('#formCadDocumento #semestre').val(),
+        ano: $('#formCadDocumento #ano').val(),
+        tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
+        caminho: $('#formCadDocumento #Caminho').val(),
+        tags: tags,
+        imagens: listDocumentos,
+    }, null, 2);
 
     $.ajax({
         type: 'POST',
-        url: "/retorna-pdfs",
-        data: formdata,
+        url: "/cadastrarDocumento",
+        data: dados,
         processData: false,
         contentType: false,
-        success: function (data) {
-            //console.log(data);
-            //dadosDocumento = data;
-            // if (($("input[name='origemDoc']").val() == "imgToPdf") || ($('#AssinaDocumentos').prop('checked')))
-            var ArrayDocumentos = JSON.parse(data);
-            ArrayDocumentos.forEach(doc => {
-                dadosDocumento = JSON.stringify(doc);
-                assinarDocumentos(dadosDocumento);
-            });
+        success: function (retorno) {
+            docid = retorno;
 
+            $.ajax({
+                type: 'POST',
+                url: "/retorna-pdfs",
+                data: dados,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    //console.log(data);
+                    var ArrayDocumentos = JSON.parse(data);
+                    totalDocumnetos = ArrayDocumentos.length;
+                    ArrayDocumentos.forEach(doc => {
+                        dadosDocumento = JSON.stringify(doc);
+                        assinarDocumentos(dadosDocumento);
+                    });
+                },
+                error: function (d) {
+                    alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#IndexarDocumento', 'alert_danger');
+
+                }
+            });
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#IndexarDocumento', 'alert_danger');
-            console.log('erro ao carregar arquivos ' + d);
+            alertas("Erro ao cadastrar o documento. Verfique os dados inseridoss", '#ModIndexarDocumento', 'alert_danger');
         }
     });
+
+
 });
 
 function assinarDocumentos(documentos) {
@@ -1080,26 +1159,30 @@ function assinarDocumentos(documentos) {
 }
 
 $(document).ready(function () {
-
-
-
     $('#assinatura').change(function () {
         var valorInput = $(this).val();
         if (valorInput !== '') {
             docAtual = $('#objetoAtual').val();
             docBase64Atual = $(this).val();
             //console.log(dadosDocumento);
-
             finalizarAssinatura(function () {
-                console.log("Terminou: " + docAtual);
+                //console.log("Terminou: ");
+
                 setTimeout(function () {
                     location.reload();
                 }, 3000);
             });
-            finalizarCriptografia(function () {
-                //console.log("Terminou: " + docAtual);
+            // finalizarCriptografia(function () {
 
-            });
+            docAtual = JSON.parse(docAtual);
+            docAtual["documentoid"] = docid;
+            docAtual = JSON.stringify(docAtual);
+
+            listDocumentosServidor.push(docAtual);
+            if (listDocumentosServidor.length == totalDocumnetos)
+                armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+
+            // });
             alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
         }
     });
@@ -1128,7 +1211,7 @@ function finalizarCriptografia(callback) {
     setTimeout(function () {
         callback();
     }, 3000);
-    console.log("Rotina de criptografia finalizada ");
+    //console.log("Rotina de criptografia finalizada ");
 
 }
 
@@ -1160,9 +1243,9 @@ function criptgrafarDocumento(documentos) {
 }
 
 function armazenaDocumentos(documentos) {
-    console.log("Rotina de armazenar ");
-    var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
-    var ArrayDocumentos = JSON.parse(documentos);
+    console.log("Rotina de armazenamento ");
+
+    //var ArrayDocumentos = JSON.parse(documentos);
     // $('#tratandoDocumento').val(documentos);
     //console.log('arma: ' + documentos);
     $.ajax({
@@ -1197,7 +1280,7 @@ function atualizarArquivo(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            // console.log(data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);

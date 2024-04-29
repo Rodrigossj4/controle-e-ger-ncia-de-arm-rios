@@ -42,7 +42,9 @@ if ((isset($_SESSION['Arquivos'])))
                 </a>
                 <div id="submenu">
                     <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
+                    <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
                 </div>
+
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/gerenciar-armarios">Gerencia de Armarios</a>
@@ -55,9 +57,6 @@ if ((isset($_SESSION['Arquivos'])))
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/visualizar-documentos">Visualizar Documentos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/Modulo_img.php" target="_blank">Tratamento de Imagens</a>

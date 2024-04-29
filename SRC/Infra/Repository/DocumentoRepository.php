@@ -223,11 +223,11 @@ class DocumentoRepository extends LogRepository
         }
     }
 
-    public function cadastrarDocumentos(array $documento): bool
+    public function cadastrarDocumentos(array $documento): int
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"Documentos\"(\"DocId\", \"Nip\", \"Semestre\", \"Ano\", \"IdTipoDoc\", \"FolderId\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"Documentos\"(\"DocId\", \"Nip\", \"Semestre\", \"Ano\", \"IdTipoDoc\", \"FolderId\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?) RETURNING \"IdDocumento\";";
             $stmt = $this->pdo->prepare($sqlQuery);
             //var_dump($documento);
             foreach ($documento as $dc) {
@@ -252,7 +252,7 @@ class DocumentoRepository extends LogRepository
             $stmt->bindValue(7, $documentoData->armario());
             $stmt->execute();
 
-            return true;
+            return $stmt->fetchColumn();
         } catch (Exception $e) {
             echo $e;
             return false;
