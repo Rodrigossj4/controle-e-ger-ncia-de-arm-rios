@@ -102,6 +102,7 @@
 		$('#objetoAtual').val(caminhoOriginal);
 		$('#assinatura').trigger('change');*/
 		// Antes de assinar
+
 		params.beforeSign && params.beforeSign();
 		// Sign - Chama o assinador
 		window.SerproSignerClient.sign(params.type, params.data, params.textEncoding, params.outputDataType, params.attached)
