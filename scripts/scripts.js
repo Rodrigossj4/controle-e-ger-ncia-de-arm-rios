@@ -842,7 +842,7 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
                 var sel = $("#documentosLista");
                 sel.empty();
                 arrayData.forEach(e => {
-                    sel.append('<tr><td>1</td><td>' + e.nip + '</td><td>' + e.semestre + '</td><td>' + e.ano + '</td><td>' + e.desctipo + '</td></tr>');
+                    sel.append('<tr class="clickDocumento" id="' + e.id + '" ><td>1</td><td>' + e.nip + '</td><td>' + e.semestre + '</td><td>' + e.ano + '</td><td>' + e.desctipo + '</td></tr>');
 
                     //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>'
                 });
@@ -854,12 +854,15 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
     }
 });
 
-$('#SelectLote #lote').on('change', function () {
 
-    var formdata = new FormData($("form[id='SelectLote']")[0]);
-    var id = $(this).val();
+$(document).on('click', '.clickDocumento', function (e) {
 
-    $.ajax({
+
+    console.log($(this).attr("id"));
+    // var formdata = new FormData($("form[id='SelectLote']")[0]);
+    //var id = $(this).val();
+
+    /*$.ajax({
         type: 'POST',
         url: "/ListarDocumentos",
         data: formdata,
@@ -878,7 +881,7 @@ $('#SelectLote #lote').on('change', function () {
         error: function (d) {
             console.log('ei erro ' + d);
         }
-    });
+    });*/
 });
 
 
@@ -1164,13 +1167,13 @@ $(document).ready(function () {
         if (valorInput !== '') {
             docAtual = $('#objetoAtual').val();
             docBase64Atual = $(this).val();
-            //console.log(dadosDocumento);
+            // console.log(dadosDocumento);
             finalizarAssinatura(function () {
-                //console.log("Terminou: ");
+                console.log("Terminou: ");
 
-                setTimeout(function () {
-                    location.reload();
-                }, 3000);
+                /* setTimeout(function () {
+                     location.reload();
+                 }, 3000);*/
             });
             // finalizarCriptografia(function () {
 
@@ -1183,14 +1186,14 @@ $(document).ready(function () {
                 armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
             // });
-            alertas('Documento Indexado com sucesso', '#IndexarDocumento', 'alert_sucess', 'true');
+            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
         }
     });
 });
 
 function finalizarAssinatura(callback) {
     var ArrayDocumentos = JSON.parse(docAtual);
-    //console.log("atual: " + ArrayDocumentos["arquivo"]);
+    console.log("atual: " + ArrayDocumentos["arquivo"]);
     //console.log("atualB64: " + docBase64Atual);
     atualizarArquivo(JSON.stringify({
         arquivoOriginal: ArrayDocumentos["arquivo"],

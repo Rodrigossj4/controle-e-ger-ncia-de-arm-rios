@@ -4,6 +4,7 @@
 	checkEnvironment();
 	initApp();
 	initSerproSignerClient();
+	let caminhoOriginal = "";
 
 	function initSerproSignerClient() {
 		var timeoutDefault = 3000;
@@ -95,6 +96,11 @@
 			throw new Error('Sign data is not defined.');
 		}
 
+		var resultado = $('#assinatura');
+		resultado.val($('#content-value').val());
+		console.log("caminho original: " + caminhoOriginal);
+		$('#objetoAtual').val(caminhoOriginal);
+		$('#assinatura').trigger('change');
 		// Antes de assinar
 		params.beforeSign && params.beforeSign();
 		// Sign - Chama o assinador
@@ -107,6 +113,7 @@
 					console.debug('Sucesso:', response);
 					var resultado = $('#assinatura');
 					resultado.val(response.signature);
+					$('#objetoAtual').val(caminhoOriginal);
 					$('#assinatura').trigger('change');
 					//resultado.autogrow();
 
@@ -312,6 +319,7 @@
 		function signPdf(event) {
 			event.preventDefault();
 
+			caminhoOriginal = $('#objetoAtual').val();
 			sign({
 				type: 'pdf',
 				data: $('#content-value').val(),

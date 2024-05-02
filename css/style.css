@@ -133,6 +133,10 @@ span.carousel-control-next-icon {
     background-image: url("../imagensSistema/arrow_forward_ios_black_24dp.svg")
 }
 
+.clickDocumento {
+    cursor: pointer;
+}
+
 /*
 .Grade {
     border: 0px solid;
