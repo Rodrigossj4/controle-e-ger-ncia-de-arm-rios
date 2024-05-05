@@ -75,6 +75,37 @@ class DocumentoController extends Controller
         echo json_encode($documentosList[0]["docid"]);
     }
 
+    public function anexarPaginaDocumento()
+    {
+        $Arquivos = json_decode(file_get_contents('php://input'), true);
+
+        if (strlen($Arquivos["nip"]) < 8 || strlen($Arquivos["ano"]) != 4 || $Arquivos["semestre"] == 0  || $Arquivos["idArmario"] == 0 || $Arquivos["tipoDoc"] == 0) {
+            http_response_code(500);
+            return "Todos os campos são obrigatórios";
+        }
+
+        $idPasta = random_int(1, 999999);
+        $service = new DocumentoServices();
+
+        //$service->gerarPastaDoc($idPasta);
+        //var_dump($Arquivos["idArmario"]);
+
+        $documentosList = array();
+        array_push($documentosList, array(
+            'docid' => $idPasta,
+            'armario' => $Arquivos["idArmario"],
+            'tipodoc' => $Arquivos["tipoDoc"],
+            'folderid' => $idPasta,
+            'semestre' =>  $Arquivos["semestre"],
+            'ano' => $Arquivos["ano"],
+            'nip' => $Arquivos["nip"]
+        ));
+
+        //var_dump($documentosList[0]["docid"]);
+        $documentosList[0]["docid"] = $service->cadastrarDocumentos($documentosList);
+
+        echo json_encode($documentosList[0]["docid"]);
+    }
     public function BuscarDocumentos()
     {
         $documentosList = array();
@@ -170,7 +201,6 @@ class DocumentoController extends Controller
     }
     public function carregarArquivosServidor()
     {
-
         //var_dump(file_get_contents('php://input'));
         $service = new DocumentoServices();
         $caminho = $service->carregarArquivoservidor(file_get_contents('php://input'));
@@ -223,15 +253,15 @@ class DocumentoController extends Controller
     public function listarPaginas()
     {
         $service = new DocumentoServices();
-        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'iddocumento'));
-        require __DIR__ . '../../Views/documento/index.php';
+        $paginasList = $service->listaPaginas(filter_input(INPUT_GET, 'idDocumento'));
+        echo json_encode($paginasList);
     }
 
     public function excluirPagina(): bool
     {
         $arquivo = json_decode(file_get_contents('php://input'));
         //unlink($b64->arquivoOriginal);
-        var_dump($arquivo->idPagina);
+        // var_dump($arquivo->idPagina);
         $service = new DocumentoServices();
         $service->excluirPagina($arquivo->idPagina);
         return true;

@@ -137,6 +137,14 @@ span.carousel-control-next-icon {
     cursor: pointer;
 }
 
+.btnIndexar {
+    display: none;
+}
+
+.btnAnexar {
+    display: none;
+}
+
 /*
 .Grade {
     border: 0px solid;

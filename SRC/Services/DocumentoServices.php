@@ -116,7 +116,23 @@ class DocumentoServices extends SistemaServices
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
-            return $repository->listarPaginas($id);
+
+            // json_decode($arquivos->listDocumentosServidor[0], true)
+            $listaArquivos =  $repository->listarPaginas($id);
+            $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
+
+            $componentes = explode('/', $listaArquivos[0]["arquivo"]);
+            $resultado = implode('/', array_slice($componentes, -3));
+            $diretorioTemporario = $this->diretorioLote . "TEMP/" . pathinfo($resultado, PATHINFO_DIRNAME);
+
+            mkdir($diretorioTemporario, 0777, true);
+
+            foreach ($listaArquivos as &$arquivo) {
+                copy($diretorioOriginal . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME), $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME));
+                $arquivo["arquivo"] = $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME);
+            }
+
+            return $listaArquivos;
         } catch (Exception $e) {
             echo $e;
             return [];
@@ -192,7 +208,7 @@ class DocumentoServices extends SistemaServices
                 'arquivo' => $caminhoPDF,
                 'filme' => "1",
                 'fotograma' => "1",
-                'imgencontrada' => "1",
+                'imgencontrada' => "0",
                 'b64' => ""
             ));
         }
@@ -444,15 +460,18 @@ class DocumentoServices extends SistemaServices
 
     public function carregarArquivoservidor($arquivos): string
     {
-        var_dump($arquivos);
+        //var_dump($arquivos);
         $arquivos = json_decode($arquivos);
         //$total = count($arquivos);
 
         $nomeArmario = json_decode($arquivos->listDocumentosServidor[0], true);
 
         $repository = new DocumentoRepository($this->Conexao());
-        $pasta = $this->gerarPasta($nomeArmario['nomeArmario']);
+        // $pasta =   $this->gerarPasta($nomeArmario['nomeArmario']);
+        //var_dump("aq " . json_decode($arquivos->listDocumentosServidor[0], true)['imgencontrada']);
 
+        $pasta =  (json_decode($arquivos->listDocumentosServidor[0], true)['imgencontrada'] == "0") ? $this->gerarPasta($nomeArmario['nomeArmario']) :
+            $this->retornaCaminhoDocumentoServ(json_decode($arquivos->listDocumentosServidor[0], true)['documentoid']);
 
         $caminhoRaiz = "";
         //var_dump("ei: " . pathinfo($documentos[0]->arquivo)['dirname']);
@@ -475,7 +494,7 @@ class DocumentoServices extends SistemaServices
                 'arquivo' => $caminho,
                 'filme' => "1",
                 'fotograma' => "1",
-                'imgencontrada' => "1"
+                'imgencontrada' => "0"
             ));
             $repository->cadastrarPagina($paginasList);
 
@@ -557,5 +576,11 @@ class DocumentoServices extends SistemaServices
         $caminhoArq = $caminhoArq . "/" . basename($caminhoOrigem);
         copy($caminhoOrigem, $caminhoArq);
         return $caminhoArq;
+    }
+
+    private function retornaCaminhoDocumentoServ(int $iddoc): string
+    {
+        $repository = new DocumentoRepository($this->Conexao());
+        return  $repository->retornaCaminhoDocumentoServ($iddoc);
     }
 }

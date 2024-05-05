@@ -73,11 +73,11 @@ $contador = 0;
                 </div>
                 <br>
                 <div class="form-group row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-3 btnIndexar">
                         <input type="button" data-bs-toggle="modal" data-bs-target="#ModIndexarDocumento" id="IndexarDocumento" name="IndexarDocumento" value="Indexar" class="btn btn-primary">
                     </div>
-                    <div class="col-sm-3">
-                        <input type="button" id="btnCadDocumento" value="Anexar" class="btn btn-primary">
+                    <div class="col-sm-3 btnAnexar">
+                        <input type="button" data-bs-toggle="modal" data-bs-target="#ModAnexarDocumento" id="AnexarDocumento" value="Anexar" class="btn btn-primary">
                     </div>
                     <span class="alerta"></span>
                 </div>
@@ -110,24 +110,25 @@ $contador = 0;
 
 
         <div class="col-md-4 order-md-1" style="border: 1px solid;">
-
             <div class="container mt-4">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="0">
-                    <div class="carousel-inner" id="listarDocumentos">
+                    <div class="carousel-inner" id="listarDocumentos" data-docId="">
 
                     </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" data-indice="0">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Anterior</span>
                     </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" data-indice="0">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Próximo</span>
                     </a>
                 </div>
             </div>
+
             <div class="container">
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary">incluir</button>
+                <button name="excluirDocumento" id="excluirDocumento" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModReIndexarDocumento">Excluir</button>
             </div>
         </div>
         <div class="col-md-4 order-md-1" style="border: 1px solid;">
@@ -241,6 +242,53 @@ $contador = 0;
                     </div>
                     <div class="col-sm-3">
                         <input type="button" id="btnNaoConfirmaIndexarDocumento" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaIndexarDocumento">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModAnexarDocumento" tabindex="-1" aria-labelledby="ModAnexarDocumento" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Já existe um documento cadastrado com essas caracteristicas. Deseja anexar páginas a esse documento?</span>
+                    <div class="col-sm-3">
+
+                        <input type="button" id="btnConfirmaAnexarDocumento" data-id="" value="Sim" class="btn btn-success btnConfirmaAnexarDocumento">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaAnexarDocumento" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaAnexarDocumento">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModReIndexarDocumento" tabindex="-1" aria-labelledby="ModReIndexarDocumento" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja realmente Re-indexar esse novo documento?</span>
+                    <div class="col-sm-3">
+
+                        <input type="button" id="btnConfirmaReIndexarDocumento" data-id="" value="Sim" class="btn btn-success btnConfirmaReIndexarDocumento">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaReIndexarDocumento" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaReIndexarDocumento">
                     </div>
                 </div>
                 <span class="alerta"></span>

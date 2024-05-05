@@ -259,6 +259,25 @@ class DocumentoRepository extends LogRepository
         }
     }
 
+    public function retornaCaminhoDocumentoServ(int $iddoc): string
+    {
+        try {
+            $sqlQuery = "SELECT * FROM {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $iddoc);
+            $stmt->execute();
+
+            $paginasDataList = $stmt->fetchAll();
+
+            //var_dump(pathinfo($paginasDataList[0]["Arquivo"], PATHINFO_DIRNAME));
+
+            return pathinfo($paginasDataList[0]["Arquivo"], PATHINFO_DIRNAME);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
     public function alterarDocumentos(array $documento): bool
     {
         try {
@@ -453,7 +472,7 @@ class DocumentoRepository extends LogRepository
     public function excluirPagina(int $id): bool
     {
         try {
-            var_dump($this->retornarCaminhoDocumento("", $id));
+            //var_dump($this->retornarCaminhoDocumento("", $id));
             unlink($this->retornarCaminhoDocumento("", $id));
             $sqlQuery = "delete FROM {$this->schema}\"DocumentoPagina\" where \"IdDocPag\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);

@@ -852,38 +852,111 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
             }
         });
     }
+
+    if ($("#listPaginas tr").length > 1) {
+        $('.btnIndexar').css("display", "none");
+        $('.btnAnexar').css("display", "block");
+    } else {
+        $('.btnIndexar').css("display", "block");
+        $('.btnAnexar').css("display", "none");
+    }
+
 });
 
 
 $(document).on('click', '.clickDocumento', function (e) {
 
-
-    console.log($(this).attr("id"));
+    //console.log($(this).attr("id"));
+    //var docId = $(this).attr("id");
     // var formdata = new FormData($("form[id='SelectLote']")[0]);
     //var id = $(this).val();
 
-    /*$.ajax({
-        type: 'POST',
-        url: "/ListarDocumentos",
-        data: formdata,
+    $.ajax({
+        type: 'GET',
+        url: "/listarPaginas?idDocumento=" + $(this).attr("id"),
+        data: '',
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
+            //console.log(docId);
             const arrayData = JSON.parse(data);
+
             var sel = $("#listarDocumentos");
-            sel.empty();
+
+            listDocumentosServidor = [];
             arrayData.forEach(e => {
-                var url = id + '\/' + e;
-                sel.append(e + ' - <input type="button" class="btn btn-primary" data-arquivo="' + url + '" id="arquivosLote"  value="Visualizar documento">  <input type="checkbox" name="documentoEscolhido" value="' + url + '"> Incluir no documento </br>');
-            })
+                listDocumentosServidor.push([e.id, e.arquivo]);
+            });
+            //console.log(listDocumentosServidor[1][1]);
+            sel.empty();
+            $('.carousel-control-prev').attr('id', 'regride');
+            $('.carousel-control-next').attr('id', 'avanca');
+            $('#avanca').attr('data-indice', 1);
+            $('#regride').attr('data-indice', 0);
+            sel.attr('data-docId', listDocumentosServidor[0][0]);
+            sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
+
         },
         error: function (d) {
             console.log('ei erro ' + d);
         }
-    });*/
+    });
 });
 
+
+$(document).on('click', '#avanca', function () {
+    if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) + 1 <= listDocumentosServidor.length)) {
+        var sel = $("#listarDocumentos");
+        sel.empty();
+        sel.append('<iframe src="/' + listDocumentosServidor[parseInt($(this).attr('data-indice'))][1] + '" width="100%" height="500"></iframe>');
+        $(this).attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
+        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).data('indice'))][0]);
+        $('#regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
+    }
+});
+
+$(document).on('click', '#regride', function () {
+
+    if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) - 1 >= 0)) {
+        var sel = $("#listarDocumentos");
+        sel.empty();
+        sel.append('<iframe src="/' + listDocumentosServidor[parseInt($(this).attr('data-indice')) - 1][1] + '" width="100%" height="500"></iframe>');
+        $(this).attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
+        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).data('indice')) - 1][0]);
+        $('#avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
+    }
+});
+
+$(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
+    console.log($("#listarDocumentos").attr("data-docid"));
+
+    dados = JSON.stringify({
+        idPagina: $("#listarDocumentos").attr("data-docid")
+    }, null, 2)
+
+    $.ajax({
+        type: 'POST',
+        url: "/excluirPagina",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+            alertas('Página Excluida com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
+            setTimeout(function () {
+                location.reload();
+            }, 3000);
+        },
+        error: function (d) {
+            alertas(d.responseJSON['msg'], '#ExcluirPagina', 'alert_danger');
+            console.log('erro ao excluir a página ' + d);
+        }
+    });
+});
+
+$(document).on('click', '#btnNaoConfirmaReIndexarDocumento', function (e) {
+    FecharModal('#ModReIndexarDocumento');
+});
 
 
 function carregarLotes() {
@@ -943,9 +1016,11 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             $('#formCadDocumento #Caminho').val(data);
             ListarArquivos();
+            $(".carousel-control-prev").removeAttr("id");
+            $(".carousel-control-next").removeAttr("id");
         },
         error: function (d) {
             console.log('erro ao carregar arquivos ' + d);
@@ -1041,7 +1116,6 @@ var docAtual = ""
 var docBase64Atual = "";
 let docid = 0;
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
-
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
         alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
         return false;
@@ -1136,6 +1210,94 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 
 });
 
+
+
+$(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
+    if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
+        alertas("Selecione um armário", '#ModAnexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Nip').val() == "") || ($('#formCadDocumento #Nip').val().length != 8)) {
+        alertas("Informe um nip válido", '#ModAnexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #semestre').val() == 0)) {
+        alertas("Informe o semestre", '#ModAnexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
+        alertas("Informe um ano válido", '#ModAnexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
+        alertas("Informe o tipo de documento", '#ModAnexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if ((listDocumentos.length == 0)) {
+        alertas("Ao menos um documento deve ser inserido para indexar", '#ModAnexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formTags #Assunto').val() == "") || ($('#formTags #Autor').val() == "") || ($('#formTags #Titulo').val() == "") || ($('#formTags #Identificador').val() == "") || ($('#formTags #Classe').val() == "")) {
+        alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    tags = JSON.stringify({
+        assunto: $('#formTags #Assunto').val(),
+        autor: $('#formTags #Autor').val(),
+        titulo: $('#formTags #Titulo').val(),
+        identificador: $('#formTags #Identificador').val(),
+        classe: $('#formTags #Classe').val(),
+        observacao: $('#formTags #Observacao').val(),
+    }, null, 2);
+
+    dados = JSON.stringify({
+        idArmario: $('#formCadDocumento #ListArmarioDocumento').val(),
+        nomeArmario: "",
+        nip: $('#formCadDocumento #Nip').val(),
+        semestre: $('#formCadDocumento #semestre').val(),
+        ano: $('#formCadDocumento #ano').val(),
+        tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
+        caminho: $('#formCadDocumento #Caminho').val(),
+        tags: tags,
+        imagens: listDocumentos,
+    }, null, 2);
+
+
+    docid = $('#listPaginas #documentosLista .clickDocumento').attr("id");
+
+
+    $.ajax({
+        type: 'POST',
+        url: "/retorna-pdfs",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+            var ArrayDocumentos = JSON.parse(data);
+            totalDocumnetos = ArrayDocumentos.length;
+            ArrayDocumentos.forEach(doc => {
+                doc["imgencontrada"] = 1;
+                dadosDocumento = JSON.stringify(doc);
+                assinarDocumentos(dadosDocumento);
+            });
+        },
+        error: function (d) {
+            alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#ModAnexarDocumento', 'alert_danger');
+
+        }
+    });
+
+
+
+});
 function assinarDocumentos(documentos) {
     console.log("Rotina de assinar: ");
     var ArrayDocumentos = JSON.parse(documentos);
@@ -1258,7 +1420,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log("arm: " + data);
+            console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);
@@ -1306,36 +1468,7 @@ $('.ExcDoc').on('click', function (e) {
     $('#formExcluirPagina #docid').val($(this).data("docid"));
 });
 
-$(document).on('click', '.btnConfirmaExcluirPagina', function (e) {
 
-    dados = JSON.stringify({
-        idPagina: $('#formExcluirPagina #id').val(),
-        docId: $('#formExcluirPagina #docid').val(),
-    }, null, 2)
-
-    $.ajax({
-        type: 'POST',
-        url: "/excluirPagina",
-        data: dados,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            //console.log(data);
-            alertas('Página Excluida com sucesso', '#ExcluirPagina', 'alert_sucess', 'true');
-            setTimeout(function () {
-                location.reload();
-            }, 3000);
-        },
-        error: function (d) {
-            alertas(d.responseJSON['msg'], '#ExcluirPagina', 'alert_danger');
-            console.log('erro ao excluir a página ' + d);
-        }
-    });
-});
-
-$(document).on('click', '#btnNaoConfirmaExcluirPagina', function (e) {
-    FecharModal('#ExcluirPagina');
-});
 
 $(document).ready(function () {
     $('.carousel').carousel({
