@@ -1271,8 +1271,6 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
 
     docid = $('#listPaginas #documentosLista .clickDocumento').attr("id");
-
-
     $.ajax({
         type: 'POST',
         url: "/retorna-pdfs",
