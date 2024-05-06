@@ -902,7 +902,7 @@ $(document).on('click', '.clickDocumento', function (e) {
         }
     });
 });
-
+//te
 
 $(document).on('click', '#avanca', function () {
     if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) + 1 <= listDocumentosServidor.length)) {

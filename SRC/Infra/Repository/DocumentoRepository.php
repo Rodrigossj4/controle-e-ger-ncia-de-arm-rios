@@ -330,7 +330,7 @@ class DocumentoRepository extends LogRepository
             return false;
         }
     }
-
+    //d
     public function listarPaginas(int $id): array
     {
         try {
