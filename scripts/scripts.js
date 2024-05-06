@@ -879,7 +879,7 @@ $(document).on('click', '.clickDocumento', function (e) {
         contentType: false,
         success: function (data) {
             console.log(data);
-            // const arrayData = JSON.parse(data);
+            const arrayData = JSON.parse(data);
 
             var sel = $("#listarDocumentos");
 

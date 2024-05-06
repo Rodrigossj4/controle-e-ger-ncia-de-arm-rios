@@ -358,7 +358,7 @@ class DocumentoRepository extends LogRepository
                 ));
             };
 
-            var_dump($paginasList);
+            //var_dump($paginasList);
             return $paginasList;
         } catch (Exception $e) {
             echo $e;
