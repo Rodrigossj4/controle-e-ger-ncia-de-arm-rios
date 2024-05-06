@@ -878,7 +878,7 @@ $(document).on('click', '.clickDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             const arrayData = JSON.parse(data);
 
             var sel = $("#listarDocumentos");
@@ -908,21 +908,30 @@ $(document).on('click', '#avanca', function () {
     if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) + 1 <= listDocumentosServidor.length)) {
         var sel = $("#listarDocumentos");
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[parseInt($(this).attr('data-indice'))][1] + '" width="100%" height="500"></iframe>');
-        $(this).attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+
+        let indice = (parseInt($(this).attr('data-indice')) + 1) > (listDocumentosServidor.length - 1) ? listDocumentosServidor.length - 1 : parseInt($(this).attr('data-indice')) + 1;
+
+        $(this).attr('data-indice', indice);
+
         sel.attr('data-docId', listDocumentosServidor[parseInt($(this).data('indice'))][0]);
         $('#regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
+
     }
 });
 
 $(document).on('click', '#regride', function () {
 
-    if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) - 1 >= 0)) {
+    if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) >= 0)) {
+
         var sel = $("#listarDocumentos");
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[parseInt($(this).attr('data-indice')) - 1][1] + '" width="100%" height="500"></iframe>');
-        $(this).attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
-        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).data('indice')) - 1][0]);
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+
+        let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
+
+        $(this).attr('data-indice', indice);
+        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).data('indice'))][0]);
         $('#avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
     }
 });
@@ -1009,6 +1018,9 @@ $('#formCadLote #btnCadLote').on('click', function (e) {
 
 $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadDocumento']")[0]);
+    listDocumentos = [];
+    listDocumentosServidor = [];
+    console.log("acho");
     $.ajax({
         type: 'POST',
         url: "/carregarArquivos",
@@ -1211,6 +1223,9 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 });
 
 
+$(document).on('click', '#btnNaoConfirmaAnexarDocumento', function (e) {
+    FecharModal('#ModAnexarDocumento');
+});
 
 $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
@@ -1330,6 +1345,9 @@ $(document).ready(function () {
             // console.log(dadosDocumento);
             finalizarAssinatura(function () {
                 console.log("Terminou: ");
+                listDocumentos = [];
+                listDocumentosServidor = [];
+                $('#semestre').trigger('change');
 
                 /* setTimeout(function () {
                      location.reload();
@@ -1347,6 +1365,7 @@ $(document).ready(function () {
 
             // });
             alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+            alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
         }
     });
 });

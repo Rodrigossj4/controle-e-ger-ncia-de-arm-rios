@@ -125,7 +125,9 @@ class DocumentoServices extends SistemaServices
             $resultado = implode('/', array_slice($componentes, -3));
             $diretorioTemporario = $this->diretorioLote . "TEMP/" . pathinfo($resultado, PATHINFO_DIRNAME);
 
-            mkdir($diretorioTemporario, 0777, true);
+            if (!file_exists($diretorioTemporario)) {
+                mkdir($diretorioTemporario, 0777, true);
+            }
 
             foreach ($listaArquivos as &$arquivo) {
                 copy($diretorioOriginal . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME), $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME));
