@@ -1020,7 +1020,6 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadDocumento']")[0]);
     listDocumentos = [];
     listDocumentosServidor = [];
-    console.log("acho");
     $.ajax({
         type: 'POST',
         url: "/carregarArquivos",
@@ -1080,12 +1079,24 @@ function ListarArquivos() {
             const arrayData = JSON.parse(data);
             var sel = $("#listarDocumentos");
             sel.empty();
-            arrayData.forEach(e => {
-                var active = (contador == 0) ? 'active' : '';
-                sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;"><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
-                contador++;
-            });
+            var extensao = arrayData[0][0].split('.').pop();
 
+            if (extensao == "pdf") {
+                arrayData.forEach(e => {
+                    //console.log(e[0].split('.').pop());
+                    var active = (contador == 0) ? 'active' : '';
+                    sel.append('<iframe src="/' + e + '" width="100%" height="500"></iframe>');
+                    contador++;
+                });
+
+            } else {
+                arrayData.forEach(e => {
+                    //console.log(e[0].split('.').pop());
+                    var active = (contador == 0) ? 'active' : '';
+                    sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;"><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+                    contador++;
+                });
+            }
             $("#carouselExampleControls").html();
 
         },
@@ -1437,7 +1448,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log("arm: " + data);
+            //console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);

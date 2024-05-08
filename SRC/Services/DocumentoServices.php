@@ -202,6 +202,7 @@ class DocumentoServices extends SistemaServices
 
             array_push($paginasList, array(
                 'documentoid' =>  null,
+                'idArmario' => $dadosDocumento->idArmario,
                 'nomeArmario' => $nomeArmario,
                 'tipoDocumento' => "",
                 'volume' => "1",
@@ -482,7 +483,7 @@ class DocumentoServices extends SistemaServices
         for ($i = 0; $i < $total; $i++) {
             $documentos = json_decode($arquivos->listDocumentosServidor[$i], true);
 
-            //var_dump($documentos->arquivo);
+            //var_dump($documentos);
             $origem = $documentos['arquivo'];
             //var_dump($arquivos->listDocumentosServidor[$i]);
             $caminho = $this->subirArquivoss($pasta, $origem);
@@ -496,7 +497,8 @@ class DocumentoServices extends SistemaServices
                 'arquivo' => $caminho,
                 'filme' => "1",
                 'fotograma' => "1",
-                'imgencontrada' => "0"
+                'imgencontrada' => "0",
+                'armario' => $documentos['idArmario']
             ));
             $repository->cadastrarPagina($paginasList);
 

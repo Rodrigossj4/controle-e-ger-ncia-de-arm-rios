@@ -60,7 +60,7 @@ $contador = 0;
                 <br>
                 <div class="form-group row">
                     <div class="col-sm-12">
-                        <label class="col-form-label" for="documento[]">Selecione as imagens</label>
+                        <label class="col-form-label" for="documento[]">Selecione arquivos</label>
                         <input type="file" id="documento" name="documento[]" class="form-control" multiple>
                     </div>
                 </div>
@@ -68,7 +68,7 @@ $contador = 0;
                 <div class="form-group row">
                     <div class="col-sm-9">
                         <input type="hidden" id="Caminho" name="Caminho" value="">
-                        <input type="buttton" class="btn btn-primary" name="btnCarregarArquivosImg" id="btnCarregarArquivosImg" value="Carregar Imagens" disabled="true">
+                        <input type="buttton" class="btn btn-primary" name="btnCarregarArquivosImg" id="btnCarregarArquivosImg" value="Carregar Arquivos" disabled="true">
                     </div>
                 </div>
                 <br>

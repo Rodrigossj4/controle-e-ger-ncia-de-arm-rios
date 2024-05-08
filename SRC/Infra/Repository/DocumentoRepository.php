@@ -427,7 +427,7 @@ class DocumentoRepository extends LogRepository
                     $pg['filme'],
                     $pg['fotograma'],
                     $pg['imgencontrada'],
-                    1,
+                    $pg['armario'],
                     false,
                     false
                 );
@@ -441,7 +441,7 @@ class DocumentoRepository extends LogRepository
             $stmt->bindValue(6, $paginaData->filme());
             $stmt->bindValue(7, $paginaData->fotograma());
             $stmt->bindValue(8, $paginaData->imgencontrada());
-            $stmt->bindValue(9, 1);
+            $stmt->bindValue(9, $paginaData->idarmario());
             $stmt->execute();
 
             return true;
