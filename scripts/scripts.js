@@ -887,7 +887,7 @@ $(document).on('click', '.clickDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             const arrayData = JSON.parse(data);
 
             var sel = $("#listarDocumentos");
@@ -1490,7 +1490,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log("arm: " + data);
+            //console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);

@@ -134,7 +134,7 @@ class DocumentoServices extends SistemaServices
             // json_decode($arquivos->listDocumentosServidor[0], true)
             $listaArquivos =  $repository->listarPaginas($id);
             $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
-
+            var_dump($listaArquivos);
             $componentes = explode('/', $listaArquivos[0]["arquivo"]);
             $resultado = implode('/', array_slice($componentes, -3));
             $diretorioTemporario = $this->diretorioLote . "TEMP/" . pathinfo($resultado, PATHINFO_DIRNAME);
