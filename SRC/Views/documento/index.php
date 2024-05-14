@@ -78,9 +78,14 @@ $contador = 0;
                     </div>
                     <div class="col-sm-3 btnAnexar">
                         <input type="button" data-bs-toggle="modal" data-bs-target="#ModAnexarDocumento" id="AnexarDocumento" value="Anexar" class="btn btn-primary">
+
+                    </div>
+                    <div class="col-sm-6 btnAnexar">
+                        <input type="button" name="excluirDocumento" id="excluirDocumento" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModReIndexarDocumento" value="ReIndexar página" />
                     </div>
                     <span class="alerta"></span>
                 </div>
+
             </form>
 
             <hr class="mb-4">
@@ -128,7 +133,6 @@ $contador = 0;
 
             <div class="container">
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary">incluir</button>
-                <button name="excluirDocumento" id="excluirDocumento" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModReIndexarDocumento">Excluir</button>
             </div>
         </div>
         <div class="col-md-4 order-md-1" style="border: 1px solid;">
@@ -296,3 +300,9 @@ $contador = 0;
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#formCadDocumento #Nip').mask('000.000-00');
+    });
+</script>

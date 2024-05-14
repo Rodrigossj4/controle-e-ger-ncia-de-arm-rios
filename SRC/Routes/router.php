@@ -77,7 +77,7 @@ class Router
                 '/excluirDocumento' => fn () => self::load('DocumentoController', 'excluir'),
                 '/alterarDocumento' => fn () => self::load('DocumentoController', 'alterarDocumento'),
                 '/cadastrarPagina' => fn () => self::load('DocumentoController', 'cadastrarPagina'),
-                '/excluirPagina' => fn () => self::load('DocumentoController', 'excluirPagina'),
+                '/ReIndexarPagina' => fn () => self::load('DocumentoController', 'ReIndexarPagina'),
                 '/alterarPagina' => fn () => self::load('DocumentoController', 'alterarPagina'),
                 //'/retornarCaminhoDocumento' => fn () => self::load('DocumentoController', 'retornarCaminhoDocumento'),
                 //'/criptografarArquivo' => fn () => self::load('DocumentoController', 'criptografarArquivo'),

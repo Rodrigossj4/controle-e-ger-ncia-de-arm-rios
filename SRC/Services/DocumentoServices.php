@@ -38,12 +38,26 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function cadastrarDocumentos(array $armario): int
+    public function cadastrarDocumentos(array $Arquivos): int
     {
         try {
+            //$Arquivos = json_decode(file_get_contents('php://input'), true);
+            $idPasta = random_int(1, 999999);
+
+            $documentosList = array();
+            array_push($documentosList, array(
+                'docid' => $idPasta,
+                'armario' => $Arquivos["idArmario"],
+                'tipodoc' => $Arquivos["tipoDoc"],
+                'folderid' => $idPasta,
+                'semestre' =>  $Arquivos["semestre"],
+                'ano' => $Arquivos["ano"],
+                'nip' => $Arquivos["nip"]
+            ));
+
             $repository = new DocumentoRepository($this->Conexao());
             //var_dump($repository);
-            return $repository->cadastrarDocumentos($armario);
+            return $repository->cadastrarDocumentos($documentosList);
         } catch (Exception $e) {
             echo $e;
             return 0;
@@ -152,11 +166,88 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function excluirPagina(int $id): bool
+    public function reindexarPagina(): bool
     {
+
         try {
+            $arquivo = json_decode(file_get_contents('php://input'));
+
+            $documentosList = array();
+            array_push($documentosList, array(
+                'docid' => "",
+                'nip' => $arquivo->nip,
+                'semestre' => $arquivo->semestre,
+                'ano' => $arquivo->ano,
+                'tipodoc' => $arquivo->tipoDoc,
+                'folderid' => "",
+                'armario' => $arquivo->idArmario
+            ));
+
+
+            //verificar se existe documento com essa caracteristica nesse nip
+            $retorno = $this->BuscarDocumentos($documentosList);
             $repository = new DocumentoRepository($this->Conexao());
-            return $repository->excluirPagina($id);
+
+            if (count($retorno) > 0) {
+                //retornar os arquivos
+                $listaArquivosDestino = $repository->listarPaginas($retorno[0]['id']);
+                $listaArquivosOrigem = $repository->carminhoArquivos($arquivo->idPagina);
+
+                // alterar o local do arquivo no servidor para a pasta do documento existente              
+                copy($listaArquivosOrigem[0]["Arquivo"], pathinfo($listaArquivosDestino[0]["arquivo"], PATHINFO_DIRNAME) . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
+                unlink("{$listaArquivosOrigem[0]["Arquivo"]}");
+
+                //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
+                $repository->AlterarDocumentoDaPagina($retorno[0]['id'], $arquivo->idPagina, pathinfo($listaArquivosDestino[0]["arquivo"], PATHINFO_DIRNAME) . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
+            } else {
+                $documentosList = array();
+                array_push($documentosList, array(
+                    'docid' => "",
+                    'nip' => $arquivo->nip,
+                    'semestre' => $arquivo->semestre,
+                    'ano' => $arquivo->ano,
+                    'tipoDoc' => $arquivo->tipoDoc,
+                    'folderid' => "",
+                    'idArmario' => $arquivo->idArmario
+                ));
+                $listaArquivosOrigem = $repository->carminhoArquivos($arquivo->idPagina);
+
+                $id = $this->cadastrarDocumentos($documentosList[0]);
+                $armarioRepository = new ArmarioRepository($this->Conexao());
+
+
+                $paginasList = array();
+                array_push($paginasList, array(
+                    'documentoid' => $id,
+                    'idArmario' => $arquivo->idArmario,
+                    'nomeArmario' =>  $armarioRepository->BuscarArmarioId($arquivo->idArmario),
+                    'tipoDocumento' => "",
+                    'volume' => "1",
+                    'numpagina' => "1",
+                    'codexp' => "1",
+                    'arquivo' => $arquivo->arquivo,
+                    'filme' => "1",
+                    'fotograma' => "1",
+                    'imgencontrada' => "0",
+                    'b64' => ""
+                ));
+
+                $arquivoList = array();
+                array_push($arquivoList, array(
+                    'listDocumentosServidor' => $paginasList,
+                ));
+                var_dump(json_encode($arquivoList, JSON_PRETTY_PRINT));
+
+                $this->carregarArquivoservidor(json_encode($arquivoList, JSON_PRETTY_PRINT));
+
+                // unlink("{$listaArquivosOrigem[0]["Arquivo"]}");
+            }
+
+
+
+
+            return true;
+            // return $repository->excluirPagina($id);
         } catch (Exception $e) {
             echo $e;
             return false;
@@ -191,7 +282,7 @@ class DocumentoServices extends SistemaServices
                 $dadosDocumento->imagens[$i];
 
             //var_dump($caminhoArqImgServ);
-            $this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
+            //$this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
 
             $arqui = random_int(1, 999999);
             $nomePDF = "/{$arqui}.pdf";
@@ -222,12 +313,12 @@ class DocumentoServices extends SistemaServices
 
     private function IncluirTags(string $arquivos, string $dadosTags)
     {
+
         $pdf = new Fpdi();
         $pdf->AddPage();
         $pdf->setSourceFile($arquivos);
         $pageId = $pdf->importPage(1);
         $pdf->useTemplate($pageId);
-
         $tags = json_decode($dadosTags);
 
         if ($tags->titulo != "")
@@ -417,7 +508,7 @@ class DocumentoServices extends SistemaServices
             $this->uploadImgPastaLote($caminhoArqImgServ, $i);
 
             if ($arquivoExtensao == "TIF") {
-                $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".jpg";
+                $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".png";
                 $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
                 array_map('unlink', glob("$caminhoArqImgServ"));
                 //rmdir("{$caminhoArqImgServ}");
@@ -463,7 +554,7 @@ class DocumentoServices extends SistemaServices
 
     public function carregarArquivoservidor($arquivos): string
     {
-        //var_dump($arquivos);
+        //var_dump("are: " . json_decode($arquivos));
         $arquivos = json_decode($arquivos);
         //$total = count($arquivos);
 

@@ -333,6 +333,7 @@ class DocumentoRepository extends LogRepository
     //d
     public function listarPaginas(int $id): array
     {
+        //var_dump("e " . $id);
         try {
             $sqlQuery = "SELECT * FROM {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
@@ -366,6 +367,23 @@ class DocumentoRepository extends LogRepository
         }
     }
 
+    public function carminhoArquivos(int $id): array
+    {
+        try {
+            $sqlQuery = "SELECT \"Arquivo\" FROM {$this->schema}\"DocumentoPagina\" where \"IdDocPag\" = ? Limit 1 FOR UPDATE;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+
+            $paginasDataList = $stmt->fetchAll();
+
+            //var_dump($paginasDataList);
+            return $paginasDataList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
     public function alterarPagina(array $pagina): bool
     {
         try {
@@ -485,5 +503,16 @@ class DocumentoRepository extends LogRepository
             echo $e;
             return false;
         }
+    }
+
+    public function AlterarDocumentoDaPagina(int $idDocumentoNovo, int $idPagina, $novoCaminho)
+    {
+        $sqlQuery = "UPDATE {$this->schema}\"DocumentoPagina\" SET \"DocId\" = ?, \"Arquivo\" = ? WHERE \"IdDocPag\" = ?";
+        $stmt = $this->pdo->prepare($sqlQuery);
+
+        $stmt->bindValue(1, $idDocumentoNovo);
+        $stmt->bindValue(2, $novoCaminho);
+        $stmt->bindValue(3, $idPagina);
+        $stmt->execute();
     }
 }

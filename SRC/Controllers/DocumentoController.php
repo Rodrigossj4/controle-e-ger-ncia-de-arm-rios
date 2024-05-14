@@ -51,28 +51,8 @@ class DocumentoController extends Controller
             http_response_code(500);
             return "Todos os campos são obrigatórios";
         }
-
-        $idPasta = random_int(1, 999999);
         $service = new DocumentoServices();
-
-        //$service->gerarPastaDoc($idPasta);
-        //var_dump($Arquivos["idArmario"]);
-
-        $documentosList = array();
-        array_push($documentosList, array(
-            'docid' => $idPasta,
-            'armario' => $Arquivos["idArmario"],
-            'tipodoc' => $Arquivos["tipoDoc"],
-            'folderid' => $idPasta,
-            'semestre' =>  $Arquivos["semestre"],
-            'ano' => $Arquivos["ano"],
-            'nip' => $Arquivos["nip"]
-        ));
-
-        //var_dump($documentosList[0]["docid"]);
-        $documentosList[0]["docid"] = $service->cadastrarDocumentos($documentosList);
-
-        echo json_encode($documentosList[0]["docid"]);
+        echo json_encode($service->cadastrarDocumentos($Arquivos));
     }
 
     public function anexarPaginaDocumento()
@@ -174,7 +154,7 @@ class DocumentoController extends Controller
     public function retornaPdfs()
     {
         $dadosDocumento = json_decode(file_get_contents('php://input'));
-        //var_dump($arquivo);
+        // var_dump($dadosDocumento);
         $service = new DocumentoServices();
         //$tagsList = $this->montaArryaTags(json_decode($dadosDocumento->tags));
 
@@ -201,7 +181,7 @@ class DocumentoController extends Controller
     }
     public function carregarArquivosServidor()
     {
-        //var_dump(file_get_contents('php://input'));
+        var_dump("oi " . file_get_contents('php://input'));
         $service = new DocumentoServices();
         $caminho = $service->carregarArquivoservidor(file_get_contents('php://input'));
         echo $caminho;
@@ -257,13 +237,10 @@ class DocumentoController extends Controller
         echo json_encode($paginasList);
     }
 
-    public function excluirPagina(): bool
+    public function ReIndexarPagina(): bool
     {
-        $arquivo = json_decode(file_get_contents('php://input'));
-        //unlink($b64->arquivoOriginal);
-        // var_dump($arquivo->idPagina);
         $service = new DocumentoServices();
-        $service->excluirPagina($arquivo->idPagina);
+        $service->reindexarPagina();
         return true;
     }
 

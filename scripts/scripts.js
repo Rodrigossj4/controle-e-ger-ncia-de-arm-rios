@@ -828,7 +828,7 @@ function alertas(msg, local, estilo, fecharAlerta) {
 
 $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
-    if ($('#formCadDocumento #Nip').val() != "") {
+    if ($('#formCadDocumento #Nip').unmask().val() != "") {
         var formdata = new FormData($("form[id='formCadDocumento']")[0]);
         $.ajax({
             type: 'POST',
@@ -863,6 +863,15 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
 });
 
+function exibeLinhasRegistros() {
+    if ($("#listPaginas tr").length > 1) {
+        $('.btnIndexar').css("display", "none");
+        $('.btnAnexar').css("display", "block");
+    } else {
+        $('.btnIndexar').css("display", "block");
+        $('.btnAnexar').css("display", "none");
+    }
+}
 
 $(document).on('click', '.clickDocumento', function (e) {
 
@@ -938,23 +947,36 @@ $(document).on('click', '#regride', function () {
 
 $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
     console.log($("#listarDocumentos").attr("data-docid"));
+    if ($("#listarDocumentos").attr("data-docid") == "") {
+        console.log("Nenhum documento sendo exibido");
+        alertas("Nenhum documento sendo exibido", '#modCadDocumento', 'alert_danger');
+        return false;
+    }
 
     dados = JSON.stringify({
-        idPagina: $("#listarDocumentos").attr("data-docid")
-    }, null, 2)
+        idArmario: $('#formCadDocumento #ListArmarioDocumento').val(),
+        nomeArmario: "",
+        nip: $('#formCadDocumento #Nip').unmask().val(),
+        semestre: $('#formCadDocumento #semestre').val(),
+        ano: $('#formCadDocumento #ano').val(),
+        tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
+        caminho: $('#formCadDocumento #Caminho').val(),
+        idPagina: $("#listarDocumentos").attr("data-docid"),
+        arquivo: $("#listarDocumentos  iframe").attr("src").replace(/\.\.\//g, "")
+    }, null, 2);
 
     $.ajax({
         type: 'POST',
-        url: "/excluirPagina",
+        url: "/ReIndexarPagina",
         data: dados,
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
-            alertas('Página Excluida com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
-            setTimeout(function () {
+            console.log(data);
+            alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
+            /*setTimeout(function () {
                 location.reload();
-            }, 3000);
+            }, 3000);*/
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#ExcluirPagina', 'alert_danger');
@@ -1040,8 +1062,13 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
 });
 
 $('#incluirDocumento').on('click', function (e) {
-    listDocumentos.push($("#listarDocumentos .active img").attr("src").replace(/\.\.\//g, ""));
-    //console.log(listDocumentos);
+    if (typeof $("#listarDocumentos .active img").attr("src") !== "undefined") {
+        listDocumentos.push($("#listarDocumentos .active img").attr("src").replace(/\.\.\//g, ""));
+
+    } else {
+        listDocumentos.push($("#listarDocumentos  iframe").attr("src").replace(/\.\.\//g, ""));
+
+    }
 });
 
 $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
@@ -1053,7 +1080,7 @@ $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             $('#formAnexarPagDoc #Caminho').val(data);
             ListarArquivos();
         },
@@ -1082,12 +1109,21 @@ function ListarArquivos() {
             var extensao = arrayData[0][0].split('.').pop();
 
             if (extensao == "pdf") {
+                listDocumentosServidor = [];
+                let contador = 0;
                 arrayData.forEach(e => {
-                    //console.log(e[0].split('.').pop());
-                    var active = (contador == 0) ? 'active' : '';
-                    sel.append('<iframe src="/' + e + '" width="100%" height="500"></iframe>');
+                    listDocumentosServidor.push([contador, e]);
                     contador++;
                 });
+
+                //console.log(listDocumentosServidor);
+                $('.carousel-control-prev').attr('id', 'regride');
+                $('.carousel-control-next').attr('id', 'avanca');
+                $('#avanca').attr('data-indice', 1);
+                $('#regride').attr('data-indice', 0);
+                sel.attr('data-docId', listDocumentosServidor[0][0]);
+                sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
+
 
             } else {
                 arrayData.forEach(e => {
@@ -1139,12 +1175,14 @@ var docAtual = ""
 var docBase64Atual = "";
 let docid = 0;
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
+    listDocumentosServidor = [];
+
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
         alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
-    if (($('#formCadDocumento #Nip').val() == "") || ($('#formCadDocumento #Nip').val().length != 8)) {
+    if (($('#formCadDocumento #Nip').unmask().val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
         alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
@@ -1211,7 +1249,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    //console.log(data);
+                    console.log(listDocumentosServidor);
                     var ArrayDocumentos = JSON.parse(data);
                     totalDocumnetos = ArrayDocumentos.length;
                     ArrayDocumentos.forEach(doc => {
@@ -1359,6 +1397,8 @@ $(document).ready(function () {
                 listDocumentos = [];
                 listDocumentosServidor = [];
                 $('#semestre').trigger('change');
+                $('.btnIndexar').css("display", "none");
+                $('.btnAnexar').css("display", "block");
 
                 /* setTimeout(function () {
                      location.reload();
@@ -1370,7 +1410,9 @@ $(document).ready(function () {
             docAtual["documentoid"] = docid;
             docAtual = JSON.stringify(docAtual);
 
+
             listDocumentosServidor.push(docAtual);
+            //console.log(listDocumentosServidor + " / " + listDocumentosServidor[1]);
             if (listDocumentosServidor.length == totalDocumnetos)
                 armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
@@ -1448,7 +1490,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log("arm: " + data);
+            console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);
