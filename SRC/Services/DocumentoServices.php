@@ -134,7 +134,7 @@ class DocumentoServices extends SistemaServices
             // json_decode($arquivos->listDocumentosServidor[0], true)
             $listaArquivos =  $repository->listarPaginas($id);
             $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
-            var_dump($listaArquivos);
+            //var_dump($listaArquivos);
             $componentes = explode('/', $listaArquivos[0]["arquivo"]);
             $resultado = implode('/', array_slice($componentes, -3));
             $diretorioTemporario = $this->diretorioLote . "TEMP/" . pathinfo($resultado, PATHINFO_DIRNAME);
@@ -267,8 +267,9 @@ class DocumentoServices extends SistemaServices
 
     public function gerarPdfs($dadosDocumento): array
     {
+
         $total = count($dadosDocumento->imagens);
-        //var_dump($total);
+        // var_dump($total);
         $paginasList = [];
 
         $armarioRepository = new ArmarioRepository($this->Conexao());
@@ -277,12 +278,15 @@ class DocumentoServices extends SistemaServices
         for ($i = 0; $i < $total; $i++) {
 
             $ext = pathinfo($dadosDocumento->imagens[$i], PATHINFO_EXTENSION);
-
-            $caminhoArqImgServ = $ext != "pdf" ? $this->gerarOcrs($dadosDocumento->imagens[$i]) :
-                $dadosDocumento->imagens[$i];
-
+            $caminhoArqImgServ = "";
+            if ($ext != "pdf") {
+                $caminhoArqImgServ = $this->gerarOcrs($dadosDocumento->imagens[$i]);
+                $this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
+            } else {
+                $caminhoArqImgServ = $dadosDocumento->imagens[$i];
+            }
             //var_dump($caminhoArqImgServ);
-            //$this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
+
 
             $arqui = random_int(1, 999999);
             $nomePDF = "/{$arqui}.pdf";

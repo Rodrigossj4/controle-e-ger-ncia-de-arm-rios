@@ -887,7 +887,7 @@ $(document).on('click', '.clickDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             const arrayData = JSON.parse(data);
 
             var sel = $("#listarDocumentos");
@@ -918,12 +918,13 @@ $(document).on('click', '#avanca', function () {
         var sel = $("#listarDocumentos");
         sel.empty();
         sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
 
         let indice = (parseInt($(this).attr('data-indice')) + 1) > (listDocumentosServidor.length - 1) ? listDocumentosServidor.length - 1 : parseInt($(this).attr('data-indice')) + 1;
 
         $(this).attr('data-indice', indice);
 
-        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).data('indice'))][0]);
+
         $('#regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
 
     }
@@ -936,17 +937,19 @@ $(document).on('click', '#regride', function () {
         var sel = $("#listarDocumentos");
         sel.empty();
         sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
-
+        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
         let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
 
         $(this).attr('data-indice', indice);
-        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).data('indice'))][0]);
+
+
         $('#avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
     }
 });
 
 $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
-    console.log($("#listarDocumentos").attr("data-docid"));
+    listDocumentosServidor = [];
+
     if ($("#listarDocumentos").attr("data-docid") == "") {
         console.log("Nenhum documento sendo exibido");
         alertas("Nenhum documento sendo exibido", '#modCadDocumento', 'alert_danger');
@@ -962,8 +965,9 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
         caminho: $('#formCadDocumento #Caminho').val(),
         idPagina: $("#listarDocumentos").attr("data-docid"),
-        arquivo: $("#listarDocumentos  iframe").attr("src").replace(/\.\.\//g, "")
+        arquivo: $("#listarDocumentos iframe").attr("src").replace(/\.\.\//g, "")
     }, null, 2);
+
 
     $.ajax({
         type: 'POST',
@@ -1249,7 +1253,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    console.log(listDocumentosServidor);
+                    console.log(data);
                     var ArrayDocumentos = JSON.parse(data);
                     totalDocumnetos = ArrayDocumentos.length;
                     ArrayDocumentos.forEach(doc => {
@@ -1277,6 +1281,7 @@ $(document).on('click', '#btnNaoConfirmaAnexarDocumento', function (e) {
 });
 
 $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
+    listDocumentosServidor = [];
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
         alertas("Selecione um armário", '#ModAnexarDocumento', 'alert_danger');
         return false;
@@ -1385,6 +1390,8 @@ function assinarDocumentos(documentos) {
 
 }
 
+
+
 $(document).ready(function () {
     $('#assinatura').change(function () {
         var valorInput = $(this).val();
@@ -1406,13 +1413,15 @@ $(document).ready(function () {
             });
             // finalizarCriptografia(function () {
 
+
+
             docAtual = JSON.parse(docAtual);
             docAtual["documentoid"] = docid;
             docAtual = JSON.stringify(docAtual);
 
 
             listDocumentosServidor.push(docAtual);
-            //console.log(listDocumentosServidor + " / " + listDocumentosServidor[1]);
+
             if (listDocumentosServidor.length == totalDocumnetos)
                 armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
@@ -1480,7 +1489,7 @@ function criptgrafarDocumento(documentos) {
 function armazenaDocumentos(documentos) {
     console.log("Rotina de armazenamento ");
 
-    //var ArrayDocumentos = JSON.parse(documentos);
+    var ArrayDocumentos = JSON.parse(documentos);
     // $('#tratandoDocumento').val(documentos);
     //console.log('arma: ' + documentos);
     $.ajax({
