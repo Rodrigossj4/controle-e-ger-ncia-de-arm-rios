@@ -183,7 +183,7 @@ class DocumentoServices extends SistemaServices
                 'armario' => $arquivo->idArmario
             ));
 
-
+            //var_dump($arquivo);
             //verificar se existe documento com essa caracteristica nesse nip
             $retorno = $this->BuscarDocumentos($documentosList);
             $repository = new DocumentoRepository($this->Conexao());
@@ -200,6 +200,7 @@ class DocumentoServices extends SistemaServices
                 //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
                 $repository->AlterarDocumentoDaPagina($retorno[0]['id'], $arquivo->idPagina, pathinfo($listaArquivosDestino[0]["arquivo"], PATHINFO_DIRNAME) . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
             } else {
+
                 $documentosList = array();
                 array_push($documentosList, array(
                     'docid' => "",
@@ -210,35 +211,22 @@ class DocumentoServices extends SistemaServices
                     'folderid' => "",
                     'idArmario' => $arquivo->idArmario
                 ));
+                $id = $this->cadastrarDocumentos($documentosList[0]);
+
+                $armarioRepository = new ArmarioRepository($this->Conexao());
+                $nomeArmario = $armarioRepository->BuscarArmarioId($arquivo->idArmario);
+
+                $arquivoDiretorio = $this->gerarPasta($nomeArmario);
+
+                //$listaArquivosDestino = $repository->listarPaginas($id);
                 $listaArquivosOrigem = $repository->carminhoArquivos($arquivo->idPagina);
 
-                $id = $this->cadastrarDocumentos($documentosList[0]);
-                $armarioRepository = new ArmarioRepository($this->Conexao());
+                // alterar o local do arquivo no servidor para a pasta do documento existente              
+                copy($listaArquivosOrigem[0]["Arquivo"], $arquivoDiretorio  . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
+                unlink("{$listaArquivosOrigem[0]["Arquivo"]}");
 
-
-                $paginasList = array();
-                array_push($paginasList, array(
-                    'documentoid' => $id,
-                    'idArmario' => $arquivo->idArmario,
-                    'nomeArmario' =>  $armarioRepository->BuscarArmarioId($arquivo->idArmario),
-                    'tipoDocumento' => "",
-                    'volume' => "1",
-                    'numpagina' => "1",
-                    'codexp' => "1",
-                    'arquivo' => $arquivo->arquivo,
-                    'filme' => "1",
-                    'fotograma' => "1",
-                    'imgencontrada' => "0",
-                    'b64' => ""
-                ));
-
-                $arquivoList = array();
-                array_push($arquivoList, array(
-                    'listDocumentosServidor' => $paginasList,
-                ));
-                var_dump(json_encode($arquivoList, JSON_PRETTY_PRINT));
-
-                $this->carregarArquivoservidor(json_encode($arquivoList, JSON_PRETTY_PRINT));
+                //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
+                $repository->AlterarDocumentoDaPagina($id, $arquivo->idPagina, $arquivoDiretorio . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
 
                 // unlink("{$listaArquivosOrigem[0]["Arquivo"]}");
             }
@@ -558,12 +546,11 @@ class DocumentoServices extends SistemaServices
 
     public function carregarArquivoservidor($arquivos): string
     {
-        //var_dump("are: " . json_decode($arquivos));
+        //var_dump("are: " . json_decode($arquivos, true));
         $arquivos = json_decode($arquivos);
-        //$total = count($arquivos);
 
         $nomeArmario = json_decode($arquivos->listDocumentosServidor[0], true);
-
+        //var_dump($nomeArmario);
         $repository = new DocumentoRepository($this->Conexao());
         // $pasta =   $this->gerarPasta($nomeArmario['nomeArmario']);
         //var_dump("aq " . json_decode($arquivos->listDocumentosServidor[0], true)['imgencontrada']);
@@ -660,10 +647,20 @@ class DocumentoServices extends SistemaServices
     private function gerarPasta(string $armario): string
     {
         $pasta = random_int(1, 999999);
-        mkdir("{$this->diretorio}/{$armario}/{$pasta}", 0777, true);
-        return "{$this->diretorio}/{$armario}/{$pasta}";
+        mkdir("{$this->diretorio}/{$this->removerAcentos($armario)}/{$pasta}", 0777, true);
+        return "{$this->diretorio}/{$this->removerAcentos($armario)}/{$pasta}";
     }
 
+    function removerAcentos($string)
+    {
+        // Converte os caracteres UTF-8 para ASCII
+        $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+
+        // Remove qualquer caractere que não seja ASCII (acentos, etc)
+        $string = preg_replace('/[^A-Za-z0-9]/', '', $string);
+
+        return $string;
+    }
     private function subirArquivoss(string $diretorio, string $caminhoOrigem): string
     {
         //var_dump($diretorio . " - " . $caminhoOrigem);

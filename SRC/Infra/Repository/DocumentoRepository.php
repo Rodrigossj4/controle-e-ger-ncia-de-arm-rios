@@ -183,6 +183,16 @@ class DocumentoRepository extends LogRepository
         return $sentenca;
     }
 
+    function removerAcentos($string)
+    {
+        // Converte os caracteres UTF-8 para ASCII
+        $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+
+        // Remove qualquer caractere que não seja ASCII (acentos, etc)
+        $string = preg_replace('/[^A-Za-z]/', '', $string);
+
+        return $string;
+    }
     public function BuscarDocumentosPorTipo(int $idTipoDocumento): array
     {
         try {

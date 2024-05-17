@@ -73,6 +73,13 @@ $contador = 0;
                 </div>
                 <br>
                 <div class="form-group row">
+                    <div class="col-sm-6">
+                        <input type="checkbox" id="ConfAssinatura" value="1" checked> Assinar documento
+                    </div>
+                </div>
+                <br>
+                <div class="form-group row">
+
                     <div class="col-sm-3 btnIndexar">
                         <input type="button" data-bs-toggle="modal" data-bs-target="#ModIndexarDocumento" id="IndexarDocumento" name="IndexarDocumento" value="Indexar" class="btn btn-primary">
                     </div>
@@ -80,7 +87,7 @@ $contador = 0;
                         <input type="button" data-bs-toggle="modal" data-bs-target="#ModAnexarDocumento" id="AnexarDocumento" value="Anexar" class="btn btn-primary">
 
                     </div>
-                    <div class="col-sm-6 btnAnexar">
+                    <div class="col-sm-6 ">
                         <input type="button" name="excluirDocumento" id="excluirDocumento" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModReIndexarDocumento" value="ReIndexar página" />
                     </div>
                     <span class="alerta"></span>

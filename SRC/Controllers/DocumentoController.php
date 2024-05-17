@@ -181,7 +181,7 @@ class DocumentoController extends Controller
     }
     public function carregarArquivosServidor()
     {
-        var_dump("oi " . file_get_contents('php://input'));
+        //var_dump("oi " . file_get_contents('php://input'));
         $service = new DocumentoServices();
         $caminho = $service->carregarArquivoservidor(file_get_contents('php://input'));
         echo $caminho;

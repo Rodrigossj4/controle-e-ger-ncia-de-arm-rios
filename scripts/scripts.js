@@ -976,7 +976,8 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
+            $('#semestre').trigger('change');
             alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
             /*setTimeout(function () {
                 location.reload();
@@ -1253,12 +1254,23 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     var ArrayDocumentos = JSON.parse(data);
                     totalDocumnetos = ArrayDocumentos.length;
                     ArrayDocumentos.forEach(doc => {
+                        doc["documentoid"] = docid;
                         dadosDocumento = JSON.stringify(doc);
-                        assinarDocumentos(dadosDocumento);
+                        if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
+                            assinarDocumentos(dadosDocumento)
+                        } else {
+                            listDocumentosServidor = [];
+                            listDocumentosServidor.push(dadosDocumento);
+                            armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+                            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+                            $('#semestre').trigger('change');
+                            $('.btnIndexar').css("display", "none");
+                            $('.btnAnexar').css("display", "block");
+                        }
                     });
                 },
                 error: function (d) {
@@ -1352,8 +1364,19 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
             totalDocumnetos = ArrayDocumentos.length;
             ArrayDocumentos.forEach(doc => {
                 doc["imgencontrada"] = 1;
+                doc["documentoid"] = docid;
                 dadosDocumento = JSON.stringify(doc);
-                assinarDocumentos(dadosDocumento);
+                if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
+                    assinarDocumentos(dadosDocumento);
+                } else {
+                    listDocumentosServidor = [];
+                    listDocumentosServidor.push(dadosDocumento);
+                    armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+                    alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+                    $('#semestre').trigger('change');
+                    $('.btnIndexar').css("display", "none");
+                    $('.btnAnexar').css("display", "block");
+                }
             });
         },
         error: function (d) {
@@ -1411,21 +1434,16 @@ $(document).ready(function () {
                      location.reload();
                  }, 3000);*/
             });
-            // finalizarCriptografia(function () {
-
-
 
             docAtual = JSON.parse(docAtual);
             docAtual["documentoid"] = docid;
             docAtual = JSON.stringify(docAtual);
-
 
             listDocumentosServidor.push(docAtual);
 
             if (listDocumentosServidor.length == totalDocumnetos)
                 armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
-            // });
             alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
             alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
         }
@@ -1434,7 +1452,7 @@ $(document).ready(function () {
 
 function finalizarAssinatura(callback) {
     var ArrayDocumentos = JSON.parse(docAtual);
-    console.log("atual: " + ArrayDocumentos["arquivo"]);
+    //console.log("atual: " + ArrayDocumentos["arquivo"]);
     //console.log("atualB64: " + docBase64Atual);
     atualizarArquivo(JSON.stringify({
         arquivoOriginal: ArrayDocumentos["arquivo"],
