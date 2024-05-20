@@ -1398,9 +1398,6 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
         }
     });
-
-
-
 });
 function assinarDocumentos(documentos) {
     console.log("Rotina de assinar: ");
