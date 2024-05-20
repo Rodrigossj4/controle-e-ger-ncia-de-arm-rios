@@ -886,6 +886,7 @@ $(document).on('click', '.clickDocumento', function (e) {
     //var docId = $(this).attr("id");
     // var formdata = new FormData($("form[id='SelectLote']")[0]);
     //var id = $(this).val();
+    //var
 
     $.ajax({
         type: 'GET',
