@@ -391,7 +391,7 @@ $(document).on('click', '.btnConfirmaExcluirTipoDoc', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
-            console.log(d);
+            // console.log(d);
             carregarTipoDocumento();
             $(this).data("id", "");
             alertas('Tipo documento excluído com sucesso', '#modexcluirTipoDoc', 'alert_sucess', 'true');
@@ -830,7 +830,7 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
     if ($('#formCadDocumento #Nip').val() != "") {
 
-        console.log($('#formCadDocumento #Nip').val());
+        //console.log($('#formCadDocumento #Nip').val());
         var formdata = new FormData($("form[id='formCadDocumento']")[0]);
         $.ajax({
             type: 'POST',
@@ -955,8 +955,6 @@ $(document).on('click', '#regride', function () {
         let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
 
         $(this).attr('data-indice', indice);
-
-
         $('#avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
     }
 });
@@ -1533,7 +1531,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log("arm: " + data);
+            console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);

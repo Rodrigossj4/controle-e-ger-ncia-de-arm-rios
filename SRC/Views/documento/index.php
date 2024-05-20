@@ -305,6 +305,6 @@ $contador = 0;
 
 <script>
     $(document).ready(function() {
-        $('#formCadDocumento #Nip').mask('000.000.00');
+        $('#formCadDocumento #Nip').mask('00.0000.00');
     });
 </script>
