@@ -145,6 +145,33 @@ span.carousel-control-next-icon {
     display: none;
 }
 
+.Metatags label {
+    cursor: pointer;
+
+}
+
+.Metatags {
+    cursor: pointer;
+
+}
+
+#carouselExampleControls {
+    display: none;
+}
+
+#incluirDocumento {
+    display: none;
+}
+
+#listarDocumentos {
+    margin-top: 50px;
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+    width: 5%;
+}
+
 /*
 .Grade {
     border: 0px solid;

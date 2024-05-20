@@ -159,10 +159,11 @@ class DocumentoRepository extends LogRepository
             }
 
             if (strlen((string)$val["nip"]) != 0) {
+                $nip = str_replace('.', '', $val["nip"]);
                 if (strlen($sentenca) != 0)
                     $sentenca .= " and ";
 
-                $sentenca .= "d.\"Nip\" = '{$val["nip"]}' ";
+                $sentenca .= "d.\"Nip\" = '{$nip}' ";
             }
 
             if ((strlen((string)$val["semestre"]) != 0) && ($val["semestre"] != 0)) {

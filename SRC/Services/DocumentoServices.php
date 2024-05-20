@@ -52,7 +52,7 @@ class DocumentoServices extends SistemaServices
                 'folderid' => $idPasta,
                 'semestre' =>  $Arquivos["semestre"],
                 'ano' => $Arquivos["ano"],
-                'nip' => $Arquivos["nip"]
+                'nip' => str_replace('.', '', $Arquivos["nip"])
             ));
 
             $repository = new DocumentoRepository($this->Conexao());

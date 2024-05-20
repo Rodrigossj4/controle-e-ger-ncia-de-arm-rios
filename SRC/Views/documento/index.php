@@ -57,7 +57,37 @@ $contador = 0;
                         <option value="0">Selecione o tipo de documento</option>
                     </select>
                 </div>
-                <br>
+                <hr class="mb-4">
+                <div class="form-group Metatags" id="Metatags">
+                    <label>Informar MetaTags</label>
+                </div>
+                <div class="containerTags" id="containerTags">
+                    <div class="form-group">
+                        <label class="col-form-label" for="Assunto">Informe o assunto: </label>
+                        <input type="text" id="Assunto" name="Assunto" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Autor">Informe o Autor </label>
+                        <input type="text" id="Autor" name="Autor" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Titulo">Informe o Titulo</label>
+                        <input type="text" id="Titulo" name="Titulo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Identificador">Identificador do documento digital</label>
+                        <input id="Identificador" name="Identificador" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Classe">Classe</label>
+                        <input id="Classe" name="Classe" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Observacao">Observação</label>
+                        <input id="Observacao" name="Observacao" class="form-control" />
+                    </div>
+                </div>
+                <hr class="mb-4">
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <label class="col-form-label" for="documento[]">Selecione arquivos</label>
@@ -121,8 +151,8 @@ $contador = 0;
         </div>
 
 
-        <div class="col-md-4 order-md-1" style="border: 1px solid;">
-            <div class="container mt-4">
+        <div class="col-md-8 order-md-1" style="border: 1px solid;">
+            <div class="container mt-8">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="0">
                     <div class="carousel-inner" id="listarDocumentos" data-docId="">
 
@@ -142,42 +172,7 @@ $contador = 0;
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary">incluir</button>
             </div>
         </div>
-        <div class="col-md-4 order-md-1" style="border: 1px solid;">
-            <form id="formTags" name="tags" method="post">
-                <div class="container mt-4">
-                    <div class="row">
-                        <label>MetaTags</label>
-                    </div>
-                    <hr class="mb-4">
-                    <div class="form-group">
-                        <label class="col-form-label" for="Assunto">Informe o assunto: </label>
-                        <input type="text" id="Assunto" name="Assunto" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="Autor">Informe o Autor </label>
-                        <input type="text" id="Autor" name="Autor" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="Titulo">Informe o Titulo</label>
-                        <input type="text" id="Titulo" name="Titulo" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="Identificador">Identificador do documento digital</label>
-                        <input id="Identificador" name="Identificador" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="Classe">Classe</label>
-                        <input id="Classe" name="Classe" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label" for="Observacao">Observação</label>
-                        <input id="Observacao" name="Observacao" class="form-control" />
-                    </div>
-                    <br>
 
-                </div>
-            </form>
-        </div>
     </div>
     <div class="row col-6">
         <div class="panel panel-default" style="display: none;">
@@ -310,6 +305,6 @@ $contador = 0;
 
 <script>
     $(document).ready(function() {
-        $('#formCadDocumento #Nip').mask('000.000-00');
+        $('#formCadDocumento #Nip').mask('000.000.00');
     });
 </script>

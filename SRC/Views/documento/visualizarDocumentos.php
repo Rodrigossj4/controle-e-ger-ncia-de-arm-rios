@@ -6,15 +6,24 @@
 $contador = 0;
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
+<script src="../../../scripts/serpro/lib/serpro/is.min.js" type="text/javascript"></script>
 
+<!-- os próximos dois arquivos - em Javascript puro - são a API de comunicação com o Assinador SERPRO -->
+<script src="../../../scripts/serpro/lib/serpro/serpro-signer-promise.js" type="text/javascript"></script>
+<script src="../../../scripts/serpro/lib/serpro/serpro-signer-client.js" type="text/javascript"></script>
+
+<!-- PDFJS, para converter bas364 em PDF -->
+<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
 <div class="container">
     <div class="tituloModulo">Visualizar Documentos</div>
     <div style="border: 1px solid;" class="row" id="modCadDocumento">
-        <div class="col-md-6 order-md-1">
+        <div class="col-md-4 order-md-1">
             <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-form-label" for="Armario">Armario: </label><br>
                     <input type="hidden" id="flagCadastro" name="flagCadastro" />
+                    <input type="hidden" id="Caminho" name="Caminho" value="">
+                    <input type="hidden" id="tratandoDocumento" name="tratandoDocumento" value="">
                     <select id="ListArmarioDocumento" name="ListArmarioDocumento" class="form-select">
                         <option value="0">Selecione um armário</option>
                         <?php foreach ($ArmariosList  as $armarios) : ?>
@@ -48,15 +57,35 @@ $contador = 0;
                         <option value="0">Selecione o tipo de documento</option>
                     </select>
                 </div>
-                <br>
-                <div class="form-group row">
-                    <div class="col-sm-3">
-                        <input type="button" id="btnCadDocumento" value="Indexar" class="btn btn-primary">
+                <hr class="mb-4">
+                <div class="form-group Metatags" id="Metatags">
+                    <label>Informar MetaTags</label>
+                </div>
+                <div class="containerTags" id="containerTags">
+                    <div class="form-group">
+                        <label class="col-form-label" for="Assunto">Informe o assunto: </label>
+                        <input type="text" id="Assunto" name="Assunto" class="form-control">
                     </div>
-                    <div class="col-sm-3">
-                        <input type="button" id="btnCadDocumento" value="Anexar" class="btn btn-primary">
+                    <div class="form-group">
+                        <label class="col-form-label" for="Autor">Informe o Autor </label>
+                        <input type="text" id="Autor" name="Autor" class="form-control">
                     </div>
-                    <span class="alerta"></span>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Titulo">Informe o Titulo</label>
+                        <input type="text" id="Titulo" name="Titulo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Identificador">Identificador do documento digital</label>
+                        <input id="Identificador" name="Identificador" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Classe">Classe</label>
+                        <input id="Classe" name="Classe" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Observacao">Observação</label>
+                        <input id="Observacao" name="Observacao" class="form-control" />
+                    </div>
                 </div>
             </form>
 
@@ -75,37 +104,171 @@ $contador = 0;
                                         <th scope="col">Tipo de documento</th>
                                     </tr>
                                 </thead>
+                                <tbody id='documentosLista'>
+
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 order-md-1" style="border: 1px solid;">
-            <div class="container mt-6">
+
+
+        <div class="col-md-8 order-md-1" style="border: 1px solid;">
+            <div class="container mt-8">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="0">
-                    <div class="carousel-inner" id="listarDocumentos">
+                    <div class="carousel-inner" id="listarDocumentos" data-docId="">
 
                     </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" data-indice="0">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Anterior</span>
                     </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" data-indice="0">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Próximo</span>
                     </a>
                 </div>
             </div>
+
             <div class="container">
-                <button name="incluir" id="incluir" class="btn btn-primary">incluir</button>
+                <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary">incluir</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="row col-6">
+        <div class="panel panel-default" style="display: none;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Assinar PDF</h3>
+            </div>
+            <div class="panel-body">
+                <form id="assinarPdf">
+                    <div class="form-group">
+                        <label for="file_input">Escolher Arquivo PDF</label>
+                        <input id="input-file" type="file" id="arquivo" name="arquivo" value="$paginasList.firstOrDefault()" onchange="convertToBase64();" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="objetoAtual" name="objetoAtual" value="">
+                        <label for="content-value">Conteúdo do PDF (Base 64)</label>
+                        <textarea id="content-value" class="form-control" rows="5" disabled></textarea>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-2">
+                            <button type="submit" id="assinarPdf" name="assinarPdf" class="btn btn-primary">Assinar PDF</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sign-websocket">Comando WebSocket</label>
+                        <textarea id="sign-websocket" class="form-control" rows="7" disabled></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-6" style="display: none;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">PDF Assinado</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <label for="resultado">Arquivo Assinado (PDF + Assinatura em Base 64)</label>
+                        <textarea id="assinatura" class="form-control" rows="5"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button id="validarAssinaturaPdf" type="button" class="btn btn-primary">Validar Assinatura</button>
+                        <button type="button" class="btn btn-primary" onclick="downloadPdf();">Download PDF</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+
+</html>
+<?php require_once __DIR__ . "../../rodape.php" ?>
+<script src="../../scripts/serpro/app/serpro-client-connector.js" type="text/javascript"></script>
+
+<div class="modal fade" id="ModIndexarDocumento" tabindex="-1" aria-labelledby="ModIndexarDocumento" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja realmente indexar esse novo documento?</span>
+                    <div class="col-sm-3">
+
+                        <input type="button" id="btnConfirmaIndexarDocumento" data-id="" value="Sim" class="btn btn-success btnConfirmaIndexarDocumento">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaIndexarDocumento" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaIndexarDocumento">
+                    </div>
+                </div>
+                <span class="alerta"></span>
             </div>
         </div>
     </div>
 </div>
 
-</body>
 
-</html>
+<div class="modal fade" id="ModAnexarDocumento" tabindex="-1" aria-labelledby="ModAnexarDocumento" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Já existe um documento cadastrado com essas caracteristicas. Deseja anexar páginas a esse documento?</span>
+                    <div class="col-sm-3">
 
-<?php require_once __DIR__ . "../../rodape.php" ?>
+                        <input type="button" id="btnConfirmaAnexarDocumento" data-id="" value="Sim" class="btn btn-success btnConfirmaAnexarDocumento">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaAnexarDocumento" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaAnexarDocumento">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModReIndexarDocumento" tabindex="-1" aria-labelledby="ModReIndexarDocumento" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja realmente Re-indexar esse novo documento?</span>
+                    <div class="col-sm-3">
+
+                        <input type="button" id="btnConfirmaReIndexarDocumento" data-id="" value="Sim" class="btn btn-success btnConfirmaReIndexarDocumento">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaReIndexarDocumento" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaReIndexarDocumento">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#formCadDocumento #Nip').mask('000.000.00');
+    });
+</script>

@@ -828,7 +828,9 @@ function alertas(msg, local, estilo, fecharAlerta) {
 
 $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
-    if ($('#formCadDocumento #Nip').unmask().val() != "") {
+    if ($('#formCadDocumento #Nip').val() != "") {
+
+        console.log($('#formCadDocumento #Nip').val());
         var formdata = new FormData($("form[id='formCadDocumento']")[0]);
         $.ajax({
             type: 'POST',
@@ -846,6 +848,7 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
                     //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>'
                 });
+
             },
             error: function (d) {
 
@@ -873,6 +876,10 @@ function exibeLinhasRegistros() {
     }
 }
 
+
+$(document).on('click', '#Metatags', function (e) {
+    $("#containerTags").slideToggle('slow')
+});
 $(document).on('click', '.clickDocumento', function (e) {
 
     //console.log($(this).attr("id"));
@@ -904,6 +911,12 @@ $(document).on('click', '.clickDocumento', function (e) {
             $('#regride').attr('data-indice', 0);
             sel.attr('data-docId', listDocumentosServidor[0][0]);
             sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
+
+            $("#carouselExampleControls").css('display', 'block');
+
+            let path = window.location.pathname;
+            if (!path.includes('/visualizar-documentos'))
+                $("#incluirDocumento").css('display', 'block');
 
         },
         error: function (d) {
@@ -1134,10 +1147,12 @@ function ListarArquivos() {
                 arrayData.forEach(e => {
                     //console.log(e[0].split('.').pop());
                     var active = (contador == 0) ? 'active' : '';
-                    sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;"><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+                    sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
                     contador++;
                 });
             }
+            $("#carouselExampleControls").css('display', 'block');
+            $("#incluirDocumento").css('display', 'block');
             $("#carouselExampleControls").html();
 
         },
@@ -1212,18 +1227,18 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formTags #Assunto').val() == "") || ($('#formTags #Autor').val() == "") || ($('#formTags #Titulo').val() == "") || ($('#formTags #Identificador').val() == "") || ($('#formTags #Classe').val() == "")) {
+    if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
         alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
     tags = JSON.stringify({
-        assunto: $('#formTags #Assunto').val(),
-        autor: $('#formTags #Autor').val(),
-        titulo: $('#formTags #Titulo').val(),
-        identificador: $('#formTags #Identificador').val(),
-        classe: $('#formTags #Classe').val(),
-        observacao: $('#formTags #Observacao').val(),
+        assunto: $('#formCadDocumento #Assunto').val(),
+        autor: $('#formCadDocumento #Autor').val(),
+        titulo: $('#formCadDocumento #Titulo').val(),
+        identificador: $('#formCadDocumento #Identificador').val(),
+        classe: $('#formCadDocumento #Classe').val(),
+        observacao: $('#formCadDocumento #Observacao').val(),
     }, null, 2);
 
     dados = JSON.stringify({
@@ -1299,7 +1314,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Nip').val() == "") || ($('#formCadDocumento #Nip').val().length != 8)) {
+    if (($('#formCadDocumento #Nip').val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
         alertas("Informe um nip válido", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
@@ -1324,18 +1339,18 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formTags #Assunto').val() == "") || ($('#formTags #Autor').val() == "") || ($('#formTags #Titulo').val() == "") || ($('#formTags #Identificador').val() == "") || ($('#formTags #Classe').val() == "")) {
+    if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
         alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
     tags = JSON.stringify({
-        assunto: $('#formTags #Assunto').val(),
-        autor: $('#formTags #Autor').val(),
-        titulo: $('#formTags #Titulo').val(),
-        identificador: $('#formTags #Identificador').val(),
-        classe: $('#formTags #Classe').val(),
-        observacao: $('#formTags #Observacao').val(),
+        assunto: $('#formCadDocumento #Assunto').val(),
+        autor: $('#formCadDocumento #Autor').val(),
+        titulo: $('#formCadDocumento #Titulo').val(),
+        identificador: $('#formCadDocumento #Identificador').val(),
+        classe: $('#formCadDocumento #Classe').val(),
+        observacao: $('#formCadDocumento #Observacao').val(),
     }, null, 2);
 
     dados = JSON.stringify({
