@@ -1084,7 +1084,6 @@ $('#incluirDocumento').on('click', function (e) {
 
     } else {
         listDocumentos.push($("#listarDocumentos  iframe").attr("src").replace(/\.\.\//g, ""));
-
     }
 });
 
@@ -1398,6 +1397,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
         }
     });
+
 });
 function assinarDocumentos(documentos) {
     console.log("Rotina de assinar: ");

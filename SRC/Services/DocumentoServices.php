@@ -587,9 +587,8 @@ class DocumentoServices extends SistemaServices
             $caminhoRaiz = pathinfo($documentos['arquivo'])['dirname'];
         }
 
-        //array_map('unlink', glob("$caminhoRaiz/*.*"));
-        //rmdir("{$caminhoRaiz}");
-
+        array_map('unlink', glob("$caminhoRaiz/*.*"));
+        rmdir("{$caminhoRaiz}");
 
         return $pasta;
     }
