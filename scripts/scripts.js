@@ -1195,40 +1195,40 @@ let docid = 0;
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
     listDocumentosServidor = [];
 
-    if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
-        alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Nip').unmask().val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
-        alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
-        return false;
-    }
-
-    if (($('#formCadDocumento #semestre').val() == 0)) {
-        alertas("Informe o semestre", '#ModIndexarDocumento', 'alert_danger');
-        return false;
-    }
-
-    if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
-        alertas("Informe um ano válido", '#ModIndexarDocumento', 'alert_danger');
-        return false;
-    }
-
-    if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
-        alertas("Informe o tipo de documento", '#ModIndexarDocumento', 'alert_danger');
-        return false;
-    }
-
-    if ((listDocumentos.length == 0)) {
-        alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
-        alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
-        return false;
-    }
+    /*   if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
+           alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
+           return false;
+       }
+   
+       if (($('#formCadDocumento #Nip').unmask().val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
+           alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
+           return false;
+       }
+   
+       if (($('#formCadDocumento #semestre').val() == 0)) {
+           alertas("Informe o semestre", '#ModIndexarDocumento', 'alert_danger');
+           return false;
+       }
+   
+       if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
+           alertas("Informe um ano válido", '#ModIndexarDocumento', 'alert_danger');
+           return false;
+       }
+   
+       if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
+           alertas("Informe o tipo de documento", '#ModIndexarDocumento', 'alert_danger');
+           return false;
+       }
+   
+       if ((listDocumentos.length == 0)) {
+           alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
+           return false;
+       }
+   
+       if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
+           alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
+           return false;
+       }*/
 
     tags = JSON.stringify({
         assunto: $('#formCadDocumento #Assunto').val(),
@@ -1270,11 +1270,42 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                     //console.log(data);
                     var ArrayDocumentos = JSON.parse(data);
                     totalDocumnetos = ArrayDocumentos.length;
-                    ArrayDocumentos.forEach(doc => {
+                    processarListaDeItens(ArrayDocumentos).then(function () {
+                        console.log('Todos os itens foram processados.');
+
+                        if (listDocumentosServidor.length == totalDocumnetos)
+                            armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+
+                        console.log("Terminou: ");
+                        listDocumentos = [];
+                        listDocumentosServidor = [];
+                        $('#semestre').trigger('change');
+                        $('.btnIndexar').css("display", "none");
+                        $('.btnAnexar').css("display", "block");
+
+                        alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+                        alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+
+                    }).catch(function (error) {
+                        console.error('Ocorreu um erro:', error);
+                    });
+                    /*ArrayDocumentos.forEach(doc => {
                         doc["documentoid"] = docid;
                         dadosDocumento = JSON.stringify(doc);
                         if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
-                            assinarDocumentos(dadosDocumento)
+                            console.log("inicio processo: " + dadosDocumento);
+                            processarListaDeItens(ArrayDocumentos).then(function () {
+                                console.log('Todos os itens foram processados.');
+
+                                if (listDocumentosServidor.length == totalDocumnetos)
+                                    armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+
+                                alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+                                alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+
+                            }).catch(function (error) {
+                                console.error('Ocorreu um erro:', error);
+                            });
                         } else {
                             listDocumentosServidor = [];
                             listDocumentosServidor.push(dadosDocumento);
@@ -1284,7 +1315,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                             $('.btnIndexar').css("display", "none");
                             $('.btnAnexar').css("display", "block");
                         }
-                    });
+                    });*/
                 },
                 error: function (d) {
                     alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#IndexarDocumento', 'alert_danger');
@@ -1380,7 +1411,19 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
                 doc["documentoid"] = docid;
                 dadosDocumento = JSON.stringify(doc);
                 if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
-                    assinarDocumentos(dadosDocumento);
+                    processarListaDeItens(dadosDocumento).then(function () {
+                        console.log('Todos os itens foram processados.');
+
+                        if (listDocumentosServidor.length == totalDocumnetos)
+                            armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+
+                        alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+                        alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+
+                    }).catch(function (error) {
+                        console.error('Ocorreu um erro:', error);
+                    });
+                    //assinarDocumentos(dadosDocumento);
                 } else {
                     listDocumentosServidor = [];
                     listDocumentosServidor.push(dadosDocumento);
@@ -1399,10 +1442,47 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
     });
 
 });
+
+function processarListaDeItens(lista) {
+    // Inicia a Promise
+    console.log("lista: " + lista);
+    return lista.reduce(function (promessaAnterior, item) {
+        // Processa cada item em série
+        return promessaAnterior.then(function () {
+            // Processa o item atual
+
+            return processarItemComResposta(item).then(function (resposta) {
+                // Trata a resposta do item
+                console.log('Resposta para o item', item, ':', resposta);
+
+                docBase64Atual = resposta;
+
+                finalizarAssinatura(function () {
+
+
+                    /* setTimeout(function () {
+                         location.reload();
+                     }, 3000);*/
+                });
+
+                docAtual = JSON.parse(docAtual);
+                docAtual["documentoid"] = docid;
+                docAtual = JSON.stringify(docAtual);
+
+                listDocumentosServidor.push(docAtual);
+                console.log("lista: " + listDocumentosServidor);
+
+                // Retorna uma Promise resolvida para avançar para o próximo item
+                return Promise.resolve();
+            });
+        });
+    }, Promise.resolve());
+}
+
 function assinarDocumentos(documentos) {
     console.log("Rotina de assinar: ");
     var ArrayDocumentos = JSON.parse(documentos);
-
+    console.log("Dados recebidos: " + ArrayDocumentos);
     $.ajax({
         type: 'GET',
         url: "/converter-base64?caminho=" + ArrayDocumentos["arquivo"],
@@ -1410,6 +1490,7 @@ function assinarDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
+            console.log("Dados recebidos da transformação em pdfB64: " + data);
             $('#assinarPdf #content-value').val(data.replace(/[\\"]/g, ''));
             $('#assinarPdf #objetoAtual').val(documentos);
             prettyCommandSign();
@@ -1424,15 +1505,36 @@ function assinarDocumentos(documentos) {
 
 }
 
+function processarItemComResposta(item) {
+    return new Promise(function (resolve, reject) {
+        assinarDocumentos(JSON.stringify(item));
+        // Seleciona o campo onde você espera a resposta
+        var campo = $('#assinatura');
 
+        // Adiciona um ouvinte de eventos para o evento 'change'
+        campo.on('change', function (event) {
+
+            var valorInput = $(this).val();
+            if (valorInput !== '') {
+                docAtual = $('#objetoAtual').val();
+                console.log("documento atual " + docAtual);
+            }
+            // Quando o evento 'change' ocorrer, resolve a Promise com o valor do campo
+            resolve(event.target.value); // Você pode passar algum dado relevante para a resolução, se necessário
+        });
+
+        // Aqui você pode fazer algo com o item, se necessário
+        console.log('Processando item:', item);
+    });
+}
 
 $(document).ready(function () {
-    $('#assinatura').change(function () {
+    /*$('#assinatura').change(function () {
         var valorInput = $(this).val();
         if (valorInput !== '') {
             docAtual = $('#objetoAtual').val();
             docBase64Atual = $(this).val();
-            // console.log(dadosDocumento);
+            console.log("documento atual " + docAtual);
             finalizarAssinatura(function () {
                 console.log("Terminou: ");
                 listDocumentos = [];
@@ -1443,7 +1545,7 @@ $(document).ready(function () {
 
                 /* setTimeout(function () {
                      location.reload();
-                 }, 3000);*/
+                 }, 3000);
             });
 
             docAtual = JSON.parse(docAtual);
@@ -1451,19 +1553,19 @@ $(document).ready(function () {
             docAtual = JSON.stringify(docAtual);
 
             listDocumentosServidor.push(docAtual);
-
+            console.log("Dados são iguais: " + listDocumentosServidor.length + " / " + totalDocumnetos);
             if (listDocumentosServidor.length == totalDocumnetos)
                 armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
             alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
             alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
         }
-    });
+    });*/
 });
 
 function finalizarAssinatura(callback) {
     var ArrayDocumentos = JSON.parse(docAtual);
-    //console.log("atual: " + ArrayDocumentos["arquivo"]);
+    console.log("atual: " + ArrayDocumentos["arquivo"]);
     //console.log("atualB64: " + docBase64Atual);
     atualizarArquivo(JSON.stringify({
         arquivoOriginal: ArrayDocumentos["arquivo"],
@@ -1545,7 +1647,7 @@ function prettyCommandSign() {
 }
 
 function atualizarArquivo(documentos) {
-    //console.log('dados recebidos' + documentos);
+    console.log('dados recebidos para atualizar' + documentos);
     $.ajax({
         type: 'POST',
         url: "/atualizar-arquivo-assinado",
@@ -1632,3 +1734,47 @@ function validarSenha(senha) {
 }
 
 
+/*function processarItemComResposta(item) {
+    return new Promise(function (resolve, reject) {
+        // Seleciona o campo onde você espera a resposta
+        var campo = $('#seu-campo');
+
+        // Adiciona um ouvinte de eventos para o evento 'change'
+        campo.on('change', function (event) {
+            // Quando o evento 'change' ocorrer, resolve a Promise com o valor do campo
+            resolve(event.target.value); // Você pode passar algum dado relevante para a resolução, se necessário
+        });
+
+        // Aqui você pode fazer algo com o item, se necessário
+        console.log('Processando item:', item);
+    });
+}
+*/
+// Sua lista de itens
+//var listaDeItens = ['item1', 'item2', 'item3'];
+
+// Função para processar a lista de itens
+/*function processarListaDeItens(lista) {
+    // Inicia a Promise
+    return lista.reduce(function (promessaAnterior, item) {
+        // Processa cada item em série
+        return promessaAnterior.then(function () {
+            // Processa o item atual
+            return processarItemComResposta(item).then(function (resposta) {
+                // Trata a resposta do item
+                console.log('Resposta para o item', item, ':', resposta);
+                // Você pode fazer algo com a resposta aqui
+
+                // Retorna uma Promise resolvida para avançar para o próximo item
+                return Promise.resolve();
+            });
+        });
+    }, Promise.resolve());
+}*/
+
+// Inicia o processamento da lista de itens
+/*processarListaDeItens(listaDeItens).then(function() {
+    console.log('Todos os itens foram processados.');
+}).catch(function(error) {
+    console.error('Ocorreu um erro:', error);
+});*/
