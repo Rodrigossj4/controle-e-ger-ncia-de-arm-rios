@@ -1192,43 +1192,44 @@ var docBase64 = "";
 var docAtual = ""
 var docBase64Atual = "";
 let docid = 0;
+let possuiPasta = 0;
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
     listDocumentosServidor = [];
 
-       if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
-           alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
-           return false;
-       }
-   
-       if (($('#formCadDocumento #Nip').unmask().val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
-           alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
-           return false;
-       }
-   
-       if (($('#formCadDocumento #semestre').val() == 0)) {
-           alertas("Informe o semestre", '#ModIndexarDocumento', 'alert_danger');
-           return false;
-       }
-   
-       if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
-           alertas("Informe um ano válido", '#ModIndexarDocumento', 'alert_danger');
-           return false;
-       }
-   
-       if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
-           alertas("Informe o tipo de documento", '#ModIndexarDocumento', 'alert_danger');
-           return false;
-       }
-   
-       if ((listDocumentos.length == 0)) {
-           alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
-           return false;
-       }
-   
-       if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
-           alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
-           return false;
-       }
+    if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
+        alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Nip').unmask().val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
+        alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #semestre').val() == 0)) {
+        alertas("Informe o semestre", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
+        alertas("Informe um ano válido", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
+        alertas("Informe o tipo de documento", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if ((listDocumentos.length == 0)) {
+        alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
+        alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
 
     tags = JSON.stringify({
         assunto: $('#formCadDocumento #Assunto').val(),
@@ -1268,58 +1269,10 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                 contentType: false,
                 success: function (data) {
                     //console.log(data);
-                    var ArrayDocumentos = JSON.parse(data);
-                    totalDocumnetos = ArrayDocumentos.length;
-                    processarListaDeItens(ArrayDocumentos).then(function () {
-                        console.log('Todos os itens foram processados.');
-
-                        if (listDocumentosServidor.length == totalDocumnetos)
-                            armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-
-                        console.log("Terminou: ");
-                        listDocumentos = [];
-                        listDocumentosServidor = [];
-                        $('#semestre').trigger('change');
-                        $('.btnIndexar').css("display", "none");
-                        $('.btnAnexar').css("display", "block");
-
-                        alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-                        alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
-
-                    }).catch(function (error) {
-                        console.error('Ocorreu um erro:', error);
-                    });
-                    /*ArrayDocumentos.forEach(doc => {
-                        doc["documentoid"] = docid;
-                        dadosDocumento = JSON.stringify(doc);
-                        if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
-                            console.log("inicio processo: " + dadosDocumento);
-                            processarListaDeItens(ArrayDocumentos).then(function () {
-                                console.log('Todos os itens foram processados.');
-
-                                if (listDocumentosServidor.length == totalDocumnetos)
-                                    armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-
-                                alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-                                alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
-
-                            }).catch(function (error) {
-                                console.error('Ocorreu um erro:', error);
-                            });
-                        } else {
-                            listDocumentosServidor = [];
-                            listDocumentosServidor.push(dadosDocumento);
-                            armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-                            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-                            $('#semestre').trigger('change');
-                            $('.btnIndexar').css("display", "none");
-                            $('.btnAnexar').css("display", "block");
-                        }
-                    });*/
+                    processoAssinaturaData(data);
                 },
                 error: function (d) {
                     alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#IndexarDocumento', 'alert_danger');
-
                 }
             });
         },
@@ -1327,10 +1280,49 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
             alertas("Erro ao cadastrar o documento. Verfique os dados inseridoss", '#ModIndexarDocumento', 'alert_danger');
         }
     });
-
-
 });
 
+function processoAssinaturaData(data) {
+    var ArrayDocumentos = JSON.parse(data);
+    totalDocumnetos = ArrayDocumentos.length;
+    if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
+        processarListaDeItens(ArrayDocumentos).then(function () {
+            console.log('Todos os itens foram processados.');
+
+            if (listDocumentosServidor.length == totalDocumnetos)
+                armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+
+            console.log("Terminou: ");
+            listDocumentos = [];
+            listDocumentosServidor = [];
+            $('#semestre').trigger('change');
+            $('.btnIndexar').css("display", "none");
+            $('.btnAnexar').css("display", "block");
+
+            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+            alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+
+        }).catch(function (error) {
+            console.error('Ocorreu um erro:', error);
+        });
+    } else {
+        listDocumentosServidor = [];
+        ArrayDocumentos.forEach(doc => {
+            doc["documentoid"] = docid;
+            doc["imgencontrada"] = possuiPasta;
+            dadosDocumento = JSON.stringify(doc);
+            listDocumentosServidor.push(dadosDocumento);
+        });
+
+        armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+        alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+        alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+        $('#semestre').trigger('change');
+        $('.btnIndexar').css("display", "none");
+        $('.btnAnexar').css("display", "block");
+
+    }
+}
 
 $(document).on('click', '#btnNaoConfirmaAnexarDocumento', function (e) {
     FecharModal('#ModAnexarDocumento');
@@ -1404,36 +1396,8 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         contentType: false,
         success: function (data) {
             //console.log(data);
-            var ArrayDocumentos = JSON.parse(data);
-            totalDocumnetos = ArrayDocumentos.length;
-            ArrayDocumentos.forEach(doc => {
-                doc["imgencontrada"] = 1;
-                doc["documentoid"] = docid;
-                dadosDocumento = JSON.stringify(doc);
-                if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
-                    processarListaDeItens(dadosDocumento).then(function () {
-                        console.log('Todos os itens foram processados.');
-
-                        if (listDocumentosServidor.length == totalDocumnetos)
-                            armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-
-                        alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-                        alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
-
-                    }).catch(function (error) {
-                        console.error('Ocorreu um erro:', error);
-                    });
-                    //assinarDocumentos(dadosDocumento);
-                } else {
-                    listDocumentosServidor = [];
-                    listDocumentosServidor.push(dadosDocumento);
-                    armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-                    alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
-                    $('#semestre').trigger('change');
-                    $('.btnIndexar').css("display", "none");
-                    $('.btnAnexar').css("display", "block");
-                }
-            });
+            possuiPasta = 1;
+            processoAssinaturaData(data);
         },
         error: function (d) {
             alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#ModAnexarDocumento', 'alert_danger');
@@ -1467,6 +1431,7 @@ function processarListaDeItens(lista) {
 
                 docAtual = JSON.parse(docAtual);
                 docAtual["documentoid"] = docid;
+                docAtual["imgencontrada"] = possuiPasta;
                 docAtual = JSON.stringify(docAtual);
 
                 listDocumentosServidor.push(docAtual);
@@ -1482,6 +1447,7 @@ function processarListaDeItens(lista) {
 function assinarDocumentos(documentos) {
     console.log("Rotina de assinar: ");
     var ArrayDocumentos = JSON.parse(documentos);
+
     console.log("Dados recebidos: " + ArrayDocumentos);
     $.ajax({
         type: 'GET',
@@ -1528,40 +1494,6 @@ function processarItemComResposta(item) {
     });
 }
 
-$(document).ready(function () {
-    /*$('#assinatura').change(function () {
-        var valorInput = $(this).val();
-        if (valorInput !== '') {
-            docAtual = $('#objetoAtual').val();
-            docBase64Atual = $(this).val();
-            console.log("documento atual " + docAtual);
-            finalizarAssinatura(function () {
-                console.log("Terminou: ");
-                listDocumentos = [];
-                listDocumentosServidor = [];
-                $('#semestre').trigger('change');
-                $('.btnIndexar').css("display", "none");
-                $('.btnAnexar').css("display", "block");
-
-                /* setTimeout(function () {
-                     location.reload();
-                 }, 3000);
-            });
-
-            docAtual = JSON.parse(docAtual);
-            docAtual["documentoid"] = docid;
-            docAtual = JSON.stringify(docAtual);
-
-            listDocumentosServidor.push(docAtual);
-            console.log("Dados são iguais: " + listDocumentosServidor.length + " / " + totalDocumnetos);
-            if (listDocumentosServidor.length == totalDocumnetos)
-                armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-
-            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-            alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
-        }
-    });*/
-});
 
 function finalizarAssinatura(callback) {
     var ArrayDocumentos = JSON.parse(docAtual);
