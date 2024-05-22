@@ -1195,7 +1195,7 @@ let docid = 0;
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
     listDocumentosServidor = [];
 
-    /*   if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
+       if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
            alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
            return false;
        }
@@ -1228,7 +1228,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
        if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
            alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
            return false;
-       }*/
+       }
 
     tags = JSON.stringify({
         assunto: $('#formCadDocumento #Assunto').val(),
