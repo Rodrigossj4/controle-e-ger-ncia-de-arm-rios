@@ -46,8 +46,8 @@ class UsuarioRepository extends LogRepository
     public function cadastrarUsuario(array $usuario)
     {
         try {
-            //var_dump($usuario);
-            $sqlQuery = "INSERT INTO {$this->schema}\"Usuarios\"(\"NomeUsuario\",\"Nip\", \"SenhaUsuario\", \"PerfilUsuario\") values(?, ?, ?, ?);";
+            // var_dump($usuario);
+            $sqlQuery = "INSERT INTO {$this->schema}\"Usuarios\"(\"NomeUsuario\",\"Nip\", \"SenhaUsuario\", \"PerfilUsuario\", \"OMUsuario\" , \"SetorUsuario\") values(?, ?, ?, ?,?,?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($usuario as $us) {
@@ -60,11 +60,12 @@ class UsuarioRepository extends LogRepository
                 );
             }
 
-
             $stmt->bindValue(1, $usuarioData->NomeUsuario());
             $stmt->bindValue(2, $usuarioData->Nip());
             $stmt->bindValue(3, $usuarioData->SenhaUsuario());
             $stmt->bindValue(4, $usuarioData->idAcesso());
+            $stmt->bindValue(5, "DPM");
+            $stmt->bindValue(6, "70");
             $stmt->execute();
 
             return true;
