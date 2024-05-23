@@ -18,7 +18,7 @@ class TipoDocumentoController extends Controller
 
    public function index()
    {
-      $this->validarSessao();
+      //$this->validarSessao();
       $service = new TipoDocumentoService();
       $armariosService =  new ArmarioServices();
       $TipoDocumentoList = $service->listaTipoDocumento();
@@ -42,7 +42,7 @@ class TipoDocumentoController extends Controller
          $service = new TipoDocumentoService();
 
          if ($service->BuscarTipoDocumento($tipoDocList) > 0) {
-            http_response_code(500);
+            http_response_code(409);
             return "Já existe um Tipo de documento com esse nome cadastrado";
          }
 

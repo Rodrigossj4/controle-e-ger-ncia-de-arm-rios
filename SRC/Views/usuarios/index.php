@@ -151,6 +151,6 @@
 
 <script>
     $(document).ready(function() {
-        $('#formCadUsuario #nip').mask('000.000-00');
+        $('#formCadUsuario #nip').mask('00.0000.00');
     });
 </script>

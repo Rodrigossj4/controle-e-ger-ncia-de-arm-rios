@@ -3,6 +3,7 @@
     <div class="bg-body-tertiary rounded-3 row">
         <div class="col divisao_bottom form-control-padronizado" id="modLogin">
             <h3>Login</h3>
+            <?php $_SERVER['REMOTE_ADDR']; ?>
             <form method="post" id="formLogin" action="">
                 <div class="form-group">
                     <label class="col-form-label" for="nip">Nip: </label>
@@ -28,3 +29,9 @@
 </html>
 
 <?php require_once __DIR__ . "../../rodape.php" ?>
+
+<script>
+    $(document).ready(function() {
+        $('#formLogin #nip').mask('00.0000.00');
+    });
+</script>

@@ -163,13 +163,25 @@ span.carousel-control-next-icon {
     display: none;
 }
 
-#listarDocumentos {
+#formListaDocumentos #listarDocumentos {
+    margin-top: 0px;
+}
+
+.carousel #listarDocumentos {
     margin-top: 50px;
 }
 
 .carousel-control-next,
 .carousel-control-prev {
     width: 5%;
+}
+
+.vincArmarioTipoDoc {
+    margin: 5px 0px 0px 0px;
+}
+
+.saudacao {
+    margin: 50px 0px 0px 100px;
 }
 
 /*

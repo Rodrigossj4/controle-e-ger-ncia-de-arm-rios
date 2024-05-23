@@ -18,7 +18,7 @@ class DocumentoController extends Controller
 
     public function index()
     {
-        $this->validarSessao();
+        //$this->validarSessao();
         $service = new DocumentoServices();
         $armariosService =  new ArmarioServices();
 

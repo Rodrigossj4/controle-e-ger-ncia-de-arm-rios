@@ -59,8 +59,12 @@ $('#btnCadArmario').on('click', function (e) {
 
         },
         error: function (d) {
-            console.log(d);
-            alertas("Houve um problema para cadastrar o armário. ", '#modCadArmario', 'alert_danger');
+            //console.log(d["status"]);
+            if (d["status"] == 409)
+                alertas("Armário já cadastrado no sistema", '#modCadArmario', 'alert_danger');
+
+            if (d["status"] == 500)
+                alertas("Houve um problema para cadastrar o armário. ", '#modCadArmario', 'alert_danger');
         }
     });
 });
@@ -107,7 +111,7 @@ function carregarTipoDocNaoVincArmarios(id) {
         dataType: 'json',
         contentType: 'application/json',
         success: function (d) {
-            console.log(d);
+            //console.log(d);
             var sel = $("#GerenciarArmario #formListaDocumentos select");
             sel.empty();
             d.forEach(e => {
@@ -121,7 +125,7 @@ function carregarTipoDocNaoVincArmarios(id) {
     });
 }
 
-$('.btnGerenciarArmario').on('click', function (e) {
+$(document).on('click', '.btnGerenciarArmario', function (e) {
     carregarTipoDocNaoVincArmarios($(this).data("id"));
     $('#formListaDocumentos #IdArmario').val($(this).data("id"));
     carregarTipoDocVincArmarios($(this).data("id"));
@@ -145,7 +149,7 @@ $(document).on('click', '#btnConfirmaDesArmTipoDoc', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             carregarTipoDocNaoVincArmarios($('#formDesArmTipoDoc #idArmario').val());
             $('#formListaDocumentos #IdArmario').val($('#formDesArmTipoDoc #idArmario').val());
             carregarTipoDocVincArmarios($('#formDesArmTipoDoc #idArmario').val());
@@ -158,6 +162,7 @@ $(document).on('click', '#btnConfirmaDesArmTipoDoc', function (e) {
     });
 });
 
+//$(document).on('click', '.vincArmarioTipoDoc', function (e) {
 $('.vincArmarioTipoDoc').on('click', function (e) {
     var formdata = new FormData($("form[id='formListaDocumentos']")[0]);
     $.ajax({
@@ -372,7 +377,12 @@ $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
             alertas('Tipo de documento cadastrado com sucesso', '#modCadTipoDocumento', 'alert_sucess');
         },
         error: function (d) {
-            alertas("Houve um problema para cadastrar o Tipo de documento", '#modCadTipoDocumento', 'alert_danger');
+            if (d["status"] == 409)
+                alertas("Já existe um Tipo de documento com esse nome cadastrado", '#modCadTipoDocumento', 'alert_danger');
+
+            if (d["status"] == 500)
+                alertas("Houve um problema para cadastrar o Tipo de documento", '#modCadTipoDocumento', 'alert_danger');
+
         }
     });
 });

@@ -18,7 +18,7 @@ class LogRepository
     public function cadastrarLog(array $log): bool
     {
         try {
-            $sqlQuery = "INSERT INTO {$this->schema}\"Log\"(idoperacao, idusuario, dh, idarmario) values(?, ?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"Log\"(idoperacao, idusuario, dh, idarmario, ipacesso) values(?, ?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($log as $lg) {
@@ -27,7 +27,8 @@ class LogRepository
                     $lg['idoperacao'],
                     $lg['idusuario'],
                     $lg['dh'],
-                    $lg['idarmario']
+                    $lg['idarmario'],
+                    $_SERVER['HTTP_CLIENT_IP']
                 );
             }
 

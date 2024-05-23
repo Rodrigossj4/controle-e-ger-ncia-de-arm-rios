@@ -46,7 +46,7 @@ class UsuarioRepository extends LogRepository
     public function cadastrarUsuario(array $usuario)
     {
         try {
-            var_dump($usuario);
+            //var_dump($usuario);
             $sqlQuery = "INSERT INTO {$this->schema}\"Usuarios\"(\"NomeUsuario\",\"Nip\", \"SenhaUsuario\", \"PerfilUsuario\") values(?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 

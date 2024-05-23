@@ -7,10 +7,11 @@ use Exception;
 use Marinha\Mvc\Services\LoginServices;
 use Marinha\Mvc\Helpers\Helppers;
 
-class LoginController
+class LoginController extends Controller
 {
     public function index()
     {
+
         require __DIR__ . '../../Views/login/index.php';
     }
 

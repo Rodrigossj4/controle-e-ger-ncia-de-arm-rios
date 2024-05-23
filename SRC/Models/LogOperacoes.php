@@ -6,18 +6,19 @@ class LogOperacoes
 {
     private ?int $id;
     private string $Codoperacao;
-    private int $IdUsuario; 
-    private string $dh; 
+    private int $IdUsuario;
+    private string $dh;
     private ?int $IdDocumento;
- 
+    private string $IpAcesso;
 
-    public function __construct(?int $id, string $Codoperacao, int $IdUsuario, string $dh, ?int $IdDocumento)
+    public function __construct(?int $id, string $Codoperacao, int $IdUsuario, string $dh, ?int $IdDocumento, string $IpAcesso)
     {
         $this->id = $id;
         $this->Codoperacao = $Codoperacao;
         $this->IdUsuario = $IdUsuario;
         $this->dh = $dh;
-        $this->IdDocumento= $IdDocumento;
+        $this->IdDocumento = $IdDocumento;
+        $this->IpAcesso = $IpAcesso;
     }
 
     public function id(): ?int
@@ -41,5 +42,10 @@ class LogOperacoes
     public function idDocumento(): ?int
     {
         return $this->IdDocumento;
+    }
+
+    public function ipAcesso(): string
+    {
+        return $this->IpAcesso;
     }
 }

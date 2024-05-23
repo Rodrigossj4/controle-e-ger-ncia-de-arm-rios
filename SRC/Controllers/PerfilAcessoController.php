@@ -15,7 +15,7 @@ class PerfilAcessoController extends Controller
 
    public function index()
    {
-      $this->validarSessao();
+      //$this->validarSessao();
       $service = new PerfilAcessoServices();
 
       $PerfilAcessoList = $service->listaPerfis();

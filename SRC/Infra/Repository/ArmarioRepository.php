@@ -167,9 +167,9 @@ class ArmarioRepository extends LogRepository
 
     public function BuscarArmario(array $armario): int
     {
-        $nomeExterno = $armario['0']["nomeexterno"];
+        $nomeInterno = $armario['0']["nomeinterno"];
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" WHERE LOWER(\"NomeExterno\") = LOWER('$nomeExterno');";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" WHERE LOWER(\"NomeInterno\") = LOWER('$nomeInterno');";
             //var_dump($sqlQuery);
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();

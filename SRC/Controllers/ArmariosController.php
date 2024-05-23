@@ -17,6 +17,7 @@ class ArmariosController extends Controller
    public function index()
    {
       $this->validarSessao();
+
       $service = new ArmarioServices();
       $ArmariosList = $service->listaArmarios();
       require __DIR__ . '../../Views/armarios/index.php';
@@ -39,7 +40,7 @@ class ArmariosController extends Controller
 
          $service = new ArmarioServices();
          if ($service->BuscarArmario($armariosList) > 0) {
-            http_response_code(500);
+            http_response_code(409);
             return "Já existe um armario com esse nome cadastrado";
          }
 
@@ -66,7 +67,7 @@ class ArmariosController extends Controller
 
    public function vincularDocumentos(): bool
    {
-      //$this->validarSessao();
+      $this->validarSessao();
       $service = new ArmarioServices();
       $vinculosList = array();
       array_push($vinculosList, array(
@@ -80,7 +81,7 @@ class ArmariosController extends Controller
 
    public function desvincularDocumentos()
    {
-      //$this->validarSessao();
+      $this->validarSessao();
       $service = new ArmarioServices();
       $vinculosList = json_decode(file_get_contents('php://input'));
       //var_dump($vinculosList);
