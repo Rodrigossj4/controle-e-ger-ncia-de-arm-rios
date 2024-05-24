@@ -471,7 +471,7 @@ class DocumentoServices extends SistemaServices
                 'Autor' => $tag['autor'],
                 'DataDigitalizacao' => new DateTime(),
                 'IdentDocDigital' => $tag['identificador'],
-                'RespDigitalizacao' => $_SESSION['usuario'] == null ? "" : $_SESSION['usuario'],
+                'RespDigitalizacao' => "",
                 'Titulo' => $tag['titulo'],
                 'TipoDocumento' =>  $documentos['tipoDocumento'],
                 'Hash' => $documentos['b64'],
