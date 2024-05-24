@@ -4,8 +4,10 @@ namespace Marinha\Mvc\Infra\Repository;
 
 use Marinha\Mvc\Models\Documentos;
 use Marinha\Mvc\Models\Paginas;
+use Marinha\Mvc\Models\MetaTags;
 use Marinha\Mvc\Infra\Repository\interfaces;
 use Exception;
+
 #implements IArmarioRepository
 use PDO;
 
@@ -437,11 +439,11 @@ class DocumentoRepository extends LogRepository
         }
     }
 
-    public function cadastrarPagina(array $pagina): bool
+    public function cadastrarPagina(array $pagina): int
     {
         try {
             //var_dump($pagina);
-            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(\"DocId\", \"Volume\", \"Numpg\", \"CodExp\", \"Arquivo\", \"Filme\", \"Fotograma\", \"IMGEncontrada\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(\"DocId\", \"Volume\", \"Numpg\", \"CodExp\", \"Arquivo\", \"Filme\", \"Fotograma\", \"IMGEncontrada\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING \"IdDocPag\";";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($pagina as $pg) {
@@ -473,10 +475,10 @@ class DocumentoRepository extends LogRepository
             $stmt->bindValue(9, $paginaData->idarmario());
             $stmt->execute();
 
-            return true;
+            return $stmt->fetchColumn();;
         } catch (Exception $e) {
             echo $e;
-            return false;
+            return 0;
         }
     }
 
@@ -525,5 +527,62 @@ class DocumentoRepository extends LogRepository
         $stmt->bindValue(2, $novoCaminho);
         $stmt->bindValue(3, $idPagina);
         $stmt->execute();
+    }
+
+    public function cadastrarMetaTags(array $tags, int $docId, int $docPagina)
+    {
+        try {
+            //var_dump($tags);
+            $sqlQuery = "INSERT INTO {$this->schema}\"Metadados\"(
+                \"Assunto\", \"Autor\", \"DataDigitalizacao\", \"IdentDocDigital\", \"RespDigitalizacao\", \"Titulo\", \"TipoDocumento\", \"Hash\", \"Classe\", \"DataProdDoc\", \"DestinacaoDoc\", \"Genero\", \"PrazoGuarda\", \"Observacoes\", \"IdDocumento\", \"IdPagina\") values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+            $stmt = $this->pdo->prepare($sqlQuery);
+
+            foreach ($tags as $tg) {
+
+                $paginaData = new MetaTags(
+                    null,
+                    $tg['assunto'],
+                    $tg['Autor'],
+                    $tg['DataDigitalizacao'],
+                    $tg['IdentDocDigital'],
+                    $tg['RespDigitalizacao'],
+                    $tg['Titulo'],
+                    $tg['TipoDocumento'],
+                    $tg['Hash'],
+                    $tg['Classe'],
+                    $tg['DataProdDoc'],
+                    $tg['DestinacaoDoc'],
+                    $tg['Genero'],
+                    $tg['PrazoGuarda'],
+                    $tg['Observacoes'],
+                    $tg['docId'],
+                    $tg['idPagina'],
+                );
+            }
+
+            $stmt->bindValue(1, $paginaData->getAssunto());
+            $stmt->bindValue(2, $paginaData->getAutor());
+            $stmt->bindValue(3, $paginaData->getDataDigitalizacao()->format('Y-m-d H:i:s'));
+            $stmt->bindValue(4, $paginaData->getIdentDocDigital());
+            $stmt->bindValue(5, $paginaData->getRespDigitalizacao());
+            $stmt->bindValue(6, $paginaData->getTitulo());
+            $stmt->bindValue(7, $paginaData->getTipoDocumento());
+            $stmt->bindValue(8, $paginaData->getHash());
+            $stmt->bindValue(9, $paginaData->getClasse());
+            $stmt->bindValue(10, $paginaData->getDataProdDoc()->format('Y-m-d H:i:s'));
+            $stmt->bindValue(11, $paginaData->getDestinacaoDoc());
+            $stmt->bindValue(12, $paginaData->getGenero());
+            $stmt->bindValue(13, $paginaData->getPrazoGuarda());
+            $stmt->bindValue(14, $paginaData->getObservacoes());
+            $stmt->bindValue(15, $paginaData->getIdDocumento());
+            $stmt->bindValue(16, $paginaData->getIdPagina());
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
     }
 }

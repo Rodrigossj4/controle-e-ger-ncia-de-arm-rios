@@ -1432,8 +1432,6 @@ function processarListaDeItens(lista) {
                 docBase64Atual = resposta;
 
                 finalizarAssinatura(function () {
-
-
                     /* setTimeout(function () {
                          location.reload();
                      }, 3000);*/
@@ -1442,6 +1440,7 @@ function processarListaDeItens(lista) {
                 docAtual = JSON.parse(docAtual);
                 docAtual["documentoid"] = docid;
                 docAtual["imgencontrada"] = possuiPasta;
+                docAtual["b64"] = docBase64Atual;
                 docAtual = JSON.stringify(docAtual);
 
                 listDocumentosServidor.push(docAtual);

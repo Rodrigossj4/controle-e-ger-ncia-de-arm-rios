@@ -8,6 +8,7 @@ use Marinha\Mvc\Infra\Repository\DocumentoRepository;
 use Marinha\Mvc\Infra\Repository\ArmarioRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use DateTime;
 
 require_once 'vendor/autoload.php';
 
@@ -155,7 +156,7 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function cadastrarPaginas(array $pagina): bool
+    public function cadastrarPaginas(array $pagina): int
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
@@ -295,7 +296,8 @@ class DocumentoServices extends SistemaServices
                 'filme' => "1",
                 'fotograma' => "1",
                 'imgencontrada' => "0",
-                'b64' => ""
+                'b64' => "",
+                'tags' => $dadosDocumento->tags
             ));
         }
 
@@ -564,7 +566,7 @@ class DocumentoServices extends SistemaServices
 
         for ($i = 0; $i < $total; $i++) {
             $documentos = json_decode($arquivos->listDocumentosServidor[$i], true);
-
+            $tag = json_decode($documentos['tags'], true);
             //var_dump($documentos);
             $origem = $documentos['arquivo'];
             //var_dump($arquivos->listDocumentosServidor[$i]);
@@ -582,8 +584,31 @@ class DocumentoServices extends SistemaServices
                 'imgencontrada' => "0",
                 'armario' => $documentos['idArmario']
             ));
-            $repository->cadastrarPagina($paginasList);
 
+
+            $idPagina = $repository->cadastrarPagina($paginasList);
+
+            $tagList = [];
+            array_push($tagList, array(
+                'assunto' => $tag['assunto'],
+                'Autor' => $tag['autor'],
+                'DataDigitalizacao' => new DateTime(),
+                'IdentDocDigital' => $tag['identificador'],
+                'RespDigitalizacao' => "",
+                'Titulo' => $tag['titulo'],
+                'TipoDocumento' => $tag['assunto'],
+                'Hash' => $tag['assunto'],
+                'Classe' => $tag['assunto'],
+                'DataProdDoc' => new DateTime(),
+                'DestinacaoDoc' => $tag['assunto'],
+                'Genero' => $tag['assunto'],
+                'PrazoGuarda' => $tag['assunto'],
+                'Observacoes' => $tag['assunto'],
+                'docId' => $documentos['documentoid'],
+                'idPagina' => $idPagina
+            ));
+
+            $repository->cadastrarMetaTags($tagList, $documentos['documentoid'], $idPagina);
             $caminhoRaiz = pathinfo($documentos['arquivo'])['dirname'];
         }
 
