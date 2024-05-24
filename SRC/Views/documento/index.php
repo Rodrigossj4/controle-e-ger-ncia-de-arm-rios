@@ -83,6 +83,27 @@ $contador = 0;
                         <input id="Classe" name="Classe" class="form-control" />
                     </div>
                     <div class="form-group">
+                        <label class="col-form-label" for="DataProdDoc">Data de produção</label>
+                        <input id="DataProdDoc" name="DataProdDoc" class="form-control" type="date" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="DestinacaoDoc">Destinação prevista</label>
+                        <select id="DestinacaoDoc" name="DestinacaoDoc" class="form-select">
+                            <option value="0">Selecione a Destinação prevista</option>
+                            <option value="transferencia">Transferência</option>
+                            <option value="eliminação">Eliminação</option>
+                            <option value="recolhimento">Recolhimento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="Genero">Gênero</label>
+                        <input id="Genero" name="Genero" class="form-control" value="textual" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="PrazoGuarda">Prazo de guarda</label>
+                        <input id="PrazoGuarda" name="PrazoGuarda" class="form-control" value="130 anos" />
+                    </div>
+                    <div class="form-group">
                         <label class="col-form-label" for="Observacao">Observação</label>
                         <input id="Observacao" name="Observacao" class="form-control" />
                     </div>

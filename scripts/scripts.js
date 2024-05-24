@@ -1248,6 +1248,10 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         identificador: $('#formCadDocumento #Identificador').val(),
         classe: $('#formCadDocumento #Classe').val(),
         observacao: $('#formCadDocumento #Observacao').val(),
+        dataProdDoc: $('#formCadDocumento #DataProdDoc').val(),
+        destinacaoDoc: $('#formCadDocumento #DestinacaoDoc').val(),
+        genero: $('#formCadDocumento #Genero').val(),
+        prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
     }, null, 2);
 
     dados = JSON.stringify({
@@ -1382,6 +1386,10 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         identificador: $('#formCadDocumento #Identificador').val(),
         classe: $('#formCadDocumento #Classe').val(),
         observacao: $('#formCadDocumento #Observacao').val(),
+        dataProdDoc: $('#formCadDocumento #DataProdDoc').val(),
+        destinacaoDoc: $('#formCadDocumento #DestinacaoDoc').val(),
+        genero: $('#formCadDocumento #Genero').val(),
+        prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
     }, null, 2);
 
     dados = JSON.stringify({
