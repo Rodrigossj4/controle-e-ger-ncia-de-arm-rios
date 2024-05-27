@@ -64,6 +64,7 @@ $contador = 0;
                 <div class="containerTags" id="containerTags">
                     <div class="form-group">
                         <label class="col-form-label" for="Assunto">Informe o assunto: </label>
+                        <input type="hidden" id="RespDigitalizacao" name="RespDigitalizacao" value="<?php echo htmlspecialchars($nipUsuario); ?>">
                         <input type="text" id="Assunto" name="Assunto" class="form-control">
                     </div>
                     <div class="form-group">
@@ -189,15 +190,11 @@ $contador = 0;
                 </div>
             </div>
 
-            <div class="container">
-                <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary">incluir</button>
+            <div class="container mt-8">
+                <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary mt-2">incluir</button>
+                <button name="verificarDocumentos" id="verificarDocumentos" class="btn btn-primary mt-2" data-toggle="modal" data-target=".bd-example-modal-lg">Verificar documentos inseridos</button>
             </div>
-
         </div>
-
-
-
-
     </div>
     <div class="row col-6">
         <div class="panel panel-default" style="display: none;">
@@ -328,6 +325,32 @@ $contador = 0;
     </div>
 </div>
 
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="carouselExampleControlsSelecionados" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <div class="carousel-inner" id="listarDocumentosSelecionados" data-docId="">
+                        <div class="carousel-item active" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="../documentos/ARQ--338110/pagina 2.jpg" class="d-block w-100" alt="Imagem 1"> </div>
+                        <div class="carousel-item " style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="../documentos/ARQ--338110/paginas 3.jpg" class="d-block w-100" alt="Imagem 1"> </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControlsSelecionados" role="button" data-slide="prev" data-indice="0">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControlsSelecionados" role="button" data-slide="next" data-indice="0">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Próximo</span>
+                    </a>
+                </div>
+            </div>
+            <div class="container mt-8">
+                <button name="removerDocumento" id="removerDocumento" class="btn btn-primary mt-2">Remover da seleção</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <script>
     $(document).ready(function() {
         $('#formCadDocumento #Nip').mask('00.0000.00');

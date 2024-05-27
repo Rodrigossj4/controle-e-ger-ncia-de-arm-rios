@@ -159,7 +159,8 @@ span.carousel-control-next-icon {
     display: none;
 }
 
-#incluirDocumento {
+#incluirDocumento,
+#verificarDocumentos {
     display: none;
 }
 

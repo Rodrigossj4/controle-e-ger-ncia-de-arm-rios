@@ -4,12 +4,21 @@ if (!isset($_SESSION))
 
 //var_dump($_SESSION['usuario'][0]["idacesso"])
 $liberaAcessoAdmin = false;
+$nomeUsuario = "";
+$nipUsuario = "";
 if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6))
     $liberaAcessoAdmin = true;
+
+if (isset($_SESSION['usuario'])) {
+    $nomeUsuario = $_SESSION['usuario'][0]["nomeusuario"];
+    $nipUsuario = $_SESSION['usuario'][0]["nip"];
+}
 
 $listaArquivosCarregados = [];
 if ((isset($_SESSION['Arquivos'])))
     $listaArquivosCarregados  = $_SESSION['Arquivos'];
+
+
 
 //echo  $liberaAcessoAdmin;
 ?>

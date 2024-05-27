@@ -4,6 +4,7 @@ var vUrlListarTipoPerfis = "/listarPerfis";
 var vUrlListarUsuarios = "/listarUsuarios";
 //var vUrlProdutos = "http://127.0.0.1:5000/Produtos";
 let listDocumentos = [];
+let listDocumentosPrimaria = [];
 let listDocumentosServidor = [];
 let totalDocumnetos = 0;
 $(document).ready(function (e) {
@@ -264,6 +265,7 @@ function carregarDocumentos() {
         contentType: 'application/json',
         cache: false,
         success: function (data) {
+            console.log(data);
             var sel = $("#documentosLista");
             sel.empty();
             data.forEach(e => {
@@ -998,7 +1000,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             $('#semestre').trigger('change');
             alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
             /*setTimeout(function () {
@@ -1092,11 +1094,82 @@ $('#incluirDocumento').on('click', function (e) {
     if (typeof $("#listarDocumentos .active img").attr("src") !== "undefined") {
         listDocumentos.push($("#listarDocumentos .active img").attr("src").replace(/\.\.\//g, ""));
 
+        listDocumentosPrimaria.forEach(function (subArray) {
+            var index = subArray.indexOf($("#listarDocumentos .active img").attr("src"));
+            if (index > -1) {
+                subArray.splice(index, 1);
+            }
+        });
+
+        listDocumentosPrimaria = listDocumentosPrimaria.filter(function (subArray) {
+            return subArray.length > 0;
+        });
+
+        ListarArquivos();
+
     } else {
         listDocumentos.push($("#listarDocumentos  iframe").attr("src").replace(/\.\.\//g, ""));
+
+        listDocumentosPrimaria.forEach(function (subArray) {
+            var index = subArray.indexOf($("#listarDocumentos  iframe").attr("src"));
+            if (index > -1) {
+                subArray.splice(index, 1);
+            }
+        });
+
+        listDocumentosPrimaria = listDocumentosPrimaria.filter(function (subArray) {
+            return subArray.length > 0;
+        });
+
+        ListarArquivos();
     }
+
+    if (listDocumentos.length > 0) {
+        $('#verificarDocumentos').css("display", "block");
+    } else {
+        $('#verificarDocumentos').css("display", "none");
+    }
+
 });
 
+$('#verificarDocumentos').on('click', function (e) {
+    ListarArquivosSelecionados()
+});
+
+$(document).on('click', '#removerDocumento', function (e) {
+    console.log("remover");
+    console.log(listDocumentosPrimaria);
+    if (typeof $("#listarDocumentosSelecionados .active img").attr("src") !== "undefined") {
+        //listDocumentos.push($("#listarDocumentosSelecionados .active img").attr("src").replace(/\.\.\//g, ""));
+        console.log(listDocumentosPrimaria);
+        item = [$("#listarDocumentosSelecionados .active img").attr("src")];
+
+        listDocumentosPrimaria.push(item);
+        console.log(listDocumentosPrimaria);
+        listDocumentos = listDocumentos.filter(function (value) {
+            return value !== item;
+        });
+
+        ListarArquivos();
+        ListarArquivosSelecionados();
+
+
+    }
+    //ListarArquivosSelecionados()
+});
+
+function ListarArquivosSelecionados() {
+    var sel = $("#listarDocumentosSelecionados");
+    sel.empty();
+    let contador = 0;
+    listDocumentos.forEach(e => {
+        var active = (contador == 0) ? 'active' : '';
+        sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+        contador++;
+    });
+
+    $("#carouselExampleControlsSelecionados").html();
+}
 $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
     $.ajax({
@@ -1116,8 +1189,21 @@ $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
     });
 });
 
-function ListarArquivos() {
+function removeItems(nestedArray, listToRemove) {
+    nestedArray.forEach(function (subArray) {
+        listToRemove.forEach(function (item) {
+            //console.log(item);
+            item = item.startsWith("/") ? ".." + item : "../" + item;
+            var index = subArray.indexOf(item);
+            if (index !== -1) {
+                subArray.splice(index, 1);
+            }
+        });
+    });
+    return nestedArray.filter(subArray => subArray.length > 0);
+}
 
+function ListarArquivos() {
     var contador = 0;
     var formdata = new FormData($("form[id='formCadDocumento']")[0]);
     var id = $('#formCadDocumento #Caminho').val();
@@ -1128,47 +1214,60 @@ function ListarArquivos() {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log('retorno: ' + data);
-            const arrayData = JSON.parse(data);
+            console.log('retorno: ' + data);
+            listDocumentosPrimaria = [];
+            listDocumentosPrimaria = JSON.parse(data);
+
+            if (listDocumentos.length > 0)
+                listDocumentosPrimaria = removeItems(listDocumentosPrimaria, listDocumentos);
+
+
             var sel = $("#listarDocumentos");
             sel.empty();
-            var extensao = arrayData[0][0].split('.').pop();
+            if (listDocumentosPrimaria.length > 0) {
+                var extensao = listDocumentosPrimaria[0][0].split('.').pop();
 
-            if (extensao == "pdf") {
-                listDocumentosServidor = [];
-                let contador = 0;
-                arrayData.forEach(e => {
-                    listDocumentosServidor.push([contador, e]);
-                    contador++;
-                });
+                if (extensao == "pdf") {
+                    listDocumentosServidor = [];
+                    let contador = 0;
+                    listDocumentosPrimaria.forEach(e => {
+                        listDocumentosServidor.push([contador, e]);
+                        contador++;
+                    });
 
-                //console.log(listDocumentosServidor);
-                $('.carousel-control-prev').attr('id', 'regride');
-                $('.carousel-control-next').attr('id', 'avanca');
-                $('#avanca').attr('data-indice', 1);
-                $('#regride').attr('data-indice', 0);
-                sel.attr('data-docId', listDocumentosServidor[0][0]);
-                sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
+                    //console.log(listDocumentosServidor);
+                    $('.carousel-control-prev').attr('id', 'regride');
+                    $('.carousel-control-next').attr('id', 'avanca');
+                    $('#avanca').attr('data-indice', 1);
+                    $('#regride').attr('data-indice', 0);
+                    sel.attr('data-docId', listDocumentosServidor[0][0]);
+                    sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
 
 
+                } else {
+                    listDocumentosPrimaria.forEach(e => {
+                        //console.log(e[0].split('.').pop());
+                        var active = (contador == 0) ? 'active' : '';
+                        sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+                        contador++;
+                    });
+                }
+                $("#carouselExampleControls").css('display', 'block');
+                $("#incluirDocumento").css('display', 'block');
+                $("#carouselExampleControls").html();
             } else {
-                arrayData.forEach(e => {
-                    //console.log(e[0].split('.').pop());
-                    var active = (contador == 0) ? 'active' : '';
-                    sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
-                    contador++;
-                });
+                $("#carouselExampleControls").css('display', 'none');
+                $("#incluirDocumento").css('display', 'none');
+                $("#carouselExampleControls").html();
             }
-            $("#carouselExampleControls").css('display', 'block');
-            $("#incluirDocumento").css('display', 'block');
-            $("#carouselExampleControls").html();
-
         },
         error: function (d) {
             console.log('ei erro ' + d);
         }
     });
 }
+
+
 
 $(document).on('click', '#arquivosLote', function (e) {
     var sel = $("#visualizarDocumento");
@@ -1252,6 +1351,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         destinacaoDoc: $('#formCadDocumento #DestinacaoDoc').val(),
         genero: $('#formCadDocumento #Genero').val(),
         prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
+        respDigitalizacao: $('#formCadDocumento #RespDigitalizacao').val(),
     }, null, 2);
 
     dados = JSON.stringify({
@@ -1390,6 +1490,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         destinacaoDoc: $('#formCadDocumento #DestinacaoDoc').val(),
         genero: $('#formCadDocumento #Genero').val(),
         prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
+        respDigitalizacao: $('#formCadDocumento #RespDigitalizacao').val(),
     }, null, 2);
 
     dados = JSON.stringify({
@@ -1413,7 +1514,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             possuiPasta = 1;
             processoAssinaturaData(data);
         },
@@ -1427,7 +1528,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
 function processarListaDeItens(lista) {
     // Inicia a Promise
-    console.log("lista: " + lista);
+    //console.log("lista: " + lista);
     return lista.reduce(function (promessaAnterior, item) {
         // Processa cada item em série
         return promessaAnterior.then(function () {
@@ -1452,7 +1553,7 @@ function processarListaDeItens(lista) {
                 docAtual = JSON.stringify(docAtual);
 
                 listDocumentosServidor.push(docAtual);
-                console.log("lista: " + listDocumentosServidor);
+                //console.log("lista: " + listDocumentosServidor);
 
                 // Retorna uma Promise resolvida para avançar para o próximo item
                 return Promise.resolve();
@@ -1473,7 +1574,7 @@ function assinarDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log("Dados recebidos da transformação em pdfB64: " + data);
+            //console.log("Dados recebidos da transformação em pdfB64: " + data);
             $('#assinarPdf #content-value').val(data.replace(/[\\"]/g, ''));
             $('#assinarPdf #objetoAtual').val(documentos);
             prettyCommandSign();
@@ -1681,49 +1782,3 @@ function validarSenha(senha) {
     // Se a senha passar por todas as verificações, é considerada válida
     return true;
 }
-
-
-/*function processarItemComResposta(item) {
-    return new Promise(function (resolve, reject) {
-        // Seleciona o campo onde você espera a resposta
-        var campo = $('#seu-campo');
-
-        // Adiciona um ouvinte de eventos para o evento 'change'
-        campo.on('change', function (event) {
-            // Quando o evento 'change' ocorrer, resolve a Promise com o valor do campo
-            resolve(event.target.value); // Você pode passar algum dado relevante para a resolução, se necessário
-        });
-
-        // Aqui você pode fazer algo com o item, se necessário
-        console.log('Processando item:', item);
-    });
-}
-*/
-// Sua lista de itens
-//var listaDeItens = ['item1', 'item2', 'item3'];
-
-// Função para processar a lista de itens
-/*function processarListaDeItens(lista) {
-    // Inicia a Promise
-    return lista.reduce(function (promessaAnterior, item) {
-        // Processa cada item em série
-        return promessaAnterior.then(function () {
-            // Processa o item atual
-            return processarItemComResposta(item).then(function (resposta) {
-                // Trata a resposta do item
-                console.log('Resposta para o item', item, ':', resposta);
-                // Você pode fazer algo com a resposta aqui
-
-                // Retorna uma Promise resolvida para avançar para o próximo item
-                return Promise.resolve();
-            });
-        });
-    }, Promise.resolve());
-}*/
-
-// Inicia o processamento da lista de itens
-/*processarListaDeItens(listaDeItens).then(function() {
-    console.log('Todos os itens foram processados.');
-}).catch(function(error) {
-    console.error('Ocorreu um erro:', error);
-});*/

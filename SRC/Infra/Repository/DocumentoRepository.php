@@ -186,16 +186,6 @@ class DocumentoRepository extends LogRepository
         return $sentenca;
     }
 
-    function removerAcentos($string)
-    {
-        // Converte os caracteres UTF-8 para ASCII
-        $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-
-        // Remove qualquer caractere que não seja ASCII (acentos, etc)
-        $string = preg_replace('/[^A-Za-z]/', '', $string);
-
-        return $string;
-    }
     public function BuscarDocumentosPorTipo(int $idTipoDocumento): array
     {
         try {
@@ -271,7 +261,24 @@ class DocumentoRepository extends LogRepository
             return false;
         }
     }
+    public function updateDocIdDocumento($idDocumento)
+    {
+        try {
 
+            $sqlQuery = "UPDATE {$this->schema}\"Documentos\" SET \"DocId\"= ? WHERE \"IdDocumento\" = ?";
+            $stmt = $this->pdo->prepare($sqlQuery);
+
+            $stmt->bindValue(1, $idDocumento);
+            $stmt->bindValue(2, $idDocumento);
+
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
     public function retornaCaminhoDocumentoServ(int $iddoc): string
     {
         try {
@@ -383,7 +390,7 @@ class DocumentoRepository extends LogRepository
     public function carminhoArquivos(int $id): array
     {
         try {
-            $sqlQuery = "SELECT \"Arquivo\" FROM {$this->schema}\"DocumentoPagina\" where \"IdDocPag\" = ? Limit 1 FOR UPDATE;";
+            $sqlQuery = "SELECT \"DocId\", \"Arquivo\" FROM {$this->schema}\"DocumentoPagina\" where \"IdDocPag\" = ? Limit 1 FOR UPDATE;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();
@@ -443,7 +450,7 @@ class DocumentoRepository extends LogRepository
     {
         try {
             //var_dump($pagina);
-            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(\"DocId\", \"Volume\", \"Numpg\", \"CodExp\", \"Arquivo\", \"Filme\", \"Fotograma\", \"IMGEncontrada\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING \"IdDocPag\";";
+            $sqlQuery = "INSERT INTO {$this->schema}\"DocumentoPagina\"(\"DocId\", \"Volume\", \"Numpg\", \"CodExp\", \"Arquivo\", \"Filme\", \"Fotograma\", \"IMGEncontrada\", \"IdArmario\", \"IdDocumento\") values(?, ?, ?, ?, ?, ?, ?, ?, ?,?) RETURNING \"IdDocPag\";";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($pagina as $pg) {
@@ -473,6 +480,7 @@ class DocumentoRepository extends LogRepository
             $stmt->bindValue(7, $paginaData->fotograma());
             $stmt->bindValue(8, $paginaData->imgencontrada());
             $stmt->bindValue(9, $paginaData->idarmario());
+            $stmt->bindValue(10, $paginaData->documentoid());
             $stmt->execute();
 
             return $stmt->fetchColumn();;
@@ -520,12 +528,13 @@ class DocumentoRepository extends LogRepository
 
     public function AlterarDocumentoDaPagina(int $idDocumentoNovo, int $idPagina, $novoCaminho)
     {
-        $sqlQuery = "UPDATE {$this->schema}\"DocumentoPagina\" SET \"DocId\" = ?, \"Arquivo\" = ? WHERE \"IdDocPag\" = ?";
+        $sqlQuery = "UPDATE {$this->schema}\"DocumentoPagina\" SET \"DocId\" = ?, \"Arquivo\" = ?, \"IdDocumento\" = ? WHERE \"IdDocPag\" = ?";
         $stmt = $this->pdo->prepare($sqlQuery);
 
         $stmt->bindValue(1, $idDocumentoNovo);
         $stmt->bindValue(2, $novoCaminho);
-        $stmt->bindValue(3, $idPagina);
+        $stmt->bindValue(3, $idDocumentoNovo);
+        $stmt->bindValue(4, $idPagina);
         $stmt->execute();
     }
 

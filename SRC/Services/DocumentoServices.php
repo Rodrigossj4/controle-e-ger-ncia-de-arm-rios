@@ -6,6 +6,7 @@ use Exception;
 
 use Marinha\Mvc\Infra\Repository\DocumentoRepository;
 use Marinha\Mvc\Infra\Repository\ArmarioRepository;
+use Marinha\Mvc\Helpers\Helppers;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use DateTime;
@@ -58,7 +59,9 @@ class DocumentoServices extends SistemaServices
 
             $repository = new DocumentoRepository($this->Conexao());
             //var_dump($repository);
-            return $repository->cadastrarDocumentos($documentosList);
+            $idDocumento = $repository->cadastrarDocumentos($documentosList);
+            $repository->updateDocIdDocumento($idDocumento);
+            return $idDocumento;
         } catch (Exception $e) {
             echo $e;
             return 0;
@@ -194,6 +197,7 @@ class DocumentoServices extends SistemaServices
                 $listaArquivosDestino = $repository->listarPaginas($retorno[0]['id']);
                 $listaArquivosOrigem = $repository->carminhoArquivos($arquivo->idPagina);
 
+
                 // alterar o local do arquivo no servidor para a pasta do documento existente              
                 copy($listaArquivosOrigem[0]["Arquivo"], pathinfo($listaArquivosDestino[0]["arquivo"], PATHINFO_DIRNAME) . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
                 unlink("{$listaArquivosOrigem[0]["Arquivo"]}");
@@ -212,6 +216,7 @@ class DocumentoServices extends SistemaServices
                     'folderid' => "",
                     'idArmario' => $arquivo->idArmario
                 ));
+                $funcoes = new Helppers();
                 $id = $this->cadastrarDocumentos($documentosList[0]);
 
                 $armarioRepository = new ArmarioRepository($this->Conexao());
@@ -229,11 +234,12 @@ class DocumentoServices extends SistemaServices
                 //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
                 $repository->AlterarDocumentoDaPagina($id, $arquivo->idPagina, $arquivoDiretorio . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
 
-                // unlink("{$listaArquivosOrigem[0]["Arquivo"]}");
+
+                $listaArquivos =  $repository->listarPaginas($listaArquivosOrigem[0]["DocId"]);
+
+                if (count($listaArquivos) == 0)
+                    $this->excluirDocumentoPastaDiretorio($listaArquivosOrigem[0]["DocId"], pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_DIRNAME));
             }
-
-
-
 
             return true;
             // return $repository->excluirPagina($id);
@@ -241,6 +247,12 @@ class DocumentoServices extends SistemaServices
             echo $e;
             return false;
         }
+    }
+
+    private function excluirDocumentoPastaDiretorio(int $id, string $diretorio)
+    {
+        $this->excluirDocumentos($id);
+        rmdir("{$diretorio}");
     }
 
     public function alterarPaginas(array $pagina): bool
@@ -272,9 +284,19 @@ class DocumentoServices extends SistemaServices
                 $caminhoArqImgServ = $this->gerarOcrs($dadosDocumento->imagens[$i]);
                 $this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
             } else {
-                $caminhoArqImgServ = $dadosDocumento->imagens[$i];
+                $funcoes = new Helppers();
+                $caminhoArquivoOriginal = $dadosDocumento->imagens[$i];
+
+                $arqui = random_int(1, 999999);
+                $nomePDF = "{$arqui}.pdf";
+                $novoNome = pathinfo($caminhoArquivoOriginal, PATHINFO_DIRNAME) . '/' . $nomePDF;
+
+                if (copy($funcoes->removerBarraInicialUrl($caminhoArquivoOriginal),  $funcoes->removerBarraInicialUrl($novoNome)))
+                    unlink($funcoes->removerBarraInicialUrl($caminhoArquivoOriginal));
+
+                $caminhoArqImgServ = $novoNome;
             }
-            //var_dump($caminhoArqImgServ);
+
 
 
             $arqui = random_int(1, 999999);
@@ -310,6 +332,7 @@ class DocumentoServices extends SistemaServices
 
         $pdf = new Fpdi();
         $pdf->AddPage();
+        $pdf->SetFont('Arial', '', 12);
         $pdf->setSourceFile($arquivos);
         $pageId = $pdf->importPage(1);
         $pdf->useTemplate($pageId);
@@ -324,12 +347,18 @@ class DocumentoServices extends SistemaServices
         if ($tags->assunto)
             $pdf->SetSubject($tags->assunto);
 
-        if ($tags->identificador)
-            $pdf->SetKeywords("Identificador: " . $tags->identificador);
+
+        $pdf->SetKeywords($this->TratarKeyWords($dadosTags));
 
         $pdf->Output($arquivos, 'F');
     }
 
+    public function TratarKeyWords(string $dadosTags): string
+    {
+        $funcoes = new Helppers();
+        $tags = json_decode($dadosTags);
+        return $funcoes->tratarStringUTF8("Identificador: " . $tags->identificador . "; Classe: " . $tags->classe . "; Data de Produção: " . $tags->dataProdDoc . "; Destinação: " . $tags->destinacaoDoc . "; Genero: " . $tags->genero . "; PrazoGuarda: " . $tags->prazoGuarda . "; Responsavel Digitalização: " . $tags->respDigitalizacao . "; Observação: " . $tags->observacao);
+    }
     public function abrirArquivo(string $caminhoarquivo, string $cifrado): string
     {
         if ($cifrado == "true") {
@@ -471,7 +500,7 @@ class DocumentoServices extends SistemaServices
                 'Autor' => $tag['autor'],
                 'DataDigitalizacao' => new DateTime(),
                 'IdentDocDigital' => $tag['identificador'],
-                'RespDigitalizacao' => "",
+                'RespDigitalizacao' => $tag['respDigitalizacao'],
                 'Titulo' => $tag['titulo'],
                 'TipoDocumento' =>  $documentos['tipoDocumento'],
                 'Hash' => $documentos['b64'],

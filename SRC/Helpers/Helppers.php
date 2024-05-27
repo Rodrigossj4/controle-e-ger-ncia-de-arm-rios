@@ -32,7 +32,18 @@ class Helppers
 
         return true;
     }
+    public function tratarStringUTF8($string)
+    {
+        return mb_convert_encoding($string, 'ISO-8859-1', 'UTF-8');
+    }
 
+    public function removerBarraInicialUrl($url): string
+    {
+        if (strpos($url, '/') === 0) {
+            $url = substr($url, 1);
+        }
+        return $url;
+    }
     public function validarSenha($senha): bool
     {
         if (strlen($senha) < 10) {
