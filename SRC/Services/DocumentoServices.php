@@ -204,6 +204,7 @@ class DocumentoServices extends SistemaServices
 
                 //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
                 $repository->AlterarDocumentoDaPagina($retorno[0]['id'], $arquivo->idPagina, pathinfo($listaArquivosDestino[0]["arquivo"], PATHINFO_DIRNAME) . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
+                $repository->AlterarDocumentoDaMetaTags($retorno[0]['id'], $arquivo->idPagina);
             } else {
 
                 $documentosList = array();
@@ -233,6 +234,7 @@ class DocumentoServices extends SistemaServices
 
                 //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
                 $repository->AlterarDocumentoDaPagina($id, $arquivo->idPagina, $arquivoDiretorio . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
+                $repository->AlterarDocumentoDaMetaTags($id, $arquivo->idPagina);
 
 
                 $listaArquivos =  $repository->listarPaginas($listaArquivosOrigem[0]["DocId"]);

@@ -38,7 +38,9 @@ class ArmariosController extends Controller
             'nomeexterno' => filter_input(INPUT_POST, 'nomeExterno')
          ));
 
+
          $service = new ArmarioServices();
+
          if ($service->BuscarArmario($armariosList) > 0) {
             http_response_code(409);
             return "Já existe um armario com esse nome cadastrado";

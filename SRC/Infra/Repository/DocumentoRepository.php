@@ -594,4 +594,14 @@ class DocumentoRepository extends LogRepository
             return false;
         }
     }
+
+    public function AlterarDocumentoDaMetaTags(int $idDocumento, int $idPagina)
+    {
+        $sqlQuery = "UPDATE {$this->schema}\"Metadados\" SET \"IdDocumento\" = ? WHERE \"IdPagina\" = ?";
+        $stmt = $this->pdo->prepare($sqlQuery);
+
+        $stmt->bindValue(1, $idDocumento);
+        $stmt->bindValue(2, $idPagina);
+        $stmt->execute();
+    }
 }

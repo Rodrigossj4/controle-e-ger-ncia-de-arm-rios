@@ -51,7 +51,7 @@ $('#btnCadArmario').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
-            //console.log(d);
+            console.log(d);
             carregarArmarios();
             $('#formCadArmario #codigo').val("");
             $('#formCadArmario #nomeInterno').val("");
@@ -1137,25 +1137,27 @@ $('#verificarDocumentos').on('click', function (e) {
 });
 
 $(document).on('click', '#removerDocumento', function (e) {
-    console.log("remover");
-    console.log(listDocumentosPrimaria);
-    if (typeof $("#listarDocumentosSelecionados .active img").attr("src") !== "undefined") {
+    var index = listDocumentos.indexOf($("#listarDocumentosSelecionados .active img").attr("src"));
+    if (index !== -1) {
         //listDocumentos.push($("#listarDocumentosSelecionados .active img").attr("src").replace(/\.\.\//g, ""));
-        console.log(listDocumentosPrimaria);
-        item = [$("#listarDocumentosSelecionados .active img").attr("src")];
+        item = "../" + [$("#listarDocumentosSelecionados .active img").attr("src")];
+        arrayItem = [item];
+        listDocumentosPrimaria.push(arrayItem);
 
-        listDocumentosPrimaria.push(item);
-        console.log(listDocumentosPrimaria);
-        listDocumentos = listDocumentos.filter(function (value) {
-            return value !== item;
-        });
+        listDocumentos.splice(index, 1);
 
         ListarArquivos();
         ListarArquivosSelecionados();
 
+        if (listDocumentos.length < 1) {
+            $('.modal').hide();
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').hide();
+            $('#verificarDocumentos').css("display", "none");
+            $('#verificarDocumentos').click();
 
+        }
     }
-    //ListarArquivosSelecionados()
 });
 
 function ListarArquivosSelecionados() {
@@ -1406,7 +1408,7 @@ function processoAssinaturaData(data) {
             if (listDocumentosServidor.length == totalDocumnetos)
                 armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
-            console.log("Terminou: ");
+            console.log("Processo Terminado.");
             listDocumentos = [];
             listDocumentosServidor = [];
             $('#semestre').trigger('change');
@@ -1514,7 +1516,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             possuiPasta = 1;
             processoAssinaturaData(data);
         },
@@ -1536,7 +1538,7 @@ function processarListaDeItens(lista) {
 
             return processarItemComResposta(item).then(function (resposta) {
                 // Trata a resposta do item
-                console.log('Resposta para o item', item, ':', resposta);
+                // console.log('Resposta para o item', item, ':', resposta);
 
                 docBase64Atual = resposta;
 
@@ -1566,7 +1568,7 @@ function assinarDocumentos(documentos) {
     console.log("Rotina de assinar: ");
     var ArrayDocumentos = JSON.parse(documentos);
 
-    console.log("Dados recebidos: " + ArrayDocumentos);
+    //console.log("Dados recebidos: " + ArrayDocumentos);
     $.ajax({
         type: 'GET',
         url: "/converter-base64?caminho=" + ArrayDocumentos["arquivo"],
@@ -1601,7 +1603,7 @@ function processarItemComResposta(item) {
             var valorInput = $(this).val();
             if (valorInput !== '') {
                 docAtual = $('#objetoAtual').val();
-                console.log("documento atual " + docAtual);
+                // console.log("documento atual " + docAtual);
             }
             // Quando o evento 'change' ocorrer, resolve a Promise com o valor do campo
             resolve(event.target.value); // Você pode passar algum dado relevante para a resolução, se necessário
@@ -1626,7 +1628,7 @@ function finalizarAssinatura(callback) {
     setTimeout(function () {
         callback();
     }, 2000);
-    console.log("Rotina de assinatura finalizada ");
+    //console.log("Rotina de assinatura finalizada ");
     //finalizarCriptografia(docAtual);
 }
 
@@ -1680,7 +1682,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log("arm: " + data);
+            // console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);
@@ -1697,7 +1699,7 @@ function prettyCommandSign() {
 }
 
 function atualizarArquivo(documentos) {
-    console.log('dados recebidos para atualizar' + documentos);
+    //console.log('dados recebidos para atualizar' + documentos);
     $.ajax({
         type: 'POST',
         url: "/atualizar-arquivo-assinado",
