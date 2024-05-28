@@ -172,7 +172,7 @@ class ArmarioRepository extends LogRepository
         $nomeExterno = trim($armario['0']["nomeexterno"]);
 
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" WHERE LOWER(\"NomeInterno\") = LOWER('$nomeInterno') AND LOWER(\"NomeExterno\") = LOWER('$nomeExterno') AND LOWER(\"CodArmario\") = LOWER('$codigo') AND \"ativo\" = true;";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" WHERE LOWER(\"NomeInterno\") = LOWER('$nomeInterno') AND LOWER(\"NomeExterno\") = LOWER('$nomeExterno') AND LOWER(\"CodArmario\") = LOWER('$codigo') AND \"Ativo\" = true;";
             //var_dump($sqlQuery);
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
