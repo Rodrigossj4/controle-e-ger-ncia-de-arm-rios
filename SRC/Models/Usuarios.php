@@ -6,17 +6,21 @@ class Usuarios
 {
     private ?int $codUsuario;
     private string $NomeUsuario;
-    private string $Nip; 
+    private string $Nip;
     private string $SenhaUsuario;
     private int $idAcesso;
+    private int $om;
+    private string $setor;
 
-    public function __construct(?int $codUsuario, string $NomeUsuario, string $Nip, string $SenhaUsuario, int $idAcesso)
+    public function __construct(?int $codUsuario, string $NomeUsuario, string $Nip, string $SenhaUsuario, int $idAcesso, int $om, $setor)
     {
         $this->codUsuario = $codUsuario;
         $this->NomeUsuario = $NomeUsuario;
         $this->Nip = $Nip;
         $this->SenhaUsuario = $SenhaUsuario;
         $this->idAcesso = $idAcesso;
+        $this->om = $om;
+        $this->setor = $setor;
     }
 
     public function codUsuario(): ?int
@@ -41,5 +45,15 @@ class Usuarios
     public function idAcesso(): string
     {
         return $this->idAcesso;
+    }
+
+    public function OM(): int
+    {
+        return $this->om;
+    }
+
+    public function setor(): string
+    {
+        return $this->setor;
     }
 }

@@ -6,6 +6,7 @@ namespace Marinha\Mvc\Controllers;
 use Exception;
 use Marinha\Mvc\Services\UsuarioServices;
 use Marinha\Mvc\Services\PerfilAcessoServices;
+use Marinha\Mvc\Services\OMServices;
 use Marinha\Mvc\Helpers;
 use Marinha\Mvc\Helpers\Helppers;
 
@@ -21,9 +22,11 @@ class UsuariosController  extends Controller
       //$this->validarSessao();
       $service = new UsuarioServices();
       $perfilService = new PerfilAcessoServices();
+      $omService = new OMServices();
 
       $PerfilAcessoList = $perfilService->listaPerfis();
       $UsuariosList = $service->listaUsuarios();
+      $OMList = $omService->listarOM();
 
       require __DIR__ . '../../Views/usuarios/index.php';
    }
@@ -39,12 +42,14 @@ class UsuariosController  extends Controller
 
       if (!$funcoes->validarNip($funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')))) {
          http_response_code(500);
-         return "Nip inválido";
+         echo "Nip inválido";
+         return false;
       }
 
       if (!$funcoes->validarSenha(filter_input(INPUT_POST, 'senhausuario'))) {
          http_response_code(500);
-         return "Senha inválida";
+         echo "Senha inválida";
+         return false;
       }
 
       try {
@@ -55,7 +60,9 @@ class UsuariosController  extends Controller
             'nomeusuario' => filter_input(INPUT_POST, 'nomeusuario'),
             'nip' => $funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')),
             'senhausuario' => filter_input(INPUT_POST, 'senhausuario'),
-            'idacesso' => filter_input(INPUT_POST, 'idacesso')
+            'idacesso' => filter_input(INPUT_POST, 'idacesso'),
+            'om' => filter_input(INPUT_POST, 'om'),
+            'setor' => filter_input(INPUT_POST, 'setor')
          ));
 
          $service = new UsuarioServices();
@@ -74,6 +81,13 @@ class UsuariosController  extends Controller
       header('Content-Type: application/json; charset=utf-8');
       $service = new UsuarioServices();
       echo json_encode($service->listaUsuarios());
+   }
+
+   public function validarNIP(): bool
+   {
+      $nip = filter_input(INPUT_GET, 'nip');
+      $service = new UsuarioServices();
+      return $service->validarNIP($nip);
    }
 
    public function alterar(): bool

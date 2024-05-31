@@ -28,9 +28,10 @@ class LoginServices extends SistemaServices
                     'codoperacao' => "OP6",
                     'codusuario' => $retorno[0]["codusuario"],
                     'iddocumento' => $retorno[0]["iddocumento"],
-                    'ipacesso' => $_SERVER['HTTP_CLIENT_IP']
+                    'ipacesso' => $_SERVER['HTTP_CLIENT_IP'],
+                    'omusuario' => $retorno[0]["omusuario"]
                 ));
-                var_dump($dadosList);
+                //var_dump($dadosList);
                 $this->gravarLogOperacoes($dadosList);
                 return true;
             } else {

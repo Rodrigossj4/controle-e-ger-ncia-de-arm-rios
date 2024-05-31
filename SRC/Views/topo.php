@@ -12,13 +12,12 @@ if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6)
 if (isset($_SESSION['usuario'])) {
     $nomeUsuario = $_SESSION['usuario'][0]["nomeusuario"];
     $nipUsuario = $_SESSION['usuario'][0]["nip"];
+    $OMUsuario =  $_SESSION['usuario'][0]["omusuario"];
 }
 
 $listaArquivosCarregados = [];
 if ((isset($_SESSION['Arquivos'])))
     $listaArquivosCarregados  = $_SESSION['Arquivos'];
-
-
 
 //echo  $liberaAcessoAdmin;
 ?>
@@ -52,6 +51,7 @@ if ((isset($_SESSION['Arquivos'])))
                 <div id="submenu">
                     <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
                     <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
+                    <a class="nav-link" href="/gerenciar-om">Gerencia OM</a>
                 </div>
 
             </li>

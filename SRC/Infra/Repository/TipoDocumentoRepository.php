@@ -203,4 +203,20 @@ class TipoDocumentoRepository extends LogRepository
             return [];
         }
     }
+
+    public function BuscarTipoDocumentoID(int $idTipoDoc): string
+    {
+        try {
+            $sqlQuery = "SELECT \"DescTipoDoc\" FROM  {$this->schema}\"TipoDocumento\" WHERE \"IdTipoDoc\" = $idTipoDoc;";
+            //var_dump($sqlQuery);
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->execute();
+
+            $tipodocumentoList = $stmt->fetchAll();
+            return $tipodocumentoList[0]['DescTipoDoc'];
+        } catch (Exception $e) {
+            echo $e;
+            return "";
+        }
+    }
 }

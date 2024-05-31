@@ -2,6 +2,7 @@
 
 /** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $DocumentosList */
 /** @var Marinha\Mvc\Models\Armarios[] $ArmariosList  */
+/** @var Marinha\Mvc\Models\OM[] $dadosOM  */
 //$TotalArquivos = count($listaArquivosCarregados);
 $contador = 0;
 ?>
@@ -69,7 +70,9 @@ $contador = 0;
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Autor">Informe o Autor </label>
-                        <input type="text" id="Autor" name="Autor" class="form-control">
+                        <input type="hidden" id="codOM" name="codOM" class="form-control" disabled value="<?php echo $dadosOM[0]["CodOM"] ?>">
+                        <input type="text" id="Autor" name="Autor" class="form-control" value="<?php echo $dadosOM[0]["NomOM"] ?>">
+
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Titulo">Informe o Titulo</label>
@@ -98,7 +101,7 @@ $contador = 0;
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Genero">Gênero</label>
-                        <input id="Genero" name="Genero" class="form-control" value="textual" />
+                        <input id="Genero" name="Genero" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="PrazoGuarda">Prazo de guarda</label>

@@ -22,12 +22,13 @@ class Helppers
 
     public function validarNip(string $nip): bool
     {
-        var_dump($nip);
         if (strlen($nip) != 8)
             return false;
 
-
         if (!ctype_digit($nip))
+            return false;
+
+        if (!$this->NIPValido($nip))
             return false;
 
         return true;
@@ -58,56 +59,40 @@ class Helppers
         return true;
     }
 
-    function NIPInvalido($RA, $Mens = "")
+    function NIPValido($value)
     {
-        // Verifica se o RA foi digitado pela metade
-        if (strlen($RA) < 8) {
-            if ($Mens == "") {
-                echo "Código NIP Incorreto!";
-            } else {
-                echo "NIP Inválido!";
-            }
-            return true;
+        if (is_object($value)) {
+            $value = $value->getNip();
         }
+        $isValid = true;
 
-        // Realiza o cálculo de validação do código RA
-        $Total = 0;
-        $Total += intval($RA[0]) * 8;
-        $Total += intval($RA[1]) * 7;
-        // Ignora o índice 2, que não está no cálculo original
-        $Total += intval($RA[3]) * 6;
-        $Total += intval($RA[4]) * 5;
-        $Total += intval($RA[5]) * 4;
-        $Total += intval($RA[6]) * 3;
-        // Ignora o índice 8, que não está no cálculo original
-        $Total += intval($RA[8]) * 2;
+        $value = (string) str_replace('.', '', $value);
+        $value = (string) str_replace('-', '', $value);
+        $tamanhoNIP = strlen($value);
 
-        $Resto = $Total % 11;
-        if ($Resto == 0) {
-            $Resto = 1;
-        } elseif ($Resto == 1) {
-            $Resto = 0;
+        $total = ((int) substr($value, 0, 1)) * 8
+            + ((int) substr($value, 1, 1)) * 7
+            + ((int) substr($value, 2, 1)) * 6
+            + ((int) substr($value, 3, 1)) * 5
+            + ((int) substr($value, 4, 1)) * 4
+            + ((int) substr($value, 5, 1)) * 3
+            + ((int) substr($value, 6, 1)) * 2;
+
+        $resto = $total % 11;
+        if ($resto == 0) {
+            $resto = 1;
         } else {
-            $Resto = 11 - $Resto;
+            if ($resto == 1) {
+                $resto = 0;
+            } else {
+                $resto = 11 - $resto;
+            }
         }
 
-        if ($RA[9] != strval($Resto)) {
-            if ($Mens == "") {
-                echo "Código NIP Inválido!";
-            } else {
-                echo "NIP Inválido!";
-            }
-            return true;
-        } else {
-            return false;
+        if (!($resto == ((int)substr($value, 7, 1)))) {
+
+            $isValid = false;
         }
+        return $isValid;
     }
-
-    // Exemplo de uso
-    //$RA = "123456789";
-    //if (NIPInvalido($RA)) {
-    // Senão há mensagem personalizada definida, apenas apresenta a mensagem padrão
-    //} else {
-    // RA válido
-    //}
 }

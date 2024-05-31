@@ -4,11 +4,11 @@
 namespace Marinha\Mvc\Controllers;
 
 use Exception;
+use Marinha\Mvc\Models\OM;
 use Marinha\Mvc\Services\ArmarioServices;
 use Marinha\Mvc\Services\DocumentoServices;
-use Marinha\Mvc\Services\LotesServices;
-use Marinha\Mvc\Models\PDF;
-use Marinha\Mvc\Services\LoteServices;
+use Marinha\Mvc\Services\OMServices;
+use Marinha\Mvc\Helpers\Helppers;
 
 class DocumentoController extends Controller
 {
@@ -18,9 +18,14 @@ class DocumentoController extends Controller
 
     public function index()
     {
-        //$this->validarSessao();
+        $this->validarSessao();
         $service = new DocumentoServices();
         $armariosService =  new ArmarioServices();
+        $OMServices =  new OMServices();
+        $dadosOM = null;
+
+        if (isset($_SESSION['usuario']))
+            $dadosOM = $OMServices->ObterDadosOM($_SESSION['usuario'][0]["omusuario"]);
 
         $DocumentosList = $service->listaDocumentos();
         $ArmariosList = $armariosService->listaArmarios();
@@ -46,11 +51,20 @@ class DocumentoController extends Controller
     public function cadastrarDocumento()
     {
         $Arquivos = json_decode(file_get_contents('php://input'), true);
+        $funcoes = new Helppers();
 
         if (strlen($Arquivos["nip"]) < 8 || strlen($Arquivos["ano"]) != 4 || $Arquivos["semestre"] == 0  || $Arquivos["idArmario"] == 0 || $Arquivos["tipoDoc"] == 0) {
             http_response_code(500);
-            return "Todos os campos são obrigatórios";
+            echo "Todos os campos são obrigatórios";
+            return false;
         }
+
+        if (!$funcoes->validarNip($funcoes->somenteNumeros($Arquivos["nip"]))) {
+            http_response_code(500);
+            echo "Nip inválido";
+            return false;
+        }
+
         $service = new DocumentoServices();
         echo json_encode($service->cadastrarDocumentos($Arquivos));
     }

@@ -6,6 +6,7 @@ use Exception;
 
 use Marinha\Mvc\Infra\Repository\DocumentoRepository;
 use Marinha\Mvc\Infra\Repository\ArmarioRepository;
+use Marinha\Mvc\Infra\Repository\TipoDocumentoRepository;
 use Marinha\Mvc\Helpers\Helppers;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -270,7 +271,6 @@ class DocumentoServices extends SistemaServices
 
     public function gerarPdfs($dadosDocumento): array
     {
-
         $total = count($dadosDocumento->imagens);
         // var_dump($total);
         $paginasList = [];
@@ -298,8 +298,6 @@ class DocumentoServices extends SistemaServices
 
                 $caminhoArqImgServ = $novoNome;
             }
-
-
 
             $arqui = random_int(1, 999999);
             $nomePDF = "/{$arqui}.pdf";
@@ -331,7 +329,6 @@ class DocumentoServices extends SistemaServices
 
     private function IncluirTags(string $arquivos, string $dadosTags)
     {
-
         $pdf = new Fpdi();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
@@ -359,7 +356,11 @@ class DocumentoServices extends SistemaServices
     {
         $funcoes = new Helppers();
         $tags = json_decode($dadosTags);
-        return $funcoes->tratarStringUTF8("Identificador: " . $tags->identificador . "; Classe: " . $tags->classe . "; Data de Produção: " . $tags->dataProdDoc . "; Destinação: " . $tags->destinacaoDoc . "; Genero: " . $tags->genero . "; PrazoGuarda: " . $tags->prazoGuarda . "; Responsavel Digitalização: " . $tags->respDigitalizacao . "; Observação: " . $tags->observacao);
+        $TipoDocumentoRepository = new TipoDocumentoRepository($this->Conexao());
+
+        $descTipoDocumento = $TipoDocumentoRepository->BuscarTipoDocumentoID($tags->tipoDoc);
+
+        return $funcoes->tratarStringUTF8("Identificador: " . $tags->identificador . "; Classe: " . $tags->classe . "; Data de Produção: " . $tags->dataProdDoc . "; Destinação: " . $tags->destinacaoDoc . "; Genero: " . $tags->genero . "; PrazoGuarda: " . $tags->prazoGuarda . ";Tipo Documental: " . $descTipoDocumento . "; Responsavel Digitalização: " . $tags->respDigitalizacao . "; Observação: " . $tags->observacao);
     }
     public function abrirArquivo(string $caminhoarquivo, string $cifrado): string
     {

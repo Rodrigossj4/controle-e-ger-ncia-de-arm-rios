@@ -2,7 +2,7 @@
 
 /** @var Marinha\Mvc\Models\Usuarios[] $UsuariosList */
 /** @var Marinha\Mvc\Models\PerfilAcesso[] $PerfilAcessoList */
-
+/** @var Marinha\Mvc\Models\OM[] $OMList */
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
@@ -31,6 +31,19 @@
                                 <option value="<?= $perfil['id']; ?>"><?= $perfil['nomeperfil']; ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="om">Selecione a OM </label>
+                        <select name="om" id="om" class="form-select">
+                            <option value="0">Escolha a OM</option>
+                            <?php foreach ($OMList  as $om) : ?>
+                                <option value="<?= $om['CodOM']; ?>"><?= $om['NomeAbreviado'] . " - " . $om['NomOM']; ?> </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="col-form-label" for="setor">Setor do Usuário: </label>
+                        <input class="form-control form-control-sm form-control-padronizado" type="text" name="setor" id="setor">
                     </div>
                 </div>
                 <div class="form-group row">

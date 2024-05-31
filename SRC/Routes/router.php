@@ -63,7 +63,9 @@ class Router
                 '/retorna-caminhoTratado' => fn () => self::load('DocumentoController', 'retornaCaminhoTratado'),
                 '/assinar' => fn () => self::load('DocumentoController', 'asssinarDigital'),
                 '/criptografar-pdfs' => fn () => self::load('DocumentoController', 'criptografarArquivo'),
-                '/converter-base64' => fn () => self::load('DocumentoController', 'arquivoBase64')
+                '/converter-base64' => fn () => self::load('DocumentoController', 'arquivoBase64'),
+                '/gerenciar-om' => fn () => self::load('OMController', 'index'),
+                '/validar-nip' => fn () => self::load('UsuariosController', 'validarNIP')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
@@ -101,7 +103,9 @@ class Router
                 '/carregar-arquivos-servidor' => fn () => self::load('DocumentoController', 'carregarArquivosServidor'),
                 '/atualizar-arquivo-assinado' => fn () => self::load('DocumentoController', 'base64ArquivoPDF'),
                 '/FinalizarArquivo' => fn () => self::load('DocumentoController', 'finalizarArquivo'),
-                '/ExcluiVinculoArmaTipoDoc' => fn () => self::load('ArmariosController', 'desvincularDocumentos')
+                '/ExcluiVinculoArmaTipoDoc' => fn () => self::load('ArmariosController', 'desvincularDocumentos'),
+                '/cadastrarOM' => fn () => self::load('OMController', 'cadastrar')
+
             ]
         ];
     }

@@ -2,6 +2,8 @@
 
 namespace Marinha\Mvc\Services;
 
+use Marinha\Mvc\Helpers\Helppers;
+
 use Exception;
 
 use Marinha\Mvc\Infra\Repository\UsuarioRepository;
@@ -58,5 +60,13 @@ class UsuarioServices extends SistemaServices
     {
         $repository = new UsuarioRepository($this->Conexao());
         return $repository->totalUsuariosPerfil($idPerfil);
+    }
+
+    public function validarNIP($nip): bool
+    {
+        $funcoes = new Helppers();
+        $nip = $funcoes->somenteNumeros($nip);
+        var_dump($funcoes->validarNip($nip));
+        return  $funcoes->validarNip($nip);
     }
 }

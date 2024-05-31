@@ -7,6 +7,7 @@ let listDocumentos = [];
 let listDocumentosPrimaria = [];
 let listDocumentosServidor = [];
 let totalDocumnetos = 0;
+let nipValido = false;
 $(document).ready(function (e) {
     //carregarSecoes();
     //carregarProdutos();
@@ -679,6 +680,13 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
         return false;
     }
 
+    /*validarNip($('#formCadUsuario #nip').val());
+
+    if (nipValido === false) {
+        alertas("Nip inválido", '#modCadUsuario', 'alert_danger');
+        return false;
+    }*/
+
     $.ajax({
         type: 'POST',
         url: "/cadastrarUsuario",
@@ -693,10 +701,12 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
             $('#formCadUsuario #nip').val("");
             $('#formCadUsuario #senhausuario').val("");
             $('#formCadUsuario #idacesso').val("");
+            $('#formCadUsuario #om').val("");
+            $('#formCadUsuario #setor').val("");
             alertas('Usuario cadastrado com sucesso', '#modCadUsuario', 'alert_sucess');
         },
         error: function (d) {
-            alertas(d, '#modCadUsuario', 'alert_danger');
+            alertas(d.responseText, '#modCadUsuario', 'alert_danger');
         }
     });
 });
@@ -707,6 +717,22 @@ $(document).on('click', '.btnAlterarUsuario', function (e) {
     $('#formAltUsuario #nomeusuarioAlt').val($(this).data("desc"));
     $('.opcoesConfirmacao').css('display', 'none');
 });
+
+function validarNip(nip) {
+    $.ajax({
+        type: 'GET',
+        url: "/validar-nip?nip=" + nip,
+        data: '',
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            nipValido = data;
+        },
+        error: function (d) {
+            nipValido = false;
+        }
+    });
+}
 
 $(document).on('click', '#exibConfirmaAlteracaoUsuario', function (e) {
     $('.opcoesConfirmacao').css('display', 'flex');
@@ -787,7 +813,7 @@ $('#formLogin #btnLogin').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
-            //console.log(d);
+            console.log(d);
             if (d = true) {
                 location.assign("/home");
             } else {
@@ -1041,25 +1067,18 @@ function carregarLotes() {
     });
 }
 
-$('#formCadLote #btnCadLote').on('click', function (e) {
-    var formdata = new FormData($("form[id='formCadLote']")[0]);
+$('#formCadOM #btnCadOM').on('click', function (e) {
+    var formdata = new FormData($("form[id='formCadOM']")[0]);
 
     $.ajax({
         type: 'POST',
-        url: "/cadastrarLote",
+        url: "/cadastrarOM",
         data: formdata,
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
-            console.log("cadastrar");
-            /*const arrayData = JSON.parse(data);
-            var sel = $("#listarDocumentos");
-            sel.empty();
-            arrayData.forEach(e => {
-                var url = caminho + '\/' + e;
-                sel.append(e + ' - <button class="btn btn-primary" data-arquivo="' + url + '" id="arquivos"> Visualizar documento</button> </br>');
-            })*/
+
+            alertas('OM cadastrada com sucesso', '#modCadOM', 'alert_sucess', 'true');
         },
         error: function (d) {
             console.log('ei erro ' + d);
@@ -1312,7 +1331,16 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Nip').unmask().val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
+    console.log($('#formCadDocumento #Nip').val().replace(/\./g, ''));
+    if (($('#formCadDocumento #Nip').val() != "")) {
+
+        var nip = $('#formCadDocumento #Nip').val().replace(/\./g, '');
+
+        if (nip.length != 8) {
+            alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
+            return false;
+        }
+    } else {
         alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
@@ -1353,6 +1381,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         destinacaoDoc: $('#formCadDocumento #DestinacaoDoc').val(),
         genero: $('#formCadDocumento #Genero').val(),
         prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
+        tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
         respDigitalizacao: $('#formCadDocumento #RespDigitalizacao').val(),
     }, null, 2);
 
@@ -1384,7 +1413,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    //console.log(data);
+                    console.log(data);
                     processoAssinaturaData(data);
                 },
                 error: function (d) {
@@ -1393,7 +1422,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
             });
         },
         error: function (d) {
-            alertas("Erro ao cadastrar o documento. Verfique os dados inseridoss", '#ModIndexarDocumento', 'alert_danger');
+            alertas(d.responseText, '#ModIndexarDocumento', 'alert_danger');
         }
     });
 });

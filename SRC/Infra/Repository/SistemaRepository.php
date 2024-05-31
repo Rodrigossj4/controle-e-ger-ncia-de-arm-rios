@@ -21,7 +21,7 @@ class SistemaRepository extends LogRepository
     {
         try {
 
-            var_dump($log);
+            // var_dump($log);
             $sqlQuery = "INSERT INTO {$this->schema}\"Log\"(\"CodOperacao\", \"IdUsuario\", \"datahoraoperacao\", \"IdDocumento\", \"IpAcesso\") values(?, ?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
@@ -40,7 +40,7 @@ class SistemaRepository extends LogRepository
             $stmt->bindValue(2, $logData->idUsuario());
             $stmt->bindValue(3, $logData->dh());
             $stmt->bindValue(4, $logData->idDocumento());
-            $stmt->bindValue(4, $logData->ipAcesso());
+            $stmt->bindValue(5, $logData->ipAcesso());
             $stmt->execute();
         } catch (Exception $e) {
             echo $e;

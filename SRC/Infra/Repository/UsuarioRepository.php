@@ -56,7 +56,9 @@ class UsuarioRepository extends LogRepository
                     $us['nomeusuario'],
                     $us['nip'],
                     $us['senhausuario'],
-                    $us['idacesso']
+                    $us['idacesso'],
+                    $us['om'],
+                    $us['setor']
                 );
             }
 
@@ -64,8 +66,8 @@ class UsuarioRepository extends LogRepository
             $stmt->bindValue(2, $usuarioData->Nip());
             $stmt->bindValue(3, $usuarioData->SenhaUsuario());
             $stmt->bindValue(4, $usuarioData->idAcesso());
-            $stmt->bindValue(5, "DPM");
-            $stmt->bindValue(6, "70");
+            $stmt->bindValue(5, $usuarioData->OM());
+            $stmt->bindValue(6, $usuarioData->setor());
             $stmt->execute();
 
             return true;
@@ -89,7 +91,9 @@ class UsuarioRepository extends LogRepository
                     $us['nomeusuario'],
                     "",
                     "",
-                    1
+                    1,
+                    1,
+                    ""
                 );
             }
 
