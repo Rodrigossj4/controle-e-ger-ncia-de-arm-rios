@@ -965,7 +965,7 @@ $(document).on('click', '.clickDocumento', function (e) {
 });
 //te
 
-$(document).on('click', '#avanca', function () {
+$(document).on('click', '#modCadDocumento #avanca', function () {
     if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) + 1 <= listDocumentosServidor.length)) {
         var sel = $("#listarDocumentos");
         sel.empty();
@@ -977,12 +977,30 @@ $(document).on('click', '#avanca', function () {
         $(this).attr('data-indice', indice);
 
 
-        $('#regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
+        $('#modCadDocumento #regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
 
     }
 });
 
-$(document).on('click', '#regride', function () {
+$(document).on('click', '#ModalDocumentosListados #avanca', function () {
+    console.log("yeye");
+    if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) + 1 <= listDocumentosServidor.length)) {
+        var sel = $("#listarDocumentosSelecionados");
+        sel.empty();
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
+
+        let indice = (parseInt($(this).attr('data-indice')) + 1) > (listDocumentosServidor.length - 1) ? listDocumentosServidor.length - 1 : parseInt($(this).attr('data-indice')) + 1;
+
+        $(this).attr('data-indice', indice);
+
+
+        $('#ModalDocumentosListados #regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
+
+    }
+});
+
+$(document).on('click', '#modCadDocumento #regride', function () {
 
     if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) >= 0)) {
 
@@ -993,7 +1011,22 @@ $(document).on('click', '#regride', function () {
         let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
 
         $(this).attr('data-indice', indice);
-        $('#avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
+        $('#modCadDocumento #avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
+    }
+});
+
+$(document).on('click', '#ModalDocumentosListados #regride', function () {
+
+    if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) >= 0)) {
+
+        var sel = $("#listarDocumentosSelecionados");
+        sel.empty();
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+        sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
+        let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
+
+        $(this).attr('data-indice', indice);
+        $('#ModalDocumentosListados #avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
     }
 });
 
@@ -1174,23 +1207,11 @@ $(document).on('click', '#removerDocumento', function (e) {
             $('.modal-backdrop').hide();
             $('#verificarDocumentos').css("display", "none");
             $('#verificarDocumentos').click();
-
         }
     }
 });
 
-function ListarArquivosSelecionados() {
-    var sel = $("#listarDocumentosSelecionados");
-    sel.empty();
-    let contador = 0;
-    listDocumentos.forEach(e => {
-        var active = (contador == 0) ? 'active' : '';
-        sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
-        contador++;
-    });
 
-    $("#carouselExampleControlsSelecionados").html();
-}
 $('#formAnexarPagDoc #btnCarregarArquivosPDF').on('click', function (e) {
     var formdata = new FormData($("form[id='formAnexarPagDoc']")[0]);
     $.ajax({
@@ -1235,7 +1256,7 @@ function ListarArquivos() {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log('retorno: ' + data);
+            //console.log('retorno: ' + data);
             listDocumentosPrimaria = [];
             listDocumentosPrimaria = JSON.parse(data);
 
@@ -1257,10 +1278,10 @@ function ListarArquivos() {
                     });
 
                     //console.log(listDocumentosServidor);
-                    $('.carousel-control-prev').attr('id', 'regride');
-                    $('.carousel-control-next').attr('id', 'avanca');
-                    $('#avanca').attr('data-indice', 1);
-                    $('#regride').attr('data-indice', 0);
+                    $('#modCadDocumento .carousel-control-prev').attr('id', 'regride');
+                    $('#modCadDocumento .carousel-control-next').attr('id', 'avanca');
+                    $('#modCadDocumento #avanca').attr('data-indice', 1);
+                    $('#modCadDocumento #regride').attr('data-indice', 0);
                     sel.attr('data-docId', listDocumentosServidor[0][0]);
                     sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
 
@@ -1289,6 +1310,40 @@ function ListarArquivos() {
 }
 
 
+function ListarArquivosSelecionados() {
+
+    var extensao = listDocumentos.length > 0 ? listDocumentos[0].split('.').pop() : "";
+    if (extensao == "pdf") {
+        var sel = $("#listarDocumentosSelecionados");
+        sel.empty();
+        listDocumentosServidor = [];
+        let contador = 0;
+        listDocumentos.forEach(e => {
+            listDocumentosServidor.push([contador, e]);
+            contador++;
+        });
+
+        //console.log(listDocumentosServidor);
+        $('#listarDocumentosSelecionados .carousel-control-prev').attr('id', 'regride');
+        $('#listarDocumentosSelecionados .carousel-control-next').attr('id', 'avanca');
+        $('#listarDocumentosSelecionados #avanca').attr('data-indice', 1);
+        $('#listarDocumentosSelecionados #regride').attr('data-indice', 0);
+        sel.attr('data-docId', listDocumentosServidor[0][0]);
+        sel.append('<iframe src="..' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
+
+    } else {
+        var sel = $("#listarDocumentosSelecionados");
+        sel.empty();
+        let contador = 0;
+        listDocumentos.forEach(e => {
+            var active = (contador == 0) ? 'active' : '';
+            sel.append('<div class="carousel-item ' + active + '" style="width: 100%; height: 100%;"><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+            contador++;
+        });
+
+    }
+    $("#carouselExampleControlsSelecionados").html();
+}
 
 $(document).on('click', '#arquivosLote', function (e) {
     var sel = $("#visualizarDocumento");

@@ -43,21 +43,22 @@ class OMRepository extends LogRepository
     public function cadastrarOM(array $om): bool
     {
         try {
-            $sqlQuery = "INSERT INTO {$this->schema}\"OM\"(\"NomeAbreviado\", \"NomOM\", \"Ativa\") values(?, ?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"OM\"( \"CodOM\", \"NomeAbreviado\", \"NomOM\", \"Ativa\") values(?, ?, ?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($om as $ar) {
                 $omData = new OM(
-                    null,
+                    $ar['codOM'],
                     $ar['sigla'],
                     $ar['nomeOM'],
                     1
                 );
             }
 
-            $stmt->bindValue(1, $omData->nomeAbreviado());
-            $stmt->bindValue(2, $omData->nomOM());
-            $stmt->bindValue(3, $omData->ativa());
+            $stmt->bindValue(1, $omData->codOM());
+            $stmt->bindValue(2, $omData->nomeAbreviado());
+            $stmt->bindValue(3, $omData->nomOM());
+            $stmt->bindValue(4, $omData->ativa());
             $stmt->execute();
 
             return true;
@@ -71,7 +72,7 @@ class OMRepository extends LogRepository
         try {
             $sqlQuery = "SELECT \"CodOM\", \"NomeAbreviado\", \"NomOM\" FROM  {$this->schema}\"OM\" where \"Ativa\" = B'1' AND \"CodOM\" = ? order by \"CodOM\" asc;";
             $stmt = $this->pdo->prepare($sqlQuery);
-            $stmt->bindValue(1, $idOM);
+            $stmt->bindValue(1, (int)$idOM);
             $stmt->execute();
 
             $OMDataList = $stmt->fetchAll();

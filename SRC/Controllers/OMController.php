@@ -32,6 +32,7 @@ class OMController extends Controller
         try {
             $armariosList = array();
             array_push($armariosList, array(
+                'codOM' => filter_input(INPUT_POST, 'codOM'),
                 'sigla' => filter_input(INPUT_POST, 'sigla'),
                 'nomeOM' => filter_input(INPUT_POST, 'nomeOM')
             ));

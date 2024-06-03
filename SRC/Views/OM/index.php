@@ -8,6 +8,10 @@
                     <form method="post" id="formCadOM" action="/cadastrarOM">
                         <div class="row">
                             <div class="col-md-4 mb-3">
+                                <label class="col-form-label" for="codOM">Código OM: </label>
+                                <input class="form-control form-control-sm" type="text" name="codOM" id="codOM">
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label class="col-form-label" for="sigla">Sigla: </label>
                                 <input class="form-control form-control-sm" type="text" name="sigla" id="sigla">
                             </div>

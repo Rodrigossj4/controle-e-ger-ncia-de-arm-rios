@@ -334,8 +334,9 @@ $contador = 0;
             <div class="modal-body">
                 <div id="carouselExampleControlsSelecionados" class="carousel slide" data-ride="carousel" data-interval="0">
                     <div class="carousel-inner" id="listarDocumentosSelecionados" data-docId="">
-                        <div class="carousel-item active" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="../documentos/ARQ--338110/pagina 2.jpg" class="d-block w-100" alt="Imagem 1"> </div>
-                        <div class="carousel-item " style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="../documentos/ARQ--338110/paginas 3.jpg" class="d-block w-100" alt="Imagem 1"> </div>
+                        <div class="carousel-item " style="width: 400px; height: 100Vh; ">
+
+                        </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleControlsSelecionados" role="button" data-slide="prev" data-indice="0">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>

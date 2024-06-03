@@ -283,6 +283,8 @@ class DocumentoServices extends SistemaServices
             $ext = pathinfo($dadosDocumento->imagens[$i], PATHINFO_EXTENSION);
             $caminhoArqImgServ = "";
             if ($ext != "pdf") {
+                $this->FormatarIMG($dadosDocumento->imagens[$i]);
+
                 $caminhoArqImgServ = $this->gerarOcrs($dadosDocumento->imagens[$i]);
                 $this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
             } else {
@@ -442,6 +444,15 @@ class DocumentoServices extends SistemaServices
         shell_exec($command);
 
         return  $output_jpeg;
+    }
+
+    private function FormatarIMG(string $diretoriosaida)
+    {
+        $command = "convert -units PixelsPerInch \"$diretoriosaida\" -resample 300 \"$diretoriosaida\"";
+        //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resample 300 \"$diretoriosaida\"";
+        //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resize 1876x2685 -resample 300 \"$diretoriosaida\"";
+        //var_dump($command);
+        shell_exec($command);
     }
 
     private function uploadImgPastaLote(string $caminhoArqImg, int $indice)

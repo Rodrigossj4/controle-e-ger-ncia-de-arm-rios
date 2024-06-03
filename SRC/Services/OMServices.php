@@ -36,7 +36,8 @@ class OMServices extends SistemaServices
         }
     }
 
-    public function ObterDadosOM(int $idOM){
+    public function ObterDadosOM(string $idOM)
+    {
         try {
             $repository = new OMRepository($this->Conexao());
             return $repository->ObterDadosOM($idOM);
