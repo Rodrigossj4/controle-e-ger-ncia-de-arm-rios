@@ -67,7 +67,7 @@ class OMRepository extends LogRepository
             return false;
         }
     }
-    public function ObterDadosOM(int $idOM)
+    public function ObterDadosOM(string $idOM)
     {
         try {
             $sqlQuery = "SELECT \"CodOM\", \"NomeAbreviado\", \"NomOM\" FROM  {$this->schema}\"OM\" where \"Ativa\" = B'1' AND \"CodOM\" = ? order by \"CodOM\" asc;";
