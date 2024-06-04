@@ -289,8 +289,11 @@ class DocumentoServices extends SistemaServices
                 $this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
             } else {
                 $funcoes = new Helppers();
-                $caminhoArquivoOriginal = $dadosDocumento->imagens[$i];
-
+                $caminhoArquivoOriginal =  $dadosDocumento->imagens[$i];
+                //var_dump($caminhoArquivoOriginal);
+                $caminhoArquivoOriginal = preg_replace('/^\//', '', $dadosDocumento->imagens[$i]);
+                //var_dump($caminhoArquivoOriginal);
+                $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
                 $arqui = random_int(1, 999999);
                 $nomePDF = "{$arqui}.pdf";
                 $novoNome = pathinfo($caminhoArquivoOriginal, PATHINFO_DIRNAME) . '/' . $nomePDF;
@@ -406,10 +409,10 @@ class DocumentoServices extends SistemaServices
         //var_dump($total);
         for ($i = 0; $i < $total; $i++) {
 
-            $nomeArquivo = pathinfo($_FILES['documento']['name'][$i], PATHINFO_BASENAME);
+            // $nomeArquivo = str_replace(' ', '', pathinfo($_FILES['documento']['name'][$i], PATHINFO_BASENAME));
             $arquivoExtensao = pathinfo($_FILES['documento']['name'][$i], PATHINFO_EXTENSION);
 
-            $caminhoArqImgServ = $diretorio . "/" . $_FILES['documento']['name'][$i];
+            $caminhoArqImgServ = $diretorio . "/" . str_replace(' ', '_', $_FILES['documento']['name'][$i]);
             $this->uploadImgPastaLote($caminhoArqImgServ, $i);
 
             if ($arquivoExtensao == "TIF") {
@@ -580,6 +583,8 @@ class DocumentoServices extends SistemaServices
 
     private function uploadImgPastaLotes(string $caminhoArq, string $caminhoOrigem): string
     {
+        //  $nome = preg_replace('/[ _]+/', '-', basename($caminhoOrigem));
+
         $caminhoArq = $caminhoArq . "/" . basename($caminhoOrigem);
         copy($caminhoOrigem, $caminhoArq);
         return $caminhoArq;

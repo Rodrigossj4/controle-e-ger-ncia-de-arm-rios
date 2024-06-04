@@ -982,12 +982,12 @@ $(document).on('click', '#modCadDocumento #avanca', function () {
     }
 });
 
-$(document).on('click', '#ModalDocumentosListados #avanca', function () {
+$(document).on('click', '#avancaPdf', function () {
     console.log("yeye");
     if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) + 1 <= listDocumentosServidor.length)) {
         var sel = $("#listarDocumentosSelecionados");
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+        sel.append('<iframe src="..' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
         sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
 
         let indice = (parseInt($(this).attr('data-indice')) + 1) > (listDocumentosServidor.length - 1) ? listDocumentosServidor.length - 1 : parseInt($(this).attr('data-indice')) + 1;
@@ -995,7 +995,7 @@ $(document).on('click', '#ModalDocumentosListados #avanca', function () {
         $(this).attr('data-indice', indice);
 
 
-        $('#ModalDocumentosListados #regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
+        $('#regridePdf').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
 
     }
 });
@@ -1015,18 +1015,18 @@ $(document).on('click', '#modCadDocumento #regride', function () {
     }
 });
 
-$(document).on('click', '#ModalDocumentosListados #regride', function () {
+$(document).on('click', '#regridePdf', function () {
 
     if ((listDocumentosServidor.length > 0) && (parseInt($(this).attr('data-indice')) >= 0)) {
 
         var sel = $("#listarDocumentosSelecionados");
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+        sel.append('<iframe src="..' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
         sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
         let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
 
         $(this).attr('data-indice', indice);
-        $('#ModalDocumentosListados #avanca').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
+        $('#avancaPdf').attr('data-indice', parseInt($(this).attr('data-indice')) + 1);
     }
 });
 
@@ -1189,7 +1189,8 @@ $('#verificarDocumentos').on('click', function (e) {
 });
 
 $(document).on('click', '#removerDocumento', function (e) {
-    var index = listDocumentos.indexOf($("#listarDocumentosSelecionados .active img").attr("src"));
+    var index = listDocumentos.indexOf($("#listarDocumentosSelecionados .active img").attr("src")) !== -1 ? listDocumentos.indexOf($("#listarDocumentosSelecionados .active img").attr("src")) : listDocumentos.indexOf($("#listarDocumentosSelecionados iframe").attr("src").replace("..", ""));
+
     if (index !== -1) {
         //listDocumentos.push($("#listarDocumentosSelecionados .active img").attr("src").replace(/\.\.\//g, ""));
         item = "../" + [$("#listarDocumentosSelecionados .active img").attr("src")];
@@ -1324,10 +1325,10 @@ function ListarArquivosSelecionados() {
         });
 
         //console.log(listDocumentosServidor);
-        $('#listarDocumentosSelecionados .carousel-control-prev').attr('id', 'regride');
-        $('#listarDocumentosSelecionados .carousel-control-next').attr('id', 'avanca');
-        $('#listarDocumentosSelecionados #avanca').attr('data-indice', 1);
-        $('#listarDocumentosSelecionados #regride').attr('data-indice', 0);
+        $('#carouselExampleControlsSelecionados .carousel-control-prev').attr('id', 'regridePdf');
+        $('#carouselExampleControlsSelecionados .carousel-control-next').attr('id', 'avancaPdf');
+        $('#carouselExampleControlsSelecionados #avancaPdf').attr('data-indice', 1);
+        $('#carouselExampleControlsSelecionados #regridePdf').attr('data-indice', 0);
         sel.attr('data-docId', listDocumentosServidor[0][0]);
         sel.append('<iframe src="..' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
 
@@ -1576,6 +1577,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         destinacaoDoc: $('#formCadDocumento #DestinacaoDoc').val(),
         genero: $('#formCadDocumento #Genero').val(),
         prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
+        tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
         respDigitalizacao: $('#formCadDocumento #RespDigitalizacao').val(),
     }, null, 2);
 
