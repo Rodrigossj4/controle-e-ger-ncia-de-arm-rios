@@ -4,47 +4,47 @@ namespace Marinha\Mvc\Models;
 
 class LogOperacoes
 {
-    private ?int $id;
-    private string $Codoperacao;
+    private ?int $IdLog;
+    private string $CodOperacao;
     private int $IdUsuario;
-    private string $dh;
+    private string $datahoraoperacao;
     private ?int $IdDocumento;
     private string $IpAcesso;
 
-    public function __construct(?int $id, string $Codoperacao, int $IdUsuario, string $dh, ?int $IdDocumento, string $IpAcesso)
+    public function __construct(?int $IdLog, string $CodOperacao, int $IdUsuario, string $datahoraoperacao, ?int $IdDocumento, string $IpAcesso)
     {
-        $this->id = $id;
-        $this->Codoperacao = $Codoperacao;
+        $this->IdLog = $IdLog;
+        $this->CodOperacao = $CodOperacao;
         $this->IdUsuario = $IdUsuario;
-        $this->dh = $dh;
+        $this->datahoraoperacao = $datahoraoperacao;
         $this->IdDocumento = $IdDocumento;
         $this->IpAcesso = $IpAcesso;
     }
 
-    public function id(): ?int
+    public function idlog(): ?int
     {
-        return $this->id;
+        return $this->IdLog;
     }
 
     public function codoperacao(): string
     {
-        return $this->Codoperacao;
+        return $this->CodOperacao;
     }
-    public function idUsuario(): int
+    public function idusuario(): int
     {
         return $this->IdUsuario;
     }
-    public function dh(): string
+    public function datahoraoperacao(): string
     {
-        return $this->dh;
+        return $this->datahoraoperacao;
     }
 
-    public function idDocumento(): ?int
+    public function iddocumento(): ?int
     {
         return $this->IdDocumento;
     }
 
-    public function ipAcesso(): string
+    public function ipacesso(): string
     {
         return $this->IpAcesso;
     }

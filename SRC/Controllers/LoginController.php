@@ -21,7 +21,8 @@ class LoginController extends Controller
         $funcoes = new Helppers();
         array_push($login, array(
             'nip' => $funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')),
-            'senhausuario' => filter_input(INPUT_POST, 'senha')
+            'senhausuario' => filter_input(INPUT_POST, 'senha'),
+            'ipusuario' => $this->retornaIP()
         ));
 
         $service = new LoginServices();
@@ -35,8 +36,17 @@ class LoginController extends Controller
 
     public function logout()
     {
+        session_start();
+        $dadosList = array();
+        array_push($dadosList, array(
+            'codoperacao' => "OP7",
+            'codusuario' => $_SESSION['usuario'][0]["codusuario"],
+            'iddocumento' => null,
+            'ipacesso' => $this->retornaIP()
+        ));
+
         $service = new LoginServices();
-        $retorno = $service->logout();
+        $service->logout($dadosList);
         header("location: /");
     }
 }

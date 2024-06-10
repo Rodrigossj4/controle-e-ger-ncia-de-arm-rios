@@ -125,6 +125,20 @@ class UsuarioRepository extends LogRepository
         }
     }
 
+    public function retornaNipUsuario(int $id): string
+    {
+        try {
+            $sqlQuery = "Select \"Nip\" FROM {$this->schema}\"Usuarios\" where \"IdUsuario\"  = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+            $nip =  $stmt->fetchAll();
+            return $nip[0]['Nip'];
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
     public function totalUsuariosPerfil(int $idPerfil): int
     {
         try {

@@ -27,6 +27,11 @@ class Request
             $ipaddress = $_SERVER['REMOTE_ADDR'];
         else
             $ipaddress = 'UNKNOWN';
+
+        if ($ipaddress == "::1") {
+            $ipaddress = "127.0.0.1";
+        }
+
         return $ipaddress;
     }
 }

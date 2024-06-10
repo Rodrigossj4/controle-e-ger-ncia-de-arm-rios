@@ -28,7 +28,7 @@ class LoginServices extends SistemaServices
                     'codoperacao' => "OP6",
                     'codusuario' => $retorno[0]["codusuario"],
                     'iddocumento' => $retorno[0]["iddocumento"],
-                    'ipacesso' => $_SERVER['HTTP_CLIENT_IP'],
+                    'ipacesso' => $usuario[0]['ipusuario'],
                     'omusuario' => $retorno[0]["omusuario"]
                 ));
                 //var_dump($dadosList);
@@ -43,17 +43,9 @@ class LoginServices extends SistemaServices
         }
     }
 
-    public function logout(): bool
+    public function logout(array $dadosList): bool
     {
         try {
-            $dadosList = array();
-            array_push($dadosList, array(
-                'codoperacao' => "OP7",
-                'codusuario' => $_SESSION['usuario'][0]["codusuario"],
-                'iddocumento' => null,
-                'ipacesso' => $_SERVER['HTTP_CLIENT_IP']
-            ));
-
             $this->gravarLogOperacoes($dadosList);
 
             session_start();

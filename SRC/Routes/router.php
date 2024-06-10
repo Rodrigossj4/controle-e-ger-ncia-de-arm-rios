@@ -65,7 +65,8 @@ class Router
                 '/criptografar-pdfs' => fn () => self::load('DocumentoController', 'criptografarArquivo'),
                 '/converter-base64' => fn () => self::load('DocumentoController', 'arquivoBase64'),
                 '/gerenciar-om' => fn () => self::load('OMController', 'index'),
-                '/validar-nip' => fn () => self::load('UsuariosController', 'validarNIP')
+                '/validar-nip' => fn () => self::load('UsuariosController', 'validarNIP'),
+                '/auditoria' => fn () => self::load('AuditoriaController', 'index')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
