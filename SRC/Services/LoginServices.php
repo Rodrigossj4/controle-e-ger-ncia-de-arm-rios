@@ -27,11 +27,11 @@ class LoginServices extends SistemaServices
                 array_push($dadosList, array(
                     'codoperacao' => "OP6",
                     'codusuario' => $retorno[0]["codusuario"],
-                    'iddocumento' => $retorno[0]["iddocumento"],
+                    'iddocumento' => 0,
                     'ipacesso' => $usuario[0]['ipusuario'],
                     'omusuario' => $retorno[0]["omusuario"]
                 ));
-                //var_dump($dadosList);
+                // var_dump($dadosList);
                 $this->gravarLogOperacoes($dadosList);
                 return true;
             } else {

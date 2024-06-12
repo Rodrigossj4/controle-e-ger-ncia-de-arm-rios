@@ -171,12 +171,10 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function reindexarPagina(): bool
+    public function reindexarPagina($arquivo): bool
     {
 
         try {
-            $arquivo = json_decode(file_get_contents('php://input'));
-
             $documentosList = array();
             array_push($documentosList, array(
                 'docid' => "",
@@ -272,7 +270,7 @@ class DocumentoServices extends SistemaServices
     public function gerarPdfs($dadosDocumento): array
     {
         $total = count($dadosDocumento->imagens);
-        // var_dump($total);
+        // var_dump($dadosDocumento);
         $paginasList = [];
 
         $armarioRepository = new ArmarioRepository($this->Conexao());
@@ -292,8 +290,10 @@ class DocumentoServices extends SistemaServices
                 $caminhoArquivoOriginal =  $dadosDocumento->imagens[$i];
                 //var_dump($caminhoArquivoOriginal);
                 $caminhoArquivoOriginal = preg_replace('/^\//', '', $dadosDocumento->imagens[$i]);
-                //var_dump($caminhoArquivoOriginal);
-                $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
+
+                if ($dadosDocumento->assina)
+                    $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
+
                 $arqui = random_int(1, 999999);
                 $nomePDF = "{$arqui}.pdf";
                 $novoNome = pathinfo($caminhoArquivoOriginal, PATHINFO_DIRNAME) . '/' . $nomePDF;
@@ -324,6 +324,7 @@ class DocumentoServices extends SistemaServices
                 'fotograma' => "1",
                 'imgencontrada' => "0",
                 'b64' => "",
+                'assina' => $dadosDocumento->assina,
                 'tags' => $dadosDocumento->tags
             ));
         }
@@ -471,28 +472,25 @@ class DocumentoServices extends SistemaServices
 
     public function carregarArquivoservidor($arquivos): string
     {
-        //var_dump("are: " . json_decode($arquivos, true));
         $arquivos = json_decode($arquivos);
 
+        //var_dump($arquivos);
         $nomeArmario = json_decode($arquivos->listDocumentosServidor[0], true);
-        //var_dump($nomeArmario);
+
         $repository = new DocumentoRepository($this->Conexao());
-        // $pasta =   $this->gerarPasta($nomeArmario['nomeArmario']);
-        //var_dump("aq " . json_decode($arquivos->listDocumentosServidor[0], true)['imgencontrada']);
 
         $pasta =  (json_decode($arquivos->listDocumentosServidor[0], true)['imgencontrada'] == "0") ? $this->gerarPasta($nomeArmario['nomeArmario']) :
             $this->retornaCaminhoDocumentoServ(json_decode($arquivos->listDocumentosServidor[0], true)['documentoid']);
 
         $caminhoRaiz = "";
-        //var_dump("ei: " . pathinfo($documentos[0]->arquivo)['dirname']);
+
         $total = Count($arquivos->listDocumentosServidor);
 
         for ($i = 0; $i < $total; $i++) {
             $documentos = json_decode($arquivos->listDocumentosServidor[$i], true);
             $tag = json_decode($documentos['tags'], true);
-            //var_dump($documentos);
+
             $origem = $documentos['arquivo'];
-            //var_dump($arquivos->listDocumentosServidor[$i]);
             $caminho = $this->subirArquivoss($pasta, $origem);
 
             $paginasList = [];

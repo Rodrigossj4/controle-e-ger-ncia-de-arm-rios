@@ -327,6 +327,7 @@ $('#btnIncluiPag').on('click', function (e) {
         success: function (d) {
             console.log(d);
             alertas('Documento cadastrado com sucesso', '#modIdxDocumento', 'alert_sucess');
+            $('#formCadDocumento #Nip').mask('00.0000.00');
             setTimeout(function () {
                 location.reload();
             }, 3000);
@@ -821,7 +822,6 @@ $('#formLogin #btnLogin').on('click', function (e) {
                 $('#formLogin #nip').val("");
                 alertas('Falha ao efeturar login', '#modLogin', 'alert_danger');
             }
-
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
@@ -918,6 +918,7 @@ function exibeLinhasRegistros() {
 $(document).on('click', '#Metatags', function (e) {
     $("#containerTags").slideToggle('slow')
 });
+
 $(document).on('click', '.clickDocumento', function (e) {
 
     //console.log($(this).attr("id"));
@@ -976,7 +977,6 @@ $(document).on('click', '#modCadDocumento #avanca', function () {
 
         $(this).attr('data-indice', indice);
 
-
         $('#modCadDocumento #regride').attr('data-indice', parseInt($(this).attr('data-indice')) - 1);
 
     }
@@ -1033,6 +1033,54 @@ $(document).on('click', '#regridePdf', function () {
 $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
     listDocumentosServidor = [];
 
+    if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
+        alertas("Selecione um armário", '#ModReIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    console.log("reindexar:" + $('#formCadDocumento #Nip').val().replace(/\./g, ''));
+    if (($('#formCadDocumento #Nip').val() != "")) {
+
+        var nip = $('#formCadDocumento #Nip').val().replace(/\./g, '');
+
+        if (nip.length != 8) {
+            alertas("Informe um nip válido", '#ModReIndexarDocumento', 'alert_danger');
+            return false;
+        }
+    } else {
+        alertas("Informe um nip válido", '#ModReIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #semestre').val() == 0)) {
+        alertas("Informe o semestre", '#ModReIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
+        alertas("Informe um ano válido", '#ModReIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
+        alertas("Informe o tipo de documento", '#ModReIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Assunto').val() == "")
+        || ($('#formCadDocumento #Autor').val() == "")
+        || ($('#formCadDocumento #Titulo').val() == "")
+        || ($('#formCadDocumento #Identificador').val() == "")
+        || ($('#formCadDocumento #Classe').val() == "")
+        || ($('#formCadDocumento #DataProdDoc').val() == "")
+        || ($('#formCadDocumento #DestinacaoDoc').val() == 0)
+        || ($('#formCadDocumento #Genero').val() == "")
+        || ($('#formCadDocumento #PrazoGuarda').val() == "")
+        || ($('#formCadDocumento #Observacao').val() == "")) {
+        alertas("Existem tags não preenchidas. Verfique", '#ModReIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
     if ($("#listarDocumentos").attr("data-docid") == "") {
         console.log("Nenhum documento sendo exibido");
         alertas("Nenhum documento sendo exibido", '#modCadDocumento', 'alert_danger');
@@ -1061,14 +1109,16 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         success: function (data) {
             console.log(data);
             $('#semestre').trigger('change');
+            $('#formCadDocumento #Nip').mask('00.0000.00');
             alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
             /*setTimeout(function () {
                 location.reload();
             }, 3000);*/
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#ExcluirPagina', 'alert_danger');
-            console.log('erro ao excluir a página ' + d);
+            alertas(d, '#ModReIndexarDocumento', 'alert_danger');
+            $('#formCadDocumento #Nip').mask('00.0000.00'); $('#formCadDocumento #Nip').mask('00.0000.00');
+            //console.log('erro ao excluir a página ' + d);
         }
     });
 });
@@ -1305,7 +1355,7 @@ function ListarArquivos() {
             }
         },
         error: function (d) {
-            console.log('ei erro ' + d);
+            console.log('erro ' + d);
         }
     });
 }
@@ -1387,7 +1437,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         return false;
     }
 
-    console.log($('#formCadDocumento #Nip').val().replace(/\./g, ''));
+    //console.log($('#formCadDocumento #Nip').val().replace(/\./g, ''));
     if (($('#formCadDocumento #Nip').val() != "")) {
 
         var nip = $('#formCadDocumento #Nip').val().replace(/\./g, '');
@@ -1421,7 +1471,16 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
+    if (($('#formCadDocumento #Assunto').val() == "")
+        || ($('#formCadDocumento #Autor').val() == "")
+        || ($('#formCadDocumento #Titulo').val() == "")
+        || ($('#formCadDocumento #Identificador').val() == "")
+        || ($('#formCadDocumento #Classe').val() == "")
+        || ($('#formCadDocumento #DataProdDoc').val() == "")
+        || ($('#formCadDocumento #DestinacaoDoc').val() == 0)
+        || ($('#formCadDocumento #Genero').val() == "")
+        || ($('#formCadDocumento #PrazoGuarda').val() == "")
+        || ($('#formCadDocumento #Observacao').val() == "")) {
         alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
@@ -1449,6 +1508,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         ano: $('#formCadDocumento #ano').val(),
         tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
         caminho: $('#formCadDocumento #Caminho').val(),
+        assina: $('#formCadDocumento #ConfAssinatura').is(':checked'),
         tags: tags,
         imagens: listDocumentos,
     }, null, 2);
@@ -1469,7 +1529,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     processoAssinaturaData(data);
                 },
                 error: function (d) {
@@ -1521,7 +1581,6 @@ function processoAssinaturaData(data) {
         $('#semestre').trigger('change');
         $('.btnIndexar').css("display", "none");
         $('.btnAnexar').css("display", "block");
-
     }
 }
 
@@ -1561,7 +1620,16 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "") || ($('#formCadDocumento #Autor').val() == "") || ($('#formCadDocumento #Titulo').val() == "") || ($('#formCadDocumento #Identificador').val() == "") || ($('#formCadDocumento #Classe').val() == "")) {
+    if (($('#formCadDocumento #Assunto').val() == "")
+        || ($('#formCadDocumento #Autor').val() == "")
+        || ($('#formCadDocumento #Titulo').val() == "")
+        || ($('#formCadDocumento #Identificador').val() == "")
+        || ($('#formCadDocumento #Classe').val() == "")
+        || ($('#formCadDocumento #DataProdDoc').val() == "")
+        || ($('#formCadDocumento #DestinacaoDoc').val() == 0)
+        || ($('#formCadDocumento #Genero').val() == "")
+        || ($('#formCadDocumento #PrazoGuarda').val() == "")
+        || ($('#formCadDocumento #Observacao').val() == "")) {
         alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
@@ -1589,6 +1657,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         ano: $('#formCadDocumento #ano').val(),
         tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
         caminho: $('#formCadDocumento #Caminho').val(),
+        assina: $('#formCadDocumento #ConfAssinatura').is(':checked'),
         tags: tags,
         imagens: listDocumentos,
     }, null, 2);
@@ -1603,12 +1672,14 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         contentType: false,
         success: function (data) {
             //console.log(data);
+            $('#formCadDocumento #Nip').mask('00.0000.00');
             possuiPasta = 1;
             processoAssinaturaData(data);
+
         },
         error: function (d) {
             alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#ModAnexarDocumento', 'alert_danger');
-
+            $('#formCadDocumento #Nip').mask('00.0000.00');
         }
     });
 
@@ -1760,7 +1831,7 @@ function armazenaDocumentos(documentos) {
 
     var ArrayDocumentos = JSON.parse(documentos);
     // $('#tratandoDocumento').val(documentos);
-    //console.log('arma: ' + documentos);
+    //console.log('arma: ' + ArrayDocumentos);
     $.ajax({
         type: 'POST',
         url: "/carregar-arquivos-servidor",
@@ -1768,7 +1839,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            // console.log("arm: " + data);
+            //console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);

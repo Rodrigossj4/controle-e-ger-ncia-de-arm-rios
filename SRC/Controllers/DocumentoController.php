@@ -72,10 +72,16 @@ class DocumentoController extends Controller
     public function anexarPaginaDocumento()
     {
         $Arquivos = json_decode(file_get_contents('php://input'), true);
-
+        $funcoes = new Helppers();
         if (strlen($Arquivos["nip"]) < 8 || strlen($Arquivos["ano"]) != 4 || $Arquivos["semestre"] == 0  || $Arquivos["idArmario"] == 0 || $Arquivos["tipoDoc"] == 0) {
             http_response_code(500);
             return "Todos os campos são obrigatórios";
+        }
+
+        if (!$funcoes->validarNip($funcoes->somenteNumeros($Arquivos["nip"]))) {
+            http_response_code(500);
+            echo "Nip inválido";
+            return false;
         }
 
         $idPasta = random_int(1, 999999);
@@ -206,7 +212,6 @@ class DocumentoController extends Controller
 
     public function retornaCaminhoTratado()
     {
-
         $caminho = filter_input(INPUT_GET, 'caminho');
 
         echo $caminho;
@@ -219,11 +224,34 @@ class DocumentoController extends Controller
         echo json_encode($paginasList);
     }
 
-    public function ReIndexarPagina(): bool
+    public function ReIndexarPagina()
     {
-        $service = new DocumentoServices();
-        $service->reindexarPagina();
-        return true;
+        $funcoes = new Helppers();
+        $Arquivos = json_decode(file_get_contents('php://input'));
+        try {
+            if (strlen($Arquivos->nip) < 8 || strlen($Arquivos->ano) != 4 || $Arquivos->semestre == 0  || $Arquivos->idArmario == 0 || $Arquivos->tipoDoc == 0) {
+                http_response_code(500);
+                return "Todos os campos são obrigatórios";
+            }
+
+            if (!$funcoes->validarNip($funcoes->somenteNumeros($Arquivos->nip))) {
+                http_response_code(500);
+                return  "Nip inválido";
+            }
+
+            $service = new DocumentoServices();
+
+
+            if ($service->reindexarPagina($Arquivos)) {
+                http_response_code(200);
+                return  "Documento Re-Indexado com sucesso";
+            }
+
+            return true;
+        } catch (Exception) {
+            http_response_code(500);
+            return  "Houve um problema para Reindexar";
+        }
     }
 
     public function alterarPagina(): bool
