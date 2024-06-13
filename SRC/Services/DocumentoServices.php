@@ -204,6 +204,10 @@ class DocumentoServices extends SistemaServices
                 //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
                 $repository->AlterarDocumentoDaPagina($retorno[0]['id'], $arquivo->idPagina, pathinfo($listaArquivosDestino[0]["arquivo"], PATHINFO_DIRNAME) . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
                 $repository->AlterarDocumentoDaMetaTags($retorno[0]['id'], $arquivo->idPagina);
+
+                $listaArquivos =  $repository->listarPaginas($listaArquivosOrigem[0]["DocId"]);
+                if (count($listaArquivos) == 0)
+                    $this->excluirDocumentoPastaDiretorio($listaArquivosOrigem[0]["DocId"], pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_DIRNAME));
             } else {
 
                 $documentosList = array();
@@ -234,7 +238,6 @@ class DocumentoServices extends SistemaServices
                 //caso exista alterar o documento pai e o campo do caminho na tabela documento pagina na tabela documento página desse item
                 $repository->AlterarDocumentoDaPagina($id, $arquivo->idPagina, $arquivoDiretorio . "/" . pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_BASENAME));
                 $repository->AlterarDocumentoDaMetaTags($id, $arquivo->idPagina);
-
 
                 $listaArquivos =  $repository->listarPaginas($listaArquivosOrigem[0]["DocId"]);
 
@@ -455,7 +458,6 @@ class DocumentoServices extends SistemaServices
         $command = "convert -units PixelsPerInch \"$diretoriosaida\" -resample 300 \"$diretoriosaida\"";
         //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resample 300 \"$diretoriosaida\"";
         //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resize 1876x2685 -resample 300 \"$diretoriosaida\"";
-        //var_dump($command);
         shell_exec($command);
     }
 

@@ -1116,8 +1116,9 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
             }, 3000);*/
         },
         error: function (d) {
-            alertas(d, '#ModReIndexarDocumento', 'alert_danger');
-            $('#formCadDocumento #Nip').mask('00.0000.00'); $('#formCadDocumento #Nip').mask('00.0000.00');
+            //console.log(d);
+            alertas(d.responseText, '#ModReIndexarDocumento', 'alert_danger', 'true');
+            $('#formCadDocumento #Nip').mask('00.0000.00');
             //console.log('erro ao excluir a página ' + d);
         }
     });
@@ -1136,7 +1137,7 @@ function carregarLotes() {
         contentType: 'application/json',
         cache: false,
         success: function (data) {
-            //console.log(data);
+            // console.log(data);
             var sel = $("#gradeDocumentos");
             sel.empty();
             data.forEach(e => {
@@ -1487,7 +1488,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 
     tags = JSON.stringify({
         assunto: $('#formCadDocumento #Assunto').val(),
-        autor: $('#formCadDocumento #Autor').val(),
+        autor: $('#formCadDocumento #codOM').val(),
         titulo: $('#formCadDocumento #Titulo').val(),
         identificador: $('#formCadDocumento #Identificador').val(),
         classe: $('#formCadDocumento #Classe').val(),
@@ -1636,7 +1637,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
     tags = JSON.stringify({
         assunto: $('#formCadDocumento #Assunto').val(),
-        autor: $('#formCadDocumento #Autor').val(),
+        autor: $('#formCadDocumento #codOM').val(),
         titulo: $('#formCadDocumento #Titulo').val(),
         identificador: $('#formCadDocumento #Identificador').val(),
         classe: $('#formCadDocumento #Classe').val(),

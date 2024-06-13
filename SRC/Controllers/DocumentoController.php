@@ -22,6 +22,7 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         $armariosService =  new ArmarioServices();
         $OMServices =  new OMServices();
+        $OMList =  $OMServices->listarOM();
         $dadosOM = null;
 
         if (isset($_SESSION['usuario']))
@@ -231,23 +232,23 @@ class DocumentoController extends Controller
         try {
             if (strlen($Arquivos->nip) < 8 || strlen($Arquivos->ano) != 4 || $Arquivos->semestre == 0  || $Arquivos->idArmario == 0 || $Arquivos->tipoDoc == 0) {
                 http_response_code(500);
-                return "Todos os campos são obrigatórios";
+                echo "Todos os campos são obrigatórios";
+                return false;
             }
 
             if (!$funcoes->validarNip($funcoes->somenteNumeros($Arquivos->nip))) {
                 http_response_code(500);
-                return  "Nip inválido";
+                echo "Nip inválido";
+                return false;
             }
 
             $service = new DocumentoServices();
 
-
             if ($service->reindexarPagina($Arquivos)) {
                 http_response_code(200);
-                return  "Documento Re-Indexado com sucesso";
+                echo "Documento Re-Indexado com sucesso";
+                return true;
             }
-
-            return true;
         } catch (Exception) {
             http_response_code(500);
             return  "Houve um problema para Reindexar";

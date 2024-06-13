@@ -3,6 +3,7 @@
 /** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $DocumentosList */
 /** @var Marinha\Mvc\Models\Armarios[] $ArmariosList  */
 /** @var Marinha\Mvc\Models\OM[] $dadosOM  */
+/** @var Marinha\Mvc\Models\OM[] $OMList */
 //$TotalArquivos = count($listaArquivosCarregados);
 $contador = 0;
 ?>
@@ -70,8 +71,11 @@ $contador = 0;
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Autor">Informe o Autor </label>
-                        <input type="hidden" id="codOM" name="codOM" class="form-control" disabled value="<?php echo $dadosOM[0]["CodOM"] ?>">
-                        <input type="text" id="Autor" name="Autor" class="form-control" value="<?php echo $dadosOM[0]["NomOM"] ?>">
+                        <select name="codOM" id="codOM" class="form-select">
+                            <?php foreach ($OMList  as $om) : ?>
+                                <option value="<?= $om['CodOM']; ?>"><?= $om['NomeAbreviado'] . " - " . $om['NomOM']; ?> </option>
+                            <?php endforeach; ?>
+                        </select>
 
                     </div>
                     <div class="form-group">
