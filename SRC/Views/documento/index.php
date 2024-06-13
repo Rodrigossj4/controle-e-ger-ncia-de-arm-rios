@@ -73,7 +73,7 @@ $contador = 0;
                         <label class="col-form-label" for="Autor">Informe o Autor </label>
                         <select name="codOM" id="codOM" class="form-select">
                             <?php foreach ($OMList  as $om) : ?>
-                                <option value="<?= $om['CodOM']; ?>"><?= $om['NomeAbreviado'] . " - " . $om['NomOM']; ?> </option>
+                                <option value="<?= $om['NomeAbreviado']; ?>"><?= $om['NomeAbreviado'] . " - " . $om['NomOM']; ?> </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
