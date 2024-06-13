@@ -420,7 +420,7 @@ class DocumentoServices extends SistemaServices
             $this->uploadImgPastaLote($caminhoArqImgServ, $i);
 
             if ($arquivoExtensao == "TIF") {
-                $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".png";
+                $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".jpg";
                 $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
                 array_map('unlink', glob("$caminhoArqImgServ"));
                 //rmdir("{$caminhoArqImgServ}");
@@ -446,19 +446,26 @@ class DocumentoServices extends SistemaServices
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "convert $input_tiff $output_jpeg";
-        //var_dump($command);
-        shell_exec($command);
+        $command = "convert  $input_tiff $output_jpeg";
+        $command2 = "convert -units PixelsPerInch $output_jpeg -resample 300 $output_jpeg";
 
+        shell_exec($command);
+        shell_exec($command2);
+        //var_dump($command2);
         return  $output_jpeg;
     }
 
-    private function FormatarIMG(string $diretoriosaida)
+    private function FormatarIMG(string $diretorioentrada)
     {
-        $command = "convert -units PixelsPerInch \"$diretoriosaida\" -resample 300 \"$diretoriosaida\"";
+        $command1 = "convert -units PixelsPerInch \"$diretorioentrada\" -resample 300 \"$diretorioentrada\"";
+        shell_exec($command1);
+
+        //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
+
+        //var_dump($diretorioentrada . " --- " . $diretoriosaidapng);
         //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resample 300 \"$diretoriosaida\"";
         //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resize 1876x2685 -resample 300 \"$diretoriosaida\"";
-        shell_exec($command);
+        //shell_exec($command);
     }
 
     private function uploadImgPastaLote(string $caminhoArqImg, int $indice)
