@@ -76,7 +76,6 @@ $contador = 0;
                                 <option value="<?= $om['CodOM']; ?>"><?= $om['NomeAbreviado'] . " - " . $om['NomOM']; ?> </option>
                             <?php endforeach; ?>
                         </select>
-
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Titulo">Informe o Titulo</label>
