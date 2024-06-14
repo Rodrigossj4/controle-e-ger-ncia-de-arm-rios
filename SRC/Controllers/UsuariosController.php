@@ -20,6 +20,9 @@ class UsuariosController  extends Controller
    public function index()
    {
       $this->validarSessao();
+
+      if ($_SESSION['usuario'][0]["nivelAcesso"] != 1)
+         header("location: /home");
       $service = new UsuarioServices();
       $perfilService = new PerfilAcessoServices();
       $omService = new OMServices();

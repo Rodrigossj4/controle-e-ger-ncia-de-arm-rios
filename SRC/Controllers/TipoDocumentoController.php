@@ -19,6 +19,11 @@ class TipoDocumentoController extends Controller
    public function index()
    {
       $this->validarSessao();
+
+      if ($_SESSION['usuario'][0]["nivelAcesso"] != 1)
+         header("location: /home");
+
+
       $service = new TipoDocumentoService();
       $armariosService =  new ArmarioServices();
       $TipoDocumentoList = $service->listaTipoDocumento();

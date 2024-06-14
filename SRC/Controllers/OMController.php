@@ -17,6 +17,9 @@ class OMController extends Controller
     {
         $this->validarSessao();
 
+        if ($_SESSION['usuario'][0]["nivelAcesso"] != 1)
+            header("location: /home");
+
         //$service = new ArmarioServices();
         //$ArmariosList = $service->listaArmarios();
         require __DIR__ . '../../Views/OM/index.php';

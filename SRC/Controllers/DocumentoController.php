@@ -19,6 +19,9 @@ class DocumentoController extends Controller
     public function index()
     {
         $this->validarSessao();
+        if ($_SESSION['usuario'][0]["nivelAcesso"] == 3)
+            header("location: /home");
+
         $service = new DocumentoServices();
         $armariosService =  new ArmarioServices();
         $OMServices =  new OMServices();
