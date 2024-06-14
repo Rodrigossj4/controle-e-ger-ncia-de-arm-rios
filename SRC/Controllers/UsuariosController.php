@@ -19,7 +19,7 @@ class UsuariosController  extends Controller
 
    public function index()
    {
-      //$this->validarSessao();
+      $this->validarSessao();
       $service = new UsuarioServices();
       $perfilService = new PerfilAcessoServices();
       $omService = new OMServices();

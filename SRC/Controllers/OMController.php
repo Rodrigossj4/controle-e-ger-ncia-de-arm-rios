@@ -15,7 +15,7 @@ class OMController extends Controller
 
     public function index()
     {
-        //$this->validarSessao();
+        $this->validarSessao();
 
         //$service = new ArmarioServices();
         //$ArmariosList = $service->listaArmarios();

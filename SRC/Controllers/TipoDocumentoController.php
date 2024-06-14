@@ -18,7 +18,7 @@ class TipoDocumentoController extends Controller
 
    public function index()
    {
-      //$this->validarSessao();
+      $this->validarSessao();
       $service = new TipoDocumentoService();
       $armariosService =  new ArmarioServices();
       $TipoDocumentoList = $service->listaTipoDocumento();
