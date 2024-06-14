@@ -562,12 +562,14 @@ $('#formCadPerfil #btnCadPerfil').on('click', function (e) {
         contentType: false,
 
         success: function (d) {
+            console.log(d);
             carregarPerfis();
             $('#formCadPerfil #nomePerfil').val("");
+            $('#formCadPerfil #armarios').val("");
             alertas('Perfil cadastrado com sucesso', '#modCadPerfil', 'alert_sucess');
         },
         error: function (d) {
-            alertas('Houve um problema para cadastrar esse perfil', '#modCadPerfil', 'alert_danger');
+            alertas(d.responseText, '#modCadPerfil', 'alert_danger');
         }
     });
 });
@@ -793,7 +795,7 @@ $(document).on('click', '.btnConfirmaExcluirUsuario', function (e) {
             alertas('Usuario excluído com sucesso', '#modexcluirUsuario', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#modexcluirUsuario', 'alert_danger');
+            alertas(d.responseText, '#modexcluirUsuario', 'alert_danger');
         }
     }
     );

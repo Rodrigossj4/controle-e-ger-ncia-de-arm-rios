@@ -17,7 +17,10 @@ class PerfilAcessoServices extends SistemaServices
     {
         try {
             $repository = new PerfilAcessoRepository($this->Conexao());
-            return $repository->cadastrarPerfis($perfil);
+            $id  = $repository->cadastrarPerfis($perfil);
+            $this->vincularPerfisArmario($perfil, $id);
+
+            return true;
         } catch (Exception $e) {
             echo $e;
             return false;
@@ -56,6 +59,17 @@ class PerfilAcessoServices extends SistemaServices
         try {
             $repository = new PerfilAcessoRepository($this->Conexao());
             return $repository->excluir($id);
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+    private function vincularPerfisArmario(array $perfil, int $idPerfil)
+    {
+        try {
+            $repository = new PerfilAcessoRepository($this->Conexao());
+            return $repository->vincularPerfisArmario($perfil, $idPerfil);
         } catch (Exception $e) {
             echo $e;
             return false;

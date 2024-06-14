@@ -66,7 +66,16 @@ class UsuarioServices extends SistemaServices
     {
         $funcoes = new Helppers();
         $nip = $funcoes->somenteNumeros($nip);
-        var_dump($funcoes->validarNip($nip));
+        //var_dump($funcoes->validarNip($nip));
         return  $funcoes->validarNip($nip);
+    }
+
+    public function BuscarUsuarioNip($nip): int
+    {
+        $funcoes = new Helppers();
+        $nip = $funcoes->somenteNumeros($nip);
+
+        $repository = new UsuarioRepository($this->Conexao());
+        return  $repository->BuscarUsuarioNip($nip);
     }
 }

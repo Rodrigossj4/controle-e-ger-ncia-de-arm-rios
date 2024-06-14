@@ -113,7 +113,7 @@ class UsuarioRepository extends LogRepository
     public function excluirUsuario(int $id): bool
     {
         try {
-            $sqlQuery = "delete FROM {$this->schema}\"Usuarios\" where \"IdUsuario\"  = ?;";
+            $sqlQuery = "update {$this->schema}\"Usuarios\" set \"Ativo\" = False  where \"IdUsuario\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();
@@ -142,8 +142,9 @@ class UsuarioRepository extends LogRepository
     public function totalUsuariosPerfil(int $idPerfil): int
     {
         try {
-            $sqlQuery = "SELECT count(\"IdUsuario\") as \"totalUsuario\" FROM  {$this->schema}\"Usuarios\" WHERE \"PerfilUsuario\" = '$idPerfil';";
+            $sqlQuery = "SELECT count(\"IdUsuario\") as \"totalUsuario\" FROM  {$this->schema}\"Usuarios\" WHERE \"PerfilUsuario\" = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idPerfil);
             $stmt->execute();
 
             $usuariosDataList = $stmt->fetchAll();
@@ -151,6 +152,25 @@ class UsuarioRepository extends LogRepository
             // var_dump($usuariosDataList['0']['totalUsuario']);
 
             return $usuariosDataList['0']['totalUsuario'];
+        } catch (Exception $e) {
+            echo $e;
+            return 1;
+        }
+    }
+
+    public function BuscarUsuarioNip($nip): int
+    {
+        try {
+            $sqlQuery = "SELECT count(\"IdUsuario\") as \"usuario\" FROM  {$this->schema}\"Usuarios\" WHERE \"Nip\" = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $nip);
+            $stmt->execute();
+
+            $usuariosDataList = $stmt->fetchAll();
+
+            // var_dump($usuariosDataList['0']['totalUsuario']);
+
+            return $usuariosDataList['0']['usuario'];
         } catch (Exception $e) {
             echo $e;
             return 1;

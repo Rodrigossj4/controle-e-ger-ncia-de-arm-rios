@@ -6,6 +6,8 @@ namespace Marinha\Mvc\Controllers;
 use Exception;
 use Marinha\Mvc\Services\PerfilAcessoServices;
 use Marinha\Mvc\Services\UsuarioServices;
+use Marinha\Mvc\Services\ArmarioServices;
+use Sabberworm\CSS\Value\Size;
 
 class PerfilAcessoController extends Controller
 {
@@ -17,6 +19,8 @@ class PerfilAcessoController extends Controller
    {
       //$this->validarSessao();
       $service = new PerfilAcessoServices();
+      $armarioService = new ArmarioServices();
+      $ArmariosList = $armarioService->listaArmarios();
 
       $PerfilAcessoList = $service->listaPerfis();
       require __DIR__ . '../../Views/perfis/index.php';
@@ -26,13 +30,22 @@ class PerfilAcessoController extends Controller
    {
       if (strlen(filter_input(INPUT_POST, 'nomePerfil')) < 1) {
          http_response_code(500);
-         return "Todos os campos são obrigatórios";
+         echo  "Todos os campos são obrigatórios";
+         return false;
       }
+
+      if (empty($_POST['armarios'])) {
+         http_response_code(500);
+         echo "Selecione um armário";
+         return false;
+      }
+
 
       try {
          $perfilList = array();
          array_push($perfilList, array(
-            'nomeperfil' => filter_input(INPUT_POST, 'nomePerfil')
+            'nomeperfil' => filter_input(INPUT_POST, 'nomePerfil'),
+            'armarios' =>  $_POST['armarios']
          ));
 
          $service = new PerfilAcessoServices();

@@ -24,6 +24,18 @@ class ArmarioServices extends SistemaServices
         }
     }
 
+    public function listaArmariosPorPerfil(int $idPerfil): array
+    {
+        try {
+            $repository = new ArmarioRepository($this->Conexao());
+            return $repository->listaArmariosPorPerfil($idPerfil);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
+
     public function cadastrarArmarios(array $armario): bool
     {
         try {

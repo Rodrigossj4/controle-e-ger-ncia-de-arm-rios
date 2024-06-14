@@ -1,6 +1,7 @@
 <?php
 
 /** @var Marinha\Mvc\Models\PerfilAcesso[] $PerfilAcessoList */
+/** @var Marinha\Mvc\Models\Armarios[] $ArmariosList */
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
@@ -12,6 +13,14 @@
                     <div class="col-md-8 mb-3">
                         <label class="col-form-label" for="nomePerfil">Nome do Perfil: </label>
                         <input class="form-control form-control-sm form-control-padronizado" type="text" name="nomePerfil" id="nomePerfil">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="col-form-label" for="Autor">Selecione o Armário </label>
+                        <select name="armarios[]" id="armarios" class="form-select" multiple>
+                            <?php foreach ($ArmariosList  as $armario) : ?>
+                                <option value="<?= $armario['id']; ?>"><?= $armario['nomeexterno']; ?> </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-3">

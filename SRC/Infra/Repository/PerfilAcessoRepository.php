@@ -16,11 +16,11 @@ class PerfilAcessoRepository extends LogRepository
         $this->pdo = $pdo;
     }
 
-    public function cadastrarPerfis(array $perfil): bool
+    public function cadastrarPerfis(array $perfil): int
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuario\"(\"DescPerfil\") values(?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuario\"(\"DescPerfil\") values(?) RETURNING \"IdPerfilUsuario\";";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($perfil as $pr) {
@@ -34,7 +34,7 @@ class PerfilAcessoRepository extends LogRepository
 
             $stmt->execute();
 
-            return true;
+            return $stmt->fetchColumn();
         } catch (Exception $e) {
             echo $e;
             return false;
@@ -118,6 +118,17 @@ class PerfilAcessoRepository extends LogRepository
         } catch (Exception $e) {
             echo $e;
             return [];
+        }
+    }
+
+    public function vincularPerfisArmario(array $perfil, int $idPerfil)
+    {
+        foreach ($perfil["0"]["armarios"] as $pr) {
+            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuarioArmarios\"(\"idperfilusuario\", \"idarmario\") values(?, ?);";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idPerfil);
+            $stmt->bindValue(2, $pr);
+            $stmt->execute();
         }
     }
 }

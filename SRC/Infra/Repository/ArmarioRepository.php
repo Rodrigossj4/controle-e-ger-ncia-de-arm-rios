@@ -41,6 +41,33 @@ class ArmarioRepository extends LogRepository
         }
     }
 
+    public function listaArmariosPorPerfil(int $idPerfil): array
+    {
+        try {
+            $sqlQuery = "SELECT arm.\"IdArmario\", arm.\"NomeInterno\", arm.\"NomeExterno\", arm.\"CodArmario\", ativo FROM  prodimagem.\"Armarios\" arm inner join  prodimagem.\"PerfilUsuarioArmarios\" per On arm.\"IdArmario\" = per.\"idarmario\" 	where \"ativo\" = true 	and per.\"idperfilusuario\" =  ? 	order by arm.\"NomeExterno\" asc;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idPerfil);
+            $stmt->execute();
+
+            $armariosDataList = $stmt->fetchAll();
+            $armariosList = array();
+            foreach ($armariosDataList as $armariosData) {
+                array_push($armariosList, array(
+                    'id' => $armariosData['IdArmario'],
+                    'codigo' => $armariosData['CodArmario'],
+                    'nomeinterno' => $armariosData['NomeInterno'],
+                    'nomeexterno' => $armariosData['NomeExterno']
+                ));
+            };
+
+            return $armariosList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
+
     public function cadastrarArmarios(array $armario): bool
     {
         try {

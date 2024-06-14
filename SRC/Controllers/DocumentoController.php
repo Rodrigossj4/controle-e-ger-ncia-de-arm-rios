@@ -29,7 +29,7 @@ class DocumentoController extends Controller
             $dadosOM = $OMServices->ObterDadosOM($_SESSION['usuario'][0]["omusuario"]);
 
         $DocumentosList = $service->listaDocumentos();
-        $ArmariosList = $armariosService->listaArmarios();
+        $ArmariosList = $armariosService->listaArmariosPorPerfil($_SESSION['usuario'][0]["idacesso"]);
         require __DIR__ . '../../Views/documento/index.php';
     }
 

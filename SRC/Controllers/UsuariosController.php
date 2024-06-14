@@ -34,6 +34,7 @@ class UsuariosController  extends Controller
    public function cadastrar()
    {
       $funcoes = new Helppers();
+      $service = new UsuarioServices();
 
       if (strlen(filter_input(INPUT_POST, 'nomeusuario')) < 1 || strlen(filter_input(INPUT_POST, 'nip')) < 1 || strlen(filter_input(INPUT_POST, 'senhausuario')) < 1 || filter_input(INPUT_POST, 'idacesso') == 0) {
          http_response_code(500);
@@ -52,6 +53,12 @@ class UsuariosController  extends Controller
          return false;
       }
 
+      if ($service->BuscarUsuarioNip(filter_input(INPUT_POST, 'nip')) > 0) {
+         http_response_code(500);
+         echo "Já existe um usuario com esse nip cadastrado";
+         return false;
+      }
+
       try {
 
          $usuariosList = array();;
@@ -65,7 +72,7 @@ class UsuariosController  extends Controller
             'setor' => filter_input(INPUT_POST, 'setor')
          ));
 
-         $service = new UsuarioServices();
+
 
          if ($service->cadastrarUsuario($usuariosList)) {
             http_response_code(200);
@@ -112,6 +119,13 @@ class UsuariosController  extends Controller
    public function excluir(): bool
    {
       $service = new UsuarioServices();
+      session_start();
+      if ($_SESSION['usuario'][0]["codusuario"] == filter_input(INPUT_POST, 'id')) {
+         http_response_code(500);
+         echo "Usuário logado na sessão atual.";
+         return false;
+      };
+
       $service->excluirUsuario(filter_input(INPUT_POST, 'id'));
       return true;
    }

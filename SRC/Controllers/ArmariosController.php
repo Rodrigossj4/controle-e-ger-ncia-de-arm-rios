@@ -110,6 +110,13 @@ class ArmariosController extends Controller
       echo json_encode($service->listaArmarios());
    }
 
+   public function listaArmariosPorPerfil(int $idPerfil)
+   {
+      header('Content-Type: application/json; charset=utf-8');
+      $service = new ArmarioServices();
+      echo json_encode($service->listaArmariosPorPerfil($idPerfil));
+   }
+
    public function alterar()
    {
       if (strlen(filter_input(INPUT_POST, 'id')) < 1 || strlen(filter_input(INPUT_POST, 'codigo')) < 1 || strlen(filter_input(INPUT_POST, 'nomeInterno')) < 1 || strlen(filter_input(INPUT_POST, 'nomeExterno')) < 1) {
