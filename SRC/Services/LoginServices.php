@@ -31,6 +31,7 @@ class LoginServices extends SistemaServices
                     'ipacesso' => $usuario[0]['ipusuario'],
                     'omusuario' => $retorno[0]["omusuario"],
                     'idperfil' => $retorno[0]["idacesso"]
+                    
                 ));
                 // var_dump($dadosList);
                 $this->gravarLogOperacoes($dadosList);

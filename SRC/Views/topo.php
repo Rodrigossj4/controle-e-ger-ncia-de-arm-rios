@@ -3,11 +3,11 @@ if (!isset($_SESSION))
     session_start();
 
 //var_dump($_SESSION['usuario'][0]["idacesso"])
-$liberaAcessoAdmin = false;
+$liberaAcesso = 3;
 $nomeUsuario = "";
 $nipUsuario = "";
-if ((isset($_SESSION['usuario']) && ($_SESSION['usuario'][0]["idacesso"]) === 6))
-    $liberaAcessoAdmin = true;
+if ((isset($_SESSION['usuario'])))
+    $liberaAcesso = $_SESSION['usuario'][0]["nivelAcesso"];
 
 if (isset($_SESSION['usuario'])) {
     $nomeUsuario = $_SESSION['usuario'][0]["nomeusuario"];
@@ -19,7 +19,7 @@ $listaArquivosCarregados = [];
 if ((isset($_SESSION['Arquivos'])))
     $listaArquivosCarregados  = $_SESSION['Arquivos'];
 
-//echo  $liberaAcessoAdmin;
+echo  $liberaAcesso;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -44,33 +44,43 @@ if ((isset($_SESSION['Arquivos'])))
         </div>
 
         <ul>
-            <li class="nav-item" id="menuAdmin">
-                <a class="nav-link dropdown-toggle" href="#" id="menuAdmin" role="button">
-                    Administração
-                </a>
-                <div id="submenu">
-                    <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
-                    <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
-                    <a class="nav-link" href="/gerenciar-om">Gerencia OM</a>
-                    <a class="nav-link" href="/auditoria">Auditoria</a>
-                </div>
+            <?php if ($liberaAcesso == 1) { ?>
+                <li class="nav-item" id="menuAdmin">
+                    <a class="nav-link dropdown-toggle" href="#" id="menuAdmin" role="button">
+                        Administração
+                    </a>
+                    <div id="submenu">
+                        <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
+                        <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
+                        <a class="nav-link" href="/gerenciar-om">Gerencia OM</a>
+                        <a class="nav-link" href="/auditoria">Auditoria</a>
+                    </div>
 
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/gerenciar-armarios">Gerencia de Armarios</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerencia de Tipo de documentos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/visualizar-documentos">Visualizar Documentos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/Modulo_img.php" target="_blank">Tratamento de Imagens</a>
-            </li>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/gerenciar-armarios">Gerencia de Armarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerencia de Tipo de documentos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
+                </li>
+            <?php } ?>
+            <?php if ($liberaAcesso < 3) { ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
+                </li>
+            <?php } ?>
+            <?php if ($liberaAcesso <= 3) { ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/visualizar-documentos">Visualizar Documentos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Modulo_img.php" target="_blank">Tratamento de Imagens</a>
+                </li>
+            <?php } ?>
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Sair</a>
             </li>

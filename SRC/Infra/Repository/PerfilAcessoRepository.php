@@ -20,18 +20,19 @@ class PerfilAcessoRepository extends LogRepository
     {
         try {
 
-            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuario\"(\"DescPerfil\") values(?) RETURNING \"IdPerfilUsuario\";";
+            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuario\"(\"DescPerfil\", \"nivelAcesso\") values(?, ?) RETURNING \"IdPerfilUsuario\";";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($perfil as $pr) {
                 $perfilData = new PerfilAcesso(
                     null,
                     $pr['nomeperfil'],
+                    $pr['nivelAcesso']
                 );
             }
 
             $stmt->bindValue(1, $perfilData->nomePerfil());
-
+            $stmt->bindValue(2, $perfilData->nivelAcesso());
             $stmt->execute();
 
             return $stmt->fetchColumn();
@@ -74,7 +75,8 @@ class PerfilAcessoRepository extends LogRepository
             foreach ($perfil as $td) {
                 $perfilData = new PerfilAcesso(
                     $td['id'],
-                    $td['nomeperfil']
+                    $td['nomeperfil'],
+                    3
                 );
             }
 
@@ -124,7 +126,7 @@ class PerfilAcessoRepository extends LogRepository
     public function vincularPerfisArmario(array $perfil, int $idPerfil)
     {
         foreach ($perfil["0"]["armarios"] as $pr) {
-            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuarioArmarios\"(\"idperfilusuario\", \"idarmario\") values(?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuarioArmarios\"(\"IdPerfilusuario\", \"IdArmario\") values(?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idPerfil);
             $stmt->bindValue(2, $pr);

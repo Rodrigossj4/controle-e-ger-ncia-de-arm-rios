@@ -2,14 +2,18 @@
 
 namespace Marinha\Mvc\Models;
 
-class PerfilAcesso{
+class PerfilAcesso
+{
     private ?int $id;
     private string $nomePerfil;
 
-    public function __construct(?int $id, string $nomePerfil)
+    private int $nivelAcesso;
+
+    public function __construct(?int $id, string $nomePerfil, int $nivelAcesso)
     {
         $this->id = $id;
-        $this->nomePerfil= $nomePerfil;        
+        $this->nomePerfil = $nomePerfil;
+        $this->nivelAcesso = $nivelAcesso;
     }
 
     public function id(): ?int
@@ -20,5 +24,10 @@ class PerfilAcesso{
     public function nomePerfil(): string
     {
         return $this->nomePerfil;
+    }
+
+    public function nivelAcesso(): int
+    {
+        return $this->nivelAcesso;
     }
 }

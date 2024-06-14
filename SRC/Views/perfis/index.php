@@ -22,6 +22,14 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="col-form-label" for="Autor">Nível de acesso </label>
+                        <select name="nivelAcesso" id="nivelAcesso" class="form-select">
+                            <option value="1">Administrador</option>
+                            <option value="2">Operador</option>
+                            <option value="3">Visualizador</option>
+                        </select>
+                    </div>
                     <div class="form-group row">
                         <div class="col-sm-3">
                             <input type="button" id="btnCadPerfil" value="Cadastrar" class="btn btn-primary">

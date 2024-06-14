@@ -45,6 +45,7 @@ class PerfilAcessoController extends Controller
          $perfilList = array();
          array_push($perfilList, array(
             'nomeperfil' => filter_input(INPUT_POST, 'nomePerfil'),
+            'nivelAcesso' => filter_input(INPUT_POST, 'nivelAcesso'),
             'armarios' =>  $_POST['armarios']
          ));
 

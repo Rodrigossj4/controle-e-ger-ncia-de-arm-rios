@@ -566,6 +566,7 @@ $('#formCadPerfil #btnCadPerfil').on('click', function (e) {
             carregarPerfis();
             $('#formCadPerfil #nomePerfil').val("");
             $('#formCadPerfil #armarios').val("");
+            $('#formCadPerfil #nivelAcesso').val("1");
             alertas('Perfil cadastrado com sucesso', '#modCadPerfil', 'alert_sucess');
         },
         error: function (d) {
