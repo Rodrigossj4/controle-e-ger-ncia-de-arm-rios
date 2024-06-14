@@ -19,7 +19,7 @@ $listaArquivosCarregados = [];
 if ((isset($_SESSION['Arquivos'])))
     $listaArquivosCarregados  = $_SESSION['Arquivos'];
 
-echo  $liberaAcesso;
+//echo  $liberaAcesso;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
