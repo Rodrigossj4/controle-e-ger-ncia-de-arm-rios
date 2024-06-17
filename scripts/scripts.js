@@ -1070,7 +1070,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "")
+    if (($('#formCadDocumento #ConfAssinatura').is(':checked') == true) && (($('#formCadDocumento #Assunto').val() == "")
         || ($('#formCadDocumento #Autor').val() == "")
         || ($('#formCadDocumento #Titulo').val() == "")
         || ($('#formCadDocumento #Identificador').val() == "")
@@ -1079,7 +1079,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         || ($('#formCadDocumento #DestinacaoDoc').val() == 0)
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
-        || ($('#formCadDocumento #Observacao').val() == "")) {
+        || ($('#formCadDocumento #Observacao').val() == ""))) {
         alertas("Existem tags não preenchidas. Verfique", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
@@ -1475,7 +1475,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "")
+    if (($('#formCadDocumento #ConfAssinatura').is(':checked') == true) && (($('#formCadDocumento #Assunto').val() == "")
         || ($('#formCadDocumento #Autor').val() == "")
         || ($('#formCadDocumento #Titulo').val() == "")
         || ($('#formCadDocumento #Identificador').val() == "")
@@ -1484,7 +1484,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         || ($('#formCadDocumento #DestinacaoDoc').val() == 0)
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
-        || ($('#formCadDocumento #Observacao').val() == "")) {
+        || ($('#formCadDocumento #Observacao').val() == ""))) {
         alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
@@ -1624,7 +1624,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "")
+    if (($('#formCadDocumento #ConfAssinatura').is(':checked') == true) && (($('#formCadDocumento #Assunto').val() == "")
         || ($('#formCadDocumento #Autor').val() == "")
         || ($('#formCadDocumento #Titulo').val() == "")
         || ($('#formCadDocumento #Identificador').val() == "")
@@ -1633,7 +1633,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         || ($('#formCadDocumento #DestinacaoDoc').val() == 0)
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
-        || ($('#formCadDocumento #Observacao').val() == "")) {
+        || ($('#formCadDocumento #Observacao').val() == ""))) {
         alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
