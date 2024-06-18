@@ -50,22 +50,22 @@ if ((isset($_SESSION['Arquivos'])))
                         Administração
                     </a>
                     <div id="submenu">
-                        <a class="nav-link" href="/gerenciar-usuarios">Gerencia de Usuarios</a>
-                        <a class="nav-link" href="/gerenciar-perfis">Gerencia de Perfil de usuario</a>
-                        <a class="nav-link" href="/gerenciar-om">Gerencia OM</a>
+                        <a class="nav-link" href="/gerenciar-usuarios">Gerência de Usuários</a>
+                        <a class="nav-link" href="/gerenciar-perfis">Gerência de Perfil de usuário</a>
+                        <a class="nav-link" href="/gerenciar-om">Gerência OM</a>
                         <a class="nav-link" href="/auditoria">Auditoria</a>
                     </div>
 
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/gerenciar-armarios">Gerencia de Armarios</a>
+                    <a class="nav-link" href="/gerenciar-armarios">Gerência de Armários</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerencia de Tipo de documentos</a>
+                    <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerência de Tipo de documentos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
+                    <a class="nav-link" href="/gerenciar-documentos">Gerência de Documentos</a>
                 </li>
             <?php } ?>
 
