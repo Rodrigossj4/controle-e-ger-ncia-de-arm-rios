@@ -55,9 +55,7 @@ if ((isset($_SESSION['Arquivos'])))
                         <a class="nav-link" href="/gerenciar-om">Gerência OM</a>
                         <a class="nav-link" href="/auditoria">Auditoria</a>
                     </div>
-
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link" href="/gerenciar-armarios">Gerência de Armários</a>
                 </li>
