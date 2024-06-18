@@ -68,11 +68,7 @@ if ((isset($_SESSION['Arquivos'])))
                     <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
                 </li>
             <?php } ?>
-            <?php if ($liberaAcesso < 3) { ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="/gerenciar-documentos">Gerencia de Documentos</a>
-                </li>
-            <?php } ?>
+
             <?php if ($liberaAcesso <= 3) { ?>
                 <li class="nav-item">
                     <a class="nav-link" href="/visualizar-documentos">Visualizar Documentos</a>
