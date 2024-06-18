@@ -62,11 +62,12 @@ if ((isset($_SESSION['Arquivos'])))
                 <li class="nav-item">
                     <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerência de Tipo de documentos</a>
                 </li>
+            <?php } ?>
+            <?php if ($liberaAcesso < 3) { ?>
                 <li class="nav-item">
                     <a class="nav-link" href="/gerenciar-documentos">Gerência de Documentos</a>
                 </li>
             <?php } ?>
-
             <?php if ($liberaAcesso <= 3) { ?>
                 <li class="nav-item">
                     <a class="nav-link" href="/visualizar-documentos">Visualizar Documentos</a>
