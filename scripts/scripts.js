@@ -1323,7 +1323,7 @@ function ListarArquivos() {
             if (listDocumentosPrimaria.length > 0) {
                 var extensao = listDocumentosPrimaria[0][0].split('.').pop();
 
-                if (extensao == "pdf") {
+                if (extensao.toLowerCase() == "pdf") {
                     listDocumentosServidor = [];
                     let contador = 0;
                     listDocumentosPrimaria.forEach(e => {
@@ -1367,7 +1367,7 @@ function ListarArquivos() {
 function ListarArquivosSelecionados() {
 
     var extensao = listDocumentos.length > 0 ? listDocumentos[0].split('.').pop() : "";
-    if (extensao == "pdf") {
+    if (extensao.toLowerCase() == "pdf") {
         var sel = $("#listarDocumentosSelecionados");
         sel.empty();
         listDocumentosServidor = [];
