@@ -66,7 +66,8 @@ class Router
                 '/converter-base64' => fn () => self::load('DocumentoController', 'arquivoBase64'),
                 '/gerenciar-om' => fn () => self::load('OMController', 'index'),
                 '/validar-nip' => fn () => self::load('UsuariosController', 'validarNIP'),
-                '/auditoria' => fn () => self::load('AuditoriaController', 'index')
+                '/auditoria' => fn () => self::load('AuditoriaController', 'index'),
+                '/troca-senha' => fn () => self::load('LoginController', 'index')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),

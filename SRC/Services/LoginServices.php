@@ -11,7 +11,7 @@ class LoginServices extends SistemaServices
     {
     }
 
-    public function login(array $usuario): bool
+    public function login(array $usuario): ?array
     {
         try {
             $repository = new LoginRepository($this->Conexao());
@@ -30,18 +30,18 @@ class LoginServices extends SistemaServices
                     'iddocumento' => 0,
                     'ipacesso' => $usuario[0]['ipusuario'],
                     'omusuario' => $retorno[0]["omusuario"],
-                    'idperfil' => $retorno[0]["idacesso"]
-                    
+                    'idperfil' => $retorno[0]["idacesso"],
+                    'dataultimologin' => $retorno[0]["dataultimologin"]
                 ));
-                // var_dump($dadosList);
+                //var_dump($dadosList);
                 $this->gravarLogOperacoes($dadosList);
-                return true;
+                return $dadosList;
             } else {
-                return false;
+                return null;
             }
         } catch (Exception $e) {
             echo $e;
-            return false;
+            return null;
         }
     }
 

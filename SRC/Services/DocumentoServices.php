@@ -283,7 +283,7 @@ class DocumentoServices extends SistemaServices
 
             $ext = pathinfo($dadosDocumento->imagens[$i], PATHINFO_EXTENSION);
             $caminhoArqImgServ = "";
-            if ($ext != "pdf") {
+            if (strtolower($ext) != "pdf") {
                 $this->FormatarIMG($dadosDocumento->imagens[$i]);
 
                 $caminhoArqImgServ = $this->gerarOcrs($dadosDocumento->imagens[$i]);
@@ -419,7 +419,7 @@ class DocumentoServices extends SistemaServices
             $caminhoArqImgServ = $diretorio . "/" . str_replace(' ', '_', $_FILES['documento']['name'][$i]);
             $this->uploadImgPastaLote($caminhoArqImgServ, $i);
 
-            if ($arquivoExtensao == "TIF") {
+            if (strtolower($arquivoExtensao) == "tif") {
                 $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".jpg";
                 $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
                 array_map('unlink', glob("$caminhoArqImgServ"));

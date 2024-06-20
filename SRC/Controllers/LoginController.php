@@ -15,7 +15,7 @@ class LoginController extends Controller
         require __DIR__ . '../../Views/login/index.php';
     }
 
-    public function login(): bool
+    public function login()
     {
         $login = array();
         $funcoes = new Helppers();
@@ -30,8 +30,8 @@ class LoginController extends Controller
         //$dados = $service->login($login);  
         //?  header("location: /gerenciar-armarios") : require __DIR__ . '../../Views/login/index.php'
         $retorno = $service->login($login);
-
-        return $retorno;
+        //var_dump($retorno);
+        echo json_encode($retorno);
     }
 
     public function logout()

@@ -421,13 +421,11 @@ $(document).on('click', '#btnNaoConfirmaExcluirTipoDoc', function (e) {
     FecharModal('#modexcluirTipoDoc');
 });
 
-
 $(document).on('click', '.btnAlterarTipoDoc', function (e) {
     $('#formAltTipoDoc #id').val($(this).data("id"));
     $('#formAltTipoDoc #descTipoDoc').val($(this).data("desc"));
     $('.opcoesConfirmacao').css('display', 'none');
 });
-
 
 $(document).on('click', '#exibConfirmaAlteracaoDocumento', function (e) {
     $('.opcoesConfirmacao').css('display', 'flex');
@@ -806,7 +804,6 @@ $(document).on('click', '#btnNaoConfirmaExcluirUsuario', function (e) {
     FecharModal('#modexcluirUsuario');
 });
 
-
 $('#formLogin #btnLogin').on('click', function (e) {
     var formdata = new FormData($("form[id='formLogin']")[0]);
     $.ajax({
@@ -815,11 +812,16 @@ $('#formLogin #btnLogin').on('click', function (e) {
         data: formdata,
         processData: false,
         contentType: false,
-
-        success: function (d) {
-            console.log(d);
-            if (d = true) {
-                location.assign("/home");
+        success: function (data) {
+            console.log(data);
+            //console.log(JSON.parse(data));
+            //JSON.parse(data)[0]['idperfil']
+            if (data != "null") {
+                if ((JSON.parse(data)[0]['dataultimologin'] == null)) {
+                    location.assign("/troca-senha");
+                } else {
+                    location.assign("/home");
+                }
             } else {
                 $('#formLogin #senha').val("");
                 $('#formLogin #nip').val("");
@@ -863,9 +865,7 @@ function alertas(msg, local, estilo, fecharAlerta) {
             $(local + ' .btn-close').trigger('click');
         $(local + ' .alerta').removeClass(estilo);
     }, 2500);
-
 }
-
 
 $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
@@ -889,7 +889,6 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
                     //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>'
                 });
-
             },
             error: function (d) {
 
