@@ -818,10 +818,10 @@ $('#formLogin #btnLogin').on('click', function (e) {
             //JSON.parse(data)[0]['idperfil']
             if (data != "null") {
                 if ((JSON.parse(data)[0]['dataultimologin'] == null)) {
-                    console.log("/trocasenha");
+                    //console.log("/trocasenha");
                     location.assign("/troca-senha");
                 } else {
-                    console.log("/home");
+                    //console.log("/home");
                     location.assign("/home");
                 }
             } else {
