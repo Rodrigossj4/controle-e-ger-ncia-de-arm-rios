@@ -176,4 +176,39 @@ class UsuarioRepository extends LogRepository
             return 1;
         }
     }
+
+    public function validarSenhaUsuario(array $usuario): ?int
+    {
+        try {
+            $sqlQuery = "select \"IdUsuario\" from {$this->schema}\"Usuarios\" where \"Nip\" = ? and \"SenhaUsuario\" = ?";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $usuario[0]['nip']);
+            $stmt->bindValue(2, hash('sha256', $usuario[0]['nip'] . $usuario[0]['senha']));
+            $stmt->execute();
+            $usuarioDataList = $stmt->fetchAll();
+
+            return  $usuarioDataList[0]['IdUsuario'];
+        } catch (Exception $e) {
+            echo $e;
+            return null;
+        }
+    }
+
+    public function AlterarSenhaUsuario($dadosUsuarios): bool
+    {
+
+        try {
+            $sqlQuery = "update {$this->schema}\"Usuarios\" set \"SenhaUsuario\" = ?, \"DataUltimoLogin\" = ?  where \"IdUsuario\"  = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, hash('sha256', $dadosUsuarios[0]['nip'] . $dadosUsuarios[0]['novaSenha']));
+            $stmt->bindValue(2, date('Y-m-d H:i:s'));
+            $stmt->bindValue(3, $dadosUsuarios[0]["idUsuario"]);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
 }

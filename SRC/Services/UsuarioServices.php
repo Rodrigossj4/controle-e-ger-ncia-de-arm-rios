@@ -78,4 +78,22 @@ class UsuarioServices extends SistemaServices
         $repository = new UsuarioRepository($this->Conexao());
         return  $repository->BuscarUsuarioNip($nip);
     }
+
+    public function validarSenhaUsuario($dadosUsuarios): ?int
+    {
+        $funcoes = new Helppers();
+        $dadosUsuarios[0]['nip'] = $funcoes->somenteNumeros($dadosUsuarios[0]['nip']);
+
+        $repository = new UsuarioRepository($this->Conexao());
+        return  $repository->validarSenhaUsuario($dadosUsuarios);
+    }
+
+    public function AlterarSenhaUsuario($dadosUsuarios): bool
+    {
+        $repository = new UsuarioRepository($this->Conexao());
+        $funcoes = new Helppers();
+        $dadosUsuarios[0]['nip'] = $funcoes->somenteNumeros($dadosUsuarios[0]['nip']);
+
+        return  $repository->AlterarSenhaUsuario($dadosUsuarios);
+    }
 }

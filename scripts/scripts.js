@@ -818,8 +818,10 @@ $('#formLogin #btnLogin').on('click', function (e) {
             //JSON.parse(data)[0]['idperfil']
             if (data != "null") {
                 if ((JSON.parse(data)[0]['dataultimologin'] == null)) {
+                    console.log("/trocasenha");
                     location.assign("/troca-senha");
                 } else {
+                    console.log("/home");
                     location.assign("/home");
                 }
             } else {
@@ -830,6 +832,32 @@ $('#formLogin #btnLogin').on('click', function (e) {
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
+        }
+    });
+});
+
+
+$('#formAltSenha #alterarSenha').on('click', function (e) {
+    var formdata = new FormData($("form[id='formAltSenha']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/alterarSenha",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+            if (data != "true") {
+                alertas('Não foi possível alterar a senha', '#modAltSenha', 'alert_danger');
+            } else {
+                alertas('Senha alterada com sucesso', '#modAltSenha', 'alert_sucess');
+                setTimeout(function () {
+                    location.assign("/login");
+                }, 3000);
+            }
+        },
+        error: function (d) {
+            alertas(d.responseText, '#modAltSenha', 'alert_danger');
         }
     });
 });

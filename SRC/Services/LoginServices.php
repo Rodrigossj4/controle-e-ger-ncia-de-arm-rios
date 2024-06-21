@@ -18,9 +18,11 @@ class LoginServices extends SistemaServices
             $retorno = $repository->login($usuario);
 
             if (count($retorno) == 1) {
-                session_start();
-                session_regenerate_id(true);
-                $_SESSION['usuario'] = $retorno;
+                if ($retorno[0]["dataultimologin"] != null) {
+                    session_start();
+                    session_regenerate_id(true);
+                    $_SESSION['usuario'] = $retorno;
+                }
 
                 $dadosList = array();
 
@@ -33,8 +35,11 @@ class LoginServices extends SistemaServices
                     'idperfil' => $retorno[0]["idacesso"],
                     'dataultimologin' => $retorno[0]["dataultimologin"]
                 ));
+
                 //var_dump($dadosList);
-                $this->gravarLogOperacoes($dadosList);
+                if ($retorno[0]["dataultimologin"] != null)
+                    $this->gravarLogOperacoes($dadosList);
+
                 return $dadosList;
             } else {
                 return null;

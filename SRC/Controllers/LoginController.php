@@ -11,7 +11,6 @@ class LoginController extends Controller
 {
     public function index()
     {
-
         require __DIR__ . '../../Views/login/index.php';
     }
 

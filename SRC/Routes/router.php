@@ -67,7 +67,7 @@ class Router
                 '/gerenciar-om' => fn () => self::load('OMController', 'index'),
                 '/validar-nip' => fn () => self::load('UsuariosController', 'validarNIP'),
                 '/auditoria' => fn () => self::load('AuditoriaController', 'index'),
-                '/troca-senha' => fn () => self::load('LoginController', 'index')
+                '/troca-senha' => fn () => self::load('UsuariosController', 'trocaSenha')
             ],
             'POST' => [
                 '/login' => fn () => self::load('LoginController', 'login'),
@@ -106,7 +106,8 @@ class Router
                 '/atualizar-arquivo-assinado' => fn () => self::load('DocumentoController', 'base64ArquivoPDF'),
                 '/FinalizarArquivo' => fn () => self::load('DocumentoController', 'finalizarArquivo'),
                 '/ExcluiVinculoArmaTipoDoc' => fn () => self::load('ArmariosController', 'desvincularDocumentos'),
-                '/cadastrarOM' => fn () => self::load('OMController', 'cadastrar')
+                '/cadastrarOM' => fn () => self::load('OMController', 'cadastrar'),
+                '/alterarSenha' => fn () => self::load('UsuariosController', 'alterarSenha')
 
             ]
         ];

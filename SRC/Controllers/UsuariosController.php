@@ -7,6 +7,7 @@ use Exception;
 use Marinha\Mvc\Services\UsuarioServices;
 use Marinha\Mvc\Services\PerfilAcessoServices;
 use Marinha\Mvc\Services\OMServices;
+use Marinha\Mvc\Services\LoginServices;
 use Marinha\Mvc\Helpers;
 use Marinha\Mvc\Helpers\Helppers;
 
@@ -131,5 +132,73 @@ class UsuariosController  extends Controller
 
       $service->excluirUsuario(filter_input(INPUT_POST, 'id'));
       return true;
+   }
+
+   public function trocaSenha()
+   {
+      require __DIR__ . '../../Views/login/trocaSenha.php';
+   }
+
+   public function alterarSenha()
+   {
+      $funcoes = new Helppers();
+      $service = new UsuarioServices();
+
+      if (!$funcoes->validarSenha(filter_input(INPUT_POST, 'novaSenha'))) {
+         http_response_code(500);
+         echo "A nova senha digitada não segue os padrões solicitados.";
+         return false;
+      }
+
+      if (!$funcoes->validarSenha(filter_input(INPUT_POST, 'confNovaSenha'))) {
+         http_response_code(500);
+         echo "A confirmação da nova senha digitada não segue os padrões solicitados.";
+         return false;
+      }
+
+      if (filter_input(INPUT_POST, 'confNovaSenha') != filter_input(INPUT_POST, 'novaSenha')) {
+         http_response_code(500);
+         echo "A nova senha é diferente da confirmação de senha digitada.";
+         return false;
+      }
+
+      if ((filter_input(INPUT_POST, 'senhaAtual') == filter_input(INPUT_POST, 'novaSenha')) || (filter_input(INPUT_POST, 'senhaAtual') == filter_input(INPUT_POST, 'confNovaSenha'))) {
+         http_response_code(500);
+         echo "A nova senha não pode ser igual a senha atual.";
+         return false;
+      }
+
+      if (!$funcoes->validarNip($funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')))) {
+         http_response_code(500);
+         echo "Nip inválido. ";
+         return false;
+      }
+
+      if (!$funcoes->validarSenha(filter_input(INPUT_POST, 'senhaAtual'))) {
+         http_response_code(500);
+         echo "A Senha atual digitada é inválida.";
+         return false;
+      }
+
+
+      $dadosUsuarios = array();
+      array_push($dadosUsuarios, array(
+         'senha' => filter_input(INPUT_POST, 'senhaAtual'),
+         'novaSenha' => filter_input(INPUT_POST, 'novaSenha'),
+         'confNovaSenha' => filter_input(INPUT_POST, 'confNovaSenha'),
+         'nip' => filter_input(INPUT_POST, 'nip'),
+         'idUsuario' => 0
+      ));
+
+      $idUsuario =  $service->validarSenhaUsuario($dadosUsuarios);
+      if (($idUsuario == null) || ($idUsuario == 0)) {
+         http_response_code(500);
+         echo "Verifique a senha e o usuário atual";
+         return false;
+      }
+
+      $dadosUsuarios[0]["idUsuario"] = $idUsuario;
+
+      echo json_encode($service->AlterarSenhaUsuario($dadosUsuarios));
    }
 }
