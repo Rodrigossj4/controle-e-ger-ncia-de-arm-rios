@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group">
                     <label class="col-form-label" for="senhaAtual">Digite a senha Atual: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="senhaAtual" id="senhaAtual">
+                    <input class="form-control form-control-sm form-control-padronizado" type="password" name="senhaAtual" id="senhaAtual">
                 </div>
                 <div class="form-group">
                     <label class="col-form-label" for="novaSenha">Digite a nova senha: </label>
