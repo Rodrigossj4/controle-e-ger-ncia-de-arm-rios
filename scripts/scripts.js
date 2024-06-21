@@ -813,7 +813,7 @@ $('#formLogin #btnLogin').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             //console.log(JSON.parse(data));
             //JSON.parse(data)[0]['idperfil']
             if (data != "null") {
