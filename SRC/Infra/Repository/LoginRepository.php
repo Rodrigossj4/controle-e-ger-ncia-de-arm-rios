@@ -38,7 +38,7 @@ class LoginRepository extends LogRepository
                     'omusuario' => $usuarioData['OMUsuario'],
                     'setorusuario' => $usuarioData['SetorUsuario'],
                     'dataLogin' => Date("d/m/Y h:i:s"),
-                    'dataultimologin' => $usuarioData['DataUltimoLogin']
+                    'dataultimologin' => $usuarioData['DataUltimoLogin'] == null ? "" : $usuarioData['DataUltimoLogin']
                 ));
             };
 
