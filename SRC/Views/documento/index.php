@@ -204,7 +204,7 @@ $contador = 0;
         </div>
     </div>
     <div class="row col-6">
-        <div class="panel panel-default" style="display: none;">
+        <div class="panel panel-default" style="display: block;">
             <div class="panel-heading">
                 <h3 class="panel-title">Assinar PDF</h3>
             </div>
@@ -233,7 +233,7 @@ $contador = 0;
         </div>
     </div>
 
-    <div class="row col-6" style="display: none;">
+    <div class="row col-6" style="display: block;">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">PDF Assinado</h3>
