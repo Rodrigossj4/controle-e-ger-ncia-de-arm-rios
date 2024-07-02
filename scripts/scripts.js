@@ -1772,7 +1772,7 @@ function processarListaDeItens(lista) {
 
             return processarItemComResposta(item).then(function (resposta) {
                 // Trata a resposta do item
-                // console.log('Resposta para o item', item, ':', resposta);
+                console.log('Resposta para o item', item, ':', resposta);
 
                 docBase64Atual = resposta;
 
