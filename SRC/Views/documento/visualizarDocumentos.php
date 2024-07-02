@@ -134,6 +134,7 @@ $contador = 0;
 
             <div class="container">
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary">incluir</button>
+                <button name="excluirDocumento" id="excluirDocumento" class="btn btn-primary">excluir</button>
             </div>
         </div>
 

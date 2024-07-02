@@ -901,6 +901,7 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
 
         //console.log($('#formCadDocumento #Nip').val());
         var formdata = new FormData($("form[id='formCadDocumento']")[0]);
+
         $.ajax({
             type: 'POST',
             url: "/BuscarDocumentos",
@@ -909,7 +910,8 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
             contentType: false,
             success: function (data) {
                 const arrayData = JSON.parse(data);
-                //console.log(data);
+
+                exibeLinhasRegistros(arrayData.length)
                 var sel = $("#documentosLista");
                 sel.empty();
                 arrayData.forEach(e => {
@@ -924,18 +926,13 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
         });
     }
 
-    if ($("#listPaginas tr").length > 1) {
-        $('.btnIndexar').css("display", "none");
-        $('.btnAnexar').css("display", "block");
-    } else {
-        $('.btnIndexar').css("display", "block");
-        $('.btnAnexar').css("display", "none");
-    }
+
 
 });
 
-function exibeLinhasRegistros() {
-    if ($("#listPaginas tr").length > 1) {
+function exibeLinhasRegistros(quantidade) {
+    console.log("retorno: " + quantidade);
+    if (quantidade >= 1) {
         $('.btnIndexar').css("display", "none");
         $('.btnAnexar').css("display", "block");
     } else {
@@ -985,9 +982,10 @@ $(document).on('click', '.clickDocumento', function (e) {
             $("#carouselExampleControls").css('display', 'block');
 
             let path = window.location.pathname;
-            if (!path.includes('/visualizar-documentos'))
-                $("#incluirDocumento").css('display', 'block');
-
+            if (!path.includes('/visualizar-documentos')) {
+                $("#incluirDocumento").css('display', 'inline-block');
+                $("#excluirDocumentoMalIndexado").css('display', 'inline-block');
+            }
         },
         error: function (d) {
             console.log('ei erro ' + d);
@@ -1068,7 +1066,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         return false;
     }
 
-    console.log("reindexar:" + $('#formCadDocumento #Nip').val().replace(/\./g, ''));
+    //console.log("reindexar:" + $('#formCadDocumento #Nip').val().replace(/\./g, ''));
     if (($('#formCadDocumento #Nip').val() != "")) {
 
         var nip = $('#formCadDocumento #Nip').val().replace(/\./g, '');
@@ -1137,7 +1135,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             $('#semestre').trigger('change');
             $('#formCadDocumento #Nip').mask('00.0000.00');
             alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
@@ -1158,6 +1156,38 @@ $(document).on('click', '#btnNaoConfirmaReIndexarDocumento', function (e) {
     FecharModal('#ModReIndexarDocumento');
 });
 
+
+$(document).on('click', '#btnConfirmaExcluirPagina', function () {
+    dados = JSON.stringify({
+        idPagina: $("#listarDocumentos").attr("data-docid"),
+        arquivo: $("#listarDocumentos iframe").attr("src").replace(/\.\.\//g, "")
+    }, null, 2);
+
+    $.ajax({
+        type: 'POST',
+        url: "/excluirDocumentoPagina",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);           
+            alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
+            $('.clickDocumento').click();
+            /*setTimeout(function () {
+                location.reload();
+            }, 3000);*/
+        },
+        error: function (d) {
+            //console.log(d);
+            alertas(d.responseText, '#ModExcluirPagina', 'alert_danger', 'true');
+            //console.log('erro ao excluir a página ' + d);
+        }
+    });
+});
+
+$(document).on('click', '#btnNaoConfirmaExcluirPagina', function (e) {
+    FecharModal('#ModExcluirPagina');
+});
 
 function carregarLotes() {
     $.ajax({
@@ -1377,7 +1407,8 @@ function ListarArquivos() {
                     });
                 }
                 $("#carouselExampleControls").css('display', 'block');
-                $("#incluirDocumento").css('display', 'block');
+                $("#incluirDocumento").css('display', 'inline-block');
+                $("#excluirDocumentoMalIndexado").css('display', 'inline-block');
                 $("#carouselExampleControls").html();
             } else {
                 $("#carouselExampleControls").css('display', 'none');
@@ -1520,7 +1551,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         assunto: $('#formCadDocumento #Assunto').val(),
         autor: $('#formCadDocumento #codOM').val(),
         titulo: $('#formCadDocumento #Titulo').val(),
-        identificador: $('#formCadDocumento #Identificador').val(),
+        identificador: $('#formCadDocumento #Nip').val() + Math.floor(Math.random() * 1000) + formatarDataHora(),
         classe: $('#formCadDocumento #Classe').val(),
         observacao: $('#formCadDocumento #Observacao').val(),
         dataProdDoc: $('#formCadDocumento #DataProdDoc').val(),
@@ -1564,6 +1595,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                     processoAssinaturaData(data);
                 },
                 error: function (d) {
+                    console.log("caso apresente erro de assinatura: " + d);
                     alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#IndexarDocumento', 'alert_danger');
                 }
             });
@@ -1573,6 +1605,20 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         }
     });
 });
+
+function formatarDataHora() {
+    let data = new Date();
+
+    let dia = String(data.getDate()).padStart(2, '0');
+    let mes = String(data.getMonth() + 1).padStart(2, '0');
+    let ano = data.getFullYear();
+
+    let horas = String(data.getHours()).padStart(2, '0');
+    let minutos = String(data.getMinutes()).padStart(2, '0');
+    let segundos = String(data.getSeconds()).padStart(2, '0');
+
+    return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+}
 
 function processoAssinaturaData(data) {
     var ArrayDocumentos = JSON.parse(data);
@@ -1669,7 +1715,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         assunto: $('#formCadDocumento #Assunto').val(),
         autor: $('#formCadDocumento #codOM').val(),
         titulo: $('#formCadDocumento #Titulo').val(),
-        identificador: $('#formCadDocumento #Identificador').val(),
+        identificador: $('#formCadDocumento #Nip').val() + Math.floor(Math.random() * 1000) + formatarDataHora(),
         classe: $('#formCadDocumento #Classe').val(),
         observacao: $('#formCadDocumento #Observacao').val(),
         dataProdDoc: $('#formCadDocumento #DataProdDoc').val(),

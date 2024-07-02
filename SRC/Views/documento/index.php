@@ -81,10 +81,10 @@ $contador = 0;
                         <label class="col-form-label" for="Titulo">Informe o Titulo</label>
                         <input type="text" id="Titulo" name="Titulo" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="col-form-label" for="Identificador">Identificador do documento digital</label>
                         <input id="Identificador" name="Identificador" class="form-control" />
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <label class="col-form-label" for="Classe">Classe</label>
                         <input id="Classe" name="Classe" class="form-control" />
@@ -187,17 +187,18 @@ $contador = 0;
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" data-indice="0">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
+
                     </a>
                     <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" data-indice="0">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Próximo</span>
+
                     </a>
                 </div>
             </div>
 
             <div class="container mt-8">
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary mt-2">incluir</button>
+                <button name="excluirDocumentoMalIndexado" id="excluirDocumentoMalIndexado" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#ModExcluirPagina">excluir</button>
                 <button name="verificarDocumentos" id="verificarDocumentos" class="btn btn-primary mt-2" data-toggle="modal" data-target=".bd-example-modal-lg">Verificar documentos inseridos</button>
             </div>
         </div>
@@ -323,6 +324,28 @@ $contador = 0;
                     </div>
                     <div class="col-sm-3">
                         <input type="button" id="btnNaoConfirmaReIndexarDocumento" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaReIndexarDocumento">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModExcluirPagina" tabindex="-1" aria-labelledby="ModExcluirPagina" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja realmente excluir esse página?</span>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnConfirmaExcluirPagina" data-id="" value="Sim" class="btn btn-success btnConfirmaExcluirPagina">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaExcluirPagina" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaExcluirPagina">
                     </div>
                 </div>
                 <span class="alerta"></span>

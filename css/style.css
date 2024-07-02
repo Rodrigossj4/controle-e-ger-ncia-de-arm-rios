@@ -126,11 +126,17 @@ main {
 }
 
 span.carousel-control-prev-icon {
-    background-image: url("../imagensSistema/arrow_back_ios_black_24dp.svg")
+    background-image: url("../imagensSistema/arrow_back_ios_black_24dp.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 span.carousel-control-next-icon {
-    background-image: url("../imagensSistema/arrow_forward_ios_black_24dp.svg")
+    background-image: url("../imagensSistema/arrow_forward_ios_black_24dp.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .clickDocumento {
@@ -160,6 +166,7 @@ span.carousel-control-next-icon {
 }
 
 #incluirDocumento,
+#excluirDocumentoMalIndexado,
 #verificarDocumentos {
     display: none;
 }

@@ -514,7 +514,25 @@ class DocumentoRepository extends LogRepository
         try {
             //var_dump($this->retornarCaminhoDocumento("", $id));
             unlink($this->retornarCaminhoDocumento("", $id));
+            $this->excluirMetadados($id);
             $sqlQuery = "delete FROM {$this->schema}\"DocumentoPagina\" where \"IdDocPag\"  = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+    public function excluirMetadados(int $id): bool
+    {
+        try {
+            //var_dump($this->retornarCaminhoDocumento("", $id));
+            unlink($this->retornarCaminhoDocumento("", $id));
+            $sqlQuery = "delete FROM {$this->schema}\"Metadados\" where \"IdPagina\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);
             $stmt->execute();

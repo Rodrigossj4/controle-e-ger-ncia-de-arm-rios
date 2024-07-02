@@ -163,6 +163,13 @@ class DocumentoController extends Controller
         return true;
     }
 
+    public function excluirPagina(): bool
+    {
+        $Arquivos = json_decode(file_get_contents('php://input'));
+        $service = new DocumentoServices();
+        return $service->excluirPagina($Arquivos->idPagina);
+    }
+
     public function retornarCaminhoDocumento(int $docid, int $pagina): string
     {
         $service = new DocumentoServices();
@@ -217,7 +224,6 @@ class DocumentoController extends Controller
     public function retornaCaminhoTratado()
     {
         $caminho = filter_input(INPUT_GET, 'caminho');
-
         echo $caminho;
     }
 
@@ -287,6 +293,7 @@ class DocumentoController extends Controller
         $arquivo  = $service->abrirArquivo($caminho, $cifrado);
         require __DIR__ . '../../Views/documento/visualizar.php';
     }
+
     public function visualizarDocumentoLote()
     {
         $caminho = filter_input(INPUT_GET, 'docid');
