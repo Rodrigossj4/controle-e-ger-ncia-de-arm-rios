@@ -468,8 +468,8 @@ class DocumentoServices extends SistemaServices
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "magick  $input_tiff $output_jpeg";
-        $command2 = "magick -units PixelsPerInch $output_jpeg -density 300 $output_jpeg";
+        $command = "convert  $input_tiff $output_jpeg";
+        $command2 = "convert -units PixelsPerInch $output_jpeg -density 300 $output_jpeg";
 
         shell_exec($command);
         shell_exec($command2);
@@ -479,7 +479,7 @@ class DocumentoServices extends SistemaServices
 
     private function FormatarIMG(string $diretorioentrada): string
     {
-        $command1 = "magick -units PixelsPerInch $diretorioentrada -density 300 -resize 1876x2685 $diretorioentrada";
+        $command1 = "convert -units PixelsPerInch $diretorioentrada -density 300 -resize 1876x2685 $diretorioentrada";
         shell_exec($command1);
 
         //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
