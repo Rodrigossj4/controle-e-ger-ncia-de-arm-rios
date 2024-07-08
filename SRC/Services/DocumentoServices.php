@@ -479,7 +479,7 @@ class DocumentoServices extends SistemaServices
 
     private function FormatarIMG(string $diretorioentrada): string
     {
-        $command1 = "convert -units PixelsPerInch $diretorioentrada -density 300 -resize 1876x2685 $diretorioentrada";
+        $command1 = "convert -units PixelsPerInch $diretorioentrada -density 300  $diretorioentrada";
         shell_exec($command1);
 
         //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
