@@ -444,7 +444,7 @@ class DocumentoServices extends SistemaServices
             if ((strtolower($arquivoExtensao) == "tif") || (strtolower($arquivoExtensao) == "tiff")) {
                 $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".png";
                 $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
-                array_map('unlink', glob("$caminhoArqImgServ"));
+                //array_map('unlink', glob("$caminhoArqImgServ"));
                 //rmdir("{$caminhoArqImgServ}");
             }
         }
@@ -455,8 +455,6 @@ class DocumentoServices extends SistemaServices
         $total = count($_FILES['documentoPDF']['name']);
         //var_dump("total: " . $total);
         for ($i = 0; $i < $total; $i++) {
-
-
             $caminhoArqImgServ = $diretorio . "/" . $_FILES['documentoPDF']['name'][$i];
             $this->uploadPDFPasta($caminhoArqImgServ, $i);
         }
@@ -469,17 +467,17 @@ class DocumentoServices extends SistemaServices
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
         $command = "convert  $input_tiff $output_jpeg";
-        //$command2 = "convert -units PixelsPerInch $output_jpeg -density 300 $output_jpeg";
+        $command2 = "convert -units PixelsPerInch $output_jpeg -density 300 -resize 1639x2285 $output_jpeg";
 
         shell_exec($command);
-        //shell_exec($command2);
+        shell_exec($command2);
         //var_dump($command2);
         return  $output_jpeg;
     }
 
     private function FormatarIMG(string $diretorioentrada): string
     {
-        $command1 = "convert -units PixelsPerInch $diretorioentrada -density 300  $diretorioentrada";
+        $command1 = "convert -units PixelsPerInch $diretorioentrada -density 300 -resize 1639x2285 $diretorioentrada";
         shell_exec($command1);
 
         //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
