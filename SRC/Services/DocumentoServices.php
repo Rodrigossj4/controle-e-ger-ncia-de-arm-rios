@@ -162,6 +162,13 @@ class DocumentoServices extends SistemaServices
             foreach ($listaArquivos as &$arquivo) {
                 copy($diretorioOriginal . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME), $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME));
                 $arquivo["arquivo"] = $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME);
+
+
+                $encrypted_code = file_get_contents($arquivo["arquivo"]);
+
+                $decrypted_code =  $this->my_decrypt($encrypted_code, $this->key);
+
+                file_put_contents($arquivo["arquivo"], $decrypted_code);
             }
 
             return $listaArquivos;
@@ -295,10 +302,12 @@ class DocumentoServices extends SistemaServices
             $ext = pathinfo($dadosDocumento->imagens[$i], PATHINFO_EXTENSION);
             $caminhoArqImgServ = "";
             if (strtolower($ext) != "pdf") {
-                $this->FormatarIMG($dadosDocumento->imagens[$i]);
 
-                $caminhoArqImgServ = $this->gerarOcrs($dadosDocumento->imagens[$i]);
+                $caminho = $this->FormatarIMG($dadosDocumento->imagens[$i]);
+
+                $caminhoArqImgServ = $this->gerarOcrs($caminho);
                 $this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
+                //var_dump($caminho);
             } else {
                 $funcoes = new Helppers();
                 $caminhoArquivoOriginal =  $dadosDocumento->imagens[$i];
@@ -382,14 +391,16 @@ class DocumentoServices extends SistemaServices
 
         return $funcoes->tratarStringUTF8("Identificador: " . $tags->identificador . "; Classe: " . $tags->classe . "; Data de Produção: " . $tags->dataProdDoc . "; Destinação: " . $tags->destinacaoDoc . "; Genero: " . $tags->genero . "; PrazoGuarda: " . $tags->prazoGuarda . ";Tipo Documental: " . $descTipoDocumento . "; Responsavel Digitalização: " . $tags->respDigitalizacao . "; Observação: " . $tags->observacao);
     }
+
     public function abrirArquivo(string $caminhoarquivo, string $cifrado): string
     {
+        //var_dump("abrir");
         if ($cifrado == "true") {
 
             $encrypted_code = file_get_contents($caminhoarquivo);
-            //$decrypted_code = $this->my_decrypt($encrypted_code, $this->key);
+            $decrypted_code = $this->my_decrypt($encrypted_code, $this->key);
 
-            file_put_contents('documentos/ttt.pdf', $encrypted_code);
+            file_put_contents('documentos/ttt.pdf', $decrypted_code);
             return "documentos/ttt.pdf";
         } else {
             file_put_contents('documentos/ttt.pdf', file_get_contents($caminhoarquivo));
@@ -457,8 +468,8 @@ class DocumentoServices extends SistemaServices
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "convert  $input_tiff $output_jpeg";
-        $command2 = "convert -units PixelsPerInch $output_jpeg -resample 300 $output_jpeg";
+        $command = "magick  $input_tiff $output_jpeg";
+        $command2 = "magick -units PixelsPerInch $output_jpeg -density 300 $output_jpeg";
 
         shell_exec($command);
         shell_exec($command2);
@@ -466,14 +477,14 @@ class DocumentoServices extends SistemaServices
         return  $output_jpeg;
     }
 
-    private function FormatarIMG(string $diretorioentrada)
+    private function FormatarIMG(string $diretorioentrada): string
     {
-        $command1 = "convert -units PixelsPerInch \"$diretorioentrada\" -resample 300 \"$diretorioentrada\"";
+        $command1 = "magick -units PixelsPerInch $diretorioentrada -density 300 -resize 1876x2685 $diretorioentrada";
         shell_exec($command1);
 
         //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
-
-        //var_dump($diretorioentrada . " --- " . $diretoriosaidapng);
+        return $diretorioentrada;
+        // var_dump($diretorioentrada . " --- ");
         //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resample 300 \"$diretoriosaida\"";
         //$command = "magick -units PixelsPerInch \"$diretoriosaida\" -resize 1876x2685 -resample 300 \"$diretoriosaida\"";
         //shell_exec($command);
@@ -511,6 +522,7 @@ class DocumentoServices extends SistemaServices
             $tag = json_decode($documentos['tags'], true);
 
             $origem = $documentos['arquivo'];
+            $this->criptografarArquivo($origem);
             $caminho = $this->subirArquivoss($pasta, $origem);
 
             $paginasList = [];
@@ -568,7 +580,7 @@ class DocumentoServices extends SistemaServices
         /*var_dump($caminhoArq);*/
         (new TesseractOCR($caminhoArq))
             //->userWords("{$this->diretorioLote}user-words.odt")
-            ->dpi(300)
+            //->dpi(300)
             ->configFile('pdf')
             ->setOutputFile($nomeArquivoOcr)
             ->run();
@@ -612,5 +624,27 @@ class DocumentoServices extends SistemaServices
     {
         $repository = new DocumentoRepository($this->Conexao());
         return  $repository->retornaCaminhoDocumentoServ($iddoc);
+    }
+
+    public function criptografarArquivo(string $retorno)
+    {
+        $code = file_get_contents($retorno);
+        $encrypted_code = $this->my_encrypt($code, $this->key);
+        file_put_contents("{$retorno}", $encrypted_code);
+    }
+
+    function my_encrypt($data, $key)
+    {
+        $encryption_key = base64_decode($key);
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
+        return base64_encode($encrypted . '::' . $iv);
+    }
+
+    function my_decrypt($data, $key)
+    {
+        $encryption_key = base64_decode($key);
+        list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
+        return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
     }
 }

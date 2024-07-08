@@ -298,7 +298,7 @@ class DocumentoController extends Controller
     {
         $caminho = filter_input(INPUT_GET, 'docid');
         $service = new DocumentoServices();
-        $arquivo  = $service->abrirArquivo($caminho, "false");
+        $arquivo  = $service->abrirArquivo($caminho, "true");
         require __DIR__ . '../../Views/documento/visualizar.php';
     }
 
