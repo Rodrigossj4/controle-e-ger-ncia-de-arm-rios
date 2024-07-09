@@ -467,10 +467,10 @@ class DocumentoServices extends SistemaServices
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
         $command = "convert  $input_tiff $output_jpeg";
-        $command2 = "convert -units PixelsPerInch $output_jpeg -density 300 -resize 1639x2285 $output_jpeg";
+        //$command2 = "convert -units PixelsPerInch $output_jpeg -density 300 -resize 1639x2285 $output_jpeg";
 
         shell_exec($command);
-        shell_exec($command2);
+        //shell_exec($command2);
         //var_dump($command2);
         return  $output_jpeg;
     }
@@ -578,7 +578,7 @@ class DocumentoServices extends SistemaServices
         /*var_dump($caminhoArq);*/
         (new TesseractOCR($caminhoArq))
             //->userWords("{$this->diretorioLote}user-words.odt")
-            //->dpi(300)
+            ->dpi(300)
             ->configFile('pdf')
             ->setOutputFile($nomeArquivoOcr)
             ->run();
