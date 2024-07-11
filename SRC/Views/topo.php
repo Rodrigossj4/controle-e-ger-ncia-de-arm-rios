@@ -3,7 +3,7 @@ if (!isset($_SESSION))
     session_start();
 
 //var_dump($_SESSION['usuario'][0]["idacesso"])
-$liberaAcesso = 3;
+$liberaAcesso = 4;
 $nomeUsuario = "";
 $nipUsuario = "";
 if ((isset($_SESSION['usuario'])))
