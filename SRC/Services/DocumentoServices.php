@@ -486,7 +486,7 @@ class DocumentoServices extends SistemaServices
         //$command = "magick $input_tiff $output_jpeg";
         $command = "convert -units PixelsPerInch $input_tiff -resample 300  $output_jpeg";
         //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
-
+//tes
         shell_exec($command);
         //shell_exec($command2);
         //var_dump($command2);
