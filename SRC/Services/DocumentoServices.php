@@ -314,6 +314,9 @@ class DocumentoServices extends SistemaServices
                 //var_dump($caminhoArquivoOriginal);
                 $caminhoArquivoOriginal = preg_replace('/^\//', '', $dadosDocumento->imagens[$i]);
 
+                //transforma ocr
+                $caminhoArquivoOriginal = $this->TransformaPDFOCR($caminhoArquivoOriginal);
+
                 if ($dadosDocumento->assina)
                     $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
 
@@ -354,6 +357,21 @@ class DocumentoServices extends SistemaServices
 
         //var_dump($paginasList);
         return $paginasList;
+    }
+
+    private function  TransformaPDFOCR(string $arquivo): string
+    {
+
+        //transformar o pdf em imagem com imagick já em 300dpi
+        $novoNome = pathinfo($arquivo, PATHINFO_DIRNAME) . "/" . pathinfo($arquivo, PATHINFO_FILENAME) . ".png";
+        $this->TratarTifParaJpeg($arquivo, $novoNome);
+
+
+        //passar as imagens no ocr
+
+        return $this->gerarOcrs($novoNome);
+        // var_dump("bomwa: " . $novoNome . "/  " . $arquivo);
+        //return "";
     }
 
     private function IncluirTags(string $arquivos, string $dadosTags)
@@ -466,8 +484,8 @@ class DocumentoServices extends SistemaServices
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "convert  $input_tiff $output_jpeg";
-        //$command2 = "convert -units PixelsPerInch $output_jpeg -density 300 -resize 1639x2285 $output_jpeg";
+        $command = "magick -units PixelsPerInch $input_tiff -resample 300  $output_jpeg";
+        //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
 
         shell_exec($command);
         //shell_exec($command2);
@@ -477,7 +495,7 @@ class DocumentoServices extends SistemaServices
 
     private function FormatarIMG(string $diretorioentrada): string
     {
-        $command1 = "convert -units PixelsPerInch $diretorioentrada -density 300 -resize 1639x2285 $diretorioentrada";
+        $command1 = "convert -units PixelsPerInch $diretorioentrada -resample 300  $diretorioentrada";
         //shell_exec($command1);
 
         //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
