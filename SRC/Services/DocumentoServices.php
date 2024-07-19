@@ -484,7 +484,7 @@ class DocumentoServices extends SistemaServices
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "magick -units PixelsPerInch $input_tiff -resample 300  $output_jpeg";
+        $command = "convert -units PixelsPerInch $input_tiff -resample 300  $output_jpeg";
         //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
 
         shell_exec($command);
