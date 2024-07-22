@@ -202,7 +202,16 @@ class DocumentoController extends Controller
     {
         //var_dump("oi " . file_get_contents('php://input'));
         $service = new DocumentoServices();
-        $caminho = $service->carregarArquivoservidor(file_get_contents('php://input'));
+        $Arquivos = json_decode(file_get_contents('php://input'));
+        $Arquivos->ip = $this->retornaIP();
+        if (!isset($_SESSION))
+            session_start();
+
+        $Arquivos->codusuario = $_SESSION['usuario'][0]["codusuario"];
+        $Arquivos->omUsuario = $_SESSION['usuario'][0]["omusuario"];
+        $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
+
+        $caminho = $service->carregarArquivoservidor($Arquivos);
         echo $caminho;
     }
     public function ExibirDireorio()
@@ -256,6 +265,13 @@ class DocumentoController extends Controller
             }
 
             $service = new DocumentoServices();
+            $Arquivos->ip = $this->retornaIP();
+            if (!isset($_SESSION))
+                session_start();
+
+            $Arquivos->codusuario = $_SESSION['usuario'][0]["codusuario"];
+            $Arquivos->omUsuario = $_SESSION['usuario'][0]["omusuario"];
+            $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
 
             if ($service->reindexarPagina($Arquivos)) {
                 http_response_code(200);

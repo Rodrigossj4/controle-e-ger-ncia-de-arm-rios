@@ -1124,7 +1124,11 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
         caminho: $('#formCadDocumento #Caminho').val(),
         idPagina: $("#listarDocumentos").attr("data-docid"),
-        arquivo: $("#listarDocumentos iframe").attr("src").replace(/\.\.\//g, "")
+        arquivo: $("#listarDocumentos iframe").attr("src").replace(/\.\.\//g, ""),
+        ip: 0,
+        codusuario: 0,
+        omUsuario: "",
+        idacesso: 0
     }, null, 2);
 
 
@@ -1916,7 +1920,7 @@ function armazenaDocumentos(documentos) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log("arm: " + data);
+            console.log("arm: " + data);
         },
         error: function (d) {
             console.log('erro ao armazena Documentos ' + d);

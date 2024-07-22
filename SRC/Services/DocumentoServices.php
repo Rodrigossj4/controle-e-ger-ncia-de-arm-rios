@@ -261,6 +261,21 @@ class DocumentoServices extends SistemaServices
 
                 if (count($listaArquivos) == 0)
                     $this->excluirDocumentoPastaDiretorio($listaArquivosOrigem[0]["DocId"], pathinfo($listaArquivosOrigem[0]["Arquivo"], PATHINFO_DIRNAME));
+
+                $dadosList = array();
+
+                array_push($dadosList, array(
+                    'codoperacao' => "OP4",
+                    'codusuario' => $arquivo->codusuario,
+                    'iddocumento' => $id,
+                    'ipacesso' => $arquivo->ip,
+                    'omusuario' => $arquivo->omusuario,
+                    'idperfil' => $arquivo->idacesso,
+                    'dataultimologin' => ""
+                ));
+
+                //var_dump($dadosList);
+                $this->gravarLogOperacoes($dadosList);
             }
 
             return true;
@@ -351,7 +366,11 @@ class DocumentoServices extends SistemaServices
                 'imgencontrada' => "0",
                 'b64' => "",
                 'assina' => $dadosDocumento->assina,
-                'tags' => $dadosDocumento->tags
+                'tags' => $dadosDocumento->tags,
+                'ip' => 0,
+                'codusuario' => 0,
+                'omUsuario' => "",
+                'idacesso' => 0
             ));
         }
 
@@ -486,7 +505,7 @@ class DocumentoServices extends SistemaServices
         //$command = "magick $input_tiff $output_jpeg";
         $command = "convert -units PixelsPerInch $input_tiff -resample 300  $output_jpeg";
         //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
-//tes
+        //tes
         shell_exec($command);
         //shell_exec($command2);
         //var_dump($command2);
@@ -519,7 +538,7 @@ class DocumentoServices extends SistemaServices
 
     public function carregarArquivoservidor($arquivos): string
     {
-        $arquivos = json_decode($arquivos);
+        //$arquivos = json_decode($arquivos);
 
         //var_dump($arquivos);
         $nomeArmario = json_decode($arquivos->listDocumentosServidor[0], true);
@@ -579,6 +598,21 @@ class DocumentoServices extends SistemaServices
 
             $repository->cadastrarMetaTags($tagList, $documentos['documentoid'], $idPagina);
             $caminhoRaiz = pathinfo($documentos['arquivo'])['dirname'];
+
+            $dadosList = array();
+
+            array_push($dadosList, array(
+                'codoperacao' => (json_decode($arquivos->listDocumentosServidor[0], true)['imgencontrada'] == "0") ? "OP1" : "OP2",
+                'codusuario' => $arquivos->codusuario,
+                'iddocumento' => $documentos['documentoid'],
+                'ipacesso' => $arquivos->ip,
+                'omusuario' => $arquivos->omusuario,
+                'idperfil' => $arquivos->idacesso,
+                'dataultimologin' => ""
+            ));
+
+            //var_dump($dadosList);
+            $this->gravarLogOperacoes($dadosList);
         }
 
         array_map('unlink', glob("$caminhoRaiz/*.*"));
