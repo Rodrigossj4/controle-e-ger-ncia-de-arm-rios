@@ -426,7 +426,7 @@ class DocumentoServices extends SistemaServices
 
         $descTipoDocumento = $TipoDocumentoRepository->BuscarTipoDocumentoID($tags->tipoDoc);
 
-        return $funcoes->tratarStringUTF8("Identificador: " . $tags->identificador . "; Classe: " . $tags->classe . "; Data de Produção: " . $tags->dataProdDoc . "; Destinação: " . $tags->destinacaoDoc . "; Genero: " . $tags->genero . "; PrazoGuarda: " . $tags->prazoGuarda . ";Tipo Documental: " . $descTipoDocumento . "; Responsavel Digitalização: " . $tags->respDigitalizacao . "; Observação: " . $tags->observacao);
+        return $funcoes->tratarStringUTF8("Identificador: " . $funcoes->limparString($tags->identificador) . "; Classe: " . $tags->classe . "; Data de Produção: " . $tags->dataProdDoc . "; Destinação: " . $tags->destinacaoDoc . "; Genero: " . $tags->genero . "; PrazoGuarda: " . $tags->prazoGuarda . ";Tipo Documental: " . $descTipoDocumento . "; Responsavel Digitalização: " . $tags->respDigitalizacao . "; Observação: " . $tags->observacao);
     }
 
     public function abrirArquivo(string $caminhoarquivo, string $cifrado): string

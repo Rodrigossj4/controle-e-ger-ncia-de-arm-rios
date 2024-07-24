@@ -1131,7 +1131,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         idacesso: 0
     }, null, 2);
 
-
+    $(this).attr('disabled', 'disabled');
     $.ajax({
         type: 'POST',
         url: "/ReIndexarPagina",
@@ -1489,6 +1489,7 @@ $(document).on('click', '#btnNaoConfirmaIndexarDocumento', function (e) {
     FecharModal('#ModIndexarDocumento');
 });
 
+
 var dadosDocumento = "";
 var docBase64 = "";
 var docAtual = ""
@@ -1578,7 +1579,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         tags: tags,
         imagens: listDocumentos,
     }, null, 2);
-
+    $(this).attr('disabled', 'disabled');
     $.ajax({
         type: 'POST',
         url: "/cadastrarDocumento",
@@ -1745,6 +1746,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
 
     docid = $('#listPaginas #documentosLista .clickDocumento').attr("id");
+    $(this).attr('disabled', 'disabled');
     $.ajax({
         type: 'POST',
         url: "/retorna-pdfs",
@@ -2004,6 +2006,18 @@ $(document).ready(function () {
                 $('#gerenImagem').css("display", "none");
             }
         }
+    });
+
+    $('#formCadDocumento #ConfAssinatura').on('click', function (e) {
+        if ($('#formCadDocumento #ConfAssinatura').is(':checked') == true) {
+            $('#blocoHash').css('display', 'none');
+        } else {
+            $('#blocoHash').css('display', 'block');
+        }
+    });
+
+    $('#formCadDocumento #ConfAssinatura').each(function (e) {
+        $('#blocoHash').css('display', 'none');
     });
 
 });

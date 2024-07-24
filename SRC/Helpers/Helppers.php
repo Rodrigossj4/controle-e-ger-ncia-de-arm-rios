@@ -59,6 +59,10 @@ class Helppers
         return true;
     }
 
+    public function limparString($valor): string
+    {
+        return preg_replace('/\D/', '', $valor);
+    }
     function NIPValido($value)
     {
         if (is_object($value)) {

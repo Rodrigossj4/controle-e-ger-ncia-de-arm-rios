@@ -135,6 +135,10 @@ $contador = 0;
                         <input type="checkbox" id="ConfAssinatura" value="1" checked> Assinar documento
                     </div>
                 </div>
+                <div class="form-group" id="blocoHash">
+                    <label class="col-form-label" for="Hash">Insira o Hash</label>
+                    <input id="Hash" name="Hash" class="form-control" value="" />
+                </div>
                 <br>
                 <div class="form-group row">
 
