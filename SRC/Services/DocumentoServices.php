@@ -380,12 +380,11 @@ class DocumentoServices extends SistemaServices
 
     private function  TransformaPDFOCR(string $arquivo): string
     {
-
         //transformar o pdf em imagem com imagick já em 300dpi
         $novoNome = pathinfo($arquivo, PATHINFO_DIRNAME) . "/" . pathinfo($arquivo, PATHINFO_FILENAME) . ".png";
         $this->TratarTifParaJpeg($arquivo, $novoNome);
 
-
+        //var_dump("bomwa: " . $novoNome . "/  " . $arquivo);
         //passar as imagens no ocr
 
         return $this->gerarOcrs($novoNome);
@@ -503,7 +502,7 @@ class DocumentoServices extends SistemaServices
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "convert -units PixelsPerInch $input_tiff -resample 300  $output_jpeg";
+        $command = "magick -density 300 -monochrome $input_tiff  $output_jpeg";
         //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
         //tes
         shell_exec($command);

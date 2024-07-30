@@ -12,7 +12,7 @@ class Usuarios
     private int $om;
     private string $setor;
 
-    public function __construct(?int $codUsuario, string $NomeUsuario, string $Nip, string $SenhaUsuario, int $idAcesso, int $om, $setor)
+    public function __construct(?int $codUsuario, string $NomeUsuario, string $Nip, string $SenhaUsuario, int $idAcesso, int $om, string $setor)
     {
         $this->codUsuario = $codUsuario;
         $this->NomeUsuario = $NomeUsuario;

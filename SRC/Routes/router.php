@@ -108,7 +108,8 @@ class Router
                 '/FinalizarArquivo' => fn () => self::load('DocumentoController', 'finalizarArquivo'),
                 '/ExcluiVinculoArmaTipoDoc' => fn () => self::load('ArmariosController', 'desvincularDocumentos'),
                 '/cadastrarOM' => fn () => self::load('OMController', 'cadastrar'),
-                '/alterarSenha' => fn () => self::load('UsuariosController', 'alterarSenha')
+                '/alterarSenha' => fn () => self::load('UsuariosController', 'alterarSenha'),
+                '/buscar-usuario-id' => fn () => self::load('UsuariosController', 'buscarUsuarioPorID')
 
             ]
         ];

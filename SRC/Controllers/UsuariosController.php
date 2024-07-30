@@ -101,23 +101,48 @@ class UsuariosController  extends Controller
       return $service->validarNIP($nip);
    }
 
-   public function alterar(): bool
+   public function alterar()
    {
       $arquivo = json_decode(file_get_contents('php://input'));
-      //unlink($b64->arquivoOriginal);
-
-      $usuariosList = array();
-      array_push($usuariosList, array(
-         'codusuario' => $arquivo->codusuario,
-         'nomeusuario' => $arquivo->nomeusuario
-         /*'nip' => filter_input(INPUT_POST, 'nip'),
-            'senhausuario' => filter_input(INPUT_POST, 'senhausuario'),
-            'idacesso' => filter_input(INPUT_POST, 'idacesso')*/
-      ));
-
+      $funcoes = new Helppers();
       $service = new UsuarioServices();
-      $service->alterarUsuario($usuariosList);
-      return true;
+
+      if (strlen($arquivo->nomeusuario) < 1 || strlen($arquivo->nipusuario) < 1 || strlen($arquivo->setorusuario) < 1 || $arquivo->acessousuario == 0) {
+         http_response_code(500);
+         return "Todos os campos são obrigatórios";
+      }
+
+      if (!$funcoes->validarNip($funcoes->somenteNumeros($arquivo->nipusuario))) {
+         http_response_code(500);
+         echo "Nip inválido";
+         return false;
+      }
+
+      if (($service->BuscarUsuarioNip($arquivo->nipusuario) > 0) && ($arquivo->nipusuario != $arquivo->nipusuariooriginal)) {
+         http_response_code(500);
+         echo "Já existe um usuario com esse nip cadastrado";
+         return false;
+      }
+      try {
+         $usuariosList = array();
+         array_push($usuariosList, array(
+            'codusuario' => $arquivo->codusuario,
+            'nomeusuario' => $arquivo->nomeusuario,
+            'nipusuario' => $arquivo->nipusuario,
+            'nipusuariooriginal' => $arquivo->nipusuariooriginal,
+            'omusuario' => $arquivo->omusuario,
+            'idacesso' => $arquivo->acessousuario,
+            'setorusuario' => $arquivo->setorusuario
+         ));
+
+         if ($service->alterarUsuario($usuariosList)) {
+            http_response_code(200);
+            return "Usuário Alterado";
+         }
+      } catch (Exception) {
+         http_response_code(500);
+         return "Houve um problema para cadastrar o usuário";
+      }
    }
 
    public function excluir(): bool
@@ -168,7 +193,7 @@ class UsuariosController  extends Controller
          return false;
       }
 
-      if (!$funcoes->validarNip($funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')))) {
+      if ((!$funcoes->validarNip($funcoes->somenteNumeros(filter_input(INPUT_POST, 'nipAltSenha'))))) {
          http_response_code(500);
          echo "Nip inválido. ";
          return false;
@@ -186,13 +211,13 @@ class UsuariosController  extends Controller
          'senha' => filter_input(INPUT_POST, 'senhaAtual'),
          'novaSenha' => filter_input(INPUT_POST, 'novaSenha'),
          'confNovaSenha' => filter_input(INPUT_POST, 'confNovaSenha'),
-         'nip' => filter_input(INPUT_POST, 'nip'),
+         'nip' => strlen(filter_input(INPUT_POST, 'nip')) < 1 ? filter_input(INPUT_POST, 'nipAltSenha') : filter_input(INPUT_POST, 'nip'),
          'idUsuario' => 0
       ));
 
       $idUsuario =  $service->validarSenhaUsuario($dadosUsuarios);
       if (($idUsuario == null) || ($idUsuario == 0)) {
-         http_response_code(500);
+         //http_response_code(500);
          echo "Verifique a senha e o usuário atual";
          return false;
       }
@@ -200,5 +225,16 @@ class UsuariosController  extends Controller
       $dadosUsuarios[0]["idUsuario"] = $idUsuario;
 
       echo json_encode($service->AlterarSenhaUsuario($dadosUsuarios));
+   }
+
+   public function buscarUsuarioPorID()
+   {
+      header('Content-Type: application/json; charset=utf-8');
+      $usuario = json_decode(file_get_contents('php://input'));
+
+      $service = new UsuarioServices();
+      $usuario = $service->buscarUsuarioPorID($usuario->codusuario);
+
+      echo json_encode($usuario);
    }
 }

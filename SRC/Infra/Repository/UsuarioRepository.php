@@ -82,26 +82,28 @@ class UsuarioRepository extends LogRepository
         try {
 
             //$sqlQuery = 'UPDATE usuarios SET nomeusuario = ?, nip = ?, senhausuario = ?, idacesso = ? WHERE codusuario = ?';
-            $sqlQuery = "UPDATE {$this->schema}\"Usuarios\" SET \"NomeUsuario\" = ? WHERE \"IdUsuario\" = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"Usuarios\" SET \"NomeUsuario\" = ?, \"Nip\" = ? , \"PerfilUsuario\" = ? , \"OMUsuario\" = ? , \"SetorUsuario\" = ? WHERE \"IdUsuario\" = ?";
+
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($usuario as $us) {
                 $usuarioData = new Usuarios(
                     $us['codusuario'],
                     $us['nomeusuario'],
+                    $us['nipusuario'],
                     "",
-                    "",
-                    1,
-                    1,
-                    ""
+                    $us['idacesso'],
+                    $us['omusuario'],
+                    $us['setorusuario']
                 );
             }
 
             $stmt->bindValue(1, $usuarioData->NomeUsuario());
-            /* $stmt->bindValue(2, $usuarioData->Nip());
-            $stmt->bindValue(3, $usuarioData->SenhaUsuario());
-            $stmt->bindValue(4, $usuarioData->idAcesso());*/
-            $stmt->bindValue(2, $usuarioData->codUsuario());
+            $stmt->bindValue(2, $usuarioData->Nip());
+            $stmt->bindValue(3, $usuarioData->idAcesso());
+            $stmt->bindValue(4, $usuarioData->OM());
+            $stmt->bindValue(5, $usuarioData->setor());
+            $stmt->bindValue(6, $usuarioData->codUsuario());
             $stmt->execute();
 
             return true;
@@ -209,6 +211,33 @@ class UsuarioRepository extends LogRepository
         } catch (Exception $e) {
             echo $e;
             return false;
+        }
+    }
+
+    public function buscarUsuarioPorID(string $id): array
+    {
+        try {
+            $sqlQuery = "SELECT \"NomeUsuario\",\"Nip\", \"PerfilUsuario\", \"OMUsuario\" , \"SetorUsuario\" FROM  {$this->schema}\"Usuarios\"  where \"IdUsuario\"  = ? Limit 1 FOR UPDATE;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+
+            $usuariosDataList = $stmt->fetchAll();
+            $usuariosList = array();
+            foreach ($usuariosDataList as $usuariosData) {
+                array_push($usuariosList, array(
+                    'nomeusuario' => $usuariosData['NomeUsuario'],
+                    'nip' => $usuariosData['Nip'],
+                    'idacesso' => $usuariosData['PerfilUsuario'],
+                    'omusuario' => $usuariosData['OMUsuario'],
+                    'setorusuario' => $usuariosData['SetorUsuario'],
+                ));
+            };
+
+            return $usuariosList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
         }
     }
 }

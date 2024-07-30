@@ -714,9 +714,66 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
 });
 
 
+$(document).on('click', '.btnAlterarSenhaUsuario', function (e) {
+
+    dados = JSON.stringify({
+        codusuario: $(this).data("id")
+    }, null, 2);
+
+    $.ajax({
+        type: 'POST',
+        url: "/buscar-usuario-id",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            // console.log(data);
+            data.forEach(e => {
+                $('#formAltSenha #nipAltSenha').mask('00.0000.00');
+                $('#formAltSenha #nipAltSenha').val(e.nip).trigger('input');
+            });
+        },
+        error: function (d) {
+            nipValido = false;
+        }
+    });
+
+    $('.opcoesConfirmacao').css('display', 'none');
+});
+
 $(document).on('click', '.btnAlterarUsuario', function (e) {
     $('#formAltUsuario #idAlt').val($(this).data("id"));
     $('#formAltUsuario #nomeusuarioAlt').val($(this).data("desc"));
+
+
+    dados = JSON.stringify({
+        codusuario: $('#formAltUsuario #idAlt').val()
+    }, null, 2);
+
+    $.ajax({
+        type: 'POST',
+        url: "/buscar-usuario-id",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            // console.log(data);
+            data.forEach(e => {
+
+                $('#formAltUsuario #nipAlt').mask('00.0000.00');
+                $('#formAltUsuario #nipAlt').val(e.nip).trigger('input');
+                $('#formAltUsuario #nipOriginal').mask('00.0000.00');
+                $('#formAltUsuario #nipOriginal').val(e.nip).trigger('input');
+                $('#formAltUsuario #setorAlt').val(e.setorusuario);
+                $('#formAltUsuario #idacessoAlt').val(e.idacesso);
+                $('#formAltUsuario #omAlt').val(e.omusuario);
+            });
+        },
+        error: function (d) {
+            nipValido = false;
+        }
+    });
+
     $('.opcoesConfirmacao').css('display', 'none');
 });
 
@@ -743,14 +800,24 @@ $(document).on('click', '#exibConfirmaAlteracaoUsuario', function (e) {
 $(document).on('click', '#btnConfirmaAlteracaoUsuario', function (e) {
     var formdata = new FormData($("form[id='formAltUsuario']")[0]);
 
-    if (($('#formAltUsuario #nomeusuarioAlt').val() == "")) {
+    if (($('#formAltUsuario #nomeusuarioAlt').val() == "") || ($('#formAltUsuario #nipAlt').val() == "") || ($('#formAltUsuario #omAlt').val() == "") || ($('#formAltUsuario #idacessoAlt').val() == 0) || ($('#formAltUsuario #setorAlt').val() == "")) {
         alertas("Todos os campos do formulário são obrigatórios", '#AlteraUsuario', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formAltUsuario #nipAlt').val().replace(/[^\d]+/g, '').length != 8)) {
+        alertas("Campo NIP inválido", '#AlteraUsuario', 'alert_danger');
         return false;
     }
 
     dados = JSON.stringify({
         codusuario: $('#formAltUsuario #idAlt').val(),
         nomeusuario: $('#formAltUsuario #nomeusuarioAlt').val(),
+        nipusuariooriginal: $('#formAltUsuario #nipOriginal').val(),
+        nipusuario: $('#formAltUsuario #nipAlt').val(),
+        omusuario: $('#formAltUsuario #omAlt').val(),
+        acessousuario: $('#formAltUsuario #idacessoAlt').val(),
+        setorusuario: $('#formAltUsuario #setorAlt').val(),
     }, null, 2)
 
     $.ajax({
@@ -760,12 +827,13 @@ $(document).on('click', '#btnConfirmaAlteracaoUsuario', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            //console.log(d);
             carregarUsuarios();
             $(this).data("nomeusuario", "");
             alertas('Dados do usuario atualizados com sucesso', '#AlteraUsuario', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#AlteraUsuario', 'alert_danger');
+            alertas(d.responseText, '#AlteraUsuario', 'alert_danger');
         }
     }
     );
@@ -846,7 +914,7 @@ $('#formAltSenha #alterarSenha').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             if (data != "true") {
                 alertas('Não foi possível alterar a senha', '#modAltSenha', 'alert_danger');
             } else {
@@ -1142,6 +1210,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
             //console.log(data);
             $('#semestre').trigger('change');
             $('#formCadDocumento #Nip').mask('00.0000.00');
+            $('#btnConfirmaReIndexarDocumento').removeAttr('disabled');
             alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
             /*setTimeout(function () {
                 location.reload();
@@ -1579,7 +1648,9 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         tags: tags,
         imagens: listDocumentos,
     }, null, 2);
+
     $(this).attr('disabled', 'disabled');
+
     $.ajax({
         type: 'POST',
         url: "/cadastrarDocumento",
@@ -1626,6 +1697,7 @@ function formatarDataHora() {
 }
 
 function processoAssinaturaData(data) {
+    console.log(data);
     var ArrayDocumentos = JSON.parse(data);
     totalDocumnetos = ArrayDocumentos.length;
     if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
@@ -1641,6 +1713,8 @@ function processoAssinaturaData(data) {
             $('#semestre').trigger('change');
             $('.btnIndexar').css("display", "none");
             $('.btnAnexar').css("display", "block");
+            $('#btnConfirmaIndexarDocumento').removeAttr('disabled');
+            $('#btnConfirmaAnexarDocumento').removeAttr('disabled');
 
             alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
             alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');

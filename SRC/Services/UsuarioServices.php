@@ -81,6 +81,7 @@ class UsuarioServices extends SistemaServices
 
     public function validarSenhaUsuario($dadosUsuarios): ?int
     {
+
         $funcoes = new Helppers();
         $dadosUsuarios[0]['nip'] = $funcoes->somenteNumeros($dadosUsuarios[0]['nip']);
 
@@ -95,5 +96,11 @@ class UsuarioServices extends SistemaServices
         $dadosUsuarios[0]['nip'] = $funcoes->somenteNumeros($dadosUsuarios[0]['nip']);
 
         return  $repository->AlterarSenhaUsuario($dadosUsuarios);
+    }
+
+    public function buscarUsuarioPorID(string $id): array
+    {
+        $repository = new UsuarioRepository($this->Conexao());
+        return $repository->buscarUsuarioPorID($id);
     }
 }
