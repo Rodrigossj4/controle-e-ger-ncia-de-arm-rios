@@ -480,7 +480,7 @@ class DocumentoServices extends SistemaServices
             if ((strtolower($arquivoExtensao) == "tif") || (strtolower($arquivoExtensao) == "tiff")) {
                 $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".png";
                 $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
-                //array_map('unlink', glob("$caminhoArqImgServ"));
+                array_map('unlink', glob("$caminhoArqImgServ"));
                 //rmdir("{$caminhoArqImgServ}");
             }
         }

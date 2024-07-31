@@ -170,6 +170,7 @@ $contador = 0;
                                         <th scope="col">Semestre</th>
                                         <th scope="col">Ano</th>
                                         <th scope="col">Tipo de documento</th>
+                                        <th scope="col">Páginas</th>
                                     </tr>
                                 </thead>
                                 <tbody id='documentosLista'>

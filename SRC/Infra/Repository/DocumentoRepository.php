@@ -131,7 +131,8 @@ class DocumentoRepository extends LogRepository
                     'tipodocumento' => $documentosData['IdTipoDoc'],
                     'armario' => $documentosData['IdArmario'],
                     'desctipo' => $documentosData['DescTipoDoc'],
-                    'nomeArmario' => $documentosData['nomearmario']
+                    'nomeArmario' => $documentosData['nomearmario'],
+                    'quantidadepaginas' => $this->TotalPaginasDocumento($documentosData['DocId'])
                 ));
             };
             //var_dump($documentosList);
@@ -387,6 +388,23 @@ class DocumentoRepository extends LogRepository
         }
     }
 
+    public function TotalPaginasDocumento(int $id): int
+    {
+        try {
+            $sqlQuery = "SELECT * FROM {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+
+            $paginasDataList = $stmt->fetchAll();
+
+
+            return COUNT($paginasDataList);
+        } catch (Exception $e) {
+            echo $e;
+            return 0;
+        }
+    }
     public function carminhoArquivos(int $id): array
     {
         try {
