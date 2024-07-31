@@ -91,7 +91,24 @@
                     <div class="form-group">
                         <input type="hidden" name="id" id="id">
                         <label class="col-form-label">Nome do Perfil: </label>
+                        <input type="hidden" class="form-control form-control-sm" name="nomeperfilOriginal" id="nomeperfilOriginal">
                         <input type="text" class="form-control form-control-sm" name="nomeperfil" id="nomeperfil">
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="col-form-label" for="armariosAlt">Selecione o Armário </label>
+                        <select name="armariosAlt[]" id="armariosAlt" class="form-select" multiple>
+                            <?php foreach ($ArmariosList  as $armario) : ?>
+                                <option value="<?= $armario['id']; ?>"><?= $armario['nomeexterno']; ?> </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="col-form-label" for="nivelAcessoAlt">Nível de acesso </label>
+                        <select name="nivelAcessoAlt" id="nivelAcessoAlt" class="form-select">
+                            <option value="1">Administrador</option>
+                            <option value="2">Operador</option>
+                            <option value="3">Visualizador</option>
+                        </select>
                     </div>
                     <br>
                     <div class="form-group row">

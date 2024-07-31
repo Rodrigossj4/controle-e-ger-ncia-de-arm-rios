@@ -77,18 +77,55 @@ class PerfilAcessoController extends Controller
       echo json_encode($service->listaPerfis());
    }
 
-   public function alterar(): bool
+   public function exibirDadosPerfil()
    {
-
-      $perfilList = array();
-      array_push($perfilList, array(
-         'id' => filter_input(INPUT_POST, 'id'),
-         'nomeperfil' => filter_input(INPUT_POST, 'nomeperfil')
-      ));
-
+      $perfil = json_decode(file_get_contents('php://input'));
+      header('Content-Type: application/json; charset=utf-8');
       $service = new PerfilAcessoServices();
-      $service->alterar($perfilList);
-      return true;
+      echo json_encode($service->exibirDadosPerfil($perfil->codperfil));
+   }
+
+   public function alterar()
+   {
+      if (strlen(filter_input(INPUT_POST, 'nomeperfil')) < 1) {
+         http_response_code(500);
+         echo  "Todos os campos são obrigatórios";
+         return false;
+      }
+
+      if (empty($_POST['armariosAlt'])) {
+         http_response_code(500);
+         echo "Selecione um armário";
+         return false;
+      }
+
+      try {
+         $perfilList = array();
+         array_push($perfilList, array(
+            'id' => filter_input(INPUT_POST, 'id'),
+            'nomeperfil' => filter_input(INPUT_POST, 'nomeperfil'),
+            'nivelAcesso' => filter_input(INPUT_POST, 'nivelAcessoAlt'),
+            'armarios' =>  $_POST['armariosAlt']
+         ));
+
+         $service = new PerfilAcessoServices();
+
+         if (($service->BuscarPerfil($perfilList) > 0) && (filter_input(INPUT_POST, 'nomePerfil') == filter_input(INPUT_POST, 'nomeperfilOriginal'))) {
+            http_response_code(500);
+            echo "Já existe um perfil com esse nome cadastrado";
+            return false;
+         }
+
+         if ($service->alterar($perfilList, filter_input(INPUT_POST, 'id'))) {
+            http_response_code(200);
+            echo "Perfil Alterado";
+            return true;
+         }
+      } catch (Exception) {
+         http_response_code(500);
+         echo "Houve um problema para alterar os dados do perfil";
+         return false;
+      }
    }
 
    public function excluir()

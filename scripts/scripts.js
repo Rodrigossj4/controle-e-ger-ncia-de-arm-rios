@@ -576,6 +576,30 @@ $('#formCadPerfil #btnCadPerfil').on('click', function (e) {
 $(document).on('click', '.btnAlterarPerfil', function (e) {
     $('#formAltPerfil #id').val($(this).data("id"));
     $('#formAltPerfil #nomeperfil').val($(this).data("desc"));
+    $('#formAltPerfil #nomeperfilOriginal').val($(this).data("desc"));
+
+    dados = JSON.stringify({
+        codperfil: $(this).data("id")
+    }, null, 2);
+
+    $.ajax({
+        type: 'POST',
+        url: "/buscar-perfil-id",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            //console.log(data);
+            data.forEach(e => {
+                $('#formAltPerfil #nipAlt').mask('00.0000.00');
+                $('#formAltPerfil #nivelAcessoAlt').val(e.nivelacesso);
+                $('#formAltPerfil #armariosAlt').val(e.armarios);
+            });
+        },
+        error: function (d) {
+            nipValido = false;
+        }
+    });
     $('.opcoesConfirmacao').css('display', 'none');
 });
 
@@ -587,7 +611,7 @@ $(document).on('click', '#btnConfirmaAlteracaoPerfil', function (e) {
     var formdata = new FormData($("form[id='formAltPerfil']")[0]);
 
     if (($('#formAltPerfil #nomeperfil').val() == "")) {
-        alertas("Todos os campos do formulário são obrigatórios", '#AlteraPerfil', 'alert_danger');
+        alertas("Todos os campos do formulário são obrigatórioss", '#AlteraPerfil', 'alert_danger');
         return false;
     }
 
@@ -598,12 +622,13 @@ $(document).on('click', '#btnConfirmaAlteracaoPerfil', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
+            //console.log(d);
             carregarPerfis();
             $(this).data("nomeperfil", "");
             alertas('Perfil atualizado com sucesso', '#AlteraPerfil', 'alert_sucess', 'true');
         },
         error: function (d) {
-            alertas(d.responseJSON['msg'], '#AlteraPerfil', 'alert_danger');
+            alertas(d.responseText, '#AlteraPerfil', 'alert_danger');
         }
     }
     );

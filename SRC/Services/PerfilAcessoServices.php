@@ -44,11 +44,28 @@ class PerfilAcessoServices extends SistemaServices
         }
     }
 
-    public function alterar(array $perfil): bool
+    public function exibirDadosPerfil(string $id): array
     {
         try {
+            $repository = new PerfilAcessoRepository($this->Conexao());
+            return $repository->exibirDadosPerfil($id);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
+    public function alterar(array $perfil, int $id): bool
+    {
+        try {
+
             $repository = new  PerfilAcessoRepository($this->Conexao());
-            return $repository->alterar($perfil);
+            $repository->alterar($perfil);
+
+            $this->removerVinculosPerfisArmario($id);
+            $this->vincularPerfisArmario($perfil, $id);
+
+            return true;
         } catch (Exception $e) {
             echo $e;
             return false;
@@ -58,6 +75,7 @@ class PerfilAcessoServices extends SistemaServices
     {
         try {
             $repository = new PerfilAcessoRepository($this->Conexao());
+            $this->removerVinculosPerfisArmario($id);
             return $repository->excluir($id);
         } catch (Exception $e) {
             echo $e;
@@ -70,6 +88,17 @@ class PerfilAcessoServices extends SistemaServices
         try {
             $repository = new PerfilAcessoRepository($this->Conexao());
             return $repository->vincularPerfisArmario($perfil, $idPerfil);
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
+    private function removerVinculosPerfisArmario(int $idPerfil)
+    {
+        try {
+            $repository = new PerfilAcessoRepository($this->Conexao());
+            return $repository->removerVinculosPerfisArmario($idPerfil);
         } catch (Exception $e) {
             echo $e;
             return false;

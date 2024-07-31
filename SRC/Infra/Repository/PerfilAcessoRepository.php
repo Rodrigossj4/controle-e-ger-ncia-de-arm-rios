@@ -65,23 +65,50 @@ class PerfilAcessoRepository extends LogRepository
         }
     }
 
+    public function exibirDadosPerfil(string $id): array
+    {
+        try {
+            $sqlQuery = "SELECT \"DescPerfil\", \"nivelAcesso\" FROM {$this->schema}\"PerfilUsuario\" WHERE \"IdPerfilUsuario\" = ? Limit 1 FOR UPDATE;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+
+            $perfilDataList = $stmt->fetchAll();
+            $perfilList = array();
+            foreach ($perfilDataList as $perfilData) {
+                array_push($perfilList, array(
+                    'descperfil' => $perfilData['DescPerfil'],
+                    'nivelacesso' => $perfilData['nivelAcesso'],
+                    'armarios' => $this->listarArmariosPerfil($id)
+                ));
+            };
+
+            //var_dump($perfilList);
+            return $perfilList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
     public function alterar(array $perfil): bool
     {
         try {
 
-            $sqlQuery = "UPDATE {$this->schema}\"PerfilUsuario\" SET \"DescPerfil\" = ? WHERE \"IdPerfilUsuario\" = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"PerfilUsuario\" SET \"DescPerfil\" = ? , \"nivelAcesso\" = ? WHERE \"IdPerfilUsuario\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
             foreach ($perfil as $td) {
                 $perfilData = new PerfilAcesso(
                     $td['id'],
                     $td['nomeperfil'],
-                    3
+                    $td['nivelAcesso']
                 );
             }
 
             $stmt->bindValue(1, $perfilData->nomePerfil());
-            $stmt->bindValue(2, $perfilData->id());
+            $stmt->bindValue(2, $perfilData->nivelAcesso());
+            $stmt->bindValue(3, $perfilData->id());
             $stmt->execute();
 
             return true;
@@ -131,6 +158,37 @@ class PerfilAcessoRepository extends LogRepository
             $stmt->bindValue(1, $idPerfil);
             $stmt->bindValue(2, $pr);
             $stmt->execute();
+        }
+    }
+
+    public function removerVinculosPerfisArmario(int $idPerfil)
+    {
+        $sqlQuery = "DELETE FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"IdPerfilusuario\" =  ?;";
+        $stmt = $this->pdo->prepare($sqlQuery);
+        $stmt->bindValue(1, $idPerfil);
+        $stmt->execute();
+    }
+
+    public function listarArmariosPerfil(int $idPerfil): array
+    {
+        try {
+            $sqlQuery = "SELECT \"IdArmario\" FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"IdPerfilusuario\" = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idPerfil);
+            $stmt->execute();
+
+            $perfilDataList = $stmt->fetchAll();
+            $perfilList = array();
+            foreach ($perfilDataList as $perfilData) {
+                array_push($perfilList, array(
+                    $perfilData['idarmario']
+                ));
+            };
+
+            return $perfilList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
         }
     }
 }
