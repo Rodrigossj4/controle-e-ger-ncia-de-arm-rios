@@ -329,11 +329,11 @@ class DocumentoServices extends SistemaServices
                 //var_dump($caminhoArquivoOriginal);
                 $caminhoArquivoOriginal = preg_replace('/^\//', '', $dadosDocumento->imagens[$i]);
 
-                //transforma ocr
-                $caminhoArquivoOriginal = $this->TransformaPDFOCR($caminhoArquivoOriginal);
-
-                if ($dadosDocumento->assina)
+                if ($dadosDocumento->assina) {
                     $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
+                    //transforma ocr
+                    $caminhoArquivoOriginal = $this->TransformaPDFOCR($caminhoArquivoOriginal);
+                }
 
                 $arqui = random_int(1, 999999);
                 $nomePDF = "{$arqui}.pdf";
