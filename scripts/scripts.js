@@ -1257,7 +1257,12 @@ $(document).on('click', '#btnNaoConfirmaReIndexarDocumento', function (e) {
 $(document).on('click', '#btnConfirmaExcluirPagina', function () {
     dados = JSON.stringify({
         idPagina: $("#listarDocumentos").attr("data-docid"),
-        arquivo: $("#listarDocumentos iframe").attr("src").replace(/\.\.\//g, "")
+        docid: $('#listPaginas #documentosLista .clickDocumento').attr("id"),
+        arquivo: $("#listarDocumentos iframe").attr("src").replace(/\.\.\//g, ""),
+        ip: 0,
+        codusuario: 0,
+        omUsuario: "",
+        idacesso: 0
     }, null, 2);
 
     $.ajax({
@@ -1267,8 +1272,10 @@ $(document).on('click', '#btnConfirmaExcluirPagina', function () {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);           
+            //console.log(data);
             alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
+            $('#semestre').trigger('change');
+
             $('.clickDocumento').click();
             /*setTimeout(function () {
                 location.reload();

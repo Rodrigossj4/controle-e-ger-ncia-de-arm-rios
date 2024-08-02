@@ -170,8 +170,17 @@ class DocumentoController extends Controller
     public function excluirPagina(): bool
     {
         $Arquivos = json_decode(file_get_contents('php://input'));
+        $Arquivos->ip = $this->retornaIP();
+        if (!isset($_SESSION))
+            session_start();
+
+        $Arquivos->codusuario = $_SESSION['usuario'][0]["codusuario"];
+        $Arquivos->omUsuario = $_SESSION['usuario'][0]["omusuario"];
+        $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
+
         $service = new DocumentoServices();
-        return $service->excluirPagina($Arquivos->idPagina);
+       
+        return $service->excluirPagina($Arquivos);
     }
 
     public function retornarCaminhoDocumento(int $docid, int $pagina): string

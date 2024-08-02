@@ -119,11 +119,33 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function excluirPagina(int $id): bool
+    public function excluirPagina($arquivo): bool
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
-            return $repository->excluirPagina($id);
+            $dadosList = array();
+
+            array_push($dadosList, array(
+                'codoperacao' => "OP5",
+                'codusuario' => $arquivo->codusuario,
+                'iddocumento' => $arquivo->docid,
+                'ipacesso' => $arquivo->ip,
+                'omusuario' => $arquivo->omusuario,
+                'idperfil' => $arquivo->idacesso,
+                'dataultimologin' => ""
+            ));
+
+            //var_dump($dadosList);
+            $this->gravarLogOperacoes($dadosList);
+
+            $repository->excluirPagina($arquivo->idPagina);
+
+            $listaArquivos =  $repository->listarPaginas($arquivo->docid);
+
+            if (count($listaArquivos) == 0)
+                $this->excluirDocumentoPastaDiretorio($arquivo->docid, pathinfo($arquivo->arquivo, PATHINFO_DIRNAME));
+
+            return true;
         } catch (Exception $e) {
             echo $e;
             return false;
