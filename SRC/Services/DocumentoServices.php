@@ -339,7 +339,6 @@ class DocumentoServices extends SistemaServices
             $ext = pathinfo($dadosDocumento->imagens[$i], PATHINFO_EXTENSION);
             $caminhoArqImgServ = "";
             if (strtolower($ext) != "pdf") {
-
                 $caminho = $this->FormatarIMG($dadosDocumento->imagens[$i]);
 
                 $caminhoArqImgServ = $this->gerarOcrs($caminho);
@@ -517,6 +516,7 @@ class DocumentoServices extends SistemaServices
             $this->uploadPDFPasta($caminhoArqImgServ, $i);
         }
     }
+
     private function TratarTifParaJpeg(string $caminhoTif, string $diretoriosaida): string
     {
         $input_tiff = $caminhoTif;
@@ -524,7 +524,7 @@ class DocumentoServices extends SistemaServices
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "magick -density 300 -monochrome $input_tiff  $output_jpeg";
+        $command = "convert -density 300 -monochrome $input_tiff  $output_jpeg";
         //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
         //tes
         shell_exec($command);
@@ -536,7 +536,7 @@ class DocumentoServices extends SistemaServices
     private function FormatarIMG(string $diretorioentrada): string
     {
         $command1 = "convert -units PixelsPerInch $diretorioentrada -resample 300  $diretorioentrada";
-        //shell_exec($command1);
+        shell_exec($command1);
 
         //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
         return $diretorioentrada;

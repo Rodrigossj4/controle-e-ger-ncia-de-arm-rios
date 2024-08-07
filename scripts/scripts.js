@@ -1728,7 +1728,7 @@ function formatarDataHora() {
 }
 
 function processoAssinaturaData(data) {
-    console.log(data);
+    //console.log(data);
     var ArrayDocumentos = JSON.parse(data);
     totalDocumnetos = ArrayDocumentos.length;
     if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
@@ -1768,6 +1768,8 @@ function processoAssinaturaData(data) {
         $('#semestre').trigger('change');
         $('.btnIndexar').css("display", "none");
         $('.btnAnexar').css("display", "block");
+        $('#btnConfirmaIndexarDocumento').removeAttr('disabled');
+        $('#btnConfirmaAnexarDocumento').removeAttr('disabled');
     }
 }
 
