@@ -110,8 +110,8 @@ class Router
                 '/cadastrarOM' => fn () => self::load('OMController', 'cadastrar'),
                 '/alterarSenha' => fn () => self::load('UsuariosController', 'alterarSenha'),
                 '/buscar-usuario-id' => fn () => self::load('UsuariosController', 'buscarUsuarioPorID'),
-                '/buscar-perfil-id' => fn () => self::load('PerfilAcessoController', 'exibirDadosPerfil')
-
+                '/buscar-perfil-id' => fn () => self::load('PerfilAcessoController', 'exibirDadosPerfil'),
+                '/buscarLog' => fn () => self::load('AuditoriaController', 'BuscarLogs')
             ]
         ];
     }

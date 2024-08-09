@@ -22,7 +22,32 @@ class AuditoriaController extends Controller
 
         $service = new AuditoriaServices();
         $LogList = $service->listaDadosAuditoria();
-
+        $OperacoesList = $service->ListarOperacoes();
         require __DIR__ . '../../Views/auditoria/index.php';
+    }
+
+
+    public function BuscarLogs(): array
+    {
+        $ListaLogs = json_decode(file_get_contents('php://input'));
+
+        try {
+            $service = new AuditoriaServices();
+            return $service->BuscarLogs($ListaLogs);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
+    public function ListarOperacoes(): array
+    {
+        try {
+            $service = new AuditoriaServices();
+            return $service->ListarOperacoes();
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
     }
 }

@@ -603,6 +603,31 @@ $(document).on('click', '.btnAlterarPerfil', function (e) {
     $('.opcoesConfirmacao').css('display', 'none');
 });
 
+$(document).on('click', '#btnBuscarLog', function (e) {
+
+    dados = JSON.stringify({
+        operacao: $('#formBuscaLog #operacao').val(),
+        nip: $('#formBuscaLog #nip').val(),
+        data: $('#formBuscaLog #data').val(),
+        ip: $('#formBuscaLog #ip').val()
+    }, null, 2);
+
+    $.ajax({
+        type: 'POST',
+        url: "/buscarLog",
+        data: dados,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log(data);
+
+        },
+        error: function (d) {
+            nipValido = false;
+        }
+    });
+});
+
 $(document).on('click', '#exibConfirmaAlteracaoPerfil', function (e) {
     $('.opcoesConfirmacao').css('display', 'flex');
 });
