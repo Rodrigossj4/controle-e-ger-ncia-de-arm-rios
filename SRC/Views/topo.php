@@ -3,6 +3,7 @@ if (!isset($_SESSION))
     session_start();
 
 //var_dump($_SESSION['usuario'][0]["idacesso"])
+
 $liberaAcesso = 4;
 $nomeUsuario = "";
 $nipUsuario = "";
@@ -20,6 +21,7 @@ if ((isset($_SESSION['Arquivos'])))
     $listaArquivosCarregados  = $_SESSION['Arquivos'];
 
 //echo  $liberaAcesso;
+var_dump($_SESSION['usuario'][0]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

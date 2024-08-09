@@ -931,10 +931,11 @@ $('#formLogin #btnLogin').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(JSON.parse(data)[0]['dataultimologin']);
+            console.log(data);
+            //console.log(JSON.parse(data)[0]['dataultimologin']);
             //console.log(JSON.parse(data));
             //JSON.parse(data)[0]['idperfil']
-            if (data != "null") {
+            /*if (data != "null") {
                 if ((JSON.parse(data)[0]['dataultimologin'] == null)) {
                     //console.log("/trocasenha");
                     location.assign("/troca-senha");
@@ -946,7 +947,7 @@ $('#formLogin #btnLogin').on('click', function (e) {
                 $('#formLogin #senha').val("");
                 $('#formLogin #nip').val("");
                 alertas('Falha ao efeturar login', '#modLogin', 'alert_danger');
-            }
+            }*/ 
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
