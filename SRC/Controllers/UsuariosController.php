@@ -14,16 +14,14 @@ use Marinha\Mvc\Helpers\Helppers;
 class UsuariosController  extends Controller
 {
 
-   public function __construct()
-   {
-   }
+   public function __construct() {}
 
    public function index()
    {
       $this->validarSessao();
 
-      if ($_SESSION['usuario'][0]["nivelAcesso"] != 1)
-         header("location: /home");
+      /* if ($_SESSION['usuario'][0]["nivelAcesso"] != 1)
+         header("location: /home");*/
       $service = new UsuarioServices();
       $perfilService = new PerfilAcessoServices();
       $omService = new OMServices();
