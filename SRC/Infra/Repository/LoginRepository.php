@@ -27,6 +27,7 @@ class LoginRepository extends LogRepository
             $stmt->execute();
 
             $usuarioDataList = $stmt->fetchAll();
+
             $usuarioList = array();
             foreach ($usuarioDataList as $usuarioData) {
                 array_push($usuarioList, array(

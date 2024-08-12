@@ -188,7 +188,7 @@ class UsuarioRepository extends LogRepository
             $stmt->bindValue(2, hash('sha256', $usuario[0]['nip'] . $usuario[0]['senha']));
             $stmt->execute();
             $usuarioDataList = $stmt->fetchAll();
-            var_dump($sqlQuery);
+
             return  $usuarioDataList[0]['IdUsuario'];
         } catch (Exception $e) {
             echo $e;

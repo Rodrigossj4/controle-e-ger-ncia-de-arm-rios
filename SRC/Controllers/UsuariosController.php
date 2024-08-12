@@ -18,10 +18,10 @@ class UsuariosController  extends Controller
 
    public function index()
    {
-      //$this->validarSessao();
+      $this->validarSessao();
 
-      /* if ($_SESSION['usuario'][0]["nivelAcesso"] != 1)
-         header("location: /home");*/
+      if ($_SESSION['usuario'][0]["nivelAcesso"] != 1)
+         header("location: /home");
       $service = new UsuarioServices();
       $perfilService = new PerfilAcessoServices();
       $omService = new OMServices();
@@ -126,7 +126,7 @@ class UsuariosController  extends Controller
          array_push($usuariosList, array(
             'codusuario' => $arquivo->codusuario,
             'nomeusuario' => $arquivo->nomeusuario,
-            'nipusuario' => $arquivo->nipusuario,
+            'nipusuario' => $funcoes->somenteNumeros($arquivo->nipusuario),
             'nipusuariooriginal' => $arquivo->nipusuariooriginal,
             'omusuario' => $arquivo->omusuario,
             'idacesso' => $arquivo->acessousuario,

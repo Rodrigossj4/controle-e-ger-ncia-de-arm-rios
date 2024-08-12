@@ -14,7 +14,7 @@ if (isset($_SESSION['usuario'])) {
     $nomeUsuario = $_SESSION['usuario'][0]["nomeusuario"];
     $nipUsuario = $_SESSION['usuario'][0]["nip"];
     $OMUsuario =  $_SESSION['usuario'][0]["omusuario"];
-    var_dump($_SESSION['usuario'][0]);
+    //var_dump($_SESSION['usuario'][0]);
 }
 
 $listaArquivosCarregados = [];
@@ -47,25 +47,25 @@ if ((isset($_SESSION['Arquivos'])))
         </div>
 
         <ul>
-
-            <li class="nav-item" id="menuAdmin">
-                <a class="nav-link dropdown-toggle" href="#" id="menuAdmin" role="button">
-                    Administração
-                </a>
-                <div id="submenu">
-                    <a class="nav-link" href="/gerenciar-usuarios">Gerência de Usuários</a>
-                    <a class="nav-link" href="/gerenciar-perfis">Gerência de Perfil de usuário</a>
-                    <a class="nav-link" href="/gerenciar-om">Gerência OM</a>
-                    <a class="nav-link" href="/auditoria">Auditoria</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/gerenciar-armarios">Gerência de Armários</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerência de Tipo de documentos</a>
-            </li>
-
+            <?php if ($liberaAcesso == 1) { ?>
+                <li class="nav-item" id="menuAdmin">
+                    <a class="nav-link dropdown-toggle" href="#" id="menuAdmin" role="button">
+                        Administração
+                    </a>
+                    <div id="submenu">
+                        <a class="nav-link" href="/gerenciar-usuarios">Gerência de Usuários</a>
+                        <a class="nav-link" href="/gerenciar-perfis">Gerência de Perfil de usuário</a>
+                        <a class="nav-link" href="/gerenciar-om">Gerência OM</a>
+                        <a class="nav-link" href="/auditoria">Auditoria</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/gerenciar-armarios">Gerência de Armários</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/gerenciar-tipo-documentos">Gerência de Tipo de documentos</a>
+                </li>
+            <?php } ?>
             <?php if ($liberaAcesso < 3) { ?>
                 <li class="nav-item">
                     <a class="nav-link" href="/gerenciar-documentos">Gerência de Documentos</a>
