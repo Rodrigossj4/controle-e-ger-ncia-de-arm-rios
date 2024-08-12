@@ -14,7 +14,7 @@ if (isset($_SESSION['usuario'])) {
     $nomeUsuario = $_SESSION['usuario'][0]["nomeusuario"];
     $nipUsuario = $_SESSION['usuario'][0]["nip"];
     $OMUsuario =  $_SESSION['usuario'][0]["omusuario"];
-    //var_dump($_SESSION['usuario'][0]);
+    var_dump($_SESSION['usuario'][0]);
 }
 
 $listaArquivosCarregados = [];
