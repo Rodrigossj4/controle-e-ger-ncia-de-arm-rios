@@ -1028,7 +1028,7 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
             processData: false,
             contentType: false,
             success: function (data) {
-
+                console.log(data);
                 const arrayData = JSON.parse(data);
                 exibeLinhasRegistros(arrayData.length)
                 var sel = $("#documentosLista");
@@ -1371,14 +1371,15 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             $('#formCadDocumento #Caminho').val(data);
             ListarArquivos();
             $(".carousel-control-prev").removeAttr("id");
             $(".carousel-control-next").removeAttr("id");
         },
         error: function (d) {
-            console.log('erro ao carregar arquivos ' + d);
+            alertas(d.responseText, '#modCadDocumento', 'alert_danger', 'true');
+            console.log('erro ao carregar arquivos ' + d.responseText);
         }
     });
 });

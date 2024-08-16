@@ -119,7 +119,7 @@ $contador = 0;
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <label class="col-form-label" for="documento[]">Selecione arquivos</label>
-                        <input type="file" id="documento" name="documento[]" class="form-control" multiple>
+                        <input type="file" id="documento" name="documento[]" class="form-control" accept=".jpg,.jpeg,.png,.tif,.tiff,.pdf" multiple>
                     </div>
                 </div>
                 <br>

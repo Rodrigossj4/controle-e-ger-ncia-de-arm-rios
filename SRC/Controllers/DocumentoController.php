@@ -12,9 +12,7 @@ use Marinha\Mvc\Helpers\Helppers;
 
 class DocumentoController extends Controller
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function index()
     {
@@ -179,7 +177,7 @@ class DocumentoController extends Controller
         $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
 
         $service = new DocumentoServices();
-       
+
         return $service->excluirPagina($Arquivos);
     }
 
@@ -196,14 +194,28 @@ class DocumentoController extends Controller
         $service = new DocumentoServices();
         //$tagsList = $this->montaArryaTags(json_decode($dadosDocumento->tags));
 
+
         $paginasList = $service->gerarPdfs($dadosDocumento);
         echo json_encode($paginasList);
     }
 
     public function carregarArquivos()
     {
-        $service = new DocumentoServices();
-        $caminho = $service->carregarArquivosDiretorioTemporario(filter_input(INPUT_POST, 'Nip'), "ARQ");
+        $caminho = "";
+        if (count($_FILES['documento']['name']) > 0) {
+            $extensoesValidas = $this->validarExtensao();
+            for ($i = 0; $i < count($_FILES['documento']['name']); $i++) {
+                $ext = pathinfo($_FILES['documento']['name'][$i], PATHINFO_EXTENSION);
+                //var_dump($ext);
+                if (!in_array(strtolower($ext), $extensoesValidas)) {
+                    http_response_code(500);
+                    echo "Extensão não permitida";
+                } else {
+                    $service = new DocumentoServices();
+                    $caminho = $service->carregarArquivosDiretorioTemporario(filter_input(INPUT_POST, 'Nip'), "ARQ");
+                }
+            }
+        }
 
         echo $caminho;
     }
@@ -370,5 +382,11 @@ class DocumentoController extends Controller
         unlink($b64->arquivoOriginal);
         $bin = base64_decode($b64->arquivoB64);
         file_put_contents($b64->arquivoOriginal, $bin);
+    }
+
+    private function validarExtensao(): array
+    {
+        $extenssoes = ["jpg", "jpeg", "png", "tif", "tiff", "pdf"];
+        return $extenssoes;
     }
 }

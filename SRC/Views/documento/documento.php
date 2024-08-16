@@ -153,7 +153,7 @@ $numPag = 1;
                   <div class=" row">
                     <div class="col-md-9 mb-3">
                       <label class="col-form-label" for="documentoPDF[]">Selecione os PDF</label>
-                      <input type="file" id="documentoPDF" name="documentoPDF[]" class="form-control" multiple>
+                      <input type="file" id="documentoPDF" name="documentoPDF[]" class="form-control" accept=".jpg,.jpeg,.png,.tif,.tiff,.pdf" multiple>
                     </div>
                   </div>
                   <div class="row">
