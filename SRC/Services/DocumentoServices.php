@@ -620,7 +620,7 @@ class DocumentoServices extends SistemaServices
 
             $dadosList = array();
 
-            /* array_push($dadosList, array(
+            array_push($dadosList, array(
                 'codoperacao' => (json_decode($arquivos->listDocumentosServidor[0], true)['imgencontrada'] == "0") ? "OP1" : "OP2",
                 'codusuario' => $arquivos->codusuario,
                 'iddocumento' => $documentos['documentoid'],
@@ -628,10 +628,10 @@ class DocumentoServices extends SistemaServices
                 'omusuario' => $arquivos->omusuario,
                 'idperfil' => $arquivos->idacesso,
                 'dataultimologin' => ""
-            ));*/
+            ));
 
             //var_dump($dadosList);
-            //$this->gravarLogOperacoes($dadosList);     
+            $this->gravarLogOperacoes($dadosList);
         }
 
         array_map('unlink', glob("$caminhoRaiz/*.*"));
