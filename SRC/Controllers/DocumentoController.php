@@ -210,11 +210,14 @@ class DocumentoController extends Controller
                 if (!in_array(strtolower($ext), $extensoesValidas)) {
                     http_response_code(500);
                     echo "Extensão não permitida";
-                } else {
-                    $service = new DocumentoServices();
-                    $caminho = $service->carregarArquivosDiretorioTemporario(filter_input(INPUT_POST, 'Nip'), "ARQ");
+                    return false;
                 }
             }
+
+
+            $service = new DocumentoServices();
+
+            $caminho = $service->carregarArquivosDiretorioTemporario(filter_input(INPUT_POST, 'Nip'), "ARQ");
         }
 
         echo $caminho;
