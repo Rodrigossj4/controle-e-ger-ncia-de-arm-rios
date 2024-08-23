@@ -402,7 +402,7 @@ class DocumentoServices extends SistemaServices
     {
         //transformar o pdf em imagem com imagick já em 300dpi
         $novoNome = pathinfo($arquivo, PATHINFO_DIRNAME) . "/" . pathinfo($arquivo, PATHINFO_FILENAME) . ".png";
-        $this->TratarTifParaJpeg($arquivo, $novoNome, "");
+        $this->TratarTifParaJpeg($arquivo, $novoNome);
 
         //var_dump("bomwa: " . $novoNome . "/  " . $arquivo);
         //passar as imagens no ocr
@@ -500,7 +500,7 @@ class DocumentoServices extends SistemaServices
 
             if ((strtolower($arquivoExtensao) == "tif") || (strtolower($arquivoExtensao) == "tiff")) {
                 $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".png";
-                $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome, "");
+                $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
                 array_map('unlink', glob("$caminhoArqImgServ"));
                 //rmdir("{$caminhoArqImgServ}");
             }
@@ -517,14 +517,14 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    private function TratarTifParaJpeg(string $caminhoTif, string $diretoriosaida, string $monocromico): string
+    private function TratarTifParaJpeg(string $caminhoTif, string $diretoriosaida): string
     {
         $input_tiff = $caminhoTif;
         $output_jpeg = $diretoriosaida;
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "convert -density 300 $monocromico $input_tiff  $output_jpeg";
+        $command = "convert -density 300 $input_tiff  $output_jpeg";
         //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
         //tes
         shell_exec($command);
