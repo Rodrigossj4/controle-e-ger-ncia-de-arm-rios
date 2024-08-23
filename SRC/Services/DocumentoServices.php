@@ -326,7 +326,7 @@ class DocumentoServices extends SistemaServices
     public function gerarPdfs($dadosDocumento): array
     {
         $total = count($dadosDocumento->imagens);
-        // var_dump($dadosDocumento);
+        //var_dump($dadosDocumento);
         $paginasList = [];
 
         $armarioRepository = new ArmarioRepository($this->Conexao());
@@ -349,9 +349,10 @@ class DocumentoServices extends SistemaServices
                 $caminhoArquivoOriginal = preg_replace('/^\//', '', $dadosDocumento->imagens[$i]);
 
                 if ($dadosDocumento->assina) {
+                    $caminhoArquivoOriginal = $this->TransformaPDFOCR($caminhoArquivoOriginal);
                     $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
                     //transforma ocr
-                    $caminhoArquivoOriginal = $this->TransformaPDFOCR($caminhoArquivoOriginal);
+
                 }
 
                 $arqui = random_int(1, 999999);
@@ -401,7 +402,7 @@ class DocumentoServices extends SistemaServices
     {
         //transformar o pdf em imagem com imagick já em 300dpi
         $novoNome = pathinfo($arquivo, PATHINFO_DIRNAME) . "/" . pathinfo($arquivo, PATHINFO_FILENAME) . ".png";
-        $this->TratarTifParaJpeg($arquivo, $novoNome);
+        $this->TratarTifParaJpeg($arquivo, $novoNome, "");
 
         //var_dump("bomwa: " . $novoNome . "/  " . $arquivo);
         //passar as imagens no ocr
@@ -413,6 +414,7 @@ class DocumentoServices extends SistemaServices
 
     private function IncluirTags(string $arquivos, string $dadosTags)
     {
+        //var_dump($arquivos);
         $pdf = new Fpdi();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
@@ -498,7 +500,7 @@ class DocumentoServices extends SistemaServices
 
             if ((strtolower($arquivoExtensao) == "tif") || (strtolower($arquivoExtensao) == "tiff")) {
                 $novoNome = $diretorio . "/" . pathinfo($_FILES['documento']['name'][$i], PATHINFO_FILENAME) . ".png";
-                $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
+                $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome, "");
                 array_map('unlink', glob("$caminhoArqImgServ"));
                 //rmdir("{$caminhoArqImgServ}");
             }
@@ -515,14 +517,14 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    private function TratarTifParaJpeg(string $caminhoTif, string $diretoriosaida): string
+    private function TratarTifParaJpeg(string $caminhoTif, string $diretoriosaida, string $monocromico): string
     {
         $input_tiff = $caminhoTif;
         $output_jpeg = $diretoriosaida;
 
         // Comando para chamar o ImageMagick para converter TIFF para JPEG
         //$command = "magick $input_tiff $output_jpeg";
-        $command = "convert -density 300 -monochrome $input_tiff  $output_jpeg";
+        $command = "magick -density 300 $monocromico $input_tiff  $output_jpeg";
         //$command = "convert -units PixelsPerInch $output_jpeg -density 300  $output_jpeg";
         //tes
         shell_exec($command);
@@ -533,7 +535,7 @@ class DocumentoServices extends SistemaServices
 
     private function FormatarIMG(string $diretorioentrada): string
     {
-        $command1 = "convert -units PixelsPerInch $diretorioentrada -resample 300  $diretorioentrada";
+        $command1 = "magick -units PixelsPerInch $diretorioentrada -resample 300  $diretorioentrada";
         shell_exec($command1);
 
         //$diretoriosaidapng =  pathinfo($diretorioentrada, PATHINFO_DIRNAME) . "/" .  pathinfo($diretorioentrada, PATHINFO_FILENAME) . ".png";
