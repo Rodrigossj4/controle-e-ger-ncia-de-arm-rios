@@ -349,10 +349,20 @@ class DocumentoServices extends SistemaServices
                 $caminhoArquivoOriginal = preg_replace('/^\//', '', $dadosDocumento->imagens[$i]);
 
                 if ($dadosDocumento->assina) {
-                    $caminhoArquivoOriginal = $this->TransformaPDFOCR($caminhoArquivoOriginal);
-                    $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
-                    //transforma ocr
+                    $PDFList = $this->DividirPDFS($caminhoArquivoOriginal);
 
+                    $PDFOCR = new FPDI();
+                    foreach ($PDFList as $valor) {
+                        $novoPDF = $this->TransformaPDFOCR($valor['caminho']);
+                        $pageCount = $PDFOCR->setSourceFile($novoPDF);
+                        $tplIdx =  $PDFOCR->importPage($pageCount);
+                        $PDFOCR->AddPage();
+                        $PDFOCR->useTemplate($tplIdx);
+                    }
+
+                    $PDFOCR->Output($caminhoArquivoOriginal, "F");
+
+                    $this->IncluirTags($caminhoArquivoOriginal, $dadosDocumento->tags);
                 }
 
                 $arqui = random_int(1, 999999);
@@ -400,6 +410,7 @@ class DocumentoServices extends SistemaServices
 
     private function  TransformaPDFOCR(string $arquivo): string
     {
+        //var_dump("bomwa: " . $arquivo);
         //transformar o pdf em imagem com imagick já em 300dpi
         $novoNome = pathinfo($arquivo, PATHINFO_DIRNAME) . "/" . pathinfo($arquivo, PATHINFO_FILENAME) . ".png";
         $this->TratarTifParaJpeg($arquivo, $novoNome);
@@ -412,29 +423,59 @@ class DocumentoServices extends SistemaServices
         //return "";
     }
 
+    private function  DividirPDFS(string $arquivo): array
+    {
+        $pdf = new FPDI();
+
+        $pagecount = $pdf->setSourceFile($arquivo);
+        $end_directory = pathinfo($arquivo, PATHINFO_DIRNAME) . '/';
+
+        $ListPDf = [];
+
+        for ($i = 1; $i <= $pagecount; $i++) {
+            $new_pdf = new FPDI();
+            $new_pdf->AddPage();
+            $new_pdf->setSourceFile($arquivo);
+            $new_pdf->useTemplate($new_pdf->importPage($i));
+
+            try {
+                $new_filename = $end_directory . str_replace('.pdf', '', pathinfo($arquivo, PATHINFO_BASENAME)) . '_' . $i . ".pdf";
+                $new_pdf->Output($new_filename, "F");
+                array_push($ListPDf, array("caminho" => $new_filename));
+                //echo "Page " . $i . " split into " . $new_filename . "<br />\n";
+            } catch (Exception $e) {
+                echo 'Caught exception: ',  $e->getMessage(), "\n";
+            }
+        }
+        //var_dump($paginasList);
+        return $ListPDf;
+    }
+
     private function IncluirTags(string $arquivos, string $dadosTags)
     {
-        //var_dump($arquivos);
         $pdf = new Fpdi();
-        $pdf->AddPage();
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->setSourceFile($arquivos);
-        $pageId = $pdf->importPage(1);
-        $pdf->useTemplate($pageId);
+
         $tags = json_decode($dadosTags);
 
-        if ($tags->titulo != "")
-            $pdf->SetTitle($tags->titulo);
+        $pageCount = $pdf->setSourceFile($arquivos);
+        for ($i = 1; $i <= $pageCount; $i++) {
+            $tpl = $pdf->importPage($i);
+            $pdf->addPage();
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->useTemplate($tpl);
 
-        if ($tags->autor)
-            $pdf->SetAuthor($tags->autor);
+            if ($tags->titulo != "")
+                $pdf->SetTitle($tags->titulo);
 
-        if ($tags->assunto)
-            $pdf->SetSubject($tags->assunto);
+            if ($tags->autor)
+                $pdf->SetAuthor($tags->autor);
+
+            if ($tags->assunto)
+                $pdf->SetSubject($tags->assunto);
 
 
-        $pdf->SetKeywords($this->TratarKeyWords($dadosTags));
-
+            $pdf->SetKeywords($this->TratarKeyWords($dadosTags));
+        }
         $pdf->Output($arquivos, 'F');
     }
 

@@ -1892,7 +1892,6 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
             $('#formCadDocumento #Nip').mask('00.0000.00');
             possuiPasta = 1;
             processoAssinaturaData(data);
-
         },
         error: function (d) {
             alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#ModAnexarDocumento', 'alert_danger');

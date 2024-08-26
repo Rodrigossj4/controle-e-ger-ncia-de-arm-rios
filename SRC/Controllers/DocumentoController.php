@@ -193,8 +193,6 @@ class DocumentoController extends Controller
         // var_dump($dadosDocumento);
         $service = new DocumentoServices();
         //$tagsList = $this->montaArryaTags(json_decode($dadosDocumento->tags));
-
-
         $paginasList = $service->gerarPdfs($dadosDocumento);
         echo json_encode($paginasList);
     }
