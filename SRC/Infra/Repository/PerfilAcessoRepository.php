@@ -163,7 +163,7 @@ class PerfilAcessoRepository extends LogRepository
 
     public function removerVinculosPerfisArmario(int $idPerfil)
     {
-        $sqlQuery = "DELETE FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"IdPerfilusuario\" =  ?;";
+        $sqlQuery = "DELETE FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"idperfilusuario\" =  ?;";
         $stmt = $this->pdo->prepare($sqlQuery);
         $stmt->bindValue(1, $idPerfil);
         $stmt->execute();
@@ -172,7 +172,7 @@ class PerfilAcessoRepository extends LogRepository
     public function listarArmariosPerfil(int $idPerfil): array
     {
         try {
-            $sqlQuery = "SELECT \"IdArmario\" FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"IdPerfilusuario\" = ?;";
+            $sqlQuery = "SELECT \"idarmario\" FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"idperfilusuario\" = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idPerfil);
             $stmt->execute();

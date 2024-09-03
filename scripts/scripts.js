@@ -597,6 +597,7 @@ $(document).on('click', '.btnAlterarPerfil', function (e) {
             });
         },
         error: function (d) {
+            console.log("Erro:" + d.responseText);
             nipValido = false;
         }
     });
@@ -677,7 +678,7 @@ $(document).on('click', '.btnConfirmaExcluirPerfil', function (e) {
         processData: false,
         contentType: false,
         success: function (d) {
-            //console.log(d);
+            console.log(d);
             carregarPerfis();
             $(this).data("id", "");
             alertas('Perfil excluído com sucesso', '#modexcluirPerfil', 'alert_sucess', 'true');

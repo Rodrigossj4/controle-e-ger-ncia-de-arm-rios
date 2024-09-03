@@ -11,9 +11,7 @@ use Sabberworm\CSS\Value\Size;
 
 class PerfilAcessoController extends Controller
 {
-   public function __construct()
-   {
-   }
+   public function __construct() {}
 
    public function index()
    {
@@ -82,6 +80,7 @@ class PerfilAcessoController extends Controller
       $perfil = json_decode(file_get_contents('php://input'));
       header('Content-Type: application/json; charset=utf-8');
       $service = new PerfilAcessoServices();
+      //var_dump($perfil);
       echo json_encode($service->exibirDadosPerfil($perfil->codperfil));
    }
 
@@ -141,7 +140,7 @@ class PerfilAcessoController extends Controller
 
          if ($service->excluir(filter_input(INPUT_POST, 'id'))) {
             http_response_code(200);
-            return "Perfil Cadastrado com sucesso";
+            return "Perfil Excluído com sucesso";
          }
       } catch (exception) {
          http_response_code(500);

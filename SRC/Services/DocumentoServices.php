@@ -21,10 +21,6 @@ use TCPDF\TCPDF;
 
 class DocumentoServices extends SistemaServices
 {
-    private $key = 'bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=';
-    private $diretorio = "/marinha/sisimagem/";
-    private $diretorioLote = "documentos/";
-
     public function __construct() {}
     public function listaDocumentos(): array
     {
@@ -162,7 +158,7 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function listaPaginas(int $id): array
+    public function listaPaginas(int $id, string  $codUsuario): array
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
@@ -173,11 +169,16 @@ class DocumentoServices extends SistemaServices
             //var_dump($listaArquivos);
             $componentes = explode('/', $listaArquivos[0]["arquivo"]);
             $resultado = implode('/', array_slice($componentes, -3));
-            $diretorioTemporario = $this->diretorioLote . "TEMP/" . pathinfo($resultado, PATHINFO_DIRNAME);
+            $diretorioTemporario = $this->diretorioLote .  $codUsuario . "//TEMP/" . pathinfo($resultado, PATHINFO_DIRNAME);
+
+            if (file_exists($this->diretorioLote .  $codUsuario)) {
+                $this->removeDirectory($this->diretorioLote .  $codUsuario);
+            }
 
             if (!file_exists($diretorioTemporario)) {
                 mkdir($diretorioTemporario, 0777, true);
             }
+
 
             foreach ($listaArquivos as &$arquivo) {
                 copy($diretorioOriginal . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME), $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME));

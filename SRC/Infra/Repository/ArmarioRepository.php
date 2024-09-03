@@ -44,7 +44,7 @@ class ArmarioRepository extends LogRepository
     public function listaArmariosPorPerfil(int $idPerfil): array
     {
         try {
-            $sqlQuery = "SELECT arm.\"IdArmario\", arm.\"NomeInterno\", arm.\"NomeExterno\", arm.\"CodArmario\", arm.\"Ativo\" FROM  prodimagem.\"Armarios\" arm inner join  prodimagem.\"PerfilUsuarioArmarios\" per On arm.\"IdArmario\" = per.\"IdArmario\" 	where \"Ativo\" = true 	and per.\"IdPerfilUsuario\" =  ? 	order by arm.\"NomeExterno\" asc;";
+            $sqlQuery = "SELECT arm.\"IdArmario\", arm.\"NomeInterno\", arm.\"NomeExterno\", arm.\"CodArmario\", arm.\"ativo\" FROM  prodimagem.\"Armarios\" arm inner join  prodimagem.\"PerfilUsuarioArmarios\" per On arm.\"IdArmario\" = per.\"idarmario\" 	where \"ativo\" = true 	and per.\"idperfilusuario\" =  ? 	order by arm.\"NomeExterno\" asc;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idPerfil);
             $stmt->execute();

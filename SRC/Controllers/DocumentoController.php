@@ -131,10 +131,15 @@ class DocumentoController extends Controller
 
     public function documento()
     {
+        if (!isset($_SESSION)) {
+            session_start();
+            $codUsuario = $_SESSION['usuario'][0]["codusuario"];
+        }
+
         $service = new DocumentoServices();
         $Documento = $service->exibirDocumento(filter_input(INPUT_POST, 'idDocumento'));
         //$CaminhoDoc = $this->retornarCaminhoDocumento(filter_input(INPUT_POST, 'idDocumento'));
-        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'));
+        $paginasList = $service->listaPaginas(filter_input(INPUT_POST, 'idDocumento'), $codUsuario);
 
         require __DIR__ . '../../Views/documento/documento.php';
     }
@@ -264,8 +269,14 @@ class DocumentoController extends Controller
 
     public function listarPaginas()
     {
+        $codUsuario = "";
+        if (!isset($_SESSION)) {
+            session_start();
+            $codUsuario = $_SESSION['usuario'][0]["codusuario"];
+        }
+
         $service = new DocumentoServices();
-        $paginasList = $service->listaPaginas(filter_input(INPUT_GET, 'idDocumento'));
+        $paginasList = $service->listaPaginas(filter_input(INPUT_GET, 'idDocumento'),  $codUsuario);
         echo json_encode($paginasList);
     }
 

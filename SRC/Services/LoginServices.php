@@ -7,9 +7,8 @@ use Marinha\Mvc\Infra\Repository\LoginRepository;
 
 class LoginServices extends SistemaServices
 {
-    public function __construct()
-    {
-    }
+
+    public function __construct() {}
 
     public function login(array $usuario): ?array
     {
@@ -21,7 +20,12 @@ class LoginServices extends SistemaServices
                 if ($retorno[0]["dataultimologin"] != null) {
                     session_start();
                     session_regenerate_id(true);
+
                     $_SESSION['usuario'] = $retorno;
+
+                    if (file_exists($this->diretorioLote .  $_SESSION['usuario'][0]["codusuario"])) {
+                        $this->removeDirectory($this->diretorioLote . $_SESSION['usuario'][0]["codusuario"]);
+                    }
                 }
 
                 $dadosList = array();
@@ -54,8 +58,12 @@ class LoginServices extends SistemaServices
     {
         try {
             $this->gravarLogOperacoes($dadosList);
-
             session_start();
+
+            if (file_exists($this->diretorioLote .  $_SESSION['usuario'][0]["codusuario"])) {
+                $this->removeDirectory($this->diretorioLote . $_SESSION['usuario'][0]["codusuario"]);
+            }
+
             $_SESSION['usuario'] = null;
             session_destroy();
 
