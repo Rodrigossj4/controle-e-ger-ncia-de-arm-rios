@@ -28,8 +28,8 @@ class SistemaServices
 
     function removeDirectory($dir)
     {
-        //exec('rm -rf ' . escapeshellarg($dir));
+        exec('rm -rf ' . escapeshellarg($dir));
 
-        exec('rmdir /S /Q ' . escapeshellarg($dir));
+        //exec('rmdir /S /Q ' . escapeshellarg($dir));
     }
 }
