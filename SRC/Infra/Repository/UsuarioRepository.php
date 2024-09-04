@@ -233,11 +233,27 @@ class UsuarioRepository extends LogRepository
                     'setorusuario' => $usuariosData['SetorUsuario'],
                 ));
             };
-
             return $usuariosList;
         } catch (Exception $e) {
             echo $e;
             return [];
+        }
+    }
+
+    public function ResetSenhaUsuario(string $id): bool
+    {
+        try {
+            $sqlQuery = "update {$this->schema}\"Usuarios\" set \"SenhaUsuario\" = ?, \"DataUltimoLogin\" = ?  where \"IdUsuario\"  = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, hash('sha256', $this->retornaNipUsuario($id) . 'MaR@123456'));
+            $stmt->bindValue(2, null, PDO::PARAM_NULL);
+            $stmt->bindValue(3, $id);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
         }
     }
 }

@@ -706,7 +706,7 @@ function carregarUsuarios() {
             var sel = $("#gradeUsuario");
             sel.empty();
             data.forEach(e => {
-                sel.append('<tr><td>' + e.nomeusuario + '</td><td><button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="' + e.codusuario + '" data-desc="' + e.nomeusuario + '">Editar</button></td><td><form method="post" id="excluir' + e.codusuario + '" name="formAltUsuario" id="formAltUsuario" action=""><input type="hidden" name="idUsuario" value="' + e.codusuario + '"><button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="' + e.codusuario + '" type="button">Excluir</button></form></td></tr>');
+                sel.append('<tr><td>' + e.nomeusuario + '</td><td><button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="' + e.codusuario + '" data-desc="' + e.nomeusuario + '">Editar</button></td><td><button class="btn btn-warning btnAlterarSenhaUsuario" data-bs-toggle="modal" data-bs-target="#AlteraSenhaUsuario" data-id="' + e.codusuario + '">Alterar Senha</button></td><td><button class="btn btn-warning btnIncluirSenhaPadrao" data-bs-toggle="modal" data-bs-target="#IncluirSenhaPadrao" data-id="' + e.codusuario + '">Senha Padrão</button></td><td><form method="post" id="excluir' + e.codusuario + '" name="formAltUsuario" id="formAltUsuario" action=""><input type="hidden" name="idUsuario" value="' + e.codusuario + '"><button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="' + e.codusuario + '" type="button">Excluir</button></form></td></tr>');
             });
         },
         error: function (data) {
@@ -890,6 +890,11 @@ $(document).on('click', '#btnConfirmaAlteracaoUsuario', function (e) {
     );
 });
 
+$(document).on('click', '.btnIncluirSenhaPadrao', function (e) {
+    $('#formAltSenhaPadrao #idSenhaPadrao').val($(this).data("id"));
+});
+
+
 $(document).on('click', '#btnNaoConfirmaAlteracaoUsuario', function (e) {
     FecharModal('#AlteraUsuario');
 });
@@ -919,6 +924,27 @@ $(document).on('click', '.btnConfirmaExcluirUsuario', function (e) {
     );
 });
 
+$(document).on('click', '.btnConfirmaResetSenhaUsuario', function (e) {
+    var formdata = new FormData($("form[id='formAltSenhaPadrao']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/ResetSenhaUsuario",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarUsuarios();
+            $(this).data("idSenhaPadrao", "");
+            alertas('Senha Padrão incluida com sucesso. Usuário deverá alterar a senha no próximo login', '#IncluirSenhaPadrao', 'alert_sucess', 'true');
+        },
+        error: function (d) {
+            alertas(d.responseText, '#IncluirSenhaPadrao', 'alert_danger');
+        }
+    }
+    );
+});
+
 $(document).on('click', '#btnNaoConfirmaExcluirUsuario', function (e) {
     FecharModal('#modexcluirUsuario');
 });
@@ -932,7 +958,7 @@ $('#formLogin #btnLogin').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             console.log(JSON.parse(data)[0]['dataultimologin']);
             //console.log(JSON.parse(data));
             //JSON.parse(data)[0]['idperfil']
@@ -1044,9 +1070,6 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
             }
         });
     }
-
-
-
 });
 
 function exibeLinhasRegistros(quantidade) {

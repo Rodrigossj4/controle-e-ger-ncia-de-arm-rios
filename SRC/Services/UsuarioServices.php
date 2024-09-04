@@ -103,4 +103,11 @@ class UsuarioServices extends SistemaServices
         $repository = new UsuarioRepository($this->Conexao());
         return $repository->buscarUsuarioPorID($id);
     }
+
+    public function ResetSenhaUsuario(string $id): bool
+    {
+        $repository = new UsuarioRepository($this->Conexao());
+        $repository->ResetSenhaUsuario($id);
+        return true; 
+    }
 }

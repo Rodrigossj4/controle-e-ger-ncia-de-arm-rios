@@ -235,4 +235,11 @@ class UsuariosController  extends Controller
 
       echo json_encode($usuario);
    }
+
+   public function ResetSenhaUsuario(): bool
+   {
+      $service = new UsuarioServices();
+      $service->ResetSenhaUsuario(filter_input(INPUT_POST, 'idSenhaPadrao'));
+      return true;
+   }
 }

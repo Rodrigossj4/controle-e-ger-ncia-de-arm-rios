@@ -69,7 +69,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Nome do Usuário</th>
-                                <th scope="col" colspan="3" style="text-align: center;">Ações</th>
+                                <th scope="col" colspan="4" style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
                         <tbody id='gradeUsuario'>
@@ -82,7 +82,9 @@
                                     <td>
                                         <button class="btn btn-warning btnAlterarSenhaUsuario" data-bs-toggle="modal" data-bs-target="#AlteraSenhaUsuario" data-id="<?= $usuario['codusuario']; ?>">Alterar Senha</button>
                                     </td>
-
+                                    <td>
+                                        <button class="btn btn-warning btnIncluirSenhaPadrao" data-bs-toggle="modal" data-bs-target="#IncluirSenhaPadrao" data-id="<?= $usuario['codusuario']; ?>">Senha Padrão</button>
+                                    </td>
                                     <td>
                                         <form method="post" id="excluir<?= $usuario['codusuario']; ?>" name="formAltUsuario" id="formAltUsuario" action="">
                                             <input type="hidden" name="idUsuario" value="<?= $usuario['codusuario']; ?>">
@@ -224,6 +226,31 @@
                 <span class="alerta"></span>
             </div>
 
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="IncluirSenhaPadrao" tabindex="-1" aria-labelledby="IncluirSenhaPadrao" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja resetar a senha do usuario para a senha padrao?</span>
+                    <div class="col-sm-3">
+                        <form id="formAltSenhaPadrao">
+                            <input type="hidden" name="idSenhaPadrao" id="idSenhaPadrao">
+                        </form>
+                        <input type="button" id="btnConfirmaResetSenhaUsuario" data-id="" value="Sim" class="btn btn-success btnConfirmaResetSenhaUsuario">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaResetSenhaUsuario" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaResetSenhaUsuario">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
         </div>
     </div>
 </div>

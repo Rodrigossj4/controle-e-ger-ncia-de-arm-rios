@@ -7,7 +7,7 @@
             <form method="post" id="formAltSenha" action="">
                 <div class="form-group">
                     <label class="col-form-label" for="senhaAtual">Digite o Nip: </label>
-                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="nip" id="nip">
+                    <input class="form-control form-control-sm form-control-padronizado" type="text" name="nipAltSenha" id="nipAltSenha">
                 </div>
                 <div class="form-group">
                     <label class="col-form-label" for="senhaAtual">Digite a senha Atual: </label>
