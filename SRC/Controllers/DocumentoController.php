@@ -208,19 +208,22 @@ class DocumentoController extends Controller
         if (count($_FILES['documento']['name']) > 0) {
             $extensoesValidas = $this->validarExtensao();
             for ($i = 0; $i < count($_FILES['documento']['name']); $i++) {
-                $ext = pathinfo($_FILES['documento']['name'][$i], PATHINFO_EXTENSION);
+                //$ext = pathinfo($_FILES['documento']['name'][$i], PATHINFO_EXTENSION);
+                $ext = explode("/", mime_content_type($_FILES['documento']['tmp_name'][$i]))[1];
                 //var_dump($ext);
-                if (!in_array(strtolower($ext), $extensoesValidas)) {
+                if ((!in_array(strtolower($ext), $extensoesValidas))) {
                     http_response_code(500);
                     echo "Extensão não permitida";
                     return false;
                 }
             }
 
+            if (!isset($_SESSION))
+                session_start();
 
             $service = new DocumentoServices();
 
-            $caminho = $service->carregarArquivosDiretorioTemporario(filter_input(INPUT_POST, 'Nip'), "ARQ");
+            $caminho = $service->carregarArquivosDiretorioTemporario(filter_input(INPUT_POST, 'Nip'), "ARQ", $_SESSION['usuario'][0]["codusuario"]);
         }
 
         echo $caminho;

@@ -507,9 +507,14 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function carregarArquivosDiretorioTemporario(string $nip, string $tipoArquivo): string
+    public function carregarArquivosDiretorioTemporario(string $nip, string $tipoArquivo, string $codUsuario): string
     {
-        $pasta = $this->gerarPastaTemporaria($nip, $tipoArquivo);
+        if (file_exists($this->diretorioLote .  $codUsuario . "/")) {
+            $this->removeDirectory($this->diretorioLote . $codUsuario . "/");
+        }
+
+        $pasta = $this->gerarPastaTemporaria($nip, $tipoArquivo, $codUsuario);
+
         if (count($_FILES['documento']['name']) > 0)
             $this->subirArquivos($pasta);
 
@@ -520,10 +525,10 @@ class DocumentoServices extends SistemaServices
         return $pasta;
     }
 
-    private function gerarPastaTemporaria(string $nip, string $tipoArquivo): string
+    private function gerarPastaTemporaria(string $nip, string $tipoArquivo, string $codUsuario): string
     {
         $idPasta = random_int(1, 999999);
-        $pasta = $tipoArquivo . "-" . $nip . "-" . $idPasta;
+        $pasta = $codUsuario . "/" . $tipoArquivo . "-" . $nip . "-" . $idPasta;
         mkdir("{$this->diretorioLote}{$pasta}", 0777, true);
         return "{$this->diretorioLote}{$pasta}";
     }

@@ -1780,47 +1780,51 @@ function formatarDataHora() {
 
 function processoAssinaturaData(data) {
     //console.log(data);
-    var ArrayDocumentos = JSON.parse(data);
-    totalDocumnetos = ArrayDocumentos.length;
-    if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
-        processarListaDeItens(ArrayDocumentos).then(function () {
-            console.log('Todos os itens foram processados.');
+    try {
+        var ArrayDocumentos = JSON.parse(data);
+        totalDocumnetos = ArrayDocumentos.length;
+        if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
+            processarListaDeItens(ArrayDocumentos).then(function () {
+                console.log('Todos os itens foram processados.');
 
-            if (listDocumentosServidor.length == totalDocumnetos)
-                armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+                if (listDocumentosServidor.length == totalDocumnetos)
+                    armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
-            console.log("Processo Terminado.");
-            listDocumentos = [];
+                console.log("Processo Terminado.");
+                listDocumentos = [];
+                listDocumentosServidor = [];
+                $('#semestre').trigger('change');
+                $('.btnIndexar').css("display", "none");
+                $('.btnAnexar').css("display", "block");
+                $('#btnConfirmaIndexarDocumento').removeAttr('disabled');
+                $('#btnConfirmaAnexarDocumento').removeAttr('disabled');
+
+                alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+                alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+
+            }).catch(function (error) {
+                console.error('Ocorreu um erro:', error);
+            });
+        } else {
             listDocumentosServidor = [];
+            ArrayDocumentos.forEach(doc => {
+                doc["documentoid"] = docid;
+                doc["imgencontrada"] = possuiPasta;
+                dadosDocumento = JSON.stringify(doc);
+                listDocumentosServidor.push(dadosDocumento);
+            });
+
+            armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
+            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+            alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
             $('#semestre').trigger('change');
             $('.btnIndexar').css("display", "none");
             $('.btnAnexar').css("display", "block");
             $('#btnConfirmaIndexarDocumento').removeAttr('disabled');
             $('#btnConfirmaAnexarDocumento').removeAttr('disabled');
-
-            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-            alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
-
-        }).catch(function (error) {
-            console.error('Ocorreu um erro:', error);
-        });
-    } else {
-        listDocumentosServidor = [];
-        ArrayDocumentos.forEach(doc => {
-            doc["documentoid"] = docid;
-            doc["imgencontrada"] = possuiPasta;
-            dadosDocumento = JSON.stringify(doc);
-            listDocumentosServidor.push(dadosDocumento);
-        });
-
-        armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-        alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-        alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
-        $('#semestre').trigger('change');
-        $('.btnIndexar').css("display", "none");
-        $('.btnAnexar').css("display", "block");
-        $('#btnConfirmaIndexarDocumento').removeAttr('disabled');
-        $('#btnConfirmaAnexarDocumento').removeAttr('disabled');
+        }
+    } catch (erro) {
+        console.log("Erro bloco 4: " + erro.message)
     }
 }
 
@@ -1905,60 +1909,68 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
     docid = $('#listPaginas #documentosLista .clickDocumento').attr("id");
     $(this).attr('disabled', 'disabled');
-    $.ajax({
-        type: 'POST',
-        url: "/retorna-pdfs",
-        data: dados,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            //console.log(data);
-            $('#formCadDocumento #Nip').mask('00.0000.00');
-            possuiPasta = 1;
-            processoAssinaturaData(data);
-        },
-        error: function (d) {
-            alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#ModAnexarDocumento', 'alert_danger');
-            $('#formCadDocumento #Nip').mask('00.0000.00');
-        }
-    });
+    try {
+        $.ajax({
+            type: 'POST',
+            url: "/retorna-pdfs",
+            data: dados,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                //console.log(data);
+                $('#formCadDocumento #Nip').mask('00.0000.00');
+                possuiPasta = 1;
+                processoAssinaturaData(data);
+            },
+            error: function (d) {
+                alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#ModAnexarDocumento', 'alert_danger');
+                $('#formCadDocumento #Nip').mask('00.0000.00');
+            }
+        });
+    } catch (erro) {
+        console.log("Erro bloco 1: " + erro.message)
+    }
 
 });
 
 function processarListaDeItens(lista) {
     // Inicia a Promise
     //console.log("lista: " + lista);
-    return lista.reduce(function (promessaAnterior, item) {
-        // Processa cada item em série
-        return promessaAnterior.then(function () {
-            // Processa o item atual
+    try {
+        return lista.reduce(function (promessaAnterior, item) {
+            // Processa cada item em série
+            return promessaAnterior.then(function () {
+                // Processa o item atual
 
-            return processarItemComResposta(item).then(function (resposta) {
-                // Trata a resposta do item
-                console.log('Resposta para o item', item, ':', resposta);
+                return processarItemComResposta(item).then(function (resposta) {
+                    // Trata a resposta do item
+                    console.log('Resposta para o item', item, ':', resposta);
 
-                docBase64Atual = resposta;
+                    docBase64Atual = resposta;
 
-                finalizarAssinatura(function () {
-                    /* setTimeout(function () {
-                         location.reload();
-                     }, 3000);*/
+                    finalizarAssinatura(function () {
+                        /* setTimeout(function () {
+                             location.reload();
+                         }, 3000);*/
+                    });
+
+                    docAtual = JSON.parse(docAtual);
+                    docAtual["documentoid"] = docid;
+                    docAtual["imgencontrada"] = possuiPasta;
+                    docAtual["b64"] = docBase64Atual;
+                    docAtual = JSON.stringify(docAtual);
+
+                    listDocumentosServidor.push(docAtual);
+                    //console.log("lista: " + listDocumentosServidor);
+
+                    // Retorna uma Promise resolvida para avançar para o próximo item
+                    return Promise.resolve();
                 });
-
-                docAtual = JSON.parse(docAtual);
-                docAtual["documentoid"] = docid;
-                docAtual["imgencontrada"] = possuiPasta;
-                docAtual["b64"] = docBase64Atual;
-                docAtual = JSON.stringify(docAtual);
-
-                listDocumentosServidor.push(docAtual);
-                //console.log("lista: " + listDocumentosServidor);
-
-                // Retorna uma Promise resolvida para avançar para o próximo item
-                return Promise.resolve();
             });
-        });
-    }, Promise.resolve());
+        }, Promise.resolve());
+    } catch (erro) {
+        console.log("Erro bloco 3: " + erro.message)
+    }
 }
 
 function assinarDocumentos(documentos) {
@@ -1989,26 +2001,30 @@ function assinarDocumentos(documentos) {
 }
 
 function processarItemComResposta(item) {
-    return new Promise(function (resolve, reject) {
-        assinarDocumentos(JSON.stringify(item));
-        // Seleciona o campo onde você espera a resposta
-        var campo = $('#assinatura');
+    try {
+        return new Promise(function (resolve, reject) {
+            assinarDocumentos(JSON.stringify(item));
+            // Seleciona o campo onde você espera a resposta
+            var campo = $('#assinatura');
 
-        // Adiciona um ouvinte de eventos para o evento 'change'
-        campo.on('change', function (event) {
+            // Adiciona um ouvinte de eventos para o evento 'change'
+            campo.on('change', function (event) {
 
-            var valorInput = $(this).val();
-            if (valorInput !== '') {
-                docAtual = $('#objetoAtual').val();
-                // console.log("documento atual " + docAtual);
-            }
-            // Quando o evento 'change' ocorrer, resolve a Promise com o valor do campo
-            resolve(event.target.value); // Você pode passar algum dado relevante para a resolução, se necessário
+                var valorInput = $(this).val();
+                if (valorInput !== '') {
+                    docAtual = $('#objetoAtual').val();
+                    // console.log("documento atual " + docAtual);
+                }
+                // Quando o evento 'change' ocorrer, resolve a Promise com o valor do campo
+                resolve(event.target.value); // Você pode passar algum dado relevante para a resolução, se necessário
+            });
+
+            // Aqui você pode fazer algo com o item, se necessário
+            console.log('Processando item:', item);
         });
-
-        // Aqui você pode fazer algo com o item, se necessário
-        console.log('Processando item:', item);
-    });
+    } catch (erro) {
+        console.log("Erro bloco 2: " + erro.message)
+    }
 }
 
 
