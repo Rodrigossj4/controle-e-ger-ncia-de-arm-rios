@@ -1977,7 +1977,7 @@ function assinarDocumentos(documentos) {
     console.log("Rotina de assinar: ");
     var ArrayDocumentos = JSON.parse(documentos);
 
-    //console.log("Dados recebidos: " + ArrayDocumentos);
+    //console.log("Dados recebidos: " + docid);
     $.ajax({
         type: 'GET',
         url: "/converter-base64?caminho=" + ArrayDocumentos["arquivo"],
@@ -2107,7 +2107,8 @@ function prettyCommandSign() {
     $('#sign-websocket').val(JSON.stringify({
         command: "sign",
         type: "pdf",
-        inputData: $('#content-value').val()
+        inputData: $('#content-value').val(),
+        docId: docid
     }, null, 2));
 }
 

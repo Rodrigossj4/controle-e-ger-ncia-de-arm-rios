@@ -168,6 +168,7 @@
 	}
 
 	function verify(params) {
+		///cancelarIndice(params.docId);
 		// Verify - Chama o assinador
 		window.SerproSignerClient.verify(params.type, params.inputData, params.inputSignature, null, params.algorithmOIDHash)
 			.success(function (response) {
@@ -203,6 +204,8 @@
 					alert(error.error);
 				}
 				console.debug('Error:', error);
+				console.log("Indice para excluir: " + params.docId);
+				cancelarIndice(params.docId);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
 			});
@@ -489,6 +492,32 @@
 			if (value === true) {
 				$('.js-is-' + key).show();
 			}
+		}
+	}
+
+	function cancelarIndice(docId) {
+		dados = JSON.stringify({
+			idDocumento: docId
+		}, null, 2);
+
+		try {
+			$.ajax({
+				type: 'POST',
+				url: "/excluirDocumento",
+				data: dados,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					console.log(data);
+
+				},
+				error: function (d) {
+					alertas("Erro ao excluir o indice", '#ModAnexarDocumento', 'alert_danger');
+
+				}
+			});
+		} catch (erro) {
+			console.log("Erro bloco 1: " + erro.message)
 		}
 	}
 
