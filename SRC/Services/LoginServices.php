@@ -15,9 +15,8 @@ class LoginServices extends SistemaServices
         try {
             $repository = new LoginRepository($this->Conexao());
             $retorno = $repository->login($usuario);
-
             if (count($retorno) == 1) {
-                if ($retorno[0]["dataultimologin"] != null) {
+                if ($retorno[0]["DataUltimoLogin"] != null) {
                     session_start();
                     session_regenerate_id(true);
 
@@ -37,11 +36,10 @@ class LoginServices extends SistemaServices
                     'ipacesso' => $usuario[0]['ipusuario'],
                     'omusuario' => $retorno[0]["omusuario"],
                     'idperfil' => $retorno[0]["idacesso"],
-                    'dataultimologin' => $retorno[0]["dataultimologin"]
+                    'dataultimologin' => $retorno[0]["DataUltimoLogin"]
                 ));
 
-                //var_dump($dadosList);
-                if ($retorno[0]["dataultimologin"] != null)
+                if ($retorno[0]["DataUltimoLogin"] != null)
                     $this->gravarLogOperacoes($dadosList);
 
                 return $dadosList;
@@ -57,8 +55,9 @@ class LoginServices extends SistemaServices
     public function logout(array $dadosList): bool
     {
         try {
-            $this->gravarLogOperacoes($dadosList);
             session_start();
+            $this->gravarLogOperacoes($dadosList);
+            
 
             if (file_exists($this->diretorioLote .  $_SESSION['usuario'][0]["codusuario"])) {
                 $this->removeDirectory($this->diretorioLote . $_SESSION['usuario'][0]["codusuario"]);

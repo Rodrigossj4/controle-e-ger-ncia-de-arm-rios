@@ -41,7 +41,6 @@ $('#btnCadArmario').on('click', function (e) {
 
     if (($('#formCadArmario #codigo').val() == "") || ($('#formCadArmario #nomeInterno').val() == "") || ($('#formCadArmario #nomeExterno').val() == "")) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
-        //alertas("Todos os campos do formulário são obrigatórios", '#modCadArmario', 'alert_danger');
         return false;
     }
 
@@ -60,7 +59,6 @@ $('#btnCadArmario').on('click', function (e) {
             $('#formCadArmario #nomeInterno').val("");
             $('#formCadArmario #nomeExterno').val("");
             toastr.success('Armário cadastrado com sucesso');
-            //alertas('Armário cadastrado com sucesso', '#modCadArmario', 'alert_sucess');
 
         },
         error: function (d) {
@@ -162,7 +160,6 @@ $(document).on('click', '#btnConfirmaDesArmTipoDoc', function (e) {
             carregarTipoDocVincArmarios($('#formDesArmTipoDoc #idArmario').val());
             toastr.success('Vinculo Excluido com sucesso');
             FecharModal('#ConfDesArmTipoDoc');
-            //alertas('Vinculo Excluido com sucesso', '#ConfDesArmTipoDoc', 'alert_sucess', 'true');
         },
         error: function (d) {
             alertas(d.responseJSON['msg'], '#ConfDesArmTipoDoc', 'alert_danger');
@@ -185,11 +182,9 @@ $('.vincArmarioTipoDoc').on('click', function (e) {
             carregarTipoDocVincArmarios($('#formListaDocumentos #IdArmario').val());
 
             toastr.success('Armário e documento vinculados com sucesso');
-            //alertas('Armário e documento vinculados com sucesso', '#GerenciarArmario', 'alert_sucess');
         },
         error: function (d) {
             toastr.error(d.responseJSON['msg']);
-            //alertas(d.responseJSON['msg'], '#modLogin', 'alert_danger');
         }
     });
 });
@@ -201,7 +196,6 @@ $(document).on('click', '#exibConfirmaAlteracaoArmario', function (e) {
 $(document).on('click', '#btnConfirmaAlteracaoArmario', function (e) {
     if (($('#formAltArmario #codigo').val() == "") || ($('#formAltArmario #nomeInterno').val() == "") || ($('#formAltArmario #nomeExterno').val() == "")) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
-        //alertas("Todos os campos do formulário são obrigatórios", '#AlteraArmario', 'alert_danger');
         return false;
     }
 
@@ -221,12 +215,10 @@ $(document).on('click', '#btnConfirmaAlteracaoArmario', function (e) {
             $('#formAltArmario #nomeExterno').val("");
             $('.opcoesConfirmacao').css('display', 'none');
             toastr.success('Armário atualizado com sucesso');
-            //alertas('Armário atualizado com sucesso', '#AlteraArmario', 'alert_sucess', 'true');
             FecharModal('#AlteraArmario');
         },
         error: function (d) {
             toastr.error('Houve um problema para atualizar o armário');
-            //alertas("Houve um problema para atualizar o armário", '#AlteraArmario', 'alert_danger');
         }
 
     });
@@ -260,11 +252,9 @@ $(document).on('click', '.btnConfirmaExcluirArmario', function (e) {
             $(this).data("id", "");
             toastr.success('Armário excluído com sucesso');
             FecharModal('#ExcluirArmario');
-            //alertas('Armário excluído com sucesso', '#ExcluirArmario', 'alert_sucess', 'true');
         },
         error: function (d) {
             toastr.error('Houve um problema para excluir o armário. Verifique se existem tipo de documentos vinculados a ele antes de excluir.');
-            //alertas("Houve um problema para excluir o armário. Verifique se existem tipo de documentos vinculados a ele antes de excluir.", '#ExcluirArmario', 'alert_danger', 'true');
         }
     }
     );
@@ -379,7 +369,6 @@ $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
 
     if (($('#formCadTipoDocumento #desctipo').val() == "")) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
-        //alertas("Todos os campos do formulário são obrigatórios", '#modCadTipoDocumento', 'alert_danger');
         return false;
     }
 
@@ -396,16 +385,13 @@ $('#formCadTipoDocumento #btnCadTipoDoc').on('click', function (e) {
             carregarTipoDocumento();
             $('#formCadTipoDocumento #desctipo').val("");
             toastr.success('Tipo de documento cadastrado com sucesso');
-            //alertas('Tipo de documento cadastrado com sucesso', '#modCadTipoDocumento', 'alert_sucess');
         },
         error: function (d) {
             if (d["status"] == 409)
                 toastr.error('Já existe um Tipo de documento com esse nome cadastrado');
-                //alertas("Já existe um Tipo de documento com esse nome cadastrado", '#modCadTipoDocumento', 'alert_danger');
 
             if (d["status"] == 500)
                 toastr.error('Houve um problema para cadastrar o Tipo de documento');
-                //alertas("Houve um problema para cadastrar o Tipo de documento", '#modCadTipoDocumento', 'alert_danger');
 
         }
     });
@@ -431,11 +417,9 @@ $(document).on('click', '.btnConfirmaExcluirTipoDoc', function (e) {
             $(this).data("id", "");
             toastr.success('Tipo documento excluído com sucesso');
             FecharModal('#modexcluirTipoDoc');
-            //alertas('Tipo documento excluído com sucesso', '#modexcluirTipoDoc', 'alert_sucess', 'true');
         },
         error: function (d) {
             toastr.error('Houve um problema para excluir o tipo de documento. Verifique se há documentos cadastrados com esse tipo.');
-            //alertas("Houve um problema para excluir o tipo de documento. Verifique se há documentos cadastrados com esse tipo.", '#modexcluirTipoDoc', 'alert_danger', 'true');
         }
     }
     );
@@ -475,11 +459,9 @@ $(document).on('click', '#btnConfirmaAlteracaoTipoDocumento', function (e) {
             $(this).data("id", "");
             toastr.success('Tipo documento atualizado com sucesso');
             FecharModal('#AlteraTipoDoc');
-            //alertas('Tipo documento atualizado com sucesso', '#AlteraTipoDoc', 'alert_sucess', 'true');
         },
         error: function (d) {
             toastr.error('Houve um problema para atualizar o tipo de documento.');
-            //alertas("Houve um problema para atualizar o tipo de documento", '#AlteraTipoDoc', 'alert_danger');
         }
     }
     );
@@ -577,7 +559,6 @@ $('#formCadPerfil #btnCadPerfil').on('click', function (e) {
 
     if (($('#formCadPerfil #nomePerfil').val() == "")) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
-        //alertas("Todos os campos do formulário são obrigatórios", '#modCadPerfil', 'alert_danger');
         return false;
     }
 
@@ -595,11 +576,9 @@ $('#formCadPerfil #btnCadPerfil').on('click', function (e) {
             $('#formCadPerfil #armarios').val("");
             $('#formCadPerfil #nivelAcesso').val("1");
             toastr.success('Perfil cadastrado com sucesso');
-            //alertas('Perfil cadastrado com sucesso', '#modCadPerfil', 'alert_sucess');
         },
         error: function (d) {
             toastr.error(d.responseText);
-            //alertas(d.responseText, '#modCadPerfil', 'alert_danger');
         }
     });
 });
@@ -670,7 +649,6 @@ $(document).on('click', '#btnConfirmaAlteracaoPerfil', function (e) {
 
     if (($('#formAltPerfil #nomeperfil').val() == "")) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
-        //alertas("Todos os campos do formulário são obrigatórioss", '#AlteraPerfil', 'alert_danger');
         return false;
     }
 
@@ -684,12 +662,10 @@ $(document).on('click', '#btnConfirmaAlteracaoPerfil', function (e) {
             //console.log(d);
             carregarPerfis();
             $(this).data("nomeperfil", "");
-            //alertas('Perfil atualizado com sucesso', '#AlteraPerfil', 'alert_sucess', 'true');
             toastr.success('Perfil atualizado com sucesso');
             FecharModal('#AlteraPerfil');
         },
         error: function (d) {
-            //alertas(d.responseText, '#AlteraPerfil', 'alert_danger');
             toastr.error(d.responseText);
         }
     }
@@ -720,10 +696,8 @@ $(document).on('click', '.btnConfirmaExcluirPerfil', function (e) {
             $(this).data("id", "");
             toastr.success('Perfil excluído com sucesso');
             FecharModal('#modexcluirPerfil');
-            //alertas('Perfil excluído com sucesso', '#modexcluirPerfil', 'alert_sucess', 'true');
         },
         error: function (d) {
-            //alertas('Não foi possível excluir o perfil. Verifique se existem usuários ativos.', '#modexcluirPerfil', 'alert_danger', 'true');
             toastr.error('Não foi possível excluir o perfil. Verifique se existem usuários ativos.');
         }
     }
@@ -760,19 +734,16 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
 
     if (($('#formCadUsuario #nomeusuario').val() == "") || ($('#formCadUsuario #nip').val() == "") || ($('#formCadUsuario #senhausuario').val() == "") || ($('#formCadUsuario #idacesso').val() == 0)) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
-        //alertas("Todos os campos do formulário são obrigatórios", '#modCadUsuario', 'alert_danger');
         return false;
     }
 
     if (($('#formCadUsuario #nip').val().replace(/[^\d]+/g, '').length != 8)) {
-        //alertas("Campo NIP inválido", '#modCadUsuario', 'alert_danger');
         toastr.error('Campo NIP inválido');
         return false;
     }
 
     if (!validarSenha($('#formCadUsuario #senhausuario').val())) {
         toastr.error('A senha não atende ao requisitos mínimos');
-        //alertas("A senha não atende ao requisitos mínimos", '#modCadUsuario', 'alert_danger');
         return false;
     }
 
@@ -800,11 +771,9 @@ $('#formCadUsuario #btnCadUsuario').on('click', function (e) {
             $('#formCadUsuario #om').val("");
             $('#formCadUsuario #setor').val("");
             toastr.success('Usuario cadastrado com sucesso');
-            //alertas('Usuario cadastrado com sucesso', '#modCadUsuario', 'alert_sucess');
         },
         error: function (d) {
             toastr.error(d.responseText);
-            //alertas(d.responseText, '#modCadUsuario', 'alert_danger');
         }
     });
 });
@@ -899,7 +868,6 @@ $(document).on('click', '#btnConfirmaAlteracaoUsuario', function (e) {
 
     if (($('#formAltUsuario #nomeusuarioAlt').val() == "") || ($('#formAltUsuario #nipAlt').val() == "") || ($('#formAltUsuario #omAlt').val() == "") || ($('#formAltUsuario #idacessoAlt').val() == 0) || ($('#formAltUsuario #setorAlt').val() == "")) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
-        //alertas("Todos os campos do formulário são obrigatórios", '#AlteraUsuario', 'alert_danger');
         return false;
     }
 
@@ -930,11 +898,9 @@ $(document).on('click', '#btnConfirmaAlteracaoUsuario', function (e) {
             $(this).data("nomeusuario", "");
             toastr.success('Dados do usuario atualizados com sucesso');
             FecharModal('#AlteraUsuario');
-            //alertas('Dados do usuario atualizados com sucesso', '#AlteraUsuario', 'alert_sucess', 'true');
         },
         error: function (d) {
             toastr.error(d.responseText);
-            //alertas(d.responseText, '#AlteraUsuario', 'alert_danger');
         }
     }
     );
@@ -969,10 +935,8 @@ $(document).on('click', '.btnConfirmaExcluirUsuario', function (e) {
             $(this).data("id", "");
             toastr.success('Usuario excluído com sucesso');
             FecharModal('#modexcluirUsuario');
-            //alertas('Usuario excluído com sucesso', '#modexcluirUsuario', 'alert_sucess', 'true');
         },
         error: function (d) {
-            //alertas(d.responseText, '#modexcluirUsuario', 'alert_danger');
             toastr.error(d.responseText);
         }
     }
@@ -993,11 +957,9 @@ $(document).on('click', '.btnConfirmaResetSenhaUsuario', function (e) {
             $(this).data("idSenhaPadrao", "");
             toastr.success('Senha Padrão incluída com sucesso. Usuário deverá alterar a senha no próximo login');
             FecharModal('#IncluirSenhaPadrao');
-            //alertas('Senha Padrão incluida com sucesso. Usuário deverá alterar a senha no próximo login', '#IncluirSenhaPadrao', 'alert_sucess', 'true');
         },
         error: function (d) {
             toastr.error(d.responseText,);
-            //alertas(d.responseText, '#IncluirSenhaPadrao', 'alert_danger');
         }
     }
     );
@@ -1028,6 +990,7 @@ $('#formLogin #btnLogin').on('click', function (e) {
         contentType: false,
         
         success: function (data) {
+            console.log(JSON.parse(data))
             //console.log(JSON.parse(data)[0]['dataultimologin']);
             //console.log(JSON.parse(data));
             //JSON.parse(data)[0]['idperfil']
@@ -1035,6 +998,7 @@ $('#formLogin #btnLogin').on('click', function (e) {
             
            
             if (data != "null") {
+                console.log(JSON.parse(data));
                 if ((JSON.parse(data)[0]['dataultimologin'] == null)) {
                     //console.log("/trocasenha");
                     location.assign("/troca-senha");
@@ -1066,21 +1030,18 @@ $('#formAltSenha #alterarSenha').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
             if (data != "true") {
-                //alertas('Não foi possível alterar a senha', '#modAltSenha', 'alert_danger');
                 toastr.error('Não foi possível alterar a senha');
             } else {
+                FecharModal('#AlteraSenhaUsuario');
                 toastr.success('Senha alterada com sucesso');
-                //alertas('Senha alterada com sucesso', '#modAltSenha', 'alert_sucess');
                 setTimeout(function () {
-                    location.assign("/logout");
+                    location.assign("/gerenciar-usuarios");
                 }, 3000);
             }
         },
         error: function (d) {
             toastr.error(d.responseText);
-            //alertas(d.responseText, '#modAltSenha', 'alert_danger');
         }
     });
 });
@@ -1290,7 +1251,6 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
 
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
         toastr.error('Selecione um armário');
-        //alertas("Selecione um armário", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -1475,8 +1435,8 @@ $('#formCadOM #btnCadOM').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
+            carregarOm()
             toastr.success('OM cadastrada com sucesso');
-            //alertas('OM cadastrada com sucesso', '#modCadOM', 'alert_sucess', 'true');
         },
         error: function (d) {
             toastr.error('Erro ao cadastrar OM');
@@ -1485,15 +1445,10 @@ $('#formCadOM #btnCadOM').on('click', function (e) {
 });
 
 $(document).on('click', '.btnAlterarOm', function (e) {
-    $("#AlterarOm").modal()
-
-    // $('#AlteraPerfil').modal()
-    // $('#formAltPerfil #id').val($(this).data("id"));
-    // $('#formAltPerfil #nomeperfil').val($(this).data("desc"));
-    // $('#formAltPerfil #nomeperfilOriginal').val($(this).data("desc"));
-    
-    $('#formCadOM #id').val($(this).data("id"));
-    $('#formCadOM #sigla').val($(this).data("desc"));
+    $("#AlterarOm").modal()    
+    $('#formAlterarOm #codOMAlter').val($(this).data("codom"));
+    $('#formAlterarOm #siglaAlter').val($(this).data("sigla"));
+    $('#formAlterarOm #nomeOMAlter').val($(this).data("nomeom"));
     $('.opcoesConfirmacao').css('display', 'none');
 });
 
@@ -1505,9 +1460,17 @@ $(document).on('click', '#exibConfirmaAlteracaoOm', function (e) {
 
 
 $(document).on('click', '#btnConfirmaAlteracaoOm', function (e) {
-    alert('oi')
+    let siglaAlter = $('#siglaAlter').val()
+    if(!siglaAlter){
+        toastr.warning('Todos os campos do formulário são obrigatórios');
+        return false
+    }
+    let nomeOMAlter = $('#nomeOMAlter').val()
+    if(!nomeOMAlter){
+        toastr.warning('Todos os campos do formulário são obrigatórios');
+        return false
+    }
     var formdata = new FormData($("form[id='formAlterarOm']")[0]);
-    console.log(formdata);
     $.ajax({
         type: 'POST',
         url: "/alterarOM",
@@ -1516,21 +1479,18 @@ $(document).on('click', '#btnConfirmaAlteracaoOm', function (e) {
         contentType: false,
         success: function (d) {
             carregarOm();
-            $(this).data("id", "");
-            toastr.success('Tipo documento atualizado com sucesso');
-            FecharModal('#AlteraTipoDoc');
-            //alertas('Tipo documento atualizado com sucesso', '#AlteraTipoDoc', 'alert_sucess', 'true');
+            toastr.success('OM atualizado com sucesso');
+            FecharModal('#AlterarOm');
         },
         error: function (d) {
-            toastr.error('Houve um problema para atualizar o tipo de documento.' + d.responseText);
-            //alertas("Houve um problema para atualizar o tipo de documento", '#AlteraTipoDoc', 'alert_danger');
+            toastr.error('Houve um problema para atualizar OM.' + d.responseText);
         }
     }
     );
 });
 
 $(document).on('click', '#btnNaoConfirmaAlteracaoOm', function (e) {
-    FecharModal('#AlteraOm');
+    $('.modal').trigger('click');
 });
 
 function carregarOm() {
@@ -1541,11 +1501,21 @@ function carregarOm() {
         contentType: 'application/json',
         cache: false,
         success: function (data) {
-            //console.log(data);
             var sel = $("#gradeListaOM");
             sel.empty();
             data.forEach(e => {
-                sel.append('<tr><td>' + e.desctipo + '</td><td><button class="btn btn-warning btnAlterarTipoDoc" data-bs-toggle="modal" data-bs-target="#AlteraTipoDoc" data-id="' + e.id + '" data-desc="' + e.desctipo + '">Editar</button></td><td><form method="post" id="excluir' + e.id + '" action=""><input type="hidden" id="idTipoDoc" name="idTipoDoc" value="' + e.id + '"><button class="btn btn-danger excluirTipoDoc" data-bs-toggle="modal" data-bs-target="#modexcluirTipoDoc" data-id="' + e.id + '" type="button">Excluir</button></form></td></tr>');
+                sel.append(`<tr>
+                    <td>${e.CodOM}</td>
+                    <td>${e.NomeAbreviado}</td>
+                    <td>${e.NomOM}</td>
+                    <td>
+                        <button class="btn btn-warning btnAlterarOm" data-bs-toggle="modal" data-bs-target="#AlteraOm" data-codom="${e.CodOM}" data-sigla="${e.NomeAbreviado}" data-nomeom="${e.NomOM}">Editar</button></td>
+                     <td>
+                        <form method="post" id="formExcluirOm${e.CodOM}" action="">
+                            <input type="hidden" id="CodOMExcluir" name="CodOMExcluir" value="${e.CodOM}"><button class="btn btn-danger excluirOm" data-bs-toggle="modal" data-bs-target="#modexcluirOm" data-codom="${e.CodOM}" type="button">Excluir</button>
+                        </form>
+                    </td>
+                    </tr>`);
             });
         },
         error: function (data) {
@@ -1553,6 +1523,34 @@ function carregarOm() {
         }
     });
 }
+
+$(document).on('click', '.excluirOm', function (e) {
+    $('#modexcluirOm').modal()
+    $('#formExcluirOm #codOMExcluir').val($(this).data("codom"));
+});
+$(document).on('click', '#btnNaoConfirmaExcluirOm', function (e) {
+    FecharModal('#modexcluirOm');
+});
+$(document).on('click', '.btnConfirmaExcluirOm', function (e) {
+    var formdata = new FormData($("form[id='formExcluirOm']")[0]);
+
+    $.ajax({
+        type: 'POST',
+        url: "/excluirOM",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            carregarOm()
+            FecharModal('#modexcluirOm');
+            toastr.success('OM excluído com sucesso');
+        },
+        error: function (d) {
+            toastr.error(d.responseText);
+        }
+    }
+    );
+});
 
 ////////////////////Documento////////////////////////
 $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
@@ -1566,7 +1564,6 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            console.log(data);
             $('#formCadDocumento #Caminho').val(data);
             ListarArquivos();
             $(".carousel-control-prev").removeAttr("id");
@@ -1823,7 +1820,6 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
         toastr.error('Selecione um armário');
-        //alertas("Selecione um armário", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -2008,7 +2004,6 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
     listDocumentosServidor = [];
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
         toastr.error('Selecione um armário');
-        //alertas("Selecione um armário", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 

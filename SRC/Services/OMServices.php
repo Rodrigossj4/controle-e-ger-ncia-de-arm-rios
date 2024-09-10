@@ -25,11 +25,11 @@ class OMServices extends SistemaServices
         }
     }
 
-    public function atualizarOM(array $armario): bool
+    public function atualizarOM(array $om): bool
     {
         try {
             $repository = new OMRepository($this->Conexao());
-            return $repository->atualizarOM($armario);
+            return $repository->atualizarOM($om);
         } catch (Exception $e) {
             echo $e;
             return false;
@@ -52,6 +52,28 @@ class OMServices extends SistemaServices
         try {
             $repository = new OMRepository($this->Conexao());
             return $repository->ObterDadosOM($idOM);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
+    public function usersOM(string $idOM)
+    {
+        try {
+            $repository = new OMRepository($this->Conexao());
+            return $repository->obterUsersOM($idOM);
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }
+
+    public function excluirOM(string $idOM)
+    {
+        try {
+            $repository = new OMRepository($this->Conexao());
+            return $repository->excluirOM($idOM);
         } catch (Exception $e) {
             echo $e;
             return [];

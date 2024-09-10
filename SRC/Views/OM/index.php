@@ -49,7 +49,7 @@
                                         <th scope="col">Código</th>
                                         <th scope="col">Sigla</th>
                                         <th scope="col">Nome</th>
-                                        <!-- <th scope="col" colspan="2" style="text-align: center;">Ações</th> -->
+                                        <th scope="col" colspan="2" style="text-align: center;">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id='gradeListaOM'>
@@ -58,15 +58,15 @@
                                             <td><?= $om['CodOM']; ?></td>
                                             <td><?= $om['NomeAbreviado']; ?></td>
                                             <td><?= $om['NomOM']; ?></td>
-                                            <!-- <td>
-                                                <button class="btn btn-warning btnAlterarOm" data-bs-toggle="modal" data-bs-target="#AlteraOm" data-id="<?= $om['id']; ?>" data-desc="<?= $om['nomeperfil']; ?>">Editar</button>
+                                            <td>
+                                                <button class="btn btn-warning btnAlterarOm" data-bs-toggle="modal" data-bs-target="#AlteraOm" data-codom="<?= $om['CodOM']; ?>" data-sigla="<?= $om['NomeAbreviado']; ?>" data-nomeom="<?= $om['NomOM']; ?>">Editar</button>
                                             </td>
                                             <td>
-                                                <form method="post" id="excluir<?= $perfil['id']; ?>" action="">
-                                                    <input type="hidden" id="idPerfil" name="idPerfil" value="<?= $perfil['id']; ?>">
-                                                    <button class="btn btn-danger excluirPerfil" data-bs-toggle="modal" data-bs-target="#modexcluirPerfil" data-id="<?= $perfil['id']; ?>" type="button">Excluir</button>
+                                                <form method="post" id="formExcluirOm<?= $om['CodOM']; ?>" action="">
+                                                    <input type="hidden" id="CodOMExcluir" name="CodOMExcluir" value="<?= $om['CodOM']; ?>">
+                                                    <button class="btn btn-danger excluirOm" data-bs-toggle="modal" data-bs-target="#modexcluirOm" data-codom="<?= $om['CodOM']; ?>" type="button">Excluir</button>
                                                 </form>
-                                            </td> -->
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="AlterarOm" tabindex="-1" aria-labelledby="AlterarOm" aria-hidden="true">
+    <div class="modal fade" id="AlterarOm" tabindex="-1" aria-labelledby="AlterarOm" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -85,16 +85,15 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="formAlterOm" action="/alterarOM">
+                    <form method="post" id="formAlterarOm" action="/alterarOM">
                         <div class="form-group">
-                            <input type="hidden" name="id" id="id">
+                            <input type="hidden" name="codOMAlter" id="codOMAlter">
                             <label class="col-form-label">Sigla: </label>
-                            <input type="text" class="form-control form-control-sm" name="sigla" id="sigla">
+                            <input type="text" class="form-control form-control-sm" name="siglaAlter" id="siglaAlter">
                         </div>
                         <div class="form-group">
-                            <input type="hidden" name="id" id="id">
                             <label class="col-form-label">Nome OM: </label>
-                            <input type="text" class="form-control form-control-sm" name="nomeOM" id="nomeOM">
+                            <input type="text" class="form-control form-control-sm" name="nomeOMAlter" id="nomeOMAlter">
                         </div>
 
                         <br>
@@ -120,6 +119,32 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modexcluirOm" tabindex="-1" aria-labelledby="modexcluirOm" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <span>Deseja realmente excluir essa OM?</span>
+                        <div class="col-sm-3">
+                            <form id="formExcluirOm">
+                                <input type="hidden" name="codOMExcluir" id="codOMExcluir">
+                            </form>
+                            <input type="button" id="btnConfirmaExcluirOn" data-id="" value="Sim" class="btn btn-success btnConfirmaExcluirOm">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="button" id="btnNaoConfirmaExcluirOm" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaExcluirOm">
+                        </div>
+                    </div>
+                    <span class="alerta"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
     </body>
 

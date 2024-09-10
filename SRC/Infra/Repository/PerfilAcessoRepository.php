@@ -153,7 +153,7 @@ class PerfilAcessoRepository extends LogRepository
     public function vincularPerfisArmario(array $perfil, int $idPerfil)
     {
         foreach ($perfil["0"]["armarios"] as $pr) {
-            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuarioArmarios\"(\"IdPerfilusuario\", \"IdArmario\") values(?, ?);";
+            $sqlQuery = "INSERT INTO {$this->schema}\"PerfilUsuarioArmarios\"(\"IdPerfilUsuario\", \"IdArmario\") values(?, ?);";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idPerfil);
             $stmt->bindValue(2, $pr);
@@ -163,7 +163,7 @@ class PerfilAcessoRepository extends LogRepository
 
     public function removerVinculosPerfisArmario(int $idPerfil)
     {
-        $sqlQuery = "DELETE FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"idperfilusuario\" =  ?;";
+        $sqlQuery = "DELETE FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"IdPerfilUsuario\" =  ?;";
         $stmt = $this->pdo->prepare($sqlQuery);
         $stmt->bindValue(1, $idPerfil);
         $stmt->execute();
@@ -172,7 +172,7 @@ class PerfilAcessoRepository extends LogRepository
     public function listarArmariosPerfil(int $idPerfil): array
     {
         try {
-            $sqlQuery = "SELECT \"idarmario\" FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"idperfilusuario\" = ?;";
+            $sqlQuery = "SELECT \"IdArmario\" FROM {$this->schema}\"PerfilUsuarioArmarios\" WHERE \"IdPerfilUsuario\" = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $idPerfil);
             $stmt->execute();
@@ -181,7 +181,7 @@ class PerfilAcessoRepository extends LogRepository
             $perfilList = array();
             foreach ($perfilDataList as $perfilData) {
                 array_push($perfilList, array(
-                    $perfilData['idarmario']
+                    $perfilData['IdArmario']
                 ));
             };
 

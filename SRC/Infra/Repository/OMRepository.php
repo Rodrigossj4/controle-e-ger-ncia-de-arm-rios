@@ -71,23 +71,22 @@ class OMRepository extends LogRepository
     public function atualizarOM(array $om): bool
     {
         try {
-            $sqlQuery = "UPDATE {$this->schema}\"OM\" SET \"NomeAbreviado\" = ?, \"NomOM\" = ?) WHERE \"CodOM\" = ?";
+            $sqlQuery = "UPDATE {$this->schema}\"OM\" SET \"NomeAbreviado\" = ?, \"NomOM\" = ?, \"Ativa\" = ? WHERE \"CodOM\" = ?";
             $stmt = $this->pdo->prepare($sqlQuery);
 
-            foreach ($om as $ar) {
+            foreach ($om as $td) {
                 $omData = new OM(
-                    $ar['codOM'],
-                    $ar['sigla'],
-                    $ar['nomeOM'],
-                    1
+                    $td['codOM'],
+                    $td['sigla'],
+                    $td['nomeOM'],
+                    1,
                 );
             }
-
             $stmt->bindValue(1, $omData->nomeAbreviado());
             $stmt->bindValue(2, $omData->nomOM());
-            $stmt->bindValue(3, $omData->codOM());
+            $stmt->bindValue(3, $omData->ativa());
+            $stmt->bindValue(4, $omData->codOM());
             $stmt->execute();
-
             return true;
         } catch (Exception $e) {
             echo $e;
@@ -116,6 +115,44 @@ class OMRepository extends LogRepository
         } catch (Exception $e) {
             echo $e;
             return [];
+        }
+    }
+
+    public function obterUsersOM(string $idOM)
+    {
+        try {
+            $sqlQuery = "SELECT \"OMUsuario\" FROM  {$this->schema}\"Usuarios\" where \"OMUsuario\" = ?";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, (int)$idOM);
+            $stmt->execute();
+
+            $OMDataList = $stmt->fetchAll();
+            $OMList = array();
+            foreach ($OMDataList as $OMData) {
+                array_push($OMList, array(
+                    'OMUsuario' => $OMData['OMUsuario']
+                ));
+            };
+
+            return $OMList;
+        } catch (Exception $e) {
+            echo $e;
+            return [];
+        }
+    }    
+
+    public function excluirOM(int $idOM): bool
+    {
+        try {
+            $sqlQuery = "delete FROM {$this->schema}\"OM\" where \"CodOM\"  = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $idOM);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
         }
     }
 }

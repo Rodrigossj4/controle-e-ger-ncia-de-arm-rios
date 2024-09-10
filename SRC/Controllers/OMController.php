@@ -55,28 +55,26 @@ class OMController extends Controller
 
     public function alterar()
     {
-        if (strlen(filter_input(INPUT_POST, 'sigla')) < 1 || strlen(filter_input(INPUT_POST, 'nomeOM')) < 1) {
+        if (strlen(filter_input(INPUT_POST, 'siglaAlter')) < 1 || strlen(filter_input(INPUT_POST, 'nomeOMAlter')) < 1) {
             http_response_code(500);
             return "Todos os campos são obrigatórios";
         }
-        var_dump('oi');
         try {
-            $armariosList = array();
-            array_push($armariosList, array(
-                'codOM' => filter_input(INPUT_POST, 'codOM'),
-                'sigla' => filter_input(INPUT_POST, 'sigla'),
-                'nomeOM' => filter_input(INPUT_POST, 'nomeOM')
+            $omList = array();
+            array_push($omList, array(
+                'codOM' => filter_input(INPUT_POST, 'codOMAlter'),
+                'sigla' => filter_input(INPUT_POST, 'siglaAlter'),
+                'nomeOM' => filter_input(INPUT_POST, 'nomeOMAlter')
             ));
 
             $service = new OMServices();
-
-            if ($service->atualizarOM($armariosList)) {
+            if ($service->atualizarOM($omList)) {
                 http_response_code(200);
                 return "OM Atualizado com sucesso";
             }
         } catch (exception) {
             http_response_code(500);
-            return "Houve um problema para atualizar o tipo de documento";
+            return "Houve um problema para atualizar OM";
         }
     }
 
@@ -84,7 +82,26 @@ class OMController extends Controller
     {
         header('Content-Type: application/json; charset=utf-8');
         $service = new OMServices();
-        var_dump($service->listarOM());
         echo json_encode($service->listarOM());
     }
+
+    public function excluir()
+   {
+      try {
+            $service = new OMServices();
+            $total = count($service->usersOM(filter_input(INPUT_POST, 'codOMExcluir')));
+            if ($total > 0) {
+                http_response_code(400);
+                echo  "Existem Usuários vinculados a essa OM. Exclua antes.";
+            }else{
+                if ($service->excluirOM(filter_input(INPUT_POST, 'codOMExcluir'))) {
+                    http_response_code(200);
+                    return "OM excluído com sucesso";
+                }
+            }
+      } catch (exception) {
+         http_response_code(500);
+         return "Houve um problema para excluir OM. Verifique se há OM cadastrados com esse tipo.";
+      }
+   }
 }

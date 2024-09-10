@@ -110,6 +110,7 @@ class Router
                 '/ExcluiVinculoArmaTipoDoc' => fn() => self::load('ArmariosController', 'desvincularDocumentos'),
                 '/cadastrarOM' => fn() => self::load('OMController', 'cadastrar'),
                 '/alterarOM' => fn() => self::load('OMController', 'alterar'),
+                '/excluirOM' => fn() => self::load('OMController', 'excluir'),
                 '/alterarSenha' => fn() => self::load('UsuariosController', 'alterarSenha'),
                 '/buscar-usuario-id' => fn() => self::load('UsuariosController', 'buscarUsuarioPorID'),
                 '/buscar-perfil-id' => fn() => self::load('PerfilAcessoController', 'exibirDadosPerfil'),
