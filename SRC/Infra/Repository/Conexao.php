@@ -10,9 +10,9 @@ class Conexao
     {
         try{
             $host = "localhost";
-            $dbname = "sispad";
+            $dbname = "postgres";
             $dbuser = "postgres";
-            $userpass = "123456";
+            $userpass = "12345678";
             $dsn = "pgsql:host=$host;port=5432;dbname=$dbname;";
             
             $connection  = new PDO($dsn, $dbuser, $userpass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);            

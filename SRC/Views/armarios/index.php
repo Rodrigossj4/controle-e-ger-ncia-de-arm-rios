@@ -29,8 +29,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <span class="alerta"></span>
+                    </div>
                 </form>
-                <span class="alerta"></span>
             </div>
         </div>
         <hr class="mb-4">
@@ -88,6 +90,7 @@
                         </div>
                     </div>
                     <div class="form-group row opcoesConfirmacao">
+                        <hr class="linha-alert">
                         <span>Deseja realmente alterar essas informações?</span>
                         <div class="col-sm-3">
                             <input type="button" id="btnConfirmaAlteracaoArmario" value="Sim" class="btn btn-success">
@@ -105,6 +108,7 @@
 </div>
 
 <div class="modal fade" id="GerenciarArmario" tabindex="-1" aria-labelledby="GerenciarArmario" aria-hidden="true">
+    
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -122,7 +126,7 @@
                 <hr class="mb-4">
                 <div class="container">
                     <div>
-                        <div class="col-md-8 order-md-1 form-control-padronizado">
+                        <div class="col-md-12 order-md-1 form-control-padronizado">
                             <h5>Tipos de documentos do armario:</h5>
                             <div class="container">
                                 <div class="row">

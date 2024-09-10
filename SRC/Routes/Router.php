@@ -1,6 +1,6 @@
 <?php
 
-namespace Marinha\Mvc\routes;
+namespace Marinha\Mvc\Routes;
 
 use Exception;
 use Marinha\Mvc\Helpers\Request;
@@ -67,7 +67,8 @@ class Router
                 '/gerenciar-om' => fn() => self::load('OMController', 'index'),
                 '/validar-nip' => fn() => self::load('UsuariosController', 'validarNIP'),
                 '/auditoria' => fn() => self::load('AuditoriaController', 'index'),
-                '/troca-senha' => fn() => self::load('UsuariosController', 'trocaSenha')
+                '/troca-senha' => fn() => self::load('UsuariosController', 'trocaSenha'),
+                '/listarOms' => fn() => self::load('OMController', 'listar')
             ],
             'POST' => [
                 '/login' => fn() => self::load('LoginController', 'login'),
@@ -108,6 +109,7 @@ class Router
                 '/FinalizarArquivo' => fn() => self::load('DocumentoController', 'finalizarArquivo'),
                 '/ExcluiVinculoArmaTipoDoc' => fn() => self::load('ArmariosController', 'desvincularDocumentos'),
                 '/cadastrarOM' => fn() => self::load('OMController', 'cadastrar'),
+                '/alterarOM' => fn() => self::load('OMController', 'alterar'),
                 '/alterarSenha' => fn() => self::load('UsuariosController', 'alterarSenha'),
                 '/buscar-usuario-id' => fn() => self::load('UsuariosController', 'buscarUsuarioPorID'),
                 '/buscar-perfil-id' => fn() => self::load('PerfilAcessoController', 'exibirDadosPerfil'),

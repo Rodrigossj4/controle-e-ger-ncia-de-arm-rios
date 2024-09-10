@@ -25,6 +25,17 @@ class OMServices extends SistemaServices
         }
     }
 
+    public function atualizarOM(array $armario): bool
+    {
+        try {
+            $repository = new OMRepository($this->Conexao());
+            return $repository->atualizarOM($armario);
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
+
     public function listarOM(): array
     {
         try {

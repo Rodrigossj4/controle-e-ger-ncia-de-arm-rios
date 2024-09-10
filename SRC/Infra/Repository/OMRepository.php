@@ -67,6 +67,33 @@ class OMRepository extends LogRepository
             return false;
         }
     }
+
+    public function atualizarOM(array $om): bool
+    {
+        try {
+            $sqlQuery = "UPDATE {$this->schema}\"OM\" SET \"NomeAbreviado\" = ?, \"NomOM\" = ?) WHERE \"CodOM\" = ?";
+            $stmt = $this->pdo->prepare($sqlQuery);
+
+            foreach ($om as $ar) {
+                $omData = new OM(
+                    $ar['codOM'],
+                    $ar['sigla'],
+                    $ar['nomeOM'],
+                    1
+                );
+            }
+
+            $stmt->bindValue(1, $omData->nomeAbreviado());
+            $stmt->bindValue(2, $omData->nomOM());
+            $stmt->bindValue(3, $omData->codOM());
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }
     public function ObterDadosOM(string $idOM)
     {
         try {

@@ -19,7 +19,7 @@ class ArmarioRepository extends LogRepository
     public function listaArmarios(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" where \"ativo\" = true order by \"NomeExterno\" asc;";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Armarios\" where \"Ativo\" = true order by \"NomeExterno\" asc;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 

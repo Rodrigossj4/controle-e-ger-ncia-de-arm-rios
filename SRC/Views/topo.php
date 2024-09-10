@@ -31,10 +31,10 @@ if ((isset($_SESSION['Arquivos'])))
     <meta charset="utf-8" />
     <title>SISTEMA DE DIGITALIZAÇÃO DE IMAGENS</title>
 
-    <link href="/../../css/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <script src="../../scripts/bootstrap.bundle.min.js"></script>
-    <link href="/../../css/style.css" type="text/css" rel="stylesheet" />
-
+    <link href="../../css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <!-- <script src="../../scripts/bootstrap.bundle.min.js"></script> -->
+    <link href="../../css/style.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/toastr.min.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>

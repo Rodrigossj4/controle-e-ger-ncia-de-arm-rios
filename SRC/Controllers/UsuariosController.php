@@ -221,7 +221,7 @@ class UsuariosController  extends Controller
       }
 
       $dadosUsuarios[0]["idUsuario"] = $idUsuario;
-
+      unset($_SESSION);
       echo json_encode($service->AlterarSenhaUsuario($dadosUsuarios));
    }
 

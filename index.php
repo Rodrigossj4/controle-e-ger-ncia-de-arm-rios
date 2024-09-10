@@ -1,6 +1,6 @@
 <?php
 
-use Marinha\Mvc\routes\Router;
+use Marinha\Mvc\Routes\Router;
 
 require_once  'vendor/autoload.php';
 

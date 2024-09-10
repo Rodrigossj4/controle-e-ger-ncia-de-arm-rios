@@ -5,6 +5,7 @@
     font-family: 'Open Sans Light';
     --cor-topo-card: #114889;
     --cor-botao-primary: #114889;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 main {
@@ -190,6 +191,10 @@ span.carousel-control-next-icon {
 
 .saudacao {
     margin: 50px 0px 0px 100px;
+}
+
+.linha-alert{
+    margin-top: 10px;
 }
 
 /*

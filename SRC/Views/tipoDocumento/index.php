@@ -85,6 +85,7 @@
                         </div>
                     </div>
                     <div class="form-group row opcoesConfirmacao">
+                        <hr class="linha-alert">
                         <span>Deseja realmente alterar essas informações?</span>
                         <div class="col-sm-3">
                             <input type="button" id="btnConfirmaAlteracaoTipoDocumento" value="Sim" class="btn btn-success">
