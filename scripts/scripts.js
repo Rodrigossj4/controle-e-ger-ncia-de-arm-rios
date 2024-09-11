@@ -1247,6 +1247,7 @@ $(document).on('click', '#regridePdf', function () {
 });
 
 $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
+    $('#ModReIndexarDocumento').modal()
     listDocumentosServidor = [];
 
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
@@ -1293,13 +1294,15 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
-        alertas("Existem tags não preenchidas. Verfique", '#ModReIndexarDocumento', 'alert_danger');
+        toastr.error('Existem tags não preenchidas');
+        //alertas("Existem tags não preenchidas. Verfique", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
 
     if ($("#listarDocumentos").attr("data-docid") == "") {
-        console.log("Nenhum documento sendo exibido");
-        alertas("Nenhum documento sendo exibido", '#modCadDocumento', 'alert_danger');
+        //console.log("Nenhum documento sendo exibido");
+        toastr.error('Nenhum documento sendo exibido');
+        //alertas("Nenhum documento sendo exibido", '#modCadDocumento', 'alert_danger');
         return false;
     }
 
@@ -1570,7 +1573,8 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
             $(".carousel-control-next").removeAttr("id");
         },
         error: function (d) {
-            alertas(d.responseText, '#modCadDocumento', 'alert_danger', 'true');
+            toastr.error(d.responseText);
+            //alertas(d.responseText, '#modCadDocumento', 'alert_danger', 'true');
             console.log('erro ao carregar arquivos ' + d.responseText);
         }
     });
@@ -1816,6 +1820,7 @@ var docBase64Atual = "";
 let docid = 0;
 let possuiPasta = 0;
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
+    alert('boatão confirmar')
     listDocumentosServidor = [];
 
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
@@ -1867,7 +1872,8 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
-        alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
+        toastr.error('Existem tags não preenchidas');
+        //alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -1999,6 +2005,17 @@ function processoAssinaturaData(data) {
 $(document).on('click', '#btnNaoConfirmaAnexarDocumento', function (e) {
     FecharModal('#ModAnexarDocumento');
 });
+$(document).on('click', '.btnNaoConfirmaAnexarDocumento', function (e) {
+    FecharModal('#ModAnexarDocumento');
+});
+
+$(document).on('click', '#IndexarDocumento', function (e) {
+    $("#ModAnexarDocumento").modal()
+});
+
+$(document).on('click', '#excluirDocumento', function (e) {
+    $("#ModReIndexarDocumento").modal()
+});
 
 $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
     listDocumentosServidor = [];
@@ -2008,17 +2025,20 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
     }
 
     if (($('#formCadDocumento #Nip').val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
-        alertas("Informe um nip válido", '#ModAnexarDocumento', 'alert_danger');
+        toastr.error('Informe um nip válido');
+        //alertas("Informe um nip válido", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #semestre').val() == 0)) {
-        alertas("Informe o semestre", '#ModAnexarDocumento', 'alert_danger');
+        toastr.error('Informe o semestre');
+        //alertas("Informe o semestre", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
-        alertas("Informe um ano válido", '#ModAnexarDocumento', 'alert_danger');
+        toastr.error('Informe um ano válido');
+        //alertas("Informe um ano válido", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -2028,7 +2048,8 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
     }
 
     if ((listDocumentos.length == 0)) {
-        alertas("Ao menos um documento deve ser inserido para indexar", '#ModAnexarDocumento', 'alert_danger');
+        toastr.error('Ao menos um documento deve ser inserido para indexar');
+        //alertas("Ao menos um documento deve ser inserido para indexar", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -2042,7 +2063,8 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
-        alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
+        toastr.error('Existem tags não preenchidas');
+        //alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -2142,6 +2164,7 @@ function processarListaDeItens(lista) {
 }
 
 function assinarDocumentos(documentos) {
+    alert('assinar do')
     console.log("Rotina de assinar: ");
     var ArrayDocumentos = JSON.parse(documentos);
 
@@ -2169,6 +2192,7 @@ function assinarDocumentos(documentos) {
 }
 
 function processarItemComResposta(item) {
+    alert('assinar do')
     try {
         return new Promise(function (resolve, reject) {
             assinarDocumentos(JSON.stringify(item));
