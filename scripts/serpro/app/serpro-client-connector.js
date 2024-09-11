@@ -162,6 +162,8 @@
 			})
 			.error(function (error) {
 				console.debug('Error:', error);
+				console.log("Indice para excluir 1: " + params.docId);
+				cancelarIndice(params.docId);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
 			});
@@ -204,7 +206,7 @@
 					alert(error.error);
 				}
 				console.debug('Error:', error);
-				console.log("Indice para excluir: " + params.docId);
+				console.log("Indice para excluir 2: " + params.docId);
 				cancelarIndice(params.docId);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
