@@ -17,7 +17,9 @@
 
 
 <!-- PDFJS, para converter bas364 em PDF -->
-<script src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+<!-- <script src="//mozilla.github.io/pdf.js/build/pdf.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf.min.mjs" type="module"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.6.82/pdf_viewer.min.css">
 
 <div class="container">
 <div class="">

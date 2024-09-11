@@ -246,7 +246,7 @@ class DocumentoController extends Controller
         $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
 
         $caminho = $service->carregarArquivoservidor($Arquivos);
-        echo $caminho;
+        //echo $caminho;
     }
     public function ExibirDireorio()
     {
@@ -367,6 +367,7 @@ class DocumentoController extends Controller
         $caminho = filter_input(INPUT_POST, 'Caminho');
         //var_dump("caminho:" . $caminho);
         $pasta = "{$caminho}/";
+        //var_dump($pasta);
         $paginasList = array();
         $types = array('jpg', 'jpeg', 'png', 'tif', 'pdf');
         if ($handle = opendir($pasta)) {
@@ -379,7 +380,6 @@ class DocumentoController extends Controller
                 }
             }
             closedir($handle);
-            //var_dump($paginasList);
 
             echo json_encode($paginasList);
         }
