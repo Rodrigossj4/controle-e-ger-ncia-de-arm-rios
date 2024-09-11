@@ -57,6 +57,7 @@ class DocumentoController extends Controller
     public function cadastrarDocumento()
     {
         $Arquivos = json_decode(file_get_contents('php://input'), true);
+
         $funcoes = new Helppers();
 
         if (strlen($Arquivos["nip"]) < 8 || strlen($Arquivos["ano"]) != 4 || $Arquivos["semestre"] == 0  || $Arquivos["idArmario"] == 0 || $Arquivos["tipoDoc"] == 0) {
