@@ -12,13 +12,13 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 	var uriServerVerify = "http://127.0.0.1:65056/";
 	var isDebug = false;
 
-    /**
-     * Log messages in console if in debug mode.
-     *
-     * @private
-     * @param {string} message - Message to log.
-     * @memberof SerproSignerClient
-     */
+	/**
+	 * Log messages in console if in debug mode.
+	 *
+	 * @private
+	 * @param {string} message - Message to log.
+	 * @memberof SerproSignerClient
+	 */
 	var l = function (message) {
 		if (isDebug) {
 			console.log(message); // eslint-disable-line no-console
@@ -27,33 +27,33 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 
 	var services = {
 		/**
-         * Set URI to use in communication.
+		 * Set URI to use in communication.
 		 *
-         * @instance
+		 * @instance
 		 * @default wss://127.0.0.1:65156/signer/
-         * @param {string} uriProtocol - Protocol to use.
-         * @param {string} uriDns - DNS to use.
-         * @param {string} uriPort - Post to use.
-         * @param {string} uriPort - Path to use.
-         * @memberof SerproSignerClient
-         */
+		 * @param {string} uriProtocol - Protocol to use.
+		 * @param {string} uriDns - DNS to use.
+		 * @param {string} uriPort - Post to use.
+		 * @param {string} uriPort - Path to use.
+		 * @memberof SerproSignerClient
+		 */
 		setUriServer: function (uriProtocol, uriDns, uriPort, uriPath) {
 			var uri = uriProtocol + "://" + uriDns + ":" + uriPort + uriPath;
 			l("Setting URI to " + uri);
 			uriServer = uri;
 		},
 
-        /**
-         * Set URI to use to verify if Desktop Client is running.
+		/**
+		 * Set URI to use to verify if Desktop Client is running.
 		 *
-         * @instance
+		 * @instance
 		 * @default http://127.0.0.1:65056/
-         * @param {string} uriProtocol - Protocol to use in verifycation.
-         * @param {string} uriDns - DNS to use in verifycation.
-         * @param {string} uriPort - Post to use in verifycation.
-         * @param {string} uriPort - Path to use in verifycation.
-         * @memberof SerproSignerClient
-         */
+		 * @param {string} uriProtocol - Protocol to use in verifycation.
+		 * @param {string} uriDns - DNS to use in verifycation.
+		 * @param {string} uriPort - Post to use in verifycation.
+		 * @param {string} uriPort - Path to use in verifycation.
+		 * @memberof SerproSignerClient
+		 */
 		uriServerVerify: function (uriProtocol, uriDns, uriPort, uriPath) {
 			var uri = uriProtocol + "://" + uriDns + ":" + uriPort + uriPath;
 			l("Setting URI Verifycation to " + uri);
@@ -61,24 +61,24 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 		},
 
 		/**
-         * Set debug true or false.
-         *
-         * @instance
-         * @param {boolean} isToDebug - Is to debug
-         * @memberof SerproSignerClient
-         */
+		 * Set debug true or false.
+		 *
+		 * @instance
+		 * @param {boolean} isToDebug - Is to debug
+		 * @memberof SerproSignerClient
+		 */
 		setDebug: function (isToDebug) {
 			l("Setting debug on to " + (isToDebug ? "ON" : "OFF"));
 			isDebug = isToDebug;
 		},
 
-        /**
-         * Verify if Desktop Client is running using a image request
-         * to http server. This technique is used because the HTTPS (http + ssl) may not be enabled.
-         *
-         * @instance
-         * @memberof SerproSignerClient
-         */
+		/**
+		 * Verify if Desktop Client is running using a image request
+		 * to http server. This technique is used because the HTTPS (http + ssl) may not be enabled.
+		 *
+		 * @instance
+		 * @memberof SerproSignerClient
+		 */
 		verifyIsInstalledAndRunning: function () {
 
 			var requestIdVerify = "error";
@@ -109,14 +109,14 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 		},
 
 		/**
-         * Method used to start connection with local WebSocket server.
-         *
-         * @instance
-         * @param {function} callbackOpen - Callback  invoked on OPEN connection.
-         * @param {function} callbackClose - Callback invoked on CLOSE connection.
-         * @param {function} callbackError - Callback invoked on ERROR connection.
-         * @memberof SerproSignerClient
-         */
+		 * Method used to start connection with local WebSocket server.
+		 *
+		 * @instance
+		 * @param {function} callbackOpen - Callback  invoked on OPEN connection.
+		 * @param {function} callbackClose - Callback invoked on CLOSE connection.
+		 * @param {function} callbackError - Callback invoked on ERROR connection.
+		 * @memberof SerproSignerClient
+		 */
 		connect: function (callbackOpen, callbackClose, callbackError) {
 			if (ws == null || ws.readyState != 1) {
 				l("Connecting on " + uriServer);
@@ -139,8 +139,10 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 					if (objResponse !== undefined && objResponse.error !== undefined) {
 						if (objResponse.requestId !== undefined && defer[objResponse.requestId].hasCallbackError()) {
 							defer[objResponse.requestId].reject(objResponse);
+							console.log("Andressa chamada serpro-signer-client 1");
 						} else if (callbackError) {
 							callbackError(objResponse);
+							console.log("Andressa chamada serpro-signer-client 2");
 						}
 					} else {
 
@@ -177,22 +179,22 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 		},
 
 		/**
-         * Verify status of connection with WebSocket server.
-         *
-         * @instance
+		 * Verify status of connection with WebSocket server.
+		 *
+		 * @instance
 		 * @return {boolean} - True for connection is up, false if is down.
-         * @memberof SerproSignerClient
-         */
+		 * @memberof SerproSignerClient
+		 */
 		isConnected: function () {
 			if (ws != null)
 				return ws.readyState == 1 ? true : false;
 			return false;
 		},
 
-        /**
+		/**
 		 * Signer content using some parameters.
-         *
-         * @instance
+		 *
+		 * @instance
 		 * @param {string} type - Type of inputData (text, file, hash, base64)
 		 * @param {string} inputData - The data to sign, user in hash, text or base64. According to setted type
 		 * @param {string} textEncoding - Encondig for type Text (ex:UTF-8, ISO-8859-1,...)
@@ -208,17 +210,17 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 				inputData: inputData,
 				textEncoding: textEncoding,
 				outputDataType: outputDataType,
-				attached : attached
+				attached: attached
 			}
 			$('sign_command').val(JSON.stringify(signerCommand))
 			var promise = services.execute(signerCommand);
 			return promise;
 		},
 
-        /**
+		/**
 		 * Verify signature, returns user and certificate info.
-         *
-         * @instance
+		 *
+		 * @instance
 		 * @param {string} type - Type of inputData (text, hash, base64)
 		 * @param {string} inputData - The data to verify, into a defined type, if validating a attached signature, leave blank
 		 * @param {string} inputSignature - A signature to be verify encoded into base64 
@@ -233,7 +235,7 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 				command: 'verify',
 				type: type,
 				inputData: inputData,
-				inputSignature : inputSignature,
+				inputSignature: inputSignature,
 				textEncoding: textEncoding,
 				algorithmOIDHash: algorithmOIDHash
 			}
@@ -241,10 +243,10 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 			return promise;
 		},
 
-        /**
+		/**
 	 * Get the content attached into a signature
-         *
-         * @instance
+		 *
+		 * @instance
 		 * @param {string} inputSignature - An attached signature (encoded into base64)
 		 * @return Promisse - The promisse when is finished.
 		 * @memberof SerproSignerClient
@@ -252,7 +254,7 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 		attached: function (inputSignature) {
 			var signerCommand = {
 				command: 'attached',
-				inputSignature : inputSignature
+				inputSignature: inputSignature
 			}
 			var promise = services.execute(signerCommand);
 			return promise;
@@ -260,10 +262,10 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 
 
 
-        /**
+		/**
 		 * List all available commands.
-         *
-         * @instance
+		 *
+		 * @instance
 		 * @return Promisse - The promisse when is finished.
 		 * @memberof SerproSignerClient
 		 */
@@ -275,12 +277,12 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 			return promise;
 		},
 
-        /**
+		/**
 		 * Generic method to sendo commands to Desktop Server.
-         *
-         * @instance
+		 *
+		 * @instance
 		 * @param {json} request - Request JSON content all attributes to run.
-	         * @return Promisse - The promisse when it is finished.
+			 * @return Promisse - The promisse when it is finished.
 		 * @memberof SerproSignerClient
 		 */
 		execute: function (request) {

@@ -27,7 +27,7 @@ var SerproSignerPromise = (function () {
 	 */
 	this.error = function (cbError) {
 		callbackError = cbError;
-		console.log("Erro promisses:");
+		console.log("Erro promisses 1:");
 		return this;
 	};
 

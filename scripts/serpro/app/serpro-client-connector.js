@@ -32,6 +32,7 @@
 					connectToWebSocket();
 				}).error(function (response) {
 					showStatusOff();
+					console.log("Andressa chamada verifyDesktopClientInstallation");
 					// Try again in Xms
 					clearInterval(tryAgainTimeoutVerify);
 					tryAgainTimeoutVerify = setTimeout(verifyDesktopClientInstallation, timeoutDefault);
@@ -66,8 +67,10 @@
 			if (event.error !== undefined) {
 				if (event.error !== null && event.error !== 'null') {
 					console.error({ message: event.error });
+					console.log("Andressa chamada callback");
 				} else {
 					console.error({ message: 'Unknown error' });
+					console.log("Andressa chamada callback");
 				}
 			}
 		}
@@ -161,8 +164,8 @@
 				params.afterSign && params.afterSign(response);
 			})
 			.error(function (error) {
-				console.debug('Error:', error);
-				console.log("Indice para excluir 1: " + params.docId);
+				console.debug('Andressa CC:', error);
+				console.log("Andressa Indice para excluir 1: " + params.docId);
 				cancelarIndice(params.docId);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
@@ -205,8 +208,8 @@
 				if (error.error) {
 					alert(error.error);
 				}
-				console.debug('Error:', error);
-				console.log("Indice para excluir 2: " + params.docId);
+				console.debug('Andressa CC', error);
+				console.log("Andressa Indice para excluir 2: " + params.docId);
 				cancelarIndice(params.docId);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
@@ -233,7 +236,8 @@
 				params.afterSign && params.afterSign(response);
 			})
 			.error(function (error) {
-				console.debug('Error:', error);
+				console.debug('Andressa CC:', error);
+				console.log("Andressa Indice para excluir 3: " + params.docId);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
 			});
@@ -330,7 +334,7 @@
 				type: 'pdf',
 				data: $('#content-value').val(),
 				onSuccess: onSuccessPdfHandler,
-				onError: function (error) { console.debug('ERRO: ', error) }, // optional
+				onError: function (error) { console.debug('ERRO Andressa serpro-client-connector: ', error) }, // optional
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional
 				// afterSign: afterSignHandler // optional
