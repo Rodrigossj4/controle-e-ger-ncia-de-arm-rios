@@ -1069,9 +1069,18 @@ function FecharModal(local) {
 
 
 $('#btnNaoConfirmaResetSenhaUsuario').on('click', function (e) {
+    $('#tipo-doc').val('')
     $('.modal').trigger('click');
 });
+function fechar(){
+    alert('oi');
+}
 $('.btn-close').on('click', function (e) {
+    $('.modal').trigger('click');
+});
+
+$('.fechar').on('click', function (e) {
+    
     $('.modal').trigger('click');
 });
 
@@ -1247,7 +1256,6 @@ $(document).on('click', '#regridePdf', function () {
 });
 
 $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
-    $('#ModReIndexarDocumento').modal()
     listDocumentosServidor = [];
 
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
@@ -1339,7 +1347,9 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
             $('#semestre').trigger('change');
             $('#formCadDocumento #Nip').mask('00.0000.00');
             $('#btnConfirmaReIndexarDocumento').removeAttr('disabled');
-            alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
+            FecharModal('#ModReIndexarDocumento');
+            toastr.success('Página Reindexada com sucesso');
+            //alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
             /*setTimeout(function () {
                 location.reload();
             }, 3000);*/
@@ -1354,6 +1364,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
 });
 
 $(document).on('click', '#btnNaoConfirmaReIndexarDocumento', function (e) {
+    $('#tipo-doc').val('')
     FecharModal('#ModReIndexarDocumento');
 });
 
@@ -1814,6 +1825,7 @@ function retornaCaminho(caminho) {
 }
 
 $(document).on('click', '#btnNaoConfirmaIndexarDocumento', function (e) {
+    $('#tipo-doc').val('')
     FecharModal('#ModIndexarDocumento');
 });
 
@@ -1899,6 +1911,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         genero: $('#formCadDocumento #Genero').val(),
         prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
         tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
+        hash: $('#formCadDocumento #Hash').val(),
         respDigitalizacao: $('#formCadDocumento #RespDigitalizacao').val(),
     }, null, 2);
 
@@ -1982,9 +1995,16 @@ function processoAssinaturaData(data) {
                 $('.btnAnexar').css("display", "block");
                 $('#btnConfirmaIndexarDocumento').removeAttr('disabled');
                 $('#btnConfirmaAnexarDocumento').removeAttr('disabled');
-
-                alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-                alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+                let tipoDoc = $('#tipo-doc').val()
+                if(tipoDoc == 'indexar'){
+                    toastr.success('Documento Indexado com sucesso');
+                    FecharModal('#ModIndexarDocumento');
+                    //alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+                }else if(tipoDoc == 'anexar'){
+                    toastr.success('Documento Anexado com sucesso');
+                    FecharModal('#ModAnexarDocumento');                    
+                    //alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+                }
 
             }).catch(function (error) {
                 console.error('Ocorreu um erro:', error);
@@ -1999,8 +2019,18 @@ function processoAssinaturaData(data) {
             });
 
             armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
-            alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-            alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+
+            let tipoDoc = $('#tipo-doc').val()
+            if(tipoDoc == 'indexar'){
+                toastr.success('Documento Indexado com sucesso');
+                FecharModal('#ModIndexarDocumento');
+                //alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+            }else if(tipoDoc == 'anexar'){
+                toastr.success('Documento Anexado com sucesso');
+                FecharModal('#ModAnexarDocumento');                    
+                //alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
+            }
+
             $('#semestre').trigger('change');
             $('.btnIndexar').css("display", "none");
             $('.btnAnexar').css("display", "block");
@@ -2013,21 +2043,26 @@ function processoAssinaturaData(data) {
 }
 
 $(document).on('click', '#btnNaoConfirmaAnexarDocumento', function (e) {
+    $('#tipo-doc').val('')
     FecharModal('#ModAnexarDocumento');
 });
 $(document).on('click', '.btnNaoConfirmaAnexarDocumento', function (e) {
+    $('#tipo-doc').val('')
     FecharModal('#ModAnexarDocumento');
 });
 
 $(document).on('click', '#IndexarDocumento', function (e) {
+    $('#tipo-doc').val('indexar');
     $("#ModIndexarDocumento").modal()
 });
 
 $(document).on('click', '#AnexarDocumento', function (e) {
+    $('#tipo-doc').val('anexar');
     $("#ModAnexarDocumento").modal()
 });
 
 $(document).on('click', '#excluirDocumento', function (e) {
+    $('#tipo-doc').val('reindexar');
     $("#ModReIndexarDocumento").modal()
 });
 

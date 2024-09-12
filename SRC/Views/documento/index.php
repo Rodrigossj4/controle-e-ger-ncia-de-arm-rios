@@ -158,6 +158,7 @@ $contador = 0;
                 </div>
 
             </form>
+            <input type="hidden" name="tipo-doc" id="tipo-doc" value="">
 
             <hr class="mb-4">
             <div class="bg-body-tertiary rounded-3 row">
@@ -273,7 +274,7 @@ $contador = 0;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" id="btnNaoConfirmaIndexarDocumento" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group row">
@@ -297,13 +298,12 @@ $contador = 0;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" id="btnNaoConfirmaAnexarDocumento" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group row">
                     <span>Já existe um documento cadastrado com essas caracteristicas. Deseja anexar páginas a esse documento?</span>
                     <div class="col-sm-3">
-
                         <input type="button" id="btnConfirmaAnexarDocumento" data-id="" value="Sim" class="btn btn-success btnConfirmaAnexarDocumento">
                     </div>
                     <div class="col-sm-3">
@@ -320,13 +320,12 @@ $contador = 0;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                 <button type="button" class="btn-close" id="btnNaoConfirmaReIndexarDocumento" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group row">
                     <span>Deseja realmente Re-indexar esse novo documento?</span>
                     <div class="col-sm-3">
-
                         <input type="button" id="btnConfirmaReIndexarDocumento" data-id="" value="Sim" class="btn btn-success btnConfirmaReIndexarDocumento">
                     </div>
                     <div class="col-sm-3">

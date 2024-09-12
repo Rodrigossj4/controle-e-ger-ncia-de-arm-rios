@@ -56,7 +56,6 @@ class DocumentoServices extends SistemaServices
             //var_dump($repository);
             $idDocumento = $repository->cadastrarDocumentos($documentosList);
             $repository->updateDocIdDocumento($idDocumento);
-            //var_dump($idDocumento);die();
             return $idDocumento;
         } catch (Exception $e) {
             echo $e;
@@ -165,7 +164,7 @@ class DocumentoServices extends SistemaServices
             $repository = new DocumentoRepository($this->Conexao());            
             // json_decode($arquivos->listDocumentosServidor[0], true)
             $listaArquivos =  $repository->listarPaginas($id);
-            //var_dump($listaArquivos);die();
+            var_dump($listaArquivos);die();
             $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
             //var_dump($listaArquivos);
             $componentes = explode('/', $listaArquivos[0]["arquivo"]);
@@ -654,7 +653,7 @@ class DocumentoServices extends SistemaServices
                 'RespDigitalizacao' => $tag['respDigitalizacao'],
                 'Titulo' => $tag['titulo'],
                 'TipoDocumento' =>  $documentos['tipoDocumento'],
-                'Hash' => $documentos['b64'],
+                'Hash' => $documentos['b64'] ? $documentos['b64'] : $tag['hash'],
                 'Classe' => $tag['classe'],
                 'DataProdDoc' => new DateTime($tag['dataProdDoc']),
                 'DestinacaoDoc' => $tag['destinacaoDoc'],
