@@ -2,7 +2,7 @@
 
 /** @var Marinha\Mvc\ValueObjects\DocumentoPaginaVO[] $Documento */
 /** @var  Marinha\Mvc\Models\Paginas[] $paginasList */
-var_dump(Count($paginasList));
+//var_dump(Count($paginasList));
 ?>
 <?php require_once __DIR__ . "../../topo.php" ?>
 <div class="container">
