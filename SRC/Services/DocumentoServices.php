@@ -677,7 +677,7 @@ class DocumentoServices extends SistemaServices
                 'dataultimologin' => ""
             ));
 
-            //var_dump($dadosList);
+           //var_dump($dadosList);
             $this->gravarLogOperacoes($dadosList);
         }
 

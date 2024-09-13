@@ -182,7 +182,7 @@ class DocumentoController extends Controller
             session_start();
 
         $Arquivos->codusuario = $_SESSION['usuario'][0]["codusuario"];
-        $Arquivos->omUsuario = $_SESSION['usuario'][0]["omusuario"];
+        $Arquivos->omusuario = $_SESSION['usuario'][0]["omusuario"];
         $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
 
         $service = new DocumentoServices();
@@ -241,8 +241,9 @@ class DocumentoController extends Controller
         if (!isset($_SESSION))
             session_start();
 
+        //var_dump($_SESSION);
         $Arquivos->codusuario = $_SESSION['usuario'][0]["codusuario"];
-        $Arquivos->omUsuario = $_SESSION['usuario'][0]["omusuario"];
+        $Arquivos->omusuario = $_SESSION['usuario'][0]["omusuario"];
         $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
 
         $caminho = $service->carregarArquivoservidor($Arquivos);
@@ -310,7 +311,7 @@ class DocumentoController extends Controller
                 session_start();
 
             $Arquivos->codusuario = $_SESSION['usuario'][0]["codusuario"];
-            $Arquivos->omUsuario = $_SESSION['usuario'][0]["omusuario"];
+            $Arquivos->omusuario = $_SESSION['usuario'][0]["omusuario"];
             $Arquivos->idacesso = $_SESSION['usuario'][0]["idacesso"];
 
             if ($service->reindexarPagina($Arquivos)) {

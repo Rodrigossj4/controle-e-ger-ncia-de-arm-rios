@@ -1392,7 +1392,7 @@ $(document).on('click', '#btnConfirmaExcluirPagina', function () {
         contentType: false,
         success: function (data) {
             //console.log(data);
-            toastr.warning('Página excluida com sucesso');
+            toastr.success('Página excluída com sucesso');
             FecharModal('#ModExcluirPagina');
             //alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
             $('#semestre').trigger('change');
