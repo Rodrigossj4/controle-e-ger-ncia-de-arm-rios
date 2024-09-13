@@ -139,10 +139,10 @@ var SerproSignerClient = (function (SerproSignerPromise) {
 					if (objResponse !== undefined && objResponse.error !== undefined) {
 						if (objResponse.requestId !== undefined && defer[objResponse.requestId].hasCallbackError()) {
 							defer[objResponse.requestId].reject(objResponse);
-							console.log("Andressa chamada serpro-signer-client 1");
+							//console.log("Andressa chamada serpro-signer-client 1");
 						} else if (callbackError) {
 							callbackError(objResponse);
-							console.log("Andressa chamada serpro-signer-client 2");
+							//console.log("Andressa chamada serpro-signer-client 2");
 						}
 					} else {
 

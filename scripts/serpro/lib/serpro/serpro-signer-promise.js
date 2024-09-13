@@ -26,8 +26,7 @@ var SerproSignerPromise = (function () {
 	 * @memberof SerproSignerPromise
 	 */
 	this.error = function (cbError) {
-		callbackError = cbError;
-		console.log("Erro promisses 1:");
+		callbackError = cbError;		
 		return this;
 	};
 
@@ -47,8 +46,7 @@ var SerproSignerPromise = (function () {
 	 * @memberof SerproSignerPromise
 	 */
 	this.hasCallbackError = function () {
-
-		console.log("Erro promisses 2:");
+	
 		return (callbackError === null ? false : true);
 	}
 
@@ -60,9 +58,7 @@ var SerproSignerPromise = (function () {
 	 */
 	this.reject = function (value) {
 		if (callbackError) {
-			callbackError(value);
-
-			console.log("Erro promisses 3:");
+			callbackError(value);	
 		}
 	};
 

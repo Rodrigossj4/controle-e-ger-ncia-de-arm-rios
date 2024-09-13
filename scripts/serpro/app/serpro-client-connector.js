@@ -32,7 +32,6 @@
 					connectToWebSocket();
 				}).error(function (response) {
 					showStatusOff();
-					console.log("Andressa chamada verifyDesktopClientInstallation");
 					// Try again in Xms
 					clearInterval(tryAgainTimeoutVerify);
 					tryAgainTimeoutVerify = setTimeout(verifyDesktopClientInstallation, timeoutDefault);
@@ -67,10 +66,8 @@
 			if (event.error !== undefined) {
 				if (event.error !== null && event.error !== 'null') {
 					console.error({ message: event.error });
-					console.log("Andressa chamada callback");
 				} else {
 					console.error({ message: 'Unknown error' });
-					console.log("Andressa chamada callback");
 				}
 			}
 		}
@@ -164,9 +161,7 @@
 				params.afterSign && params.afterSign(response);
 			})
 			.error(function (error) {
-				console.debug('Andressa CC:', error);
-				console.log("Andressa Indice para excluir 1: " + params.docId);
-				cancelarIndice(params.docId);
+				console.debug('Error:', error);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
 			});
@@ -185,7 +180,6 @@
 					console.debug(response.signerSignatureValidations[0]);
 
 					var dados = response.signerSignatureValidations[0];
-					console.log('DADOS', dados)
 					var cadeias = "";
 					$.each(dados.cadeiaCertificado, function (i, v) {
 						cadeias += (v + "\n");
@@ -208,9 +202,7 @@
 				if (error.error) {
 					alert(error.error);
 				}
-				console.debug('Andressa CC', error);
-				console.log("Andressa Indice para excluir 2: " + params.docId);
-				cancelarIndice(params.docId);
+				console.debug('Error', error);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
 			});
@@ -236,8 +228,7 @@
 				params.afterSign && params.afterSign(response);
 			})
 			.error(function (error) {
-				console.debug('Andressa CC:', error);
-				console.log("Andressa Indice para excluir 3: " + params.docId);
+				console.debug('Error:', error);
 				params.onError && params.onError(error);
 				params.afterSign && params.afterSign(error);
 			});
@@ -334,7 +325,11 @@
 				type: 'pdf',
 				data: $('#content-value').val(),
 				onSuccess: onSuccessPdfHandler,
-				onError: function (error) { console.debug('ERRO Andressa serpro-client-connector: ', error) }, // optional
+				onError: function (error) {
+					console.debug('ERRO', error);
+					console.log('DocId:' + params.docId)
+					cancelarIndice(params.docId);
+				}, // optional
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional
 				// afterSign: afterSignHandler // optional
