@@ -1368,6 +1368,10 @@ $(document).on('click', '#btnNaoConfirmaReIndexarDocumento', function (e) {
     FecharModal('#ModReIndexarDocumento');
 });
 
+$(document).on('click', '#excluirDocumentoMalIndexado', function (e) {
+    $('#ModExcluirPagina').modal();
+});
+
 
 $(document).on('click', '#btnConfirmaExcluirPagina', function () {
     dados = JSON.stringify({
@@ -1388,7 +1392,9 @@ $(document).on('click', '#btnConfirmaExcluirPagina', function () {
         contentType: false,
         success: function (data) {
             //console.log(data);
-            alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
+            toastr.warning('Página excluida com sucesso');
+            FecharModal('#ModExcluirPagina');
+            //alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
             $('#semestre').trigger('change');
 
             $('.clickDocumento').click();
