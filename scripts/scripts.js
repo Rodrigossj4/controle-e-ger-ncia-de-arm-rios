@@ -105,7 +105,7 @@ function carregarTipoDocVincArmarios(id) {
     });
 
 }
-function carregarTipoDocNaoVincArmarios(id) {    
+function carregarTipoDocNaoVincArmarios(id) {
     var formdata = new FormData($("form[id='formGerenciarArmario']")[0]);
     $.ajax({
         type: 'GET',
@@ -973,12 +973,12 @@ $('#formLogin #btnLogin').on('click', function (e) {
     var formdata = new FormData($("form[id='formLogin']")[0]);
     let nip = $('#nip').val()
 
-    if(!nip){
+    if (!nip) {
         toastr.warning('Informe seu Nip');
         return false
     }
     let senha = $('#senha').val()
-    if(!senha){
+    if (!senha) {
         toastr.warning('Informe sua Senha');
         return false
     }
@@ -988,15 +988,15 @@ $('#formLogin #btnLogin').on('click', function (e) {
         data: formdata,
         processData: false,
         contentType: false,
-        
+
         success: function (data) {
             console.log(JSON.parse(data))
             //console.log(JSON.parse(data)[0]['dataultimologin']);
             //console.log(JSON.parse(data));
             //JSON.parse(data)[0]['idperfil']
 
-            
-           
+
+
             if (data != "null") {
                 console.log(JSON.parse(data));
                 if ((JSON.parse(data)[0]['dataultimologin'] == null)) {
@@ -1072,7 +1072,7 @@ $('#btnNaoConfirmaResetSenhaUsuario').on('click', function (e) {
     $('#tipo-doc').val('')
     $('.modal').trigger('click');
 });
-function fechar(){
+function fechar() {
     alert('oi');
 }
 $('.btn-close').on('click', function (e) {
@@ -1080,7 +1080,7 @@ $('.btn-close').on('click', function (e) {
 });
 
 $('.fechar').on('click', function (e) {
-    
+
     $('.modal').trigger('click');
 });
 
@@ -1433,17 +1433,17 @@ function carregarLotes() {
 $('#formCadOM #btnCadOM').on('click', function (e) {
     var formdata = new FormData($("form[id='formCadOM']")[0]);
     let codOM = $('#codOM').val()
-    if(!codOM){
+    if (!codOM) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
         return false
     }
     let sigla = $('#sigla').val()
-    if(!sigla){
+    if (!sigla) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
         return false
     }
     let nomeOM = $('#nomeOM').val()
-    if(!nomeOM){
+    if (!nomeOM) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
         return false
     }
@@ -1464,7 +1464,7 @@ $('#formCadOM #btnCadOM').on('click', function (e) {
 });
 
 $(document).on('click', '.btnAlterarOm', function (e) {
-    $("#AlterarOm").modal()    
+    $("#AlterarOm").modal()
     $('#formAlterarOm #codOMAlter').val($(this).data("codom"));
     $('#formAlterarOm #siglaAlter').val($(this).data("sigla"));
     $('#formAlterarOm #nomeOMAlter').val($(this).data("nomeom"));
@@ -1480,12 +1480,12 @@ $(document).on('click', '#exibConfirmaAlteracaoOm', function (e) {
 
 $(document).on('click', '#btnConfirmaAlteracaoOm', function (e) {
     let siglaAlter = $('#siglaAlter').val()
-    if(!siglaAlter){
+    if (!siglaAlter) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
         return false
     }
     let nomeOMAlter = $('#nomeOMAlter').val()
-    if(!nomeOMAlter){
+    if (!nomeOMAlter) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
         return false
     }
@@ -1938,6 +1938,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         contentType: false,
         success: function (retorno) {
             docid = retorno;
+            $('#DocIdAtual').val(docid);
 
             $.ajax({
                 type: 'POST',
@@ -1996,13 +1997,13 @@ function processoAssinaturaData(data) {
                 $('#btnConfirmaIndexarDocumento').removeAttr('disabled');
                 $('#btnConfirmaAnexarDocumento').removeAttr('disabled');
                 let tipoDoc = $('#tipo-doc').val()
-                if(tipoDoc == 'indexar'){
+                if (tipoDoc == 'indexar') {
                     toastr.success('Documento Indexado com sucesso');
                     FecharModal('#ModIndexarDocumento');
                     //alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-                }else if(tipoDoc == 'anexar'){
+                } else if (tipoDoc == 'anexar') {
                     toastr.success('Documento Anexado com sucesso');
-                    FecharModal('#ModAnexarDocumento');                    
+                    FecharModal('#ModAnexarDocumento');
                     //alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
                 }
 
@@ -2021,13 +2022,13 @@ function processoAssinaturaData(data) {
             armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
             let tipoDoc = $('#tipo-doc').val()
-            if(tipoDoc == 'indexar'){
+            if (tipoDoc == 'indexar') {
                 toastr.success('Documento Indexado com sucesso');
                 FecharModal('#ModIndexarDocumento');
                 //alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
-            }else if(tipoDoc == 'anexar'){
+            } else if (tipoDoc == 'anexar') {
                 toastr.success('Documento Anexado com sucesso');
-                FecharModal('#ModAnexarDocumento');                    
+                FecharModal('#ModAnexarDocumento');
                 //alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
             }
 

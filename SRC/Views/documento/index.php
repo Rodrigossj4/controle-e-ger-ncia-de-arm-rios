@@ -223,6 +223,7 @@ $contador = 0;
                         <input id="input-file" type="file" id="arquivo" name="arquivo" value="$paginasList.firstOrDefault()" onchange="convertToBase64();" />
                     </div>
                     <div class="form-group">
+                        <input type="hidden" id="DocIdAtual" name="DocIdAtual" value="">
                         <input type="text" id="objetoAtual" name="objetoAtual" value="">
                         <label for="content-value">Conteúdo do PDF (Base 64)</label>
                         <textarea id="content-value" class="form-control" rows="5" disabled></textarea>
@@ -320,7 +321,7 @@ $contador = 0;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                 <button type="button" class="btn-close" id="btnNaoConfirmaReIndexarDocumento" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" id="btnNaoConfirmaReIndexarDocumento" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group row">

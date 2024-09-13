@@ -327,7 +327,7 @@
 				onSuccess: onSuccessPdfHandler,
 				onError: function (error) {
 					console.debug('ERRO', error);
-					console.log('DocId:' + params.docId)
+					console.log('DocId:' + $('#DocIdAtual').val())
 					cancelarIndice(params.docId);
 				}, // optional
 				// onCancel: onCancelHandler, // optional
