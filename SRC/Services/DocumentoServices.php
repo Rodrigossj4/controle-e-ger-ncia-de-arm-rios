@@ -164,7 +164,6 @@ class DocumentoServices extends SistemaServices
             $repository = new DocumentoRepository($this->Conexao());            
             // json_decode($arquivos->listDocumentosServidor[0], true)
             $listaArquivos =  $repository->listarPaginas($id);
-            var_dump($listaArquivos);die();
             $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
             //var_dump($listaArquivos);
             $componentes = explode('/', $listaArquivos[0]["arquivo"]);
@@ -191,7 +190,6 @@ class DocumentoServices extends SistemaServices
 
                 file_put_contents($arquivo["arquivo"], $decrypted_code);
             }
-
             return $listaArquivos;
         } catch (Exception $e) {
             echo $e;

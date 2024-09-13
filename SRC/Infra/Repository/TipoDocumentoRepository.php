@@ -23,7 +23,6 @@ class TipoDocumentoRepository extends LogRepository
 
             $sqlQuery = "INSERT INTO {$this->schema}\"TipoDocumento\"(\"DescTipoDoc\") values(?);";
             $stmt = $this->pdo->prepare($sqlQuery);
-            var_dump($sqlQuery);
             foreach ($tipoDocumento as $dc) {
                 $tipoDocumentoData = new TipoDocumento(
                     null,
