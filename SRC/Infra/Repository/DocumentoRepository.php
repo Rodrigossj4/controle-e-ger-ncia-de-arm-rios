@@ -577,7 +577,6 @@ class DocumentoRepository extends LogRepository
     public function cadastrarMetaTags(array $tags, int $docId, int $docPagina)
     {
         try {
-            //var_dump($tags);
             $sqlQuery = "INSERT INTO {$this->schema}\"Metadados\"(
                 \"Assunto\", \"Autor\", \"DataDigitalizacao\", \"IdentDocDigital\", \"RespDigitalizacao\", \"Titulo\", \"TipoDocumento\", \"Hash\", \"Classe\", \"DataProdDoc\", \"DestinacaoDoc\", \"Genero\", \"PrazoGuarda\", \"Observacoes\", \"IdDocumento\", \"IdPagina\") values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
