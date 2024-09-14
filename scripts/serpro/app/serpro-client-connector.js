@@ -102,7 +102,7 @@
 		$('#objetoAtual').val(caminhoOriginal);
 		$('#assinatura').trigger('change');
 
-		cancelarIndice($('#DocIdAtual').val());
+
 		// Antes de assinar
 
 		params.beforeSign && params.beforeSign();
@@ -307,7 +307,11 @@
 				data: null,
 				attached: $('#incluir-coteudo').prop('checked'),
 				onSuccess: onSuccessFileHandler,
-				onError: function (error) { console.debug('ERRO: ', error) }, // optional
+				onError: function (error) {
+					console.debug('ERRO: ', error);
+					//cancelarIndice($('#DocIdAtual').val());
+				}, // optional
+
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional
 				// afterSign: afterSignHandler // optional
@@ -329,8 +333,9 @@
 				onSuccess: onSuccessPdfHandler,
 				onError: function (error) {
 					console.debug('ERRO', error);
-					console.log('DocId:' + $('#DocIdAtual').val())
-					cancelarIndice($('#DocIdAtual').val());
+					//console.log("Verificar Erro: " + JSON.stringify(error));
+					if ($('#DocIdAtual').val() != "")
+						cancelarIndice($('#DocIdAtual').val());
 				}, // optional
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional
