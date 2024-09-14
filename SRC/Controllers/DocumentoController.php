@@ -409,4 +409,19 @@ class DocumentoController extends Controller
         $extenssoes = ["jpg", "jpeg", "png", "tif", "tiff", "pdf"];
         return $extenssoes;
     }
+
+    public function migrarLegado(string $caminhoArq): void
+    {
+        $service = new DocumentoServices();
+        //ler do banco
+        //transforma pdf       
+        $caminhoArq = $service->gerarOcrs($caminhoArq);
+
+        //cifra
+        $service->criptografarArquivo($caminhoArq);
+
+        //apaga antigo
+
+        //atualiza banco
+    }
 }

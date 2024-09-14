@@ -96,11 +96,11 @@
 			throw new Error('Sign data is not defined.');
 		}
 
-		var resultado = $('#assinatura');
+		/*var resultado = $('#assinatura');
 		resultado.val($('#content-value').val());
 		console.log("caminho original: " + caminhoOriginal);
 		$('#objetoAtual').val(caminhoOriginal);
-		$('#assinatura').trigger('change');
+		$('#assinatura').trigger('change');*/
 
 
 		// Antes de assinar

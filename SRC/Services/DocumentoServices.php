@@ -161,7 +161,7 @@ class DocumentoServices extends SistemaServices
     public function listaPaginas(int $id, string  $codUsuario): array
     {
         try {
-            $repository = new DocumentoRepository($this->Conexao());            
+            $repository = new DocumentoRepository($this->Conexao());
             // json_decode($arquivos->listDocumentosServidor[0], true)
             $listaArquivos =  $repository->listarPaginas($id);
             $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
@@ -552,6 +552,17 @@ class DocumentoServices extends SistemaServices
         }
     }
 
+    private function processoTransformarTifParaPNG(string $documento): void
+    {
+        $arquivoExtensao = pathinfo($documento, PATHINFO_EXTENSION);
+        /*if ((strtolower($arquivoExtensao) == "tif") || (strtolower($arquivoExtensao) == "tiff")) {
+            $novoNome = $diretorio . "/" . pathinfo($documento, PATHINFO_FILENAME) . ".png";
+            $this->TratarTifParaJpeg($caminhoArqImgServ, $novoNome);
+            array_map('unlink', glob("$caminhoArqImgServ"));
+            //rmdir("{$caminhoArqImgServ}");
+        }*/
+    }
+
     private function subirArquivosPDF(string $diretorio)
     {
         $total = count($_FILES['documentoPDF']['name']);
@@ -677,7 +688,7 @@ class DocumentoServices extends SistemaServices
                 'dataultimologin' => ""
             ));
 
-           //var_dump($dadosList);
+            //var_dump($dadosList);
             $this->gravarLogOperacoes($dadosList);
         }
 
@@ -687,7 +698,7 @@ class DocumentoServices extends SistemaServices
         return $pasta;
     }
 
-    private function gerarOcrs(string $caminhoArq): string
+    public function gerarOcrs(string $caminhoArq): string
     {
         //var_dump($caminhoArq);
         $pasta = random_int(1, 999999);
