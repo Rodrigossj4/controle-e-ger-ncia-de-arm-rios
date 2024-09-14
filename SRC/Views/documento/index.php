@@ -343,11 +343,11 @@ $contador = 0;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" id="btnNaoConfirmaExcluirPagina" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <span>Deseja realmente excluir esse página?</span>
+                    <span>Deseja realmente excluir essa página?</span>
                     <div class="col-sm-3">
                         <input type="button" id="btnConfirmaExcluirPagina" data-id="" value="Sim" class="btn btn-success btnConfirmaExcluirPagina">
                     </div>

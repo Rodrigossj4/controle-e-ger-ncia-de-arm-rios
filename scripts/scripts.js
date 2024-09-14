@@ -1267,6 +1267,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
     if (($('#formCadDocumento #Nip').val() != "")) {
 
         var nip = $('#formCadDocumento #Nip').val().replace(/\./g, '');
+        //var nip = $('#formCadDocumento #Nip').val().replace(/\.\.\//g, "");
 
         if (nip.length != 8) {
             toastr.error('Informe um nip válido');
@@ -1329,6 +1330,7 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         caminho: $('#formCadDocumento #Caminho').val(),
         idPagina: $("#listarDocumentos").attr("data-docid"),
         arquivo: $("#listarDocumentos iframe").attr("src").replace(/\.\.\//g, ""),
+        //arquivo: $("#listarDocumentos iframe").attr("src").replace(/\./g, ''),
         ip: 0,
         codusuario: 0,
         omUsuario: "",
@@ -1368,6 +1370,10 @@ $(document).on('click', '#btnNaoConfirmaReIndexarDocumento', function (e) {
     FecharModal('#ModReIndexarDocumento');
 });
 
+$(document).on('click', '#excluirDocumentoMalIndexado', function (e) {
+    $('#ModExcluirPagina').modal();
+});
+
 
 $(document).on('click', '#btnConfirmaExcluirPagina', function () {
     dados = JSON.stringify({
@@ -1388,7 +1394,9 @@ $(document).on('click', '#btnConfirmaExcluirPagina', function () {
         contentType: false,
         success: function (data) {
             //console.log(data);
-            alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
+            toastr.success('Página excluída com sucesso');
+            FecharModal('#ModExcluirPagina');
+            //alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
             $('#semestre').trigger('change');
 
             $('.clickDocumento').click();
@@ -1848,6 +1856,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
     if (($('#formCadDocumento #Nip').val() != "")) {
 
         var nip = $('#formCadDocumento #Nip').val().replace(/\./g, '');
+        //var nip = $('#formCadDocumento #Nip').val().replace(/\.\.\//g, "");
 
         if (nip.length != 8) {
             toastr.error('Informe um nip válido');
@@ -2006,6 +2015,15 @@ function processoAssinaturaData(data) {
                     FecharModal('#ModAnexarDocumento');
                     //alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
                 }
+                $("#Assunto").val('')
+                $("#codOM").val('')
+                $("#Titulo").val('')
+                $("#Classe").val('')
+                $("#DataProdDoc").val('')
+                $("#DestinacaoDoc").val('')
+                $("#Genero").val('')
+                $("#Observacao").val('')
+                $("#documento").val('')
 
             }).catch(function (error) {
                 console.error('Ocorreu um erro:', error);
@@ -2031,6 +2049,15 @@ function processoAssinaturaData(data) {
                 FecharModal('#ModAnexarDocumento');
                 //alertas('Documento Anexado com sucesso', '#ModAnexarDocumento', 'alert_sucess', 'true');
             }
+            $("#Assunto").val('')
+            $("#codOM").val('')
+            $("#Titulo").val('')
+            $("#Classe").val('')
+            $("#DataProdDoc").val('')
+            $("#DestinacaoDoc").val('')
+            $("#Genero").val('')
+            $("#Observacao").val('')
+            $("#documento").val('')
 
             $('#semestre').trigger('change');
             $('.btnIndexar').css("display", "none");
