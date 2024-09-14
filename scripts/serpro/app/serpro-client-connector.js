@@ -96,11 +96,13 @@
 			throw new Error('Sign data is not defined.');
 		}
 
-		/*var resultado = $('#assinatura');
+		var resultado = $('#assinatura');
 		resultado.val($('#content-value').val());
 		console.log("caminho original: " + caminhoOriginal);
 		$('#objetoAtual').val(caminhoOriginal);
-		$('#assinatura').trigger('change');*/
+		$('#assinatura').trigger('change');
+
+		cancelarIndice($('#DocIdAtual').val());
 		// Antes de assinar
 
 		params.beforeSign && params.beforeSign();
@@ -328,7 +330,7 @@
 				onError: function (error) {
 					console.debug('ERRO', error);
 					console.log('DocId:' + $('#DocIdAtual').val())
-					cancelarIndice(params.docId);
+					cancelarIndice($('#DocIdAtual').val());
 				}, // optional
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional
