@@ -177,7 +177,7 @@ span.carousel-control-next-icon {
 }
 
 .carousel #listarDocumentos {
-    margin-top: 50px;
+    margin-top: 5px;
 }
 
 .carousel-control-next,
@@ -197,6 +197,20 @@ span.carousel-control-next-icon {
     margin-top: 10px;
 }
 
+#documento-total{
+    float: right;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+table{
+    font-size: 12px;
+}
 /*
 .Grade {
     border: 0px solid;

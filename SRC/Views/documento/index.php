@@ -190,6 +190,9 @@ $contador = 0;
         <div class="col-md-8 order-md-1" style="border: 1px solid;">
             <div class="container mt-8">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="0">
+                    
+                    <span id="download-doc"></span> <span id="documento-total"></span>
+
                     <div class="carousel-inner" id="listarDocumentos" data-docId="">
 
                     </div>
@@ -372,12 +375,12 @@ $contador = 0;
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleControlsSelecionados" role="button" data-slide="prev" data-indice="0">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
+                        
+                        <span class="sr-only" style="color: black;"><span class="carousel-control-prev-icon" aria-hidden="true" style="color: black;"></span></span>
                     </a>
                     <a class="carousel-control-next" href="#carouselExampleControlsSelecionados" role="button" data-slide="next" data-indice="0">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Próximo</span>
+                        
+                        <span class="sr-only" style="color: black;"><span class="carousel-control-next-icon" aria-hidden="true"  style="color: black;"></span></span>
                     </a>
                 </div>
             </div>
