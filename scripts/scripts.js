@@ -1179,7 +1179,7 @@ $(document).on('click', '.clickDocumento', function (e) {
             let url = listDocumentosServidor[0][1];
             $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - 1</a>`)
             sel.attr('data-docId', listDocumentosServidor[0][0]);
-            sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe> Hash: <input type="hidden" id="file-${contador++}"/>');
+            sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" id="file-${contador++}"/>-->');
             
 
             $("#carouselExampleControls").css('display', 'block');
@@ -1207,7 +1207,7 @@ $(document).on('click', '#modCadDocumento #avanca', function () {
         let url = listDocumentosServidor[$(this).attr('data-indice')][1];
         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - ${index}</a>`)
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe> Hash: <input type="hidden" value="'+index+'" id="file-'+index+'"/>');
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" value="'+index+'" id="file-'+index+'"/>-->');
         sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
 
         //let indice = (parseInt($(this).attr('data-indice')) + 1) > (listDocumentosServidor.length - 1) ? listDocumentosServidor.length - 1 : parseInt($(this).attr('data-indice')) + 1;
@@ -1249,7 +1249,7 @@ $(document).on('click', '#modCadDocumento #regride', function () {
         let url = listDocumentosServidor[$(this).attr('data-indice')][1];
         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - ${index}</a>`)
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe> Hash: <input type="hidden" value="'+index+'" id="file-'+index+'"/>');
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" value="'+index+'" id="file-'+index+'"/>-->');
         sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
         let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
 
@@ -1744,13 +1744,14 @@ function ListarArquivos() {
 
             if (listDocumentos.length > 0)
                 listDocumentosPrimaria = removeItems(listDocumentosPrimaria, listDocumentos);
-            console.log(listDocumentosPrimaria)
+            //console.log(listDocumentosPrimaria)
 
             var sel = $("#listarDocumentos");
             sel.empty();
             if (listDocumentosPrimaria.length > 0) {
 
-                var extensao = listDocumentosPrimaria[0][0].split('.').pop();                
+                var extensao = listDocumentosPrimaria[0][0].split('.').pop();     
+                          
                 if (extensao.toLowerCase() == "pdf") {
                     listDocumentosServidor = [];
                     let contador = 0;
@@ -1759,7 +1760,7 @@ function ListarArquivos() {
                         contador++;
                     });
                     console.log(contador)
-
+                    console.log(listDocumentosServidor[0][1]);
                     //console.log(listDocumentosServidor);
                     $('#modCadDocumento .carousel-control-prev').attr('id', 'regride');
                     $('#modCadDocumento .carousel-control-next').attr('id', 'avanca');
@@ -1781,8 +1782,8 @@ function ListarArquivos() {
                         alert(listDocumentosServidor[0][0])
                         sel.attr('data-docId', listDocumentosServidor[0][0]);
                     }
-                    
-                    sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe> Hash: <input type="hidden" id="file-${contador++}"/>');
+                    alert(listDocumentosServidor[0][1])
+                    sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" value="1" id="file-1"/>-->');
 
 
                 } else {
@@ -1790,7 +1791,7 @@ function ListarArquivos() {
                         //console.log(e[0].split('.').pop());
                         console.log(contador) 
                         var active = (contador == 0) ? 'active' : '';
-                        sel.append(`<div class="carousel-item ${active}" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="${e}" class="d-block w-100" alt="Imagem 1"> Hash: <input type="hidden" id="file-${contador++}"/></div>`);
+                        sel.append(`<div class="carousel-item ${active}" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="${e}" class="d-block w-100" alt="Imagem 1"> <!--Hash: <input type="text" id="file-${contador++}"/>--></div>`);
                         contador++;
                     });                   
                 }
