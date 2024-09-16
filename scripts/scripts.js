@@ -38,7 +38,6 @@ function carregarArmarios() {
 }
 
 $('#btnCadArmario').on('click', function (e) {
-
     if (($('#formCadArmario #codigo').val() == "") || ($('#formCadArmario #nomeInterno').val() == "") || ($('#formCadArmario #nomeExterno').val() == "")) {
         toastr.warning('Todos os campos do formulário são obrigatórios');
         return false;
