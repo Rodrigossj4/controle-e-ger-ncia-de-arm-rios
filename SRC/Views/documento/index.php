@@ -24,7 +24,7 @@ $contador = 0;
         <div class="col-md-4 order-md-1">
             <form method="post" id="formCadDocumento" action="/cadastrarDocumento" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label class="col-form-label" for="Armario">Armario: </label><br>
+                    <label class="col-form-label" for="Armario">Armario:<span class="text-danger">*</span> </label><br>
                     <input type="hidden" id="flagCadastro" name="flagCadastro" />
                     <input type="hidden" id="Caminho" name="Caminho" value="">
                     <input type="hidden" id="tratandoDocumento" name="tratandoDocumento" value="">
@@ -36,12 +36,12 @@ $contador = 0;
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label" for="Nip">NIP: </label>
+                    <label class="col-form-label" for="Nip">NIP:<span class="text-danger">*</span> </label> </label>
                     <input class="form-control form-control-sm form-control-padronizado" type="text" name="Nip" id="Nip">
                 </div>
                 <div class="row">
                     <div class="col-md-7 mb-3">
-                        <label class="col-form-label" for="semestre">Semestre: </label>
+                        <label class="col-form-label" for="semestre">Semestre:<span class="text-danger">*</span> </label> </label>
                         <br>
                         <select id="semestre" name="semestre" class="form-select">
                             <option value="0">Selecione o semestre</option>
@@ -50,12 +50,12 @@ $contador = 0;
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="col-form-label" for="ano">Ano: </label>
+                        <label class="col-form-label" for="ano">Ano:<span class="text-danger">*</span> </label> </label>
                         <input class="form-control form-control-padronizado" type="number" name="ano" id="ano">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label" for="TipoDoc">Tipo de documento: </label>
+                    <label class="col-form-label" for="TipoDoc">Tipo de documento:<span class="text-danger">*</span> </label> </label>
                     </br>
                     <select id="SelectTipoDoc" name="SelectTipoDoc" class="form-select">
                         <option value="0">Selecione o tipo de documento</option>
@@ -63,16 +63,16 @@ $contador = 0;
                 </div>
                 <hr class="mb-4">
                 <div class="form-group Metatags" id="Metatags">
-                    <label>Informar MetaTags</label>
+                    <label><b>Informar MetaTags</b></label>
                 </div>
                 <div class="containerTags" id="containerTags">
                     <div class="form-group">
-                        <label class="col-form-label" for="Assunto">Informe o assunto: </label>
+                        <label class="col-form-label" for="Assunto">Informe o assunto:<span class="text-danger">*</span> </label> </label>
                         <input type="hidden" id="RespDigitalizacao" name="RespDigitalizacao" value="<?php echo htmlspecialchars($nipUsuario); ?>">
                         <input type="text" id="Assunto" name="Assunto" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="Autor">Informe o Autor </label>
+                        <label class="col-form-label" for="Autor">Informe o Autor:<span class="text-danger">*</span> </label> </label>
                         <select name="codOM" id="codOM" class="form-select">
                             <?php foreach ($OMList  as $om) : ?>
                                 <option value="<?= $om['NomeAbreviado']; ?>"><?= $om['NomeAbreviado'] . " - " . $om['NomOM']; ?> </option>
@@ -80,7 +80,7 @@ $contador = 0;
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="Titulo">Informe o Titulo</label>
+                        <label class="col-form-label" for="Titulo">Informe o Titulo:<span class="text-danger">*</span> </label></label>
                         <input type="text" id="Titulo" name="Titulo" class="form-control">
                     </div>
                     <!--<div class="form-group">
@@ -88,15 +88,15 @@ $contador = 0;
                         <input id="Identificador" name="Identificador" class="form-control" />
                     </div>-->
                     <div class="form-group">
-                        <label class="col-form-label" for="Classe">Classe</label>
+                        <label class="col-form-label" for="Classe">Classe:<span class="text-danger">*</span> </label></label>
                         <input id="Classe" name="Classe" class="form-control" />
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="DataProdDoc">Data de produção</label>
+                        <label class="col-form-label" for="DataProdDoc">Data de produção:<span class="text-danger">*</span> </label></label>
                         <input id="DataProdDoc" name="DataProdDoc" class="form-control" type="date" />
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="DestinacaoDoc">Destinação prevista</label>
+                        <label class="col-form-label" for="DestinacaoDoc">Destinação prevista:<span class="text-danger">*</span> </label></label>
                         <select id="DestinacaoDoc" name="DestinacaoDoc" class="form-select">
                             <option value="0">Selecione a Destinação prevista</option>
                             <option value="transferencia">Transferência</option>
@@ -105,15 +105,15 @@ $contador = 0;
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="Genero">Gênero</label>
+                        <label class="col-form-label" for="Genero">Gênero:<span class="text-danger">*</span> </label></label>
                         <input id="Genero" name="Genero" class="form-control" value="" />
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="PrazoGuarda">Prazo de guarda</label>
+                        <label class="col-form-label" for="PrazoGuarda">Prazo de guarda:<span class="text-danger">*</span> </label></label>
                         <input id="PrazoGuarda" name="PrazoGuarda" class="form-control" value="130 anos" />
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="Observacao">Observação</label>
+                        <label class="col-form-label" for="Observacao">Observação:</label>
                         <input id="Observacao" name="Observacao" class="form-control" />
                     </div>
                 </div>
@@ -134,11 +134,11 @@ $contador = 0;
                 <br>
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <input type="checkbox" id="ConfAssinatura" value="1" checked> Assinar documento
+                        <input type="checkbox" id="ConfAssinatura" value="1" checked> <label for="ConfAssinatura">Assinar documento</label>
                     </div>
                 </div>
                 <div class="form-group" id="blocoHash">
-                    <label class="col-form-label" for="Hash">Insira o Hash</label>
+                    <label class="col-form-label" for="Hash">Insira o Hash:<span class="text-danger">*</span> </label></label>
                     <input id="Hash" name="Hash" class="form-control" value="" />
                 </div>
                 <br>
@@ -209,7 +209,7 @@ $contador = 0;
 
             <div class="container mt-8">
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary mt-2">incluir</button>
-                <button name="excluirDocumentoMalIndexado" id="excluirDocumentoMalIndexado" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#ModExcluirPagina">excluir</button>
+                <button name="excluirDocumentoMalIndexado" id="excluirDocumentoMalIndexado" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#ModExcluirPagina">Excluir</button>
                 <button name="verificarDocumentos" id="verificarDocumentos" class="btn btn-primary mt-2" data-toggle="modal" data-target=".bd-example-modal-lg">Verificar documentos inseridos</button>
             </div>
         </div>

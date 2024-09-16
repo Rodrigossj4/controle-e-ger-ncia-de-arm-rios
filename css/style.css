@@ -211,6 +211,9 @@ a:hover{
 table{
     font-size: 12px;
 }
+label{
+    cursor: pointer;
+}
 /*
 .Grade {
     border: 0px solid;
