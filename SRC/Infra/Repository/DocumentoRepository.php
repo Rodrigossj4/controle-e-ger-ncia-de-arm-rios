@@ -337,7 +337,7 @@ class DocumentoRepository extends LogRepository
     }
 
 
-    public function excluirDocumentos(int $id): bool
+    public function excluirDocumentos(string $id): bool
     {
         try {
             $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";

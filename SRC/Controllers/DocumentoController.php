@@ -167,7 +167,7 @@ class DocumentoController extends Controller
     public function excluir(): bool
     {
         $dadosDocumento = json_decode(file_get_contents('php://input'));
-        var_dump($dadosDocumento);
+        //var_dump($dadosDocumento);
 
         $service = new DocumentoServices();
         $service->excluirDocumentos($dadosDocumento->idDocumento);

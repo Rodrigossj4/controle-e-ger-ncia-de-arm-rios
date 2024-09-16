@@ -102,7 +102,7 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function excluirDocumentos(int $id): bool
+    public function excluirDocumentos(string $id): bool
     {
         try {
             $repository = new DocumentoRepository($this->Conexao());
