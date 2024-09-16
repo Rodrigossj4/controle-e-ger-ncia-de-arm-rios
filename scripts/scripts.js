@@ -276,7 +276,10 @@ function carregarDocumentos() {
             var sel = $("#documentosLista");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
+                sel.append('<tr class="clickDocumento" id="' + e.id + '" ><td>1</td><td>' + e.nip + '</td><td>' + e.semestre + '</td><td>' + e.ano + '</td><td>' + e.desctipo + '</td><td>' + e.quantidadepaginas + '</td></tr>');
+
+                //sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
+                
                 //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>'
             });
         },
@@ -1176,7 +1179,8 @@ $(document).on('click', '.clickDocumento', function (e) {
             let url = listDocumentosServidor[0][1];
             $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - 1</a>`)
             sel.attr('data-docId', listDocumentosServidor[0][0]);
-            sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
+            sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" id="file-${contador++}"/>-->');
+            
 
             $("#carouselExampleControls").css('display', 'block');
 
@@ -1203,7 +1207,7 @@ $(document).on('click', '#modCadDocumento #avanca', function () {
         let url = listDocumentosServidor[$(this).attr('data-indice')][1];
         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - ${index}</a>`)
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" value="'+index+'" id="file-'+index+'"/>-->');
         sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
 
         //let indice = (parseInt($(this).attr('data-indice')) + 1) > (listDocumentosServidor.length - 1) ? listDocumentosServidor.length - 1 : parseInt($(this).attr('data-indice')) + 1;
@@ -1245,7 +1249,7 @@ $(document).on('click', '#modCadDocumento #regride', function () {
         let url = listDocumentosServidor[$(this).attr('data-indice')][1];
         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - ${index}</a>`)
         sel.empty();
-        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe>');
+        sel.append('<iframe src="/' + listDocumentosServidor[$(this).attr('data-indice')][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" value="'+index+'" id="file-'+index+'"/>-->');
         sel.attr('data-docId', listDocumentosServidor[parseInt($(this).attr('data-indice'))][0]);
         let indice = (parseInt($(this).attr('data-indice')) - 1) < 0 ? 0 : parseInt($(this).attr('data-indice')) - 1;
 
@@ -1733,18 +1737,21 @@ function ListarArquivos() {
         processData: false,
         contentType: false,
         success: function (data) {
+            $('#download-doc').show()
+            $('#documento-total').show()
             listDocumentosPrimaria = [];
             listDocumentosPrimaria = JSON.parse(data);
 
             if (listDocumentos.length > 0)
                 listDocumentosPrimaria = removeItems(listDocumentosPrimaria, listDocumentos);
-
+            //console.log(listDocumentosPrimaria)
 
             var sel = $("#listarDocumentos");
             sel.empty();
             if (listDocumentosPrimaria.length > 0) {
 
-                var extensao = listDocumentosPrimaria[0][0].split('.').pop();                
+                var extensao = listDocumentosPrimaria[0][0].split('.').pop();     
+                          
                 if (extensao.toLowerCase() == "pdf") {
                     listDocumentosServidor = [];
                     let contador = 0;
@@ -1753,7 +1760,7 @@ function ListarArquivos() {
                         contador++;
                     });
                     console.log(contador)
-
+                    console.log(listDocumentosServidor[0][1]);
                     //console.log(listDocumentosServidor);
                     $('#modCadDocumento .carousel-control-prev').attr('id', 'regride');
                     $('#modCadDocumento .carousel-control-next').attr('id', 'avanca');
@@ -1765,25 +1772,28 @@ function ListarArquivos() {
                     if(isNaN(index)){ 
                         $('#documento-total').hide()
                         $('#download-doc').hide()
+                        //sel.append('<div><embed src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"/> Hash: <input type="text" value="1" id="file-1"/></div>');
                     }else{
                         $('#documento-total').show()
                         $('#download-doc').show()
                         $('#documento-total').html(`Total de páginas(s): ${index}/${listDocumentosServidor.length}`)
                         let url = listDocumentosServidor[0][1];
                         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arqui0vo - ${index}</a>`)
+                        alert(listDocumentosServidor[0][0])
+                        sel.attr('data-docId', listDocumentosServidor[0][0]);
                     }
-                    
-                    sel.attr('data-docId', listDocumentosServidor[0][0]);
-                    sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe>');
+                    alert(listDocumentosServidor[0][1])
+                    sel.append('<iframe src="/' + listDocumentosServidor[0][1] + '" width="100%" height="500"></iframe> <!--Hash: <input type="text" value="1" id="file-1"/>-->');
 
 
                 } else {
                     listDocumentosPrimaria.forEach(e => {
                         //console.log(e[0].split('.').pop());
+                        console.log(contador) 
                         var active = (contador == 0) ? 'active' : '';
-                        sel.append('<div class="carousel-item ' + active + '" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="' + e + '" class="d-block w-100" alt="Imagem 1"> </div>');
+                        sel.append(`<div class="carousel-item ${active}" style="width: 400px; height: 100Vh;margin-left: 200px; "><img src="${e}" class="d-block w-100" alt="Imagem 1"> <!--Hash: <input type="text" id="file-${contador++}"/>--></div>`);
                         contador++;
-                    });                    
+                    });                   
                 }
                 
                 $("#carouselExampleControls").css('display', 'block');
