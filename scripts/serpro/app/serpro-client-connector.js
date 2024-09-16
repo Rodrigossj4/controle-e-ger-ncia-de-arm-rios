@@ -309,7 +309,7 @@
 				onSuccess: onSuccessFileHandler,
 				onError: function (error) {
 					console.debug('ERRO: ', error);
-					//cancelarIndice($('#DocIdAtual').val());
+					cancelarIndice($('#DocIdAtual').val());
 				}, // optional
 
 				// onCancel: onCancelHandler, // optional
