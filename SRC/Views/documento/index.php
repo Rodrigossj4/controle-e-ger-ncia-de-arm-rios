@@ -209,7 +209,9 @@ $contador = 0;
 
             <div class="container mt-8">
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary mt-2">incluir</button>
+                <?php if($_SESSION['usuario'][0]['nivelAcesso']===1){ ?>
                 <button name="excluirDocumentoMalIndexado" id="excluirDocumentoMalIndexado" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#ModExcluirPagina">Excluir</button>
+                <?php } ?>
                 <button name="verificarDocumentos" id="verificarDocumentos" class="btn btn-primary mt-2" data-toggle="modal" data-target=".bd-example-modal-lg">Verificar documentos inseridos</button>
             </div>
         </div>

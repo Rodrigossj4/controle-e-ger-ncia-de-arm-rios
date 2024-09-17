@@ -120,28 +120,29 @@ $contador = 0;
         <div class="col-md-8 order-md-1" style="border: 1px solid;">
             <div class="container mt-8">
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <span id="download-doc"></span> <span id="documento-total"></span>
                     <div class="carousel-inner" id="listarDocumentos" data-docId="">
 
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" data-indice="0">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
+                        <!--<span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+                        <span class="sr-only"><span class="carousel-control-prev-icon" aria-hidden="true"></span></span>
                     </a>
                     <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" data-indice="0">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Próximo</span>
+                        <!--<span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+                        <span class="sr-only"><span class="carousel-control-next-icon" aria-hidden="true"></span></span>
                     </a>
                 </div>
             </div>
 
-            <div class="container">
+            <!-- <div class="container">
                 <button name="incluirDocumento" id="incluirDocumento" class="btn btn-primary">incluir</button>
                 <button name="excluirDocumento" id="excluirDocumento" class="btn btn-primary">excluir</button>
-            </div>
+            </div> -->
         </div>
 
     </div>
-    <div class="row col-6">
+    <!-- <div class="row col-6">
         <div class="panel panel-default" style="display: none;">
             <div class="panel-heading">
                 <h3 class="panel-title">Assinar PDF</h3>
@@ -169,9 +170,9 @@ $contador = 0;
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="row col-6" style="display: none;">
+    <!-- <div class="row col-6" style="display: none;">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">PDF Assinado</h3>
@@ -190,7 +191,7 @@ $contador = 0;
             </div>
         </div>
 
-    </div>
+    </div> -->
 </div>
 
 
@@ -200,7 +201,7 @@ $contador = 0;
 <?php require_once __DIR__ . "../../rodape.php" ?>
 <script src="../../scripts/serpro/app/serpro-client-connector.js" type="text/javascript"></script>
 
-<div class="modal fade" id="ModIndexarDocumento" tabindex="-1" aria-labelledby="ModIndexarDocumento" aria-hidden="true">
+<!-- <div class="modal fade" id="ModIndexarDocumento" tabindex="-1" aria-labelledby="ModIndexarDocumento" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -221,10 +222,10 @@ $contador = 0;
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
-<div class="modal fade" id="ModAnexarDocumento" tabindex="-1" aria-labelledby="ModAnexarDocumento" aria-hidden="true">
+<!-- <div class="modal fade" id="ModAnexarDocumento" tabindex="-1" aria-labelledby="ModAnexarDocumento" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -245,9 +246,9 @@ $contador = 0;
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
-<div class="modal fade" id="ModReIndexarDocumento" tabindex="-1" aria-labelledby="ModReIndexarDocumento" aria-hidden="true">
+<!-- <div class="modal fade" id="ModReIndexarDocumento" tabindex="-1" aria-labelledby="ModReIndexarDocumento" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -268,7 +269,7 @@ $contador = 0;
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <script>
     $(document).ready(function() {
