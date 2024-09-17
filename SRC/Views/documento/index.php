@@ -139,7 +139,7 @@ $contador = 0;
                 </div>
                 <div class="form-group" id="blocoHash">
                     <label class="col-form-label" for="Hash">Insira o Hash:<span class="text-danger">*</span> </label></label>
-                    <input id="Hash" name="Hash" class="form-control" value="" />
+                    <input id="Hash" name="Hash" class="form-control" onkeyup="verificaHash()" value="" />
                 </div>
                 <br>
                 <div class="form-group row">

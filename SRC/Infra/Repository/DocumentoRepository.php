@@ -351,7 +351,7 @@ class DocumentoRepository extends LogRepository
             return false;
         }
     }
-    //d
+    
     public function listarPaginas(int $id): array
     {
         //var_dump("e " . $id);
@@ -388,6 +388,20 @@ class DocumentoRepository extends LogRepository
         }
     }
 
+    public function verificaHash(string $hash): int
+    {
+        try {
+            $sqlQuery = "SELECT * FROM {$this->schema}\"Metadados\" where \"Hash\" = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $hash);
+            $stmt->execute();
+            $hash = $stmt->fetchAll();
+            return COUNT($hash);
+        } catch (Exception $e) {
+            echo $e;
+            return 0;
+        }
+    }
     public function TotalPaginasDocumento(int $id): int
     {
         try {

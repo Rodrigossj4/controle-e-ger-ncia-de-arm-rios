@@ -425,4 +425,11 @@ class DocumentoController extends Controller
 
         //atualiza banco
     }
+
+    public function verificaHash()
+    {
+        $service = new DocumentoServices();
+        $hash = $service->verificaHash(filter_input(INPUT_GET, 'hash'));
+        echo $hash;
+    }
 }

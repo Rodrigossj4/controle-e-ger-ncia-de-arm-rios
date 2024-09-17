@@ -1289,30 +1289,25 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
 
         if (nip.length != 8) {
             toastr.error('Informe um nip válido');
-            //alertas("Informe um nip válido", '#ModReIndexarDocumento', 'alert_danger');
             return false;
         }
     } else {
         toastr.error('Informe um nip válido');
-        //alertas("Informe um nip válido", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #semestre').val() == 0)) {
         toastr.error('Informe o semestre');
-        //alertas("Informe o semestre", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
         toastr.error('Informe um ano válido');
-        //alertas("Informe um ano válido", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
         toastr.error('Informe o tipo de documento');
-        //alertas("Informe o tipo de documento", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -1327,7 +1322,6 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
         toastr.error('Existem tags não preenchidas');
-        //alertas("Existem tags não preenchidas. Verfique", '#ModReIndexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -1341,7 +1335,6 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
     if ($("#listarDocumentos").attr("data-docid") == "") {
         //console.log("Nenhum documento sendo exibido");
         toastr.error('Nenhum documento sendo exibido');
-        //alertas("Nenhum documento sendo exibido", '#modCadDocumento', 'alert_danger');
         return false;
     }
 
@@ -1376,7 +1369,6 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
             $('#btnConfirmaReIndexarDocumento').removeAttr('disabled');
             FecharModal('#ModReIndexarDocumento');
             toastr.success('Página Reindexada com sucesso');
-            //alertas('Página Reindexada com sucesso', '#ModReIndexarDocumento', 'alert_sucess', 'true');
             /*setTimeout(function () {
                 location.reload();
             }, 3000);*/
@@ -1421,12 +1413,11 @@ $(document).on('click', '#btnConfirmaExcluirPagina', function () {
             //console.log(data);
             toastr.success('Página excluída com sucesso');
             FecharModal('#ModExcluirPagina');
-            //alertas('Página excluida com sucesso', '#ModExcluirPagina', 'alert_sucess', 'true');
             $('#semestre').trigger('change');
 
             $('#formCadDocumento').trigger('change');
 
-            $('.clickDocumento').click();
+            //$('.clickDocumento').click();
             /*setTimeout(function () {
                 location.reload();
             }, 3000);*/
@@ -1625,7 +1616,6 @@ $('#formCadDocumento #btnCarregarArquivosImg').on('click', function (e) {
         },
         error: function (d) {
             toastr.error(d.responseText);
-            //alertas(d.responseText, '#modCadDocumento', 'alert_danger', 'true');
             console.log('erro ao carregar arquivos ' + d.responseText);
         }
     });
@@ -1901,6 +1891,27 @@ var docAtual = ""
 var docBase64Atual = "";
 let docid = 0;
 let possuiPasta = 0;
+
+function verificaHash() {
+    let hash = $('#formCadDocumento #Hash').val()
+    $.ajax({
+        url: "/verifica-se-hash-existe?hash=" + hash,
+        type: 'GET',
+        data: "",
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            if(data > 0){
+                toastr.error('Esse Hash já existe em outra página');
+                $('#AnexarDocumento').prop('disabled', true)
+                $('#IndexarDocumento').prop('disabled', true)
+            }else{
+                $('#AnexarDocumento').prop('disabled', false)
+                $('#IndexarDocumento').prop('disabled', false)
+            }
+        }
+    });
+}
 $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
     listDocumentosServidor = [];
 
@@ -1908,7 +1919,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         toastr.error('Selecione um armário');
         return false;
     }
-
+    
     //console.log($('#formCadDocumento #Nip').val().replace(/\./g, ''));
     if (($('#formCadDocumento #Nip').val() != "")) {
 
@@ -1917,36 +1928,59 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 
         if (nip.length != 8) {
             toastr.error('Informe um nip válido');
-            //alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
             return false;
         }
     } else {
         toastr.error('Informe um nip válido');
-        //alertas("Informe um nip válido", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
-
     if (($('#formCadDocumento #semestre').val() == 0)) {
         toastr.error('Informe o semestre');
-        //alertas("Informe o semestre", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
         toastr.error('Informe um ano válido');
-        //alertas("Informe um ano válido", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
         toastr.error('Informe o tipo de documento');
-        //alertas("Informe o tipo de documento", '#ModIndexarDocumento', 'alert_danger');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Assunto').val() == "")) {
+        toastr.error('Informe o assunto');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Titulo').val() == "")) {
+        toastr.error('Informe o título');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Classe').val() == "")) {
+        toastr.error('Informe a Classe');
+        return false;
+    }
+
+    if (($('#formCadDocumento #DataProdDoc').val() == "")) {
+        toastr.error('Informe a data de produção');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Genero').val() == "")) {
+        toastr.error('Informe o gênero');
+        return false;
+    }
+
+    if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
+        toastr.error('Informe o prazo de guarda');
         return false;
     }
 
     if ((listDocumentos.length == 0)) {
         toastr.error('Ao menos um documento deve ser inserido para indexar');
-        //alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -1961,7 +1995,6 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
         toastr.error('Existem tags não preenchidas');
-        //alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -2025,7 +2058,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 
                     $('#semestre').trigger('change');
                     $('#formCadDocumento').trigger('change');    
-                    $('.clickDocumento').click();
+                    //$('.clickDocumento').click();
                 },
                 error: function (d) {
                     console.log("caso apresente erro de assinatura: " + d);
@@ -2082,8 +2115,7 @@ function processoAssinaturaData(data) {
                     //carregarDocumentos()
                     $('#semestre').trigger('change');
                     $('#formCadDocumento').trigger('change');    
-                    $('.clickDocumento').click();
-                    //alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
+                    //$('.clickDocumento').click();
                 } else if (tipoDoc == 'anexar') {
                     toastr.success('Documento Anexado com sucesso');
                     FecharModal('#ModAnexarDocumento');
@@ -2091,7 +2123,7 @@ function processoAssinaturaData(data) {
                     //carregarDocumentos()
                     $('#semestre').trigger('change');
                     $('#formCadDocumento').trigger('change');    
-                    $('.clickDocumento').click();
+                    //$('.clickDocumento').click();
                 }
 
                 $("#documento").val('')
@@ -2115,7 +2147,6 @@ function processoAssinaturaData(data) {
             if (tipoDoc == 'indexar') {
                 toastr.success('Documento Indexado com sucesso');
                 FecharModal('#ModIndexarDocumento');
-                //alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
             } else if (tipoDoc == 'anexar') {
                 toastr.success('Documento Anexado com sucesso');
                 FecharModal('#ModAnexarDocumento');
@@ -2125,7 +2156,7 @@ function processoAssinaturaData(data) {
             
             $('#semestre').trigger('change');
             $('#formCadDocumento').trigger('change');    
-            $('.clickDocumento').click();
+            //$('.clickDocumento').click();
 
             $("#documento").val('')
             $("#Hash").val('')
@@ -2174,32 +2205,27 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
     if (($('#formCadDocumento #Nip').val() == "") || ($('#formCadDocumento #Nip').unmask().val().length != 8)) {
         toastr.error('Informe um nip válido');
-        //alertas("Informe um nip válido", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #semestre').val() == 0)) {
         toastr.error('Informe o semestre');
-        //alertas("Informe o semestre", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
   
 
     if (($('#formCadDocumento #ano').val() == 0) || ($('#formCadDocumento #ano').val().length != 4) || ($('#formCadDocumento #ano').val() > new Date().getFullYear())) {
         toastr.error('Informe um ano válido');
-        //alertas("Informe um ano válido", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
     if (($('#formCadDocumento #SelectTipoDoc').val() == 0)) {
         toastr.error('Informe o tipo de documento');
-        //alertas("Informe o tipo de documento", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
     if ((listDocumentos.length == 0)) {
         toastr.error('Ao menos um documento deve ser inserido para indexar');
-        //alertas("Ao menos um documento deve ser inserido para indexar", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -2214,7 +2240,6 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
         toastr.error('Existem tags não preenchidas');
-        //alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
         return false;
     }
 
@@ -2237,6 +2262,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         genero: $('#formCadDocumento #Genero').val(),
         prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
         tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
+        hash: $('#formCadDocumento #Hash').val(),
         respDigitalizacao: $('#formCadDocumento #RespDigitalizacao').val(),
     }, null, 2);
 
@@ -2495,8 +2521,6 @@ $('.ExcDoc').on('click', function (e) {
     $('#formExcluirPagina #id').val($(this).data("idpagina"));
     $('#formExcluirPagina #docid').val($(this).data("docid"));
 });
-
-
 
 $(document).ready(function () {
     $('.carousel').carousel({

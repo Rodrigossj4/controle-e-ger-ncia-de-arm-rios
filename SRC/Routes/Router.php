@@ -68,7 +68,8 @@ class Router
                 '/validar-nip' => fn() => self::load('UsuariosController', 'validarNIP'),
                 '/auditoria' => fn() => self::load('AuditoriaController', 'index'),
                 '/troca-senha' => fn() => self::load('UsuariosController', 'trocaSenha'),
-                '/listarOms' => fn() => self::load('OMController', 'listar')
+                '/listarOms' => fn() => self::load('OMController', 'listar'),
+                '/verifica-se-hash-existe' => fn() => self::load('DocumentoController', 'verificaHash')
             ],
             'POST' => [
                 '/login' => fn() => self::load('LoginController', 'login'),
