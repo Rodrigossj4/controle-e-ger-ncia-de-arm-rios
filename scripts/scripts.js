@@ -297,7 +297,7 @@ $('#formCadDocumento #btnCadDocumento').on('click', function (e) {
         contentType: false,
         success: function (d) {
             $("#formCadDocumento #flagCadastro").val("1").trigger('change');
-            //carregarDocumentos();
+            carregarDocumentos();
             /* $("#formCadDocumento #ListArmarioDocumento").val("");
              $('#formCadDocumento #SelectTipoDoc').val("");
              $('#formCadDocumento #semestre').val("");
@@ -1417,7 +1417,7 @@ $(document).on('click', '#btnConfirmaExcluirPagina', function () {
 
             $('#formCadDocumento').trigger('change');
 
-            //$('.clickDocumento').click();
+            $('.clickDocumento').click();
             /*setTimeout(function () {
                 location.reload();
             }, 3000);*/
@@ -2058,7 +2058,7 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
 
                     $('#semestre').trigger('change');
                     $('#formCadDocumento').trigger('change');    
-                    //$('.clickDocumento').click();
+                    $('.clickDocumento').click();
                 },
                 error: function (d) {
                     console.log("caso apresente erro de assinatura: " + d);
@@ -2112,20 +2112,21 @@ function processoAssinaturaData(data) {
                     toastr.success('Documento Indexado com sucesso');
                     FecharModal('#ModIndexarDocumento');
                     $('#verificarDocumentos').hide()
-                    //carregarDocumentos()
+                    carregarDocumentos()
                     $('#semestre').trigger('change');
-                    $('#formCadDocumento').trigger('change');    
-                    //$('.clickDocumento').click();
+                    // $('#formCadDocumento').trigger('change');    
+                    // $('.clickDocumento').click();
                 } else if (tipoDoc == 'anexar') {
                     toastr.success('Documento Anexado com sucesso');
                     FecharModal('#ModAnexarDocumento');
                     $('#verificarDocumentos').hide()
-                    //carregarDocumentos()
+                    carregarDocumentos()
                     $('#semestre').trigger('change');
-                    $('#formCadDocumento').trigger('change');    
-                    //$('.clickDocumento').click();
+                    // $('#formCadDocumento').trigger('change');    
+                    // $('.clickDocumento').click();
                 }
-
+                $('.clickDocumento').click();
+                $('#formCadDocumento').trigger('change'); 
                 $("#documento").val('')
                 $("#Hash").val('')
 
@@ -2151,12 +2152,12 @@ function processoAssinaturaData(data) {
                 toastr.success('Documento Anexado com sucesso');
                 FecharModal('#ModAnexarDocumento');
                 $('#verificarDocumentos').hide()
-                //carregarDocumentos()
+                carregarDocumentos()
             }
             
             $('#semestre').trigger('change');
             $('#formCadDocumento').trigger('change');    
-            //$('.clickDocumento').click();
+            $('.clickDocumento').click();
 
             $("#documento").val('')
             $("#Hash").val('')
