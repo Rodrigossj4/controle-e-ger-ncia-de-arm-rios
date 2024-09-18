@@ -334,8 +334,8 @@
 				onError: function (error) {
 					console.debug('ERRO', error);
 					//console.log("Verificar Erro: " + JSON.stringify(error));
-					if ($('#DocIdAtual').val() != "")
-						cancelarIndice($('#DocIdAtual').val());
+					// if ($('#DocIdAtual').val() != "")
+					// 	cancelarIndice($('#DocIdAtual').val());
 				}, // optional
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional
