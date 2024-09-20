@@ -113,7 +113,7 @@ $contador = 0;
                         <input id="PrazoGuarda" name="PrazoGuarda" class="form-control" value="130 anos" />
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="Observacao">Observação:</label>
+                        <label class="col-form-label" for="Observacao">Observação:<span class="text-danger">*</span></label>
                         <input id="Observacao" name="Observacao" class="form-control" />
                     </div>
                 </div>
@@ -139,7 +139,7 @@ $contador = 0;
                 </div>
                 <div class="form-group" id="blocoHash">
                     <label class="col-form-label" for="Hash">Insira o Hash:<span class="text-danger">*</span> </label></label>
-                    <input id="Hash" name="Hash" class="form-control" onkeyup="verificaHash()" value="" />
+                    <input id="Hash" name="Hash" onkeyup="verificaHash()" class="form-control" value="" />
                 </div>
                 <br>
                 <div class="form-group row">

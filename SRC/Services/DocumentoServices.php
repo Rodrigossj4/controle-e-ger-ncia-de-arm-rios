@@ -164,6 +164,11 @@ class DocumentoServices extends SistemaServices
             $repository = new DocumentoRepository($this->Conexao());
             // json_decode($arquivos->listDocumentosServidor[0], true)
             $listaArquivos =  $repository->listarPaginas($id);
+            if(!$listaArquivos){
+                //Remover a referencia do arquivo caso não exista o documento fisico
+                
+            var_dump($listaArquivos, $id);die();
+            }
             $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
             //var_dump($listaArquivos);
             $componentes = explode('/', $listaArquivos[0]["arquivo"]);
@@ -197,18 +202,6 @@ class DocumentoServices extends SistemaServices
         }
     }
 
-    public function verificaHash(string  $hash): int
-    {
-        try {
-            $repository = new DocumentoRepository($this->Conexao());
-            $hash =  $repository->verificaHash($hash);
-            return $hash;
-        } catch (Exception $e) {
-            echo $e;
-            return 0;
-        }
-    }
-
     public function cadastrarPaginas(array $pagina): int
     {
         try {
@@ -222,6 +215,7 @@ class DocumentoServices extends SistemaServices
 
     public function reindexarPagina($arquivo): bool
     {
+
         try {
             $documentosList = array();
             array_push($documentosList, array(
@@ -660,6 +654,7 @@ class DocumentoServices extends SistemaServices
                 'imgencontrada' => "0",
                 'armario' => $documentos['idArmario']
             ));
+
 
             $idPagina = $repository->cadastrarPagina($paginasList);
 
