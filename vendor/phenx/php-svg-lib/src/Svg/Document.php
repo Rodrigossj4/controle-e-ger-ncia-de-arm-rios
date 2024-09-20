@@ -23,7 +23,6 @@ use Svg\Tag\Polygon;
 use Svg\Tag\Polyline;
 use Svg\Tag\Rect;
 use Svg\Tag\Stop;
-use Svg\Tag\Symbol;
 use Svg\Tag\Text;
 use Svg\Tag\StyleTag;
 use Svg\Tag\UseTag;
@@ -31,7 +30,6 @@ use Svg\Tag\UseTag;
 class Document extends AbstractTag
 {
     protected $filename;
-    protected $_defs_depth = 0;
     public $inDefs = false;
 
     protected $x;
@@ -80,31 +78,6 @@ class Document extends AbstractTag
 
     public function __construct() {
 
-    }
-
-    /**
-     * Increase the nesting level for defs-like elements
-     *
-     * @return int
-     */
-    public function enterDefs () {
-        $this->_defs_depth++;
-        $this->inDefs = true;
-        return $this->_defs_depth;
-    }
-
-    /**
-     * Decrease the nesting level for defs-like elements
-     *
-     * @return int
-     */
-    public function exitDefs () {
-        $this->_defs_depth--;
-        if ($this->_defs_depth < 0) {
-            $this->_defs_depth = 0;
-        }
-        $this->inDefs = ($this->_defs_depth > 0 ? true : false);
-        return $this->_defs_depth;
     }
 
     /**
@@ -160,7 +133,6 @@ class Document extends AbstractTag
                 break;
             }
         }
-        xml_parse($parser, "", true);
 
         xml_parser_free($parser);
 
@@ -241,7 +213,6 @@ class Document extends AbstractTag
 
     public function render(SurfaceInterface $surface)
     {
-        $this->_defs_depth = 0;
         $this->inDefs = false;
         $this->surface = $surface;
 
@@ -285,7 +256,7 @@ class Document extends AbstractTag
 
         switch (strtolower($name)) {
             case 'defs':
-                $this->enterDefs();
+                $this->inDefs = true;
                 return;
 
             case 'svg':
@@ -351,14 +322,10 @@ class Document extends AbstractTag
                 break;
 
             case 'g':
+            case 'symbol':
                 $tag = new Group($this, $name);
                 break;
 
-            case 'symbol':
-                $this->enterDefs();
-                $tag = new Symbol($this, $name);
-                break;
-    
             case 'clippath':
                 $tag = new ClipPath($this, $name);
                 break;
@@ -408,14 +375,9 @@ class Document extends AbstractTag
         $tag = null;
         switch (strtolower($name)) {
             case 'defs':
-                $this->exitDefs();
+                $this->inDefs = false;
                 return;
 
-            case 'symbol':
-                $this->exitDefs();
-                $tag = array_pop($this->stack);
-                break;
-    
             case 'svg':
             case 'path':
             case 'rect':
@@ -431,6 +393,7 @@ class Document extends AbstractTag
             case 'style':
             case 'text':
             case 'g':
+            case 'symbol':
             case 'clippath':
             case 'use':
             case 'a':
@@ -438,7 +401,7 @@ class Document extends AbstractTag
                 break;
         }
 
-        if ((!$this->inDefs && $tag) || $tag instanceof StyleTag) {
+        if (!$this->inDefs && $tag) {
             $tag->handleEnd();
         }
     }

@@ -164,11 +164,6 @@ class DocumentoServices extends SistemaServices
             $repository = new DocumentoRepository($this->Conexao());
             // json_decode($arquivos->listDocumentosServidor[0], true)
             $listaArquivos =  $repository->listarPaginas($id);
-            if(!$listaArquivos){
-                //Remover a referencia do arquivo caso não exista o documento fisico
-                
-            var_dump($listaArquivos, $id);die();
-            }
             $diretorioOriginal = pathinfo($listaArquivos[0]["arquivo"], PATHINFO_DIRNAME);
             //var_dump($listaArquivos);
             $componentes = explode('/', $listaArquivos[0]["arquivo"]);
@@ -329,6 +324,7 @@ class DocumentoServices extends SistemaServices
 
     public function gerarPdfs($dadosDocumento): array
     {
+        //var_dump('passei aqui');die();
         $total = count($dadosDocumento->imagens);
         //var_dump($dadosDocumento);
         $paginasList = [];
@@ -414,6 +410,7 @@ class DocumentoServices extends SistemaServices
 
     private function  TransformaPDFOCR(string $arquivo): string
     {
+        //var_dump('aqui');die();
         //var_dump("bomwa: " . $arquivo);
         //transformar o pdf em imagem com imagick já em 300dpi
         $novoNome = pathinfo($arquivo, PATHINFO_DIRNAME) . "/" . pathinfo($arquivo, PATHINFO_FILENAME) . ".png";

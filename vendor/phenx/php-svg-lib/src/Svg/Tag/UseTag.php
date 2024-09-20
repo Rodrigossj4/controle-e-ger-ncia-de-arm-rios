@@ -48,6 +48,10 @@ class UseTag extends AbstractTag
         $link = $attributes["href"] ?? $attributes["xlink:href"];
         $this->reference = $document->getDef($link);
 
+        if ($this->reference) {
+            $this->reference->before($attributes);
+        }
+
         $surface = $document->getSurface();
         $surface->save();
 
@@ -59,6 +63,11 @@ class UseTag extends AbstractTag
             return;
         }
         parent::after();
+
+        if ($this->reference) {
+            $this->reference->after();
+        }
+
         $this->getDocument()->getSurface()->restore();
     }
 
@@ -75,22 +84,19 @@ class UseTag extends AbstractTag
             return;
         }
 
-        $originalAttributes = array_merge($this->reference->attributes);
-        $originalStyle = $this->reference->getStyle();
         $mergedAttributes = $this->reference->attributes;
-        $attributesToNotMerge = ['x', 'y', 'width', 'height', 'href', 'xlink:href', 'id', 'style'];
+        $attributesToNotMerge = ['x', 'y', 'width', 'height', 'href', 'xlink:href', 'id'];
         foreach ($attributes as $attrKey => $attrVal) {
             if (!in_array($attrKey, $attributesToNotMerge) && !isset($mergedAttributes[$attrKey])) {
                 $mergedAttributes[$attrKey] = $attrVal;
             }
         }
-        $mergedAttributes['style'] = ($attributes['style'] ?? '') . ';' . ($mergedAttributes['style'] ?? '');
 
-        $this->_handle($this->reference, $mergedAttributes);
+        $this->reference->handle($mergedAttributes);
 
-        $this->reference->attributes = $originalAttributes;
-        if ($originalStyle !== null) {
-            $this->reference->setStyle($originalStyle);
+        foreach ($this->reference->children as $_child) {
+            $_attributes = array_merge($_child->attributes, $mergedAttributes);
+            $_child->handle($_attributes);
         }
     }
 
@@ -101,32 +107,16 @@ class UseTag extends AbstractTag
             return;
         }
 
-        if ($this->reference) {
-            $this->_handleEnd($this->reference);
-        }
-
         parent::handleEnd();
-    }
 
-    private function _handle($tag, $attributes) {
-        $tag->handle($attributes);
-        foreach ($tag->children as $child) {
-            $originalAttributes = array_merge($child->attributes);
-            $originalStyle = $child->getStyle();
-            $mergedAttributes = $child->attributes;
-            $mergedAttributes['style'] = ($attributes['style'] ?? '') . ';' . ($mergedAttributes['style'] ?? '');
-            $this->_handle($child, $mergedAttributes);
-            $child->attributes = $originalAttributes;
-            if ($originalStyle !== null) {
-                $child->setStyle($originalStyle);
-            }
+        if (!$this->reference) {
+            return;
         }
-    }
 
-    private function _handleEnd($tag) {
-        foreach ($tag->children as $child) {
-            $this->_handleEnd($child);
+        $this->reference->handleEnd();
+
+        foreach ($this->reference->children as $_child) {
+            $_child->handleEnd();
         }
-        $tag->handleEnd();
     }
 } 

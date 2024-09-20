@@ -131,15 +131,18 @@ abstract class CSSList implements Renderable, Commentable
             }
             return $oAtRule;
         } elseif ($oParserState->comes('}')) {
-            if ($bIsRoot) {
-                if ($oParserState->getSettings()->bLenientParsing) {
-                    return DeclarationBlock::parse($oParserState);
-                } else {
-                    throw new SourceException("Unopened {", $oParserState->currentLine());
-                }
+            if (!$oParserState->getSettings()->bLenientParsing) {
+                throw new UnexpectedTokenException('CSS selector', '}', 'identifier', $oParserState->currentLine());
             } else {
-                // End of list
-                return null;
+                if ($bIsRoot) {
+                    if ($oParserState->getSettings()->bLenientParsing) {
+                        return DeclarationBlock::parse($oParserState);
+                    } else {
+                        throw new SourceException("Unopened {", $oParserState->currentLine());
+                    }
+                } else {
+                    return null;
+                }
             }
         } else {
             return DeclarationBlock::parse($oParserState, $oList);
@@ -294,22 +297,6 @@ abstract class CSSList implements Renderable, Commentable
     public function splice($iOffset, $iLength = null, $mReplacement = null)
     {
         array_splice($this->aContents, $iOffset, $iLength, $mReplacement);
-    }
-
-    /**
-     * Inserts an item in the CSS list before its sibling. If the desired sibling cannot be found,
-     * the item is appended at the end.
-     *
-     * @param RuleSet|CSSList|Import|Charset $item
-     * @param RuleSet|CSSList|Import|Charset $sibling
-     */
-    public function insertBefore($item, $sibling)
-    {
-        if (in_array($sibling, $this->aContents, true)) {
-            $this->replace($sibling, [$item, $sibling]);
-        } else {
-            $this->append($item);
-        }
     }
 
     /**

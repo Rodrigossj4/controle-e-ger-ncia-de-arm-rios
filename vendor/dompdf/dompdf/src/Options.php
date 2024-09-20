@@ -84,13 +84,6 @@ class Options
     ];
 
     /**
-    * Operational artifact (log files, temporary files) path validation
-    *
-    * @var callable
-    */
-    private $artifactPathValidation = null;
-
-    /**
      * @var string
      */
     private $logOutputFile;
@@ -342,8 +335,6 @@ class Options
 
         $this->setAllowedProtocols(["file://", "http://", "https://"]);
 
-        $this->setArtifactPathValidation([$this, "validateArtifactPath"]);
-
         if (null !== $attributes) {
             $this->set($attributes);
         }
@@ -370,8 +361,6 @@ class Options
                 $this->setChroot($value);
             } elseif ($key === 'allowedProtocols') {
                 $this->setAllowedProtocols($value);
-            } elseif ($key === 'artifactPathValidation') {
-                $this->setArtifactPathValidation($value);
             } elseif ($key === 'logOutputFile' || $key === 'log_output_file') {
                 $this->setLogOutputFile($value);
             } elseif ($key === 'defaultMediaType' || $key === 'default_media_type') {
@@ -439,8 +428,6 @@ class Options
             return $this->getChroot();
         } elseif ($key === 'allowedProtocols') {
             return $this->getAllowedProtocols();
-        } elseif ($key === 'artifactPathValidation') {
-            return $this->getArtifactPathValidation();
         } elseif ($key === 'logOutputFile' || $key === 'log_output_file') {
             return $this->getLogOutputFile();
         } elseif ($key === 'defaultMediaType' || $key === 'default_media_type') {
@@ -602,24 +589,6 @@ class Options
             }
         }
         $this->allowedProtocols[$protocol] = ["rules" => $rules];
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getArtifactPathValidation()
-    {
-        return $this->artifactPathValidation;
-    }
-
-    /**
-     * @param callable $validator
-     * @return $this
-     */
-    public function setArtifactPathValidation($validator)
-    {
-        $this->artifactPathValidation = $validator;
         return $this;
     }
 
@@ -879,9 +848,7 @@ class Options
      */
     public function setFontCache($fontCache)
     {
-        if (!is_callable($this->artifactPathValidation) || ($this->artifactPathValidation)($fontCache, "fontCache") === true) {
-            $this->fontCache = $fontCache;
-        }
+        $this->fontCache = $fontCache;
         return $this;
     }
 
@@ -899,9 +866,7 @@ class Options
      */
     public function setFontDir($fontDir)
     {
-        if (!is_callable($this->artifactPathValidation) || ($this->artifactPathValidation)($fontDir, "fontDir") === true) {
-            $this->fontDir = $fontDir;
-        }
+        $this->fontDir = $fontDir;
         return $this;
     }
 
@@ -1070,9 +1035,7 @@ class Options
      */
     public function setLogOutputFile($logOutputFile)
     {
-        if (!is_callable($this->artifactPathValidation) || ($this->artifactPathValidation)($logOutputFile, "logOutputFile") === true) {
-            $this->logOutputFile = $logOutputFile;
-        }
+        $this->logOutputFile = $logOutputFile;
         return $this;
     }
 
@@ -1090,9 +1053,7 @@ class Options
      */
     public function setTempDir($tempDir)
     {
-        if (!is_callable($this->artifactPathValidation) || ($this->artifactPathValidation)($tempDir, "tempDir") === true) {
-            $this->tempDir = $tempDir;
-        }
+        $this->tempDir = $tempDir;
         return $this;
     }
 
@@ -1110,9 +1071,7 @@ class Options
      */
     public function setRootDir($rootDir)
     {
-        if (!is_callable($this->artifactPathValidation) || ($this->artifactPathValidation)($rootDir, "rootDir") === true) {
-            $this->rootDir = $rootDir;
-        }
+        $this->rootDir = $rootDir;
         return $this;
     }
 
@@ -1144,19 +1103,6 @@ class Options
     public function getHttpContext()
     {
         return $this->httpContext;
-    }
-
-
-    public function validateArtifactPath(?string $path, string $option)
-    {
-        if ($path === null) {
-            return true;
-        }
-        $parsed_uri = parse_url($path);
-        if ($parsed_uri === false || (array_key_exists("scheme", $parsed_uri) && strtolower($parsed_uri["scheme"]) === "phar")) {
-            return false;
-        }
-        return true;
     }
 
     public function validateLocalUri(string $uri)

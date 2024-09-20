@@ -467,17 +467,12 @@ class GD implements Canvas
         imagesetthickness($this->get_image(), $width);
 
         if ($c === IMG_COLOR_STYLED) {
-            $points = [
+            imagepolygon($this->get_image(), [
                 $x1, $y1,
                 $x1 + $w, $y1,
                 $x1 + $w, $y1 + $h,
                 $x1, $y1 + $h
-            ];
-            if (version_compare(PHP_VERSION, "8.1.0", "<")) {
-                imagepolygon($this->get_image(), $points, count($points)/2, $c);
-            } else {
-                imagepolygon($this->get_image(), $points, $c);
-            }
+            ], $c);
         } else {
             imagerectangle($this->get_image(), $x1, $y1, $x1 + $w, $y1 + $h, $c);
         }
@@ -575,17 +570,9 @@ class GD implements Canvas
         imagesetthickness($this->get_image(), isset($width) ? $width : 0);
 
         if ($fill) {
-            if (version_compare(PHP_VERSION, "8.1.0", "<")) {
-                imagefilledpolygon($this->get_image(), $points, count($points)/2, $c);
-            } else {
-                imagefilledpolygon($this->get_image(), $points, $c);
-            }
+            imagefilledpolygon($this->get_image(), $points, $c);
         } else {
-            if (version_compare(PHP_VERSION, "8.1.0", "<")) {
-                imagepolygon($this->get_image(), $points, count($points)/2, $c);
-            } else {
-                imagepolygon($this->get_image(), $points, $c);
-            }
+            imagepolygon($this->get_image(), $points, $c);
         }
     }
 

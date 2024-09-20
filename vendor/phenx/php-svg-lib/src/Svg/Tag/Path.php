@@ -449,12 +449,7 @@ class Path extends Shape
         $toX = $tx - $fx;
         $toY = $ty - $fy;
 
-        if ((float)($toX + $toY) === 0.0) {
-            return;
-        }
-
-        if ((float)abs($rx) == 0.0 || (float)abs($ry) === 0.0) {
-            $surface->lineTo($tx, $ty);
+        if ($toX + $toY === 0) {
             return;
         }
 

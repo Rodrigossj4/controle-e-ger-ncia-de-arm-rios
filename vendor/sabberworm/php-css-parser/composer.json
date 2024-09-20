@@ -12,14 +12,6 @@
     "authors": [
         {
             "name": "Raphael Schweikert"
-        },
-        {
-            "name": "Oliver Klee",
-            "email": "github@oliverklee.de"
-        },
-        {
-            "name": "Jake Hotson",
-            "email": "jake.github@qzdesign.co.uk"
         }
     ],
     "require": {
@@ -27,7 +19,8 @@
         "ext-iconv": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7.27"
+        "phpunit/phpunit": "^5.7.27",
+        "codacy/coverage": "^1.4.3"
     },
     "suggest": {
         "ext-mbstring": "for parsing UTF-8 CSS"
@@ -44,7 +37,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "9.0.x-dev"
+            "dev-master": "9.0.x-dev"
         }
     },
     "scripts": {
