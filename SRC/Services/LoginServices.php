@@ -52,6 +52,18 @@ class LoginServices extends SistemaServices
         }
     }
 
+    public function tentativaLogin($nip)
+    {
+        try {
+            $repository = new LoginRepository($this->Conexao());
+            $retorno = $repository->tentativaLogin($nip);
+            return $retorno;
+        } catch (Exception $e) {
+            echo $e;
+            return null;
+        }
+    }
+
     public function logout(array $dadosList): bool
     {
         try {

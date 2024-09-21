@@ -68,7 +68,8 @@ class Router
                 '/validar-nip' => fn() => self::load('UsuariosController', 'validarNIP'),
                 '/auditoria' => fn() => self::load('AuditoriaController', 'index'),
                 '/troca-senha' => fn() => self::load('UsuariosController', 'trocaSenha'),
-                '/listarOms' => fn() => self::load('OMController', 'listar')
+                '/listarOms' => fn() => self::load('OMController', 'listar'),
+                '/verifica-se-hash-existe' => fn() => self::load('DocumentoController', 'verificaHash')
             ],
             'POST' => [
                 '/login' => fn() => self::load('LoginController', 'login'),
@@ -93,6 +94,7 @@ class Router
                 '/cadastrarUsuario' => fn() => self::load('UsuariosController', 'cadastrar'),
                 '/alterarUsuario' => fn() => self::load('UsuariosController', 'alterar'),
                 '/excluirUsuario' => fn() => self::load('UsuariosController', 'excluir'),
+                '/ativarUsuario' => fn() => self::load('UsuariosController', 'ativar'),
                 '/vincular-documentos-armarios' => fn() => self::load('ArmariosController', 'vincularDocumentos'),
                 '/tratar-documento' => fn() => self::load('DocumentoController', 'documento'),
                 '/indexar-documento-om' => fn() => self::load('DocumentoController', 'documentoOm'),

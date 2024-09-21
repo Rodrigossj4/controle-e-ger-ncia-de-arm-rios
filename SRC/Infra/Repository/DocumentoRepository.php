@@ -639,4 +639,19 @@ class DocumentoRepository extends LogRepository
         $stmt->bindValue(2, $idPagina);
         $stmt->execute();
     }
+
+    public function verificaHash(string $hash): int
+    {
+        try {
+            $sqlQuery = "SELECT * FROM {$this->schema}\"Metadados\" where \"Hash\" = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $hash);
+            $stmt->execute();
+            $hash = $stmt->fetchAll();
+            return COUNT($hash);
+        } catch (Exception $e) {
+            echo $e;
+            return 0;
+        }
+    }
 }

@@ -69,6 +69,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Nome do Usuário</th>
+                                <th scope="col">Status</th>
                                 <th scope="col" colspan="4" style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
@@ -76,6 +77,13 @@
                             <?php foreach ($UsuariosList  as $usuario) : ?>
                                 <tr>
                                     <td><?= $usuario['nomeusuario']; ?></td>
+                                    <td>
+                                        <?php if($usuario['ativo'] == false){?>
+                                            <span class="text-danger">Inativo</span>
+                                        <?php }else {?>
+                                            <span class="text-success">Ativo</span>
+                                        <?php }?>
+                                    </td>
                                     <td>
                                         <button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="<?= $usuario['codusuario']; ?>" data-desc="<?= $usuario['nomeusuario']; ?>">Editar</button>
                                     </td>
@@ -86,10 +94,17 @@
                                         <button class="btn btn-warning btnIncluirSenhaPadrao" data-bs-toggle="modal" data-bs-target="#IncluirSenhaPadrao" data-id="<?= $usuario['codusuario']; ?>">Senha Padrão</button>
                                     </td>
                                     <td>
+                                        <?php if($usuario['ativo'] == true){?>
                                         <form method="post" id="excluir<?= $usuario['codusuario']; ?>" name="formAltUsuario" id="formAltUsuario" action="">
                                             <input type="hidden" name="idUsuario" value="<?= $usuario['codusuario']; ?>">
-                                            <button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="<?= $usuario['codusuario']; ?>" type="button">Excluir</button>
+                                            <button class="btn btn-danger excluirUsuario col-md-12" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="<?= $usuario['codusuario']; ?>" type="button">Inativar</button>
                                         </form>
+                                        <?php }else {?>
+                                        <form method="post" id="ativar<?= $usuario['codusuario']; ?>" name="formAltUsuario" id="formAltUsuario" action="">
+                                            <input type="hidden" name="idUsuario" value="<?= $usuario['codusuario']; ?>">
+                                            <button class="btn btn-success ativarUsuario col-md-12" data-bs-toggle="modal" data-bs-target="#modativarUsuario" data-id="<?= $usuario['codusuario']; ?>" type="button">Ativar</button>
+                                        </form>
+                                        <?php }?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -177,7 +192,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <span>Deseja realmente excluir esse Usuario?</span>
+                    <span>Deseja realmente desativar esse Usuario?</span>
                     <div class="col-sm-3">
                         <form id="formExcluirUsuario">
                             <input type="hidden" name="id" id="id">
@@ -186,6 +201,31 @@
                     </div>
                     <div class="col-sm-3">
                         <input type="button" id="btnNaoConfirmaExcluirUsuario" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaExcluirUsuario">
+                    </div>
+                </div>
+                <span class="alerta"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modativarUsuario" tabindex="-1" aria-labelledby="modativarUsuario" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja realmente ativar esse Usuario?</span>
+                    <div class="col-sm-3">
+                        <form id="formAtivarUsuario">
+                            <input type="hidden" name="id" id="id">
+                        </form>
+                        <input type="button" id="btnConfirmaAtivarUsuario" data-id="" value="Sim" class="btn btn-success btnConfirmaAtivarUsuario">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaAtivarUsuario" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaExcluirUsuario">
                     </div>
                 </div>
                 <span class="alerta"></span>

@@ -18,8 +18,10 @@ class LoginController extends Controller
     {
         $login = array();
         $funcoes = new Helppers();
+        $nip = $funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip'));
+
         array_push($login, array(
-            'nip' => $funcoes->somenteNumeros(filter_input(INPUT_POST, 'nip')),
+            'nip' => $nip,
             'senhausuario' => filter_input(INPUT_POST, 'senha'),
             'ipusuario' => $this->retornaIP()
         ));
@@ -29,8 +31,12 @@ class LoginController extends Controller
         //$dados = $service->login($login);  
         //?  header("location: /gerenciar-armarios") : require __DIR__ . '../../Views/login/index.php'
         $retorno = $service->login($login);
-        //var_dump($retorno);
-        echo json_encode($retorno);
+
+        if($retorno == null){
+            echo json_encode($service->tentativaLogin($nip));
+        }else{
+            echo json_encode($retorno);
+        }
     }
 
     public function logout()

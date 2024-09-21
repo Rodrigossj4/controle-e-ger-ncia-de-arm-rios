@@ -20,6 +20,16 @@ class Helppers
         return preg_replace("/[^0-9]/", "", $str);
     }
 
+    function somenteNumerosCaracteres($valor)
+    {
+        $valor = trim($valor);
+        $valor = str_replace(".", "", $valor);
+        $valor = str_replace(",", "", $valor);
+        $valor = str_replace("-", "", $valor);
+        $valor = str_replace("/", "", $valor);
+        return $valor;
+    }
+
     public function validarNip(string $nip): bool
     {
         if (strlen($nip) != 8)

@@ -157,6 +157,20 @@ class UsuariosController  extends Controller
       return true;
    }
 
+   public function ativar(): bool
+   {
+      $service = new UsuarioServices();
+      session_start();
+      if ($_SESSION['usuario'][0]["codusuario"] == filter_input(INPUT_POST, 'id')) {
+         http_response_code(500);
+         echo "Usuário logado na sessão atual.";
+         return false;
+      };
+
+      $service->ativarUsuario(filter_input(INPUT_POST, 'id'));
+      return true;
+   }
+
    public function trocaSenha()
    {
       require __DIR__ . '../../Views/login/trocaSenha.php';

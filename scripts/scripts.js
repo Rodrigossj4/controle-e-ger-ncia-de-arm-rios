@@ -16,6 +16,27 @@ $(document).ready(function (e) {
 
 });
 
+function verificaHash() {
+    let hash = $('#formCadDocumento #Hash').val()
+    $.ajax({
+        url: "./verifica-se-hash-existe?hash=" + hash,
+        type: 'GET',
+        data: "",
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            if(data > 0){
+                toastr.error('Esse Hash já existe em outra página');
+                $('#AnexarDocumento').prop('disabled', true)
+                $('#IndexarDocumento').prop('disabled', true)
+            }else{
+                $('#AnexarDocumento').prop('disabled', false)
+                $('#IndexarDocumento').prop('disabled', false)
+            }
+        }
+    });
+}
+
 function carregarArmarios() {
     $.ajax({
         url: vUrlListarArmarios,
@@ -275,8 +296,9 @@ function carregarDocumentos() {
             var sel = $("#documentosLista");
             sel.empty();
             data.forEach(e => {
-                sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
-                //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>'
+                sel.append('<tr class="clickDocumento" id="' + e.id + '" ><td>1</td><td>' + e.nip + '</td><td>' + e.semestre + '</td><td>' + e.ano + '</td><td>' + e.desctipo + '</td><td><span id="qtd-paginas">' + e.quantidadepaginas + '</span></td></tr>');
+                //sel.append('<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Tratar Documento"></form></div></div>');
+                
             });
         },
         error: function (data) {
@@ -295,7 +317,9 @@ $('#formCadDocumento #btnCadDocumento').on('click', function (e) {
         contentType: false,
         success: function (d) {
             $("#formCadDocumento #flagCadastro").val("1").trigger('change');
-            //carregarDocumentos();
+            $('#formCadDocumento').trigger('change');    
+            $('.clickDocumento').click();
+            carregarDocumentos()
             /* $("#formCadDocumento #ListArmarioDocumento").val("");
              $('#formCadDocumento #SelectTipoDoc').val("");
              $('#formCadDocumento #semestre').val("");
@@ -467,8 +491,9 @@ $(document).on('click', '#btnConfirmaAlteracaoTipoDocumento', function (e) {
 });
 
 $(document).on('change', '#ListArmarioDocumento', function (e) {
+    // $('#excluirDocumentoMalIndexado').hide()
+    // $('#carouselExampleControls').hide()
     idArmario = $(this).val();
-
     $.ajax({
         type: 'GET',
         url: "/listarTipoDocumentosArmario?id=" + idArmario,
@@ -719,7 +744,31 @@ function carregarUsuarios() {
             var sel = $("#gradeUsuario");
             sel.empty();
             data.forEach(e => {
-                sel.append('<tr><td>' + e.nomeusuario + '</td><td><button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="' + e.codusuario + '" data-desc="' + e.nomeusuario + '">Editar</button></td><td><button class="btn btn-warning btnAlterarSenhaUsuario" data-bs-toggle="modal" data-bs-target="#AlteraSenhaUsuario" data-id="' + e.codusuario + '">Alterar Senha</button></td><td><button class="btn btn-warning btnIncluirSenhaPadrao" data-bs-toggle="modal" data-bs-target="#IncluirSenhaPadrao" data-id="' + e.codusuario + '">Senha Padrão</button></td><td><form method="post" id="excluir' + e.codusuario + '" name="formAltUsuario" id="formAltUsuario" action=""><input type="hidden" name="idUsuario" value="' + e.codusuario + '"><button class="btn btn-danger excluirUsuario" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="' + e.codusuario + '" type="button">Excluir</button></form></td></tr>');
+
+                if(e.ativo == false){
+                    var status = `<span class="text-danger">Inativo</span>`
+                    var botaoAtivarDesativar = `<form method="post" id="ativar${e.codusuario}" name="formAltUsuario" id="formAltUsuario" action="">
+                                            <input type="hidden" name="idUsuario" value="${e.codusuario}">
+                                            <button class="btn btn-success ativarUsuario col-md-12" data-bs-toggle="modal" data-bs-target="#modativarUsuario" data-id="${e.codusuario}" type="button">Ativar</button>
+                                        </form>`
+                }else{
+                    var status = `<span class="text-success">Ativo</span>`
+                    var botaoAtivarDesativar = `<form method="post" id="excluir${e.codusuario}" name="formAltUsuario" id="formAltUsuario" action="">
+                                            <input type="hidden" name="idUsuario" value="${e.codusuario}">
+                                            <button class="btn btn-danger excluirUsuario col-md-12" data-bs-toggle="modal" data-bs-target="#modexcluirUsuario" data-id="${e.codusuario}" type="button">Inativar</button>
+                                        </form>`
+                }
+
+                sel.append(`<tr>
+                                <td>${e.nomeusuario}</td>
+                                <td>${status}</td>
+                                <td><button class="btn btn-warning btnAlterarUsuario" data-bs-toggle="modal" data-bs-target="#AlteraUsuario" data-id="${e.codusuario}" data-desc="${e.nomeusuario}">Editar</button></td>
+                                <td><button class="btn btn-warning btnAlterarSenhaUsuario" data-bs-toggle="modal" data-bs-target="#AlteraSenhaUsuario" data-id="${e.codusuario}">Alterar Senha</button></td>
+                                <td><button class="btn btn-warning btnIncluirSenhaPadrao" data-bs-toggle="modal" data-bs-target="#IncluirSenhaPadrao" data-id="${e.codusuario}">Senha Padrão</button></td>
+                                <td>
+                                ${botaoAtivarDesativar}
+                                </td>
+                            </tr>`);
             });
         },
         error: function (data) {
@@ -920,6 +969,12 @@ $(document).on('click', '.excluirUsuario', function (e) {
     $('#formExcluirUsuario #id').val($(this).data("id"));
 });
 
+$(document).on('click', '.excluirUsuario', function (e) {
+    $('#modexcluirUsuario').modal()
+    $('#formExcluirUsuario #id').val($(this).data("id"));
+});
+
+
 $(document).on('click', '.btnConfirmaExcluirUsuario', function (e) {
     var formdata = new FormData($("form[id='formExcluirUsuario']")[0]);
 
@@ -932,8 +987,35 @@ $(document).on('click', '.btnConfirmaExcluirUsuario', function (e) {
         success: function (d) {
             carregarUsuarios();
             $(this).data("id", "");
-            toastr.success('Usuario excluído com sucesso');
+            toastr.success('Usuario inativado com sucesso');
             FecharModal('#modexcluirUsuario');
+        },
+        error: function (d) {
+            toastr.error(d.responseText);
+        }
+    }
+    );
+});
+
+$(document).on('click', '.ativarUsuario', function (e) {
+    $('#modativarUsuario').modal()
+    $('#formAtivarUsuario #id').val($(this).data("id"));
+});
+
+
+$(document).on('click', '.btnConfirmaAtivarUsuario', function (e) {
+    var formdata = new FormData($("form[id='formAtivarUsuario']")[0]);
+    $.ajax({
+        type: 'POST',
+        url: "/ativarUsuario",
+        data: formdata,
+        processData: false,
+        contentType: false,
+        success: function (d) {
+            carregarUsuarios();
+            $(this).data("id", "");
+            toastr.success('Usuario ativado com sucesso');
+            FecharModal('#modativarUsuario');
         },
         error: function (d) {
             toastr.error(d.responseText);
@@ -989,12 +1071,26 @@ $('#formLogin #btnLogin').on('click', function (e) {
         contentType: false,
 
         success: function (data) {
-            console.log(JSON.parse(data))
+            //console.log(JSON.parse(data))
             //console.log(JSON.parse(data)[0]['dataultimologin']);
             //console.log(JSON.parse(data));
             //JSON.parse(data)[0]['idperfil']
-
-
+            if(data == 0){
+                toastr.error('NIP não encontrado');
+                return false
+            }else if(data == 1){
+                toastr.error('Falha ao efeturar login, 1 de 3 tentativas');
+                return false
+            }else if(data == 2){
+                toastr.error('Falha ao efeturar login, 2 de 3 tentativas');
+                return false
+            }else if(data == 3){
+                toastr.error('Falha ao efeturar login, 3 de 3 tentativas');
+                return false
+            }else if(data > 3){
+                toastr.error('Falha ao efeturar login, usuário bloqueado, favor informar ao administrador do sistema');
+                return false
+            }
 
             if (data != "null") {
                 console.log(JSON.parse(data));
@@ -1115,7 +1211,7 @@ $('#formCadDocumento').on('change paste keyup', 'input, select', function () {
                 var sel = $("#documentosLista");
                 sel.empty();
                 arrayData.forEach(e => {
-                    sel.append('<tr class="clickDocumento" id="' + e.id + '" ><td>1</td><td>' + e.nip + '</td><td>' + e.semestre + '</td><td>' + e.ano + '</td><td>' + e.desctipo + '</td><td>' + e.quantidadepaginas + '</td></tr>');
+                    sel.append('<tr class="clickDocumento" id="' + e.id + '" ><td>1</td><td>' + e.nip + '</td><td>' + e.semestre + '</td><td>' + e.ano + '</td><td>' + e.desctipo + '</td><td><span id="qtd-paginas">' + e.quantidadepaginas + '</span></td></tr>');
                     //'<div class="container_item_maior" id="gradeDocumentos"><div class=Descricao_maior>' + e.nip + '</div><div class=Descricao_maior>' + e.semestre + '</div><div class=Descricao_maior>' + e.ano + '</div><div class=Descricao_maior>' + e.desctipo + '</div><div class=Descricao_maior>' + e.nomeArmario + '</div><div class=Descricao_maior><form method="post" id="" name="" action="/tratar-documento"><input type="hidden" id="idDocumento" name="idDocumento" value="' + e.id + '"><input type="submit" id="btnAbrirDocumento" name="btnAbrirDocumento" class="btn btn-primary btnAbrirDocumento" value="Indexar Documento"></form></div></div>'
                 });
             },
@@ -1171,6 +1267,7 @@ $(document).on('click', '.clickDocumento', function (e) {
             $('#avanca').attr('data-indice', 1);
             //$('#regride').attr('data-indice', 0);
             $('#regride').attr('data-indice', 1);
+            $('#qtd-paginas').html(listDocumentosServidor.length)
             $('#documento-total').html(`Total de páginas(s): 1/${listDocumentosServidor.length}`)
             let url = listDocumentosServidor[0][1];
             $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - 1</a>`)
@@ -1198,6 +1295,7 @@ $(document).on('click', '#modCadDocumento #avanca', function () {
         var sel = $("#listarDocumentos");
         let index = $(this).attr('data-indice');
         index++
+        $('#qtd-paginas').html(listDocumentosServidor.length)
         $('#documento-total').html(`Total de páginas(s): ${index}/${listDocumentosServidor.length}`)
         let url = listDocumentosServidor[$(this).attr('data-indice')][1];
         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - ${index}</a>`)
@@ -1240,6 +1338,7 @@ $(document).on('click', '#modCadDocumento #regride', function () {
         var sel = $("#listarDocumentos");
         let index = $(this).attr('data-indice');
         index++
+        $('#qtd-paginas').html(listDocumentosServidor.length)
         $('#documento-total').html(`Total de páginas(s): ${index}/${listDocumentosServidor.length}`)
         let url = listDocumentosServidor[$(this).attr('data-indice')][1];
         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - ${index}</a>`)
@@ -1311,6 +1410,51 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         return false;
     }
 
+    if (($('#formCadDocumento #Assunto').val() == "")) {
+        toastr.error('Informe o assunto');
+        return false;
+    }
+
+    if (($('#formCadDocumento #codOM').val() == "")) {
+        toastr.error('Informe o autor');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Titulo').val() == "")) {
+        toastr.error('Informe o título');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Classe').val() == "")) {
+        toastr.error('Informe a Classe');
+        return false;
+    }
+
+    if (($('#formCadDocumento #DataProdDoc').val() == "")) {
+        toastr.error('Informe a data de produção');
+        return false;
+    }
+
+    if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
+        toastr.error('Informe destinação prevista');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Genero').val() == "")) {
+        toastr.error('Informe o gênero');
+        return false;
+    }
+
+    if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
+        toastr.error('Informe o prazo de guarda');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Observacao').val() == "")) {
+        toastr.error('Informe a observação');
+        return false;
+    }
+
     if (($('#formCadDocumento #ConfAssinatura').is(':checked') == true) && (($('#formCadDocumento #Assunto').val() == "")
         || ($('#formCadDocumento #Autor').val() == "")
         || ($('#formCadDocumento #Titulo').val() == "")
@@ -1324,6 +1468,13 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         toastr.error('Existem tags não preenchidas');
         //alertas("Existem tags não preenchidas. Verfique", '#ModReIndexarDocumento', 'alert_danger');
         return false;
+    }
+
+    if ($('#formCadDocumento #ConfAssinatura').is(':checked') === false) {
+        if (($('#formCadDocumento #Hash').val() == "") || ($('#formCadDocumento #Hash').val() == 0)) {
+            toastr.error('Informe o hash');
+            return false;
+        }
     }
 
     if ($("#listarDocumentos").attr("data-docid") == "") {
@@ -1732,6 +1883,8 @@ function ListarArquivos() {
         processData: false,
         contentType: false,
         success: function (data) {
+            $('#documento-total').show()
+            $('#download-doc').show()
             listDocumentosPrimaria = [];
             listDocumentosPrimaria = JSON.parse(data);
 
@@ -1767,6 +1920,7 @@ function ListarArquivos() {
                     } else {
                         $('#documento-total').show()
                         $('#download-doc').show()
+                        $('#qtd-paginas').html(listDocumentosServidor.length)
                         $('#documento-total').html(`Total de páginas(s): ${index}/${listDocumentosServidor.length}`)
                         let url = listDocumentosServidor[0][1];
                         $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arqui0vo - ${index}</a>`)
@@ -1797,6 +1951,7 @@ function ListarArquivos() {
                 } else {
                     $('#documento-total').show()
                     $('#download-doc').show()
+                    $('#qtd-paginas').html(listDocumentosServidor.length)
                     $('#documento-total').html(`Total de páginas(s): ${index}/${listDocumentosServidor.length}`)
                     let url = listDocumentosServidor[0][1];
                     $('#download-doc').html(`<a href="${url}" target="_blank">Baixar arquivo - ${index}</a>`)
@@ -1928,6 +2083,51 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         return false;
     }
 
+    if (($('#formCadDocumento #Assunto').val() == "")) {
+        toastr.error('Informe o assunto');
+        return false;
+    }
+
+    if (($('#formCadDocumento #codOM').val() == "")) {
+        toastr.error('Informe o autor');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Titulo').val() == "")) {
+        toastr.error('Informe o título');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Classe').val() == "")) {
+        toastr.error('Informe a Classe');
+        return false;
+    }
+
+    if (($('#formCadDocumento #DataProdDoc').val() == "")) {
+        toastr.error('Informe a data de produção');
+        return false;
+    }
+
+    if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
+        toastr.error('Informe destinação prevista');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Genero').val() == "")) {
+        toastr.error('Informe o gênero');
+        return false;
+    }
+
+    if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
+        toastr.error('Informe o prazo de guarda');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Observacao').val() == "")) {
+        toastr.error('Informe a observação');
+        return false;
+    }
+
     if ((listDocumentos.length == 0)) {
         toastr.error('Ao menos um documento deve ser inserido para indexar');
         //alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
@@ -1947,6 +2147,13 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         toastr.error('Existem tags não preenchidas');
         //alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
         return false;
+    }
+
+    if ($('#formCadDocumento #ConfAssinatura').is(':checked') === false) {
+        if (($('#formCadDocumento #Hash').val() == "") || ($('#formCadDocumento #Hash').val() == 0)) {
+            toastr.error('Informe o hash');
+            return false;
+        }
     }
 
     tags = JSON.stringify({
@@ -2001,13 +2208,17 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
                     processoAssinaturaData(data);
                 },
                 error: function (d) {
+                    $('#btnConfirmaIndexarDocumento').prop('disabled', false)
+                    toastr.error('Erro ao cadastrar o documento. Verfique os dados inseridos');
                     console.log("caso apresente erro de assinatura: " + d);
-                    alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#IndexarDocumento', 'alert_danger');
+                    //alertas("Erro ao cadastrar o documento. Verfique os dados inseridos", '#IndexarDocumento', 'alert_danger');
                 }
             });
         },
         error: function (d) {
-            alertas(d.responseText, '#ModIndexarDocumento', 'alert_danger');
+            $('#btnConfirmaIndexarDocumento').prop('disabled', false)
+            toastr.error(d.responseText);
+            //alertas(d.responseText, '#ModIndexarDocumento', 'alert_danger');
         }
     });
 });
@@ -2033,12 +2244,18 @@ function processoAssinaturaData(data) {
         totalDocumnetos = ArrayDocumentos.length;
         if ($('#formCadDocumento #ConfAssinatura').is(':checked')) {
             processarListaDeItens(ArrayDocumentos).then(function () {
+                $('#documento-total').show()
+                $('#download-doc').show()
                 console.log('Todos os itens foram processados.');
 
                 if (listDocumentosServidor.length == totalDocumnetos)
                     armazenaDocumentos(JSON.stringify({ listDocumentosServidor }, null, 2));
 
                 console.log("Processo Terminado.");
+
+                $('#formCadDocumento').trigger('change');    
+                $('.clickDocumento').click();
+
                 listDocumentos = [];
                 listDocumentosServidor = [];
                 $('#semestre').trigger('change');
@@ -2051,13 +2268,19 @@ function processoAssinaturaData(data) {
                     toastr.success('Documento Indexado com sucesso');
                     FecharModal('#ModIndexarDocumento');
                     $('#verificarDocumentos').hide()
-                    carregarDocumentos()
+
+                    $('#formCadDocumento').trigger('change');    
+                    $('.clickDocumento').click();
+                   carregarDocumentos()
                     //alertas('Documento Indexado com sucesso', '#ModIndexarDocumento', 'alert_sucess', 'true');
                 } else if (tipoDoc == 'anexar') {
                     toastr.success('Documento Anexado com sucesso');
                     FecharModal('#ModAnexarDocumento');
                     $('#verificarDocumentos').hide()
-                    carregarDocumentos()
+
+                    $('#formCadDocumento').trigger('change');    
+                    $('.clickDocumento').click();
+                    //carregarDocumentos()
                 }
                 $("#documento").val('')
                 $("#Hash").val('')
@@ -2085,7 +2308,10 @@ function processoAssinaturaData(data) {
                 toastr.success('Documento Anexado com sucesso');
                 FecharModal('#ModAnexarDocumento');
                 $('#verificarDocumentos').hide()
-                carregarDocumentos()
+
+                $('#formCadDocumento').trigger('change');    
+                $('.clickDocumento').click();
+                //carregarDocumentos()
             }
             $("#documento").val('')
             $("#Hash").val('')
@@ -2156,6 +2382,51 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         return false;
     }
 
+    if (($('#formCadDocumento #Assunto').val() == "")) {
+        toastr.error('Informe o assunto');
+        return false;
+    }
+
+    if (($('#formCadDocumento #codOM').val() == "")) {
+        toastr.error('Informe o autor');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Titulo').val() == "")) {
+        toastr.error('Informe o título');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Classe').val() == "")) {
+        toastr.error('Informe a Classe');
+        return false;
+    }
+
+    if (($('#formCadDocumento #DataProdDoc').val() == "")) {
+        toastr.error('Informe a data de produção');
+        return false;
+    }
+
+    if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
+        toastr.error('Informe destinação prevista');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Genero').val() == "")) {
+        toastr.error('Informe o gênero');
+        return false;
+    }
+
+    if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
+        toastr.error('Informe o prazo de guarda');
+        return false;
+    }
+
+    if (($('#formCadDocumento #Observacao').val() == "")) {
+        toastr.error('Informe a observação');
+        return false;
+    }
+
     if ((listDocumentos.length == 0)) {
         toastr.error('Ao menos um documento deve ser inserido para indexar');
         //alertas("Ao menos um documento deve ser inserido para indexar", '#ModAnexarDocumento', 'alert_danger');
@@ -2177,6 +2448,14 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         return false;
     }
 
+    if ($('#formCadDocumento #ConfAssinatura').is(':checked') === false) {
+        if (($('#formCadDocumento #Hash').val() == "") || ($('#formCadDocumento #Hash').val() == 0)) {
+            toastr.error('Informe o hash');
+            return false;
+        }
+        
+    }
+
     tags = JSON.stringify({
         assunto: $('#formCadDocumento #Assunto').val(),
         autor: $('#formCadDocumento #codOM').val(),
@@ -2189,6 +2468,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         genero: $('#formCadDocumento #Genero').val(),
         prazoGuarda: $('#formCadDocumento #PrazoGuarda').val(),
         tipoDoc: $('#formCadDocumento #SelectTipoDoc').val(),
+        hash: $('#formCadDocumento #Hash').val(),
         respDigitalizacao: $('#formCadDocumento #RespDigitalizacao').val(),
     }, null, 2);
 

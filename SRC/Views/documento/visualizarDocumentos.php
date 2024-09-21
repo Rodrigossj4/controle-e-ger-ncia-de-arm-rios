@@ -61,32 +61,32 @@ $contador = 0;
                 </div>
                 <hr class="mb-4">
                 <div class="form-group Metatags" id="Metatags">
-                    <label>Informar MetaTags</label>
+                    <label><b>Informar MetaTags</b></label>
                 </div>
                 <div class="containerTags" id="containerTags">
                     <div class="form-group">
                         <label class="col-form-label" for="Assunto">Informe o assunto: </label>
-                        <input type="text" id="Assunto" name="Assunto" class="form-control">
+                        <input type="text" id="Assunto" name="Assunto" class="form-control" disabled>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Autor">Informe o Autor </label>
-                        <input type="text" id="Autor" name="Autor" class="form-control">
+                        <input type="text" id="Autor" name="Autor" class="form-control" disabled>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Titulo">Informe o Titulo</label>
-                        <input type="text" id="Titulo" name="Titulo" class="form-control">
+                        <input type="text" id="Titulo" name="Titulo" class="form-control" disabled>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Identificador">Identificador do documento digital</label>
-                        <input id="Identificador" name="Identificador" class="form-control" />
+                        <input id="Identificador" name="Identificador" class="form-control" disabled/>
                     </div>
                     <div class="form-group">
                         <label class="col-form-label" for="Classe">Classe</label>
-                        <input id="Classe" name="Classe" class="form-control" />
+                        <input id="Classe" name="Classe" class="form-control" disabled/>
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label" for="Observacao">Observação</label>
-                        <input id="Observacao" name="Observacao" class="form-control" />
+                        <label class="col-form-label" for="Observacao" disabled>Observação</label>
+                        <input id="Observacao" name="Observacao" class="form-control" disabled/>
                     </div>
                 </div>
             </form>

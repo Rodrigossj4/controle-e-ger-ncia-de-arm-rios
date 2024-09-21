@@ -20,7 +20,7 @@ class UsuarioRepository extends LogRepository
     public function listaUsuarios(): array
     {
         try {
-            $sqlQuery = "SELECT * FROM  {$this->schema}\"Usuarios\" where \"Ativo\" = true order by \"NomeUsuario\" asc;";
+            $sqlQuery = "SELECT * FROM  {$this->schema}\"Usuarios\" order by \"NomeUsuario\" asc;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->execute();
 
@@ -32,7 +32,8 @@ class UsuarioRepository extends LogRepository
                     'nomeusuario' => $usuariosData['NomeUsuario'],
                     'nip' => $usuariosData['Nip'],
                     'senhausuario' => $usuariosData['SenhaUsuario'],
-                    'idacesso' => $usuariosData['PerfilUsuario']
+                    'idacesso' => $usuariosData['PerfilUsuario'],
+                    'ativo' => $usuariosData['Ativo'],
                 ));
             };
 
@@ -126,6 +127,21 @@ class UsuarioRepository extends LogRepository
             return false;
         }
     }
+
+    public function ativarUsuario(int $id): bool
+    {
+        try {
+            $sqlQuery = "update {$this->schema}\"Usuarios\" set \"Ativo\" = true  where \"IdUsuario\"  = ?;";
+            $stmt = $this->pdo->prepare($sqlQuery);
+            $stmt->bindValue(1, $id);
+            $stmt->execute();
+
+            return true;
+        } catch (Exception $e) {
+            echo $e;
+            return false;
+        }
+    }    
 
     public function retornaNipUsuario(int $id): string
     {

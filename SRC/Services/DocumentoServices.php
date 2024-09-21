@@ -776,4 +776,16 @@ class DocumentoServices extends SistemaServices
         list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
         return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
     }
+
+    public function verificaHash(string  $hash): int
+    {
+        try {
+            $repository = new DocumentoRepository($this->Conexao());
+            $hash =  $repository->verificaHash($hash);
+            return $hash;
+        } catch (Exception $e) {
+            echo $e;
+            return 0;
+        }
+    }
 }
