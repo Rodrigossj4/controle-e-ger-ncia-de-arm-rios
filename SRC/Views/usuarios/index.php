@@ -70,7 +70,7 @@
                             <tr>
                                 <th scope="col">Nome do Usuário</th>
                                 <th scope="col">Status</th>
-                                <th scope="col" colspan="4" style="text-align: center;">Ações</th>
+                                <th scope="col" colspan="5" style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
                         <tbody id='gradeUsuario'>
@@ -111,6 +111,31 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modativarUsuario" tabindex="-1" aria-labelledby="modativarUsuario" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <span>Deseja realmente ativar esse Usuario?</span>
+                    <div class="col-sm-3">
+                        <form id="formAtivarUsuario">
+                            <input type="hidden" name="id" id="id">
+                        </form>
+                        <input type="button" id="btnConfirmaAtivarUsuario" data-id="" value="Sim" class="btn btn-success btnConfirmaAtivarUsuario">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="button" id="btnNaoConfirmaAtivarUsuario" data-id="" value="Não" class="btn btn-danger btnNaoConfirmaExcluirUsuario">
+                    </div>
+                </div>
+                <span class="alerta"></span>
             </div>
         </div>
     </div>
