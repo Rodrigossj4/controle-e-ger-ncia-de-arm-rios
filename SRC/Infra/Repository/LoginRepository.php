@@ -44,7 +44,7 @@ class LoginRepository extends LogRepository
                 ));
             };
 
-            if(isset($usuarioDataList)){
+            if($usuarioList){
                 $sqlQuery = "UPDATE {$this->schema}\"Usuarios\" SET \"tentativaLogin\" = ? WHERE \"Nip\" = ?";
                 $stmt = $this->pdo->prepare($sqlQuery);
                 $stmt->bindValue(1, 0);

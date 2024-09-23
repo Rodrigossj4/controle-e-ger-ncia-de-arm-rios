@@ -1410,51 +1410,6 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "")) {
-        toastr.error('Informe o assunto');
-        return false;
-    }
-
-    if (($('#formCadDocumento #codOM').val() == "")) {
-        toastr.error('Informe o autor');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Titulo').val() == "")) {
-        toastr.error('Informe o título');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Classe').val() == "")) {
-        toastr.error('Informe a Classe');
-        return false;
-    }
-
-    if (($('#formCadDocumento #DataProdDoc').val() == "")) {
-        toastr.error('Informe a data de produção');
-        return false;
-    }
-
-    if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
-        toastr.error('Informe destinação prevista');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Genero').val() == "")) {
-        toastr.error('Informe o gênero');
-        return false;
-    }
-
-    if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
-        toastr.error('Informe o prazo de guarda');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Observacao').val() == "")) {
-        toastr.error('Informe a observação');
-        return false;
-    }
-
     if (($('#formCadDocumento #ConfAssinatura').is(':checked') == true) && (($('#formCadDocumento #Assunto').val() == "")
         || ($('#formCadDocumento #Autor').val() == "")
         || ($('#formCadDocumento #Titulo').val() == "")
@@ -1465,6 +1420,55 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
+
+
+            if (($('#formCadDocumento #Assunto').val() == "")) {
+                toastr.error('Informe o assunto');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #codOM').val() == "")) {
+                toastr.error('Informe o autor');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Titulo').val() == "")) {
+                toastr.error('Informe o título');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Classe').val() == "")) {
+                toastr.error('Informe a Classe');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #DataProdDoc').val() == "")) {
+                toastr.error('Informe a data de produção');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
+                toastr.error('Informe destinação prevista');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Genero').val() == "")) {
+                toastr.error('Informe o gênero');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
+                toastr.error('Informe o prazo de guarda');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Observacao').val() == "")) {
+                toastr.error('Informe a observação');
+                return false;
+            }
+
+
+
         toastr.error('Existem tags não preenchidas');
         //alertas("Existem tags não preenchidas. Verfique", '#ModReIndexarDocumento', 'alert_danger');
         return false;
@@ -2083,51 +2087,6 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "")) {
-        toastr.error('Informe o assunto');
-        return false;
-    }
-
-    if (($('#formCadDocumento #codOM').val() == "")) {
-        toastr.error('Informe o autor');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Titulo').val() == "")) {
-        toastr.error('Informe o título');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Classe').val() == "")) {
-        toastr.error('Informe a Classe');
-        return false;
-    }
-
-    if (($('#formCadDocumento #DataProdDoc').val() == "")) {
-        toastr.error('Informe a data de produção');
-        return false;
-    }
-
-    if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
-        toastr.error('Informe destinação prevista');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Genero').val() == "")) {
-        toastr.error('Informe o gênero');
-        return false;
-    }
-
-    if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
-        toastr.error('Informe o prazo de guarda');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Observacao').val() == "")) {
-        toastr.error('Informe a observação');
-        return false;
-    }
-
     if ((listDocumentos.length == 0)) {
         toastr.error('Ao menos um documento deve ser inserido para indexar');
         //alertas("Ao menos um documento deve ser inserido para indexar", '#ModIndexarDocumento', 'alert_danger');
@@ -2144,6 +2103,52 @@ $(document).on('click', '#btnConfirmaIndexarDocumento', function (e) {
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
+
+            if (($('#formCadDocumento #Assunto').val() == "")) {
+                toastr.error('Informe o assunto');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #codOM').val() == "")) {
+                toastr.error('Informe o autor');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Titulo').val() == "")) {
+                toastr.error('Informe o título');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Classe').val() == "")) {
+                toastr.error('Informe a Classe');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #DataProdDoc').val() == "")) {
+                toastr.error('Informe a data de produção');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
+                toastr.error('Informe destinação prevista');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Genero').val() == "")) {
+                toastr.error('Informe o gênero');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
+                toastr.error('Informe o prazo de guarda');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Observacao').val() == "")) {
+                toastr.error('Informe a observação');
+                return false;
+            }
+
         toastr.error('Existem tags não preenchidas');
         //alertas("Existem tags não preenchidas. Verfique", '#ModIndexarDocumento', 'alert_danger');
         return false;
@@ -2382,50 +2387,6 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         return false;
     }
 
-    if (($('#formCadDocumento #Assunto').val() == "")) {
-        toastr.error('Informe o assunto');
-        return false;
-    }
-
-    if (($('#formCadDocumento #codOM').val() == "")) {
-        toastr.error('Informe o autor');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Titulo').val() == "")) {
-        toastr.error('Informe o título');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Classe').val() == "")) {
-        toastr.error('Informe a Classe');
-        return false;
-    }
-
-    if (($('#formCadDocumento #DataProdDoc').val() == "")) {
-        toastr.error('Informe a data de produção');
-        return false;
-    }
-
-    if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
-        toastr.error('Informe destinação prevista');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Genero').val() == "")) {
-        toastr.error('Informe o gênero');
-        return false;
-    }
-
-    if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
-        toastr.error('Informe o prazo de guarda');
-        return false;
-    }
-
-    if (($('#formCadDocumento #Observacao').val() == "")) {
-        toastr.error('Informe a observação');
-        return false;
-    }
 
     if ((listDocumentos.length == 0)) {
         toastr.error('Ao menos um documento deve ser inserido para indexar');
@@ -2443,6 +2404,52 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
         || ($('#formCadDocumento #Genero').val() == "")
         || ($('#formCadDocumento #PrazoGuarda').val() == "")
         || ($('#formCadDocumento #Observacao').val() == ""))) {
+
+            if (($('#formCadDocumento #Assunto').val() == "")) {
+                toastr.error('Informe o assunto');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #codOM').val() == "")) {
+                toastr.error('Informe o autor');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Titulo').val() == "")) {
+                toastr.error('Informe o título');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Classe').val() == "")) {
+                toastr.error('Informe a Classe');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #DataProdDoc').val() == "")) {
+                toastr.error('Informe a data de produção');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #DestinacaoDoc').val() == 0)) {
+                toastr.error('Informe destinação prevista');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Genero').val() == "")) {
+                toastr.error('Informe o gênero');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #PrazoGuarda').val() == "")) {
+                toastr.error('Informe o prazo de guarda');
+                return false;
+            }
+        
+            if (($('#formCadDocumento #Observacao').val() == "")) {
+                toastr.error('Informe a observação');
+                return false;
+            }
+
         toastr.error('Existem tags não preenchidas');
         //alertas("Existem tags não preenchidas. Verfique", '#ModAnexarDocumento', 'alert_danger');
         return false;
