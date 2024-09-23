@@ -71,11 +71,20 @@ class LoginRepository extends LogRepository
             $tentativaLoginList = $stmt->fetch();
             if($tentativaLoginList){
                 $tentativa = intval($tentativaLoginList['tentativaLogin']) + 1;
+<<<<<<< HEAD
                 if($tentativa > 3){
                     $sqlQuery = "UPDATE {$this->schema}\"Usuarios\" SET \"Ativo\" = ? WHERE \"Nip\" = ?";
                     $stmt = $this->pdo->prepare($sqlQuery);
                     $stmt->bindValue(1, 0);
                     $stmt->bindValue(2, $nip);
+=======
+                if($tentativa > 2){
+                    $sqlQuery = "UPDATE {$this->schema}\"Usuarios\" SET \"Ativo\" = ?, \"SenhaUsuario\" = ? WHERE \"Nip\" = ?";
+                    $stmt = $this->pdo->prepare($sqlQuery);
+                    $stmt->bindValue(1, 0);
+                    $stmt->bindValue(2, hash('sha256','!!#@#@$#!@!M@R'));
+                    $stmt->bindValue(3, $nip);
+>>>>>>> 75d1868 (Melhorias de bloqueia por tentativas de login)
                     $stmt->execute();
                     return $tentativa;
                 }else{
@@ -106,4 +115,8 @@ class LoginRepository extends LogRepository
             return [];
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 75d1868 (Melhorias de bloqueia por tentativas de login)

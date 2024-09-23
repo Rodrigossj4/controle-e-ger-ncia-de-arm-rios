@@ -1075,6 +1075,10 @@ $('#formLogin #btnLogin').on('click', function (e) {
             //console.log(JSON.parse(data)[0]['dataultimologin']);
             //console.log(JSON.parse(data));
             //JSON.parse(data)[0]['idperfil']
+<<<<<<< HEAD
+=======
+
+>>>>>>> 75d1868 (Melhorias de bloqueia por tentativas de login)
             if(data == 0){
                 toastr.error('NIP não encontrado');
                 return false

@@ -159,6 +159,10 @@ class UsuariosController  extends Controller
 
    public function ativar(): bool
    {
+<<<<<<< HEAD
+=======
+      var_dump(filter_input(INPUT_POST, 'id'));
+>>>>>>> 75d1868 (Melhorias de bloqueia por tentativas de login)
       $service = new UsuarioServices();
       session_start();
       if ($_SESSION['usuario'][0]["codusuario"] == filter_input(INPUT_POST, 'id')) {

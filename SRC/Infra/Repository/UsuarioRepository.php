@@ -259,11 +259,12 @@ class UsuarioRepository extends LogRepository
     public function ResetSenhaUsuario(string $id): bool
     {
         try {
-            $sqlQuery = "update {$this->schema}\"Usuarios\" set \"SenhaUsuario\" = ?, \"DataUltimoLogin\" = ?  where \"IdUsuario\"  = ?;";
+            $sqlQuery = "update {$this->schema}\"Usuarios\" set \"SenhaUsuario\" = ?, \"tentativaLogin\" = ?, \"DataUltimoLogin\" = ?  where \"IdUsuario\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, hash('sha256', $this->retornaNipUsuario($id) . 'MaR@123456'));
-            $stmt->bindValue(2, null, PDO::PARAM_NULL);
-            $stmt->bindValue(3, $id);
+            $stmt->bindValue(2, 0);
+            $stmt->bindValue(3, null, PDO::PARAM_NULL);
+            $stmt->bindValue(4, $id);
             $stmt->execute();
 
             return true;
