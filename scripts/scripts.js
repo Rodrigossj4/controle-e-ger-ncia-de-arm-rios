@@ -1084,13 +1084,13 @@ $('#formLogin #btnLogin').on('click', function (e) {
             }else if(data == 2){
                 toastr.error('Falha ao efeturar login, 2 de 3 tentativas');
                 return false
-            }else if(data == 3){
-                toastr.error('Falha ao efeturar login, 3 de 3 tentativas');
+            }else if(data > 2){
+                toastr.error('Usuário bloqueado');
                 return false
-            }else if(data > 3){
+            }/*else if(data > 3){
                 toastr.error('Falha ao efeturar login, usuário bloqueado, favor informar ao administrador do sistema');
                 return false
-            }
+            }*/
 
             if (data != "null") {
                 console.log(JSON.parse(data));
