@@ -1253,7 +1253,7 @@ $(document).on('click', '.clickDocumento', function (e) {
         processData: false,
         contentType: false,
         success: function (data) {
-            const arrayData = JSON.parse(data);
+            //const arrayData = JSON.parse(data);
             var sel = $("#listarDocumentos");
 
             listDocumentosServidor = [];
@@ -2033,6 +2033,7 @@ function retornaCaminho(caminho) {
 }
 
 $(document).on('click', '#btnNaoConfirmaIndexarDocumento', function (e) {
+    $('#btnConfirmaIndexarDocumento').prop('disabled', false)
     $('#tipo-doc').val('')
     FecharModal('#ModIndexarDocumento');
 });
@@ -2332,11 +2333,8 @@ function processoAssinaturaData(data) {
     }
 }
 
-$(document).on('click', '#btnNaoConfirmaAnexarDocumento', function (e) {
-    $('#tipo-doc').val('')
-    FecharModal('#ModAnexarDocumento');
-});
 $(document).on('click', '.btnNaoConfirmaAnexarDocumento', function (e) {
+    $('#btnConfirmaAnexarDocumento').prop('disabled', false)
     $('#tipo-doc').val('')
     FecharModal('#ModAnexarDocumento');
 });
