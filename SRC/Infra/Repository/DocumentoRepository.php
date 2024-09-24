@@ -125,13 +125,13 @@ class DocumentoRepository extends LogRepository
 
                 $totalPagina = $this->TotalPaginasDocumento($documentosData['DocId']);
 
-                if($totalPagina == 0){
-                    //Remove a refencia desse documento pois não possui nenhum arquivo
-                    $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
-                    $stmt = $this->pdo->prepare($sqlQuery);
-                    $stmt->bindValue(1, $documentosData['DocId']);
-                    $stmt->execute();
-                }
+                // if($totalPagina == 0){
+                //     //Remove a refencia desse documento pois não possui nenhum arquivo
+                //     $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
+                //     $stmt = $this->pdo->prepare($sqlQuery);
+                //     $stmt->bindValue(1, $documentosData['DocId']);
+                //     $stmt->execute();
+                // }
 
                 array_push($documentosList, array(
                     'id' => $documentosData['IdDocumento'],
@@ -244,7 +244,6 @@ class DocumentoRepository extends LogRepository
 
             $sqlQuery = "INSERT INTO {$this->schema}\"Documentos\"(\"DocId\", \"Nip\", \"Semestre\", \"Ano\", \"IdTipoDoc\", \"FolderId\", \"IdArmario\") values(?, ?, ?, ?, ?, ?, ?) RETURNING \"IdDocumento\";";
             $stmt = $this->pdo->prepare($sqlQuery);
-            //var_dump($documento);
             foreach ($documento as $dc) {
                 $documentoData = new Documentos(
                     null,
@@ -374,13 +373,13 @@ class DocumentoRepository extends LogRepository
 
             $paginasDataList = $stmt->fetchAll();
 
-            if(count($paginasDataList) == 0){
-                //Remove a refencia desse documento pois não possui nenhum arquivo
-                $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
-                $stmt = $this->pdo->prepare($sqlQuery);
-                $stmt->bindValue(1, $id);
-                $stmt->execute();
-            }
+            // if(count($paginasDataList) == 0){
+            //     //Remove a refencia desse documento pois não possui nenhum arquivo
+            //     $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
+            //     $stmt = $this->pdo->prepare($sqlQuery);
+            //     $stmt->bindValue(1, $id);
+            //     $stmt->execute();
+            // }
 
             $paginasList = array();
             foreach ($paginasDataList as $paginasData) {
@@ -570,7 +569,7 @@ class DocumentoRepository extends LogRepository
         try {
             // $file = $this->retornarCaminhoDocumento("", $id);
             // if (file_exists($file)) {
-                //unlink($this->retornarCaminhoDocumento("", $id));
+                //Zunlink($this->retornarCaminhoDocumento("", $id));
             // }
             $sqlQuery = "delete FROM {$this->schema}\"Metadados\" where \"IdPagina\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);

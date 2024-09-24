@@ -96,11 +96,11 @@
 			throw new Error('Sign data is not defined.');
 		}
 
-		var resultado = $('#assinatura');
-		resultado.val($('#content-value').val());
-		console.log("caminho original: " + caminhoOriginal);
-		$('#objetoAtual').val(caminhoOriginal);
-		$('#assinatura').trigger('change');
+		// var resultado = $('#assinatura');
+		// resultado.val($('#content-value').val());
+		// console.log("caminho original: " + caminhoOriginal);
+		// $('#objetoAtual').val(caminhoOriginal);
+		// $('#assinatura').trigger('change');
 
 
 		// Antes de assinar
@@ -334,8 +334,8 @@
 				onError: function (error) {
 					console.debug('ERRO', error);
 					//console.log("Verificar Erro: " + JSON.stringify(error));
-					if ($('#DocIdAtual').val() != "")
-						cancelarIndice($('#DocIdAtual').val());
+					// if ($('#DocIdAtual').val() != "")
+					// 	cancelarIndice($('#DocIdAtual').val());
 				}, // optional
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional

@@ -55,6 +55,7 @@ class DocumentoServices extends SistemaServices
             $repository = new DocumentoRepository($this->Conexao());
             //var_dump($repository);
             $idDocumento = $repository->cadastrarDocumentos($documentosList);
+           // var_dump($idDocumento);die();
             $repository->updateDocIdDocumento($idDocumento);
             return $idDocumento;
         } catch (Exception $e) {
@@ -326,7 +327,7 @@ class DocumentoServices extends SistemaServices
     {
         //var_dump('passei aqui');die();
         $total = count($dadosDocumento->imagens);
-        //var_dump($dadosDocumento);
+        
         $paginasList = [];
 
         $armarioRepository = new ArmarioRepository($this->Conexao());
@@ -335,14 +336,19 @@ class DocumentoServices extends SistemaServices
         for ($i = 0; $i < $total; $i++) {
 
             $ext = pathinfo($dadosDocumento->imagens[$i], PATHINFO_EXTENSION);
+            
             $caminhoArqImgServ = "";
             if (strtolower($ext) != "pdf") {
+                
                 $caminho = $this->FormatarIMG($dadosDocumento->imagens[$i]);
+               
 
                 $caminhoArqImgServ = $this->gerarOcrs($caminho);
+                
                 $this->IncluirTags($caminhoArqImgServ, $dadosDocumento->tags);
                 //var_dump($caminho);
             } else {
+               
                 $funcoes = new Helppers();
                 $caminhoArquivoOriginal =  $dadosDocumento->imagens[$i];
                 //var_dump($caminhoArquivoOriginal);
@@ -459,6 +465,7 @@ class DocumentoServices extends SistemaServices
         $tags = json_decode($dadosTags);
 
         $pageCount = $pdf->setSourceFile($arquivos);
+        
         for ($i = 1; $i <= $pageCount; $i++) {
             $tpl = $pdf->importPage($i);
             $pdf->addPage();
@@ -705,7 +712,7 @@ class DocumentoServices extends SistemaServices
         //var_dump($caminhoArq);
         $pasta = random_int(1, 999999);
         $nomeArquivoOcr = pathinfo($caminhoArq, PATHINFO_DIRNAME) . "/{$pasta}.pdf";
-        //var_dump($nomeArquivoOcr);
+       
         /*var_dump($caminhoArq);*/
         (new TesseractOCR($caminhoArq))
             //->userWords("{$this->diretorioLote}user-words.odt")
@@ -757,6 +764,8 @@ class DocumentoServices extends SistemaServices
 
     public function criptografarArquivo(string $retorno)
     {
+        var_dump($retorno);
+
         $code = file_get_contents($retorno);
         $encrypted_code = $this->my_encrypt($code, $this->key);
         file_put_contents("{$retorno}", $encrypted_code);

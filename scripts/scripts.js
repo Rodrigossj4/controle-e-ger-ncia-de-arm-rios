@@ -1168,7 +1168,7 @@ $('#btnNaoConfirmaResetSenhaUsuario').on('click', function (e) {
     $('.modal').trigger('click');
 });
 function fechar() {
-    alert('oi');
+    //alert('oi');
 }
 $('.btn-close').on('click', function (e) {
     $('.modal').trigger('click');
@@ -2355,6 +2355,7 @@ $(document).on('click', '#excluirDocumento', function (e) {
 });
 
 $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
+
     listDocumentosServidor = [];
     if (($('#formCadDocumento #ListArmarioDocumento').val() == 0)) {
         toastr.error('Selecione um armário');
@@ -2492,6 +2493,7 @@ $(document).on('click', '#btnConfirmaAnexarDocumento', function (e) {
 
 
     docid = $('#listPaginas #documentosLista .clickDocumento').attr("id");
+    //alert(docid)
     $(this).attr('disabled', 'disabled');
     try {
         $.ajax({

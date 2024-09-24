@@ -200,7 +200,7 @@ class DocumentoController extends Controller
     public function retornaPdfs()
     {
         $dadosDocumento = json_decode(file_get_contents('php://input'));
-        // var_dump($dadosDocumento);
+
         $service = new DocumentoServices();
         //$tagsList = $this->montaArryaTags(json_decode($dadosDocumento->tags));
         $paginasList = $service->gerarPdfs($dadosDocumento);
