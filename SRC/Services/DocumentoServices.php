@@ -180,15 +180,18 @@ class DocumentoServices extends SistemaServices
 
 
             foreach ($listaArquivos as &$arquivo) {
-                copy($diretorioOriginal . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME), $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME));
-                $arquivo["arquivo"] = $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME);
+                if($arquivo["arquivo"]){
+                    copy($diretorioOriginal . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME), $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME));
+                    $arquivo["arquivo"] = $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME);
 
 
-                $encrypted_code = file_get_contents($arquivo["arquivo"]);
+                    $encrypted_code = file_get_contents($arquivo["arquivo"]);
 
-                $decrypted_code =  $this->my_decrypt($encrypted_code, $this->key);
+                    $decrypted_code =  $this->my_decrypt($encrypted_code, $this->key);
 
-                file_put_contents($arquivo["arquivo"], $decrypted_code);
+                    file_put_contents($arquivo["arquivo"], $decrypted_code);
+                }
+                
             }
             return $listaArquivos;
         } catch (Exception $e) {
