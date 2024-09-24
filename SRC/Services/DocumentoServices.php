@@ -180,6 +180,8 @@ class DocumentoServices extends SistemaServices
 
 
             foreach ($listaArquivos as &$arquivo) {
+                echo '<pre>';
+                var_dump($arquivo);
                 if($arquivo["arquivo"]){
                     copy($diretorioOriginal . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME), $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME));
                     $arquivo["arquivo"] = $diretorioTemporario . "/" . pathinfo($arquivo["arquivo"], PATHINFO_BASENAME);
