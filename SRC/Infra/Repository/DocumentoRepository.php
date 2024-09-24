@@ -122,6 +122,17 @@ class DocumentoRepository extends LogRepository
             $documentosDataList = $stmt->fetchAll();
             $documentosList = array();
             foreach ($documentosDataList as $documentosData) {
+
+                $totalPagina = $this->TotalPaginasDocumento($documentosData['DocId']);
+
+                if($totalPagina == 0){
+                    //Remove a refencia desse documento pois não possui nenhum arquivo
+                    $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
+                    $stmt = $this->pdo->prepare($sqlQuery);
+                    $stmt->bindValue(1, $documentosData['DocId']);
+                    $stmt->execute();
+                }
+
                 array_push($documentosList, array(
                     'id' => $documentosData['IdDocumento'],
                     'docid' => $documentosData['DocId'],
@@ -132,7 +143,7 @@ class DocumentoRepository extends LogRepository
                     'armario' => $documentosData['IdArmario'],
                     'desctipo' => $documentosData['DescTipoDoc'],
                     'nomeArmario' => $documentosData['nomearmario'],
-                    'quantidadepaginas' => $this->TotalPaginasDocumento($documentosData['DocId'])
+                    'quantidadepaginas' => $totalPagina, //$this->TotalPaginasDocumento($documentosData['DocId'])
                 ));
             };
             //var_dump($documentosList);
@@ -362,6 +373,15 @@ class DocumentoRepository extends LogRepository
             $stmt->execute();
 
             $paginasDataList = $stmt->fetchAll();
+
+            if(count($paginasDataList) == 0){
+                //Remove a refencia desse documento pois não possui nenhum arquivo
+                $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
+                $stmt = $this->pdo->prepare($sqlQuery);
+                $stmt->bindValue(1, $id);
+                $stmt->execute();
+            }
+
             $paginasList = array();
             foreach ($paginasDataList as $paginasData) {
                 array_push($paginasList, array(
