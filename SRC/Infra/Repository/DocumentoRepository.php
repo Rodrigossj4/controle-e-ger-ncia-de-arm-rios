@@ -1,7 +1,6 @@
 <?php
 
 namespace Marinha\Mvc\Infra\Repository;
-ini_set('display_errors','of');
 use Marinha\Mvc\Models\Documentos;
 use Marinha\Mvc\Models\Paginas;
 use Marinha\Mvc\Models\MetaTags;
@@ -10,9 +9,11 @@ use Exception;
 
 #implements IArmarioRepository
 use PDO;
-
+error_reporting(E_ALL);
+ini_set("display_errors", 0 );
 class DocumentoRepository extends LogRepository
 {
+    
     private $pdo;
 
     public function __construct(PDO $pdo)
