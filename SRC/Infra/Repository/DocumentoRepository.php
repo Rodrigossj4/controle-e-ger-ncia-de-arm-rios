@@ -1,7 +1,7 @@
 <?php
 
 namespace Marinha\Mvc\Infra\Repository;
-
+ini_set('display_errors','of');
 use Marinha\Mvc\Models\Documentos;
 use Marinha\Mvc\Models\Paginas;
 use Marinha\Mvc\Models\MetaTags;
@@ -373,13 +373,13 @@ class DocumentoRepository extends LogRepository
 
             $paginasDataList = $stmt->fetchAll();
 
-            // if(count($paginasDataList) == 0){
-            //     //Remove a refencia desse documento pois não possui nenhum arquivo
-            //     $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
-            //     $stmt = $this->pdo->prepare($sqlQuery);
-            //     $stmt->bindValue(1, $id);
-            //     $stmt->execute();
-            // }
+            if(count($paginasDataList) == 0){
+                //Remove a refencia desse documento pois não possui nenhum arquivo
+                $sqlQuery = "delete FROM {$this->schema}\"Documentos\" where \"IdDocumento\"  = ?;";
+                $stmt = $this->pdo->prepare($sqlQuery);
+                $stmt->bindValue(1, $id);
+                $stmt->execute();
+            }
 
             $paginasList = array();
             foreach ($paginasDataList as $paginasData) {
