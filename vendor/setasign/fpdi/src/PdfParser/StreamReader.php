@@ -39,8 +39,12 @@ class StreamReader
      */
     public static function createByFile($filename)
     {
-        $h = \fopen($filename, 'rb');
-        return new self($h, true);
+        if(file_exists($filename)){
+            $h = \fopen($filename, 'rb');
+            return new self($h, true);
+        }else{
+            return new self('', false);
+        }
     }
 
     /**
