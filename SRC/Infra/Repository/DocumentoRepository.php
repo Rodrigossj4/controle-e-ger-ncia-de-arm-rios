@@ -9,8 +9,7 @@ use Exception;
 
 #implements IArmarioRepository
 use PDO;
-error_reporting(E_ALL);
-ini_set("display_errors", 0 );
+
 class DocumentoRepository extends LogRepository
 {
     
@@ -23,6 +22,8 @@ class DocumentoRepository extends LogRepository
 
     public function listaDocumentos(): array
     {
+        error_reporting(E_ALL);
+        ini_set("display_errors", 0 );
         try {
             $sqlQuery = "select d.\"IdDocumento\", d.\"DocId\", d.\"Nip\", d.\"Semestre\", d.\"Ano\", d.\"IdTipoDoc\", d.\"IdArmario\", 
                          td.\"DescTipoDoc\", arm.\"NomeExterno\" as nomeArmario
@@ -365,6 +366,8 @@ class DocumentoRepository extends LogRepository
     //d
     public function listarPaginas(int $id): array
     {
+        error_reporting(E_ALL);
+        ini_set("display_errors", 0 );
         //var_dump("e " . $id);
         try {
             $sqlQuery = "SELECT * FROM {$this->schema}\"DocumentoPagina\" where \"DocId\" = ?;";
@@ -569,9 +572,7 @@ class DocumentoRepository extends LogRepository
     {
         try {
             // $file = $this->retornarCaminhoDocumento("", $id);
-            // if (file_exists($file)) {
-                //Zunlink($this->retornarCaminhoDocumento("", $id));
-            // }
+            unlink($this->retornarCaminhoDocumento("", $id));
             $sqlQuery = "delete FROM {$this->schema}\"Metadados\" where \"IdPagina\"  = ?;";
             $stmt = $this->pdo->prepare($sqlQuery);
             $stmt->bindValue(1, $id);

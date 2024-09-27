@@ -1357,6 +1357,27 @@ $(document).on('click', '#regridePdf', function () {
     }
 });
 
+function verificaDadosReindexarPagina() {
+    let hash = $('#formCadDocumento #Hash').val()
+    $.ajax({
+        url: "./verifica-se-hash-existe?hash=" + hash,
+        type: 'GET',
+        data: "",
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            if(data > 0){
+                toastr.error('Esse Hash já existe em outra página');
+                $('#AnexarDocumento').prop('disabled', true)
+                $('#IndexarDocumento').prop('disabled', true)
+            }else{
+                $('#AnexarDocumento').prop('disabled', false)
+                $('#IndexarDocumento').prop('disabled', false)
+            }
+        }
+    });
+}
+
 $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
     listDocumentosServidor = [];
 
@@ -1456,6 +1477,8 @@ $(document).on('click', '#btnConfirmaReIndexarDocumento', function () {
             toastr.error('Informe a observação');
             return false;
         }
+
+       // verificaDadosReindexarPagina()
 
         toastr.error('Existem tags não preenchidas');
         return false;

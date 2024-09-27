@@ -111,6 +111,10 @@
 			.success(function (response) {
 				if (response.actionCanceled) {
 					console.debug('Action canceled by User.');
+					$('#btnConfirmaIndexarDocumento').prop('disabled', false)
+					$('#btnConfirmaAnexarDocumento').prop('disabled', false)
+					$('#btnConfirmaReIndexarDocumento').prop('disabled', false)
+					toastr.error('Ação cancelada pelo usuário');
 					params.onCancel && params.onCancel(response);
 				} else {
 					console.debug('Sucesso:', response);
@@ -176,6 +180,10 @@
 			.success(function (response) {
 				if (response.actionCanceled) {
 					console.debug('Action canceled by User.');
+					$('#btnConfirmaIndexarDocumento').prop('disabled', false)
+					$('#btnConfirmaAnexarDocumento').prop('disabled', false)
+					$('#btnConfirmaReIndexarDocumento').prop('disabled', false)
+					toastr.error('Ação cancelada pelo usuário');
 					params.onCancel && params.onCancel(response);
 				} else {
 					console.debug('Verify:', response);
@@ -216,6 +224,10 @@
 			.success(function (response) {
 				if (response.actionCanceled) {
 					console.debug('Action canceled by User.');
+					$('#btnConfirmaIndexarDocumento').prop('disabled', false)
+					$('#btnConfirmaAnexarDocumento').prop('disabled', false)
+					$('#btnConfirmaReIndexarDocumento').prop('disabled', false)
+					toastr.error('Ação cancelada pelo usuário');
 					params.onCancel && params.onCancel(response);
 				} else {
 					console.debug('Attached:', response);
@@ -333,9 +345,13 @@
 				onSuccess: onSuccessPdfHandler,
 				onError: function (error) {
 					console.debug('ERRO', error);
-					//console.log("Verificar Erro: " + JSON.stringify(error));
-					// if ($('#DocIdAtual').val() != "")
-					// 	cancelarIndice($('#DocIdAtual').val());
+					console.log("Verificar Erro: " + JSON.stringify(error));
+					$('#btnConfirmaIndexarDocumento').prop('disabled', false)
+					$('#btnConfirmaAnexarDocumento').prop('disabled', false)
+					$('#btnConfirmaReIndexarDocumento').prop('disabled', false)
+					if ($('#DocIdAtual').val() != "")
+						cancelarIndice($('#DocIdAtual').val());
+					toastr.error(error.error);
 				}, // optional
 				// onCancel: onCancelHandler, // optional
 				// beforeSign: beforeSignHandler, // optional
